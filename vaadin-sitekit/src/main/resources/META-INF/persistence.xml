@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="bare-site" transaction-type="RESOURCE_LOCAL">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<class>org.vaadin.addons.sitekit.model.Company</class>
+		<class>org.vaadin.addons.sitekit.model.Customer</class>
+		<class>org.vaadin.addons.sitekit.model.PostalAddress</class>
+		<class>org.vaadin.addons.sitekit.model.User</class>
+		<class>org.vaadin.addons.sitekit.model.Group</class>
+		<class>org.vaadin.addons.sitekit.model.GroupMember</class>
+		<class>org.vaadin.addons.sitekit.model.Privilege</class>
+		<shared-cache-mode>NONE</shared-cache-mode>
+		<properties>
+			<property name="eclipselink.session.customizer" value="org.vaadin.addons.sitekit.model.UuidSequence"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://127.0.0.1:5432/site"/>
+			<property name="javax.persistence.jdbc.user" value="site"/>
+			<property name="javax.persistence.jdbc.password" value="password"/>
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+			<property name="eclipselink.cache.type.default" value="NONE"/>
+			<property name="eclipselink.ddl-generation.output-mode" value="database"/>
+			<property name="eclipselink.ddl-generation" value="create-tables"/>
+			<property name="eclipselink.logging.level" value="SEVERE"/>
+			<property name="eclipselink.jdbc.timeout" value="3"/>
+		</properties>
+	</persistence-unit>
+</persistence>
