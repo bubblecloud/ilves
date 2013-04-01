@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.web;
 
+import org.apache.log4j.xml.DOMConfigurator;
 import org.vaadin.addons.sitekit.dao.CompanyDao;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
@@ -45,7 +46,6 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -82,6 +82,7 @@ public final class BareSiteUI extends AbstractSiteUI {
      * @throws Exception if exception occurs in jetty startup.
      */
     public static void main(final String[] args) throws Exception {
+        DOMConfigurator.configure("./log4j.xml");
 
         final String webappUrl = BareSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm();
 
