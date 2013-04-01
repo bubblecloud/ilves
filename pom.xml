@@ -47,6 +47,7 @@
 
     <modules>
         <module>vaadin-sitekit</module>
+        <module>vaadin-sitekit-example-bare</module>
     </modules>
 
 </project>
