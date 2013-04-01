@@ -52,18 +52,19 @@ public final class Site implements ViewProvider, ViewChangeListener {
     private final Map<String, View> views = new HashMap<String, View>();
 
     /**
-     * @param siteDescriptor the site to be published
-     * @param mode the portal mode of operation
+     * Construct site with help of the providers.
+     * @param siteMode the portal mode of operation
+     * @param contentProvider the content provider
      * @param localizationProvider the localization provider
      * @param securityProvider the security provider
      * @param siteContext the site context
      */
-    public Site(final SiteDescriptor siteDescriptor, final SiteMode mode,
+    public Site(final SiteMode siteMode, final ContentProvider contentProvider,
                 final LocalizationProvider localizationProvider,
             final SecurityProvider securityProvider, final SiteContext siteContext) {
         super();
-        this.siteDescriptor = siteDescriptor;
-        this.siteMode = mode;
+        this.siteDescriptor = contentProvider.getSiteDescriptor(siteMode);
+        this.siteMode = siteMode;
         this.localizationProvider = localizationProvider;
         this.securityProvider = securityProvider;
         this.siteContext = siteContext;

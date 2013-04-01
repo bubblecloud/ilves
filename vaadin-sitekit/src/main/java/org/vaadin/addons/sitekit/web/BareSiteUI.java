@@ -19,6 +19,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.vaadin.addons.sitekit.dao.CompanyDao;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
+import org.vaadin.addons.sitekit.site.ContentProvider;
 import org.vaadin.addons.sitekit.site.FixedWidthView;
 import org.vaadin.addons.sitekit.site.LocalizationProvider;
 import org.vaadin.addons.sitekit.site.LocalizationProviderBundleImpl;
@@ -67,7 +68,7 @@ import java.util.Map;
  */
 @SuppressWarnings({ "serial", "unchecked" })
 @Theme("eelis")
-public final class BareSiteUI extends AbstractSiteUI {
+public final class BareSiteUI extends AbstractSiteUI implements ContentProvider {
 
     /** The logger. */
     private static final Logger LOG = Logger.getLogger(BareSiteUI.class);
@@ -99,6 +100,94 @@ public final class BareSiteUI extends AbstractSiteUI {
         server.join();
     }
 
+    @Override
+    protected Site constructSite(final VaadinRequest request) {
+        final ContentProvider contentProvider = this;
+
+        final LocalizationProvider localizationProvider =
+                new LocalizationProviderBundleImpl("bare-site-localization");
+        BareSiteFields.initialize(localizationProvider, getLocale());
+
+        final SiteContext siteContext = new SiteContext();
+        final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        siteContext.putObject(EntityManager.class, entityManager);
+        siteContext.putObject(Company.class, CompanyDao.getCompany(entityManager,
+                ((VaadinServletRequest) VaadinService.getCurrentRequest()).getHttpServletRequest().getServerName()));
+
+        final SecurityProviderSessionImpl securityProvider = new SecurityProviderSessionImpl(
+                Arrays.asList("administrator", "user"));
+
+        return new Site(SiteMode.PRODUCTION, contentProvider, localizationProvider, securityProvider, siteContext);
+    }
+
+    @Override
+    public SiteDescriptor getSiteDescriptor(final SiteMode siteMode) {
+        final List<ViewDescriptor> viewDescriptors = new ArrayList<ViewDescriptor>();
+
+        viewDescriptors.add(new ViewDescriptor("master", null, null, new ViewVersion(0, null, "Master", "",
+                "This is a master view.", FixedWidthView.class.getCanonicalName(), new String[]{"admin"},
+                Arrays.asList(
+                        new ViewletDescriptor("logo", "Logo", "This is logo.", "eelis-logo-2.png",
+                                ImageViewlet.class.getCanonicalName()),
+                        new ViewletDescriptor("header", "Header", "This is header.", null,
+                                CompanyHeaderViewlet.class.getCanonicalName()),
+                        new ViewletDescriptor("navigation", "NavigationDescriptor", "This is navigation.", null,
+                                NavigationViewlet.class.getCanonicalName()),
+                        new ViewletDescriptor("footer", "Footer", "This is footer.", null,
+                                CompanyFooterViewlet.class.getCanonicalName())
+                ))));
+
+        viewDescriptors.add(new ViewDescriptor("default", null, null, new ViewVersion(0, "master", "Default", "",
+                "This is default view.", FixedWidthView.class.getCanonicalName(), new String[]{},
+                Arrays.asList(new ViewletDescriptor[0])
+        )));
+
+        viewDescriptors.add(new ViewDescriptor("users", null, null, new ViewVersion(
+                0, "master", "Users", "", "This is users page.",
+                FixedWidthView.class.getCanonicalName(), new String[]{"administrator"},
+                Arrays.asList(new ViewletDescriptor(
+                        "content", "Flowlet Sheet", "This is flow sheet.", null,
+                        UserFlowViewlet.class.getCanonicalName())
+                ))));
+        viewDescriptors.add(new ViewDescriptor("groups", null, null, new ViewVersion(
+                0, "master", "Groups", "", "This is groups page.",
+                FixedWidthView.class.getCanonicalName(), new String[]{"administrator"},
+                Arrays.asList(new ViewletDescriptor(
+                        "content", "Flowlet Sheet", "This is flow sheet.", null,
+                        GroupFlowViewlet.class.getCanonicalName())
+                ))));
+        viewDescriptors.add(new ViewDescriptor("customers", null, null, new ViewVersion(
+                0, "master", "Customers", "customers", "This is customers page.",
+                FixedWidthView.class.getCanonicalName(), new String[]{"administrator"},
+                Arrays.asList(new ViewletDescriptor(
+                        "content", "Flowlet Sheet", "This is flow sheet.", null,
+                        CustomerFlowViewlet.class.getCanonicalName())
+                ))));
+        viewDescriptors.add(new ViewDescriptor("companies", null, null, new ViewVersion(
+                0, "master", "Companies", "companies", "This is companies page.",
+                FixedWidthView.class.getCanonicalName(), new String[]{"administrator"},
+                Arrays.asList(new ViewletDescriptor(
+                        "content", "Flowlet Sheet", "This is flow sheet.", null,
+                        CompanyFlowViewlet.class.getCanonicalName())
+                ))));
+
+        viewDescriptors.add(new ViewDescriptor("login", null, null, new ViewVersion(
+                0, "master", "Login SiteView", "login page", "This is login page.",
+                FixedWidthView.class.getCanonicalName(), new String[]{"anonymous"},
+                Arrays.asList(
+                        new ViewletDescriptor(
+                                "content", "Flowlet Sheet", "This is flow sheet.", null,
+                                LoginFlowViewlet.class.getCanonicalName())
+                ))));
+
+        final NavigationDescriptor navigationDescriptor = new NavigationDescriptor("navigation", null, null,
+                new NavigationVersion(0, "default", "default;customers;users;groups;companies;login", true));
+
+        return new SiteDescriptor("Test site.", "test site", "This is a test site.",
+                navigationDescriptor, viewDescriptors);
+
+    }
+
     /** The entity manager factory for test. */
     private static EntityManagerFactory entityManagerFactory;
     static {
@@ -118,87 +207,4 @@ public final class BareSiteUI extends AbstractSiteUI {
         entityManagerFactory = Persistence.createEntityManagerFactory(
                 PERSISTENCE_UNIT, properties);
     }
-
-    @Override
-    protected Site constructSite(final VaadinRequest request) {
-        final LocalizationProvider localizationProvider =
-                new LocalizationProviderBundleImpl("bare-site-localization");
-        BareSiteFields.initialize(localizationProvider, getLocale());
-
-        final SiteContext siteContext = new SiteContext();
-        final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        siteContext.putObject(EntityManager.class, entityManager);
-        siteContext.putObject(Company.class, CompanyDao.getCompany(entityManager,
-                ((VaadinServletRequest) VaadinService.getCurrentRequest()).getHttpServletRequest().getServerName()));
-
-        final List<ViewDescriptor> viewDescriptors = new ArrayList<ViewDescriptor>();
-
-        viewDescriptors.add(new ViewDescriptor("master", null, null, new ViewVersion(0, null, "Master", "",
-            "This is a master view.", FixedWidthView.class.getCanonicalName(), new String[]{"admin"},
-                Arrays.asList(
-                new ViewletDescriptor("logo", "Logo", "This is logo.", "eelis-logo-2.png",
-                        ImageViewlet.class.getCanonicalName()),
-                new ViewletDescriptor("header", "Header", "This is header.", null,
-                        CompanyHeaderViewlet.class.getCanonicalName()),
-                new ViewletDescriptor("navigation", "NavigationDescriptor", "This is navigation.", null,
-                        NavigationViewlet.class.getCanonicalName()),
-                new ViewletDescriptor("footer", "Footer", "This is footer.", null,
-                    CompanyFooterViewlet.class.getCanonicalName())
-        ))));
-
-        viewDescriptors.add(new ViewDescriptor("default", null, null, new ViewVersion(0, "master", "Default", "",
-            "This is default view.", FixedWidthView.class.getCanonicalName(), new String[]{},
-                Arrays.asList(new ViewletDescriptor[0])
-        )));
-
-        viewDescriptors.add(new ViewDescriptor("users", null, null, new ViewVersion(
-                0, "master", "Users", "", "This is users page.",
-                FixedWidthView.class.getCanonicalName(), new String[]{"administrator"},
-                Arrays.asList(new ViewletDescriptor(
-                "content", "Flowlet Sheet", "This is flow sheet.", null,
-                        UserFlowViewlet.class.getCanonicalName())
-                ))));
-        viewDescriptors.add(new ViewDescriptor("groups", null, null, new ViewVersion(
-                0, "master", "Groups", "", "This is groups page.",
-                FixedWidthView.class.getCanonicalName(), new String[]{"administrator"},
-                Arrays.asList(new ViewletDescriptor(
-                "content", "Flowlet Sheet", "This is flow sheet.", null,
-                        GroupFlowViewlet.class.getCanonicalName())
-                ))));
-        viewDescriptors.add(new ViewDescriptor("customers", null, null, new ViewVersion(
-                0, "master", "Customers", "customers", "This is customers page.",
-                FixedWidthView.class.getCanonicalName(), new String[]{"administrator"},
-                Arrays.asList(new ViewletDescriptor(
-                "content", "Flowlet Sheet", "This is flow sheet.", null,
-                        CustomerFlowViewlet.class.getCanonicalName())
-                ))));
-        viewDescriptors.add(new ViewDescriptor("companies", null, null, new ViewVersion(
-                0, "master", "Companies", "companies", "This is companies page.",
-                FixedWidthView.class.getCanonicalName(), new String[]{"administrator"},
-                Arrays.asList(new ViewletDescriptor(
-                "content", "Flowlet Sheet", "This is flow sheet.", null,
-                        CompanyFlowViewlet.class.getCanonicalName())
-                ))));
-
-        viewDescriptors.add(new ViewDescriptor("login", null, null, new ViewVersion(
-                0, "master", "Login SiteView", "login page", "This is login page.",
-                FixedWidthView.class.getCanonicalName(), new String[]{"anonymous"},
-                Arrays.asList(
-                new ViewletDescriptor(
-                        "content", "Flowlet Sheet", "This is flow sheet.", null,
-                        LoginFlowViewlet.class.getCanonicalName())
-        ))));
-
-        final NavigationDescriptor navigationDescriptor = new NavigationDescriptor("navigation", null, null,
-                new NavigationVersion(0, "default", "default;customers;users;groups;companies;login", true));
-
-        final SiteDescriptor siteDescriptor = new SiteDescriptor("Test site.", "test site", "This is a test site.",
-                navigationDescriptor, viewDescriptors);
-
-        final SecurityProviderSessionImpl securityProvider = new SecurityProviderSessionImpl(
-                Arrays.asList("administrator", "user"));
-
-        return new Site(siteDescriptor, SiteMode.PRODUCTION, localizationProvider, securityProvider, siteContext);
-    }
-
 }
