@@ -100,7 +100,7 @@ public final class BareSiteUI extends AbstractSiteUI {
 
     /** The entity manager factory for test. */
     private static EntityManagerFactory entityManagerFactory;
-    {
+    static {
         BasicConfigurator.configure();
         @SuppressWarnings("rawtypes")
         final Map properties = new HashMap();
