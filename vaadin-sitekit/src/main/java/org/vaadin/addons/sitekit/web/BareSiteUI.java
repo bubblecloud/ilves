@@ -121,7 +121,7 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
     }
 
     @Override
-    public SiteDescriptor getSiteDescriptor(final SiteMode siteMode) {
+    public SiteDescriptor getSiteDescriptor() {
         final List<ViewDescriptor> viewDescriptors = new ArrayList<ViewDescriptor>();
 
         viewDescriptors.add(new ViewDescriptor("master", null, null, new ViewVersion(0, null, "Master", "",

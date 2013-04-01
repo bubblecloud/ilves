@@ -20,9 +20,8 @@ package org.vaadin.addons.sitekit.site;
  */
 public interface ContentProvider {
     /**
-     * Gets the SiteDescriptor based on SiteMode.
-     * @param siteMode the SiteMode
+     * Gets the SiteDescriptor.
      * @return the SiteDescriptor
      */
-    SiteDescriptor getSiteDescriptor(SiteMode siteMode);
+    SiteDescriptor getSiteDescriptor();
 }

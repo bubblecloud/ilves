@@ -63,7 +63,7 @@ public final class Site implements ViewProvider, ViewChangeListener {
                 final LocalizationProvider localizationProvider,
             final SecurityProvider securityProvider, final SiteContext siteContext) {
         super();
-        this.siteDescriptor = contentProvider.getSiteDescriptor(siteMode);
+        this.siteDescriptor = contentProvider.getSiteDescriptor();
         this.siteMode = siteMode;
         this.localizationProvider = localizationProvider;
         this.securityProvider = securityProvider;
