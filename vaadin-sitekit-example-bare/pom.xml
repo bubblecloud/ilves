@@ -6,7 +6,7 @@
     <artifactId>vaadin-sitekit-example-bare</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0</version>
-    <name>vaadin-sitekit</name>
+    <name>vaadin-sitekit-example-bare</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -85,7 +85,7 @@
         <dependency>
             <groupId>org.vaadin.addons.sitekit</groupId>
             <artifactId>vaadin-sitekit</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.4</version>
         </dependency>
         <dependency>
             <groupId>hsqldb</groupId>
