@@ -122,6 +122,11 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
             final String userEmailAddress = event.getLoginParameter("username");
             final User user = UserDao.getUser(entityManager, company, userEmailAddress);
 
+            if (user == null) {
+                Notification.show(getSite().localize("message-login-failed"), Notification.TYPE_WARNING_MESSAGE);
+                return;
+            }
+
             final byte[] passwordAndSaltBytes = (user.getEmailAddress()
                     + ":" + ((String) event.getLoginParameter("password")))
                     .getBytes("UTF-8");
