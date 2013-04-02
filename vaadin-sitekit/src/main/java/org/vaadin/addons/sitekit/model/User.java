@@ -54,6 +54,10 @@ public final class User implements Serializable {
     @Column(nullable = false)
     private String emailAddress;
 
+    /** Email address validated. */
+    @Column(nullable = false)
+    private boolean emailAddressValidated;
+
     /** Password hash. */
     @Column(nullable = false)
     private String passwordHash;
@@ -134,6 +138,20 @@ public final class User implements Serializable {
      */
     public void setEmailAddress(final String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    /**
+     * @return is email address validated
+     */
+    public boolean isEmailAddressValidated() {
+        return emailAddressValidated;
+    }
+
+    /**
+     * @param emailAddressValidated is email address validated
+     */
+    public void setEmailAddressValidated(final boolean emailAddressValidated) {
+        this.emailAddressValidated = emailAddressValidated;
     }
 
     /**

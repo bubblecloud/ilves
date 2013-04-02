@@ -18,6 +18,7 @@ package org.vaadin.addons.sitekit.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -26,6 +27,7 @@ import java.io.Serializable;
  * @author Tommi S.E. Laukkanen
  */
 @Entity
+@Table(name = "postaladdress")
 public final class PostalAddress implements Serializable {
     /** Java serialization version UID. */
     private static final long serialVersionUID = 1L;

@@ -9,7 +9,6 @@
 		<class>org.vaadin.addons.sitekit.model.Group</class>
 		<class>org.vaadin.addons.sitekit.model.GroupMember</class>
 		<class>org.vaadin.addons.sitekit.model.Privilege</class>
-		<shared-cache-mode>NONE</shared-cache-mode>
 		<properties>
 			<property name="eclipselink.session.customizer" value="org.vaadin.addons.sitekit.model.UuidSequence"/>
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://127.0.0.1:5432/site"/>
@@ -18,9 +17,10 @@
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 			<property name="eclipselink.cache.type.default" value="NONE"/>
 			<property name="eclipselink.ddl-generation.output-mode" value="database"/>
-			<property name="eclipselink.ddl-generation" value="create-tables"/>
-			<property name="eclipselink.logging.level" value="SEVERE"/>
+			<property name="eclipselink.ddl-generation" value="none"/>
+			<property name="eclipselink.logging.level" value="WARNING"/>
 			<property name="eclipselink.jdbc.timeout" value="3"/>
+            <property name="eclipselink.jdbc.uppercase-columns" value="true" />
 		</properties>
 	</persistence-unit>
 </persistence>

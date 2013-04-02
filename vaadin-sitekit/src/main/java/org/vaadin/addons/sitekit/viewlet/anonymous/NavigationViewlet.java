@@ -167,7 +167,7 @@ public final class NavigationViewlet extends AbstractViewlet {
      * SiteView constructSite occurred.
      */
     @Override
-    public void enter() {
+    public void enter(final String parameters) {
         final List<String> currentRoles = getSite().getSecurityProvider().getRoles();
         if (!currentRoles.equals(lastRoles)) {
             refresh();

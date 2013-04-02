@@ -52,7 +52,7 @@ public final class CompanyHeaderViewlet extends AbstractViewlet {
     }
 
     @Override
-    public void enter() {
+    public void enter(final String parameters) {
         final Company company = getSite().getSiteContext().getObject(Company.class);
         if (company != null) {
             companyLabel.setValue(company.getCompanyName() + " (" + company.getCompanyCode() + ")");

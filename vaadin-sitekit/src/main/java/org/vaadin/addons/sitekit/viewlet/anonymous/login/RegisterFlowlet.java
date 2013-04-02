@@ -21,8 +21,12 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 
+import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinServletRequest;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
+import org.vaadin.addons.sitekit.util.EmailUtil;
 import org.vaadin.addons.sitekit.util.StringUtil;
 import org.vaadin.addons.sitekit.web.BareSiteFields;
 import org.vaadin.addons.sitekit.grid.validator.PasswordValidator;
@@ -61,7 +65,7 @@ import com.vaadin.ui.VerticalLayout;
 public final class RegisterFlowlet extends AbstractFlowlet {
 
     /** The logger. */
-    private static final Logger LOG = Logger.getLogger(RegisterFlowlet.class);
+    private static final Logger LOGGER = Logger.getLogger(RegisterFlowlet.class);
 
     /** Default serial version UID. */
     private static final long serialVersionUID = 1L;
@@ -140,7 +144,7 @@ public final class RegisterFlowlet extends AbstractFlowlet {
 
                 if (UserDao.getUser(entityManager, company, customer.getEmailAddress()) != null) {
                     Notification.show(getSite().localize("message-user-email-address-registered"),
-                            Notification.TYPE_WARNING_MESSAGE);
+                            Notification.Type.WARNING_MESSAGE);
                     return;
                 }
 
@@ -164,12 +168,21 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                     UserDao.addUserPrivilege(entityManager, user, "member", customer.getCustomerId());
                     UserDao.addUserPrivilege(entityManager, user, "administrator", customer.getCustomerId());
 
+                    final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
+                            .getHttpServletRequest();
+                    final String url = request.getScheme() + "://" + request.getServerName() + ":"
+                            + request.getServerPort() + request.getContextPath() + "#!validate/" +
+                            user.getUserId();
+
+                    EmailUtil.send(user.getEmailAddress(), company.getSupportEmailAddress(), "Email Validation",
+                            "Please validate your email by browsing to this URL: " + url);
+
                     Notification.show(getSite().localize("message-registration-success"),
-                            Notification.TYPE_HUMANIZED_MESSAGE);
+                            Notification.Type.HUMANIZED_MESSAGE);
 
                     getViewSheet().back();
                 } catch (final Exception e) {
-                    LOG.error("Error adding user.", e);
+                    LOGGER.error("Error adding user.", e);
                     Notification.show(getSite().localize("message-registration-error"),
                             Notification.TYPE_WARNING_MESSAGE);
                 }

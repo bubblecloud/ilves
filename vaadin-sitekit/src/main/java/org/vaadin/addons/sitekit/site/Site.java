@@ -233,7 +233,11 @@ public final class Site implements ViewProvider, ViewChangeListener {
         if (viewAndParameters.length() == 0) {
             return getCurrentNavigationVersion().getDefaultPageName();
         }
-        return viewAndParameters;
+        if (viewAndParameters.contains("/")) {
+            return viewAndParameters.split("/")[0];
+        } else {
+            return viewAndParameters;
+        }
     }
 
     @Override

@@ -47,8 +47,7 @@ public final class ImageViewlet extends AbstractViewlet {
      * SiteView constructSite occurred.
      */
     @Override
-    public void enter() {
-        // TODO Auto-generated method stub
+    public void enter(final String parameters) {
 
     }
 

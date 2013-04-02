@@ -49,7 +49,7 @@ public final class CompanyFooterViewlet extends AbstractViewlet {
     }
 
     @Override
-    public void enter() {
+    public void enter(final String parameters) {
         final Company company = getSite().getSiteContext().getObject(Company.class);
         if (company != null) {
             companyLabel.setCaption(company.getCompanyName() + " (" + company.getCompanyCode() + ")");

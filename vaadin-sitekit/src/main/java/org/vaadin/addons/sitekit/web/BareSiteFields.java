@@ -156,6 +156,7 @@ public class BareSiteFields {
                 true, true, true));
 
         BareSiteFields.add(User.class, new FieldDescriptor("emailAddress", "Email Address", TextField.class, null, 150, null, String.class, "", false, true, true), new EmailValidator("Email address is not valid."));
+        BareSiteFields.add(User.class, new FieldDescriptor("emailAddressValidated", "Email Validated", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
         BareSiteFields.add(User.class, new FieldDescriptor("passwordHash", "Password", PasswordField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(User.class, new FieldDescriptor("lastName", "Last Name", TextField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(User.class, new FieldDescriptor("firstName", "First Name", TextField.class, null, 100, null, String.class, "", false, true, true));

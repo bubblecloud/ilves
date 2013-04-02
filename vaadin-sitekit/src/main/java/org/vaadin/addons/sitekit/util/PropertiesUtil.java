@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.util;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -27,12 +28,19 @@ import java.util.Properties;
  *
  * @author Tommi S.E. Laukkanen
  */
-public class PropertiesUtil {
+public final class PropertiesUtil {
 
     /** The loaded properties. */
     private static final Map<String, Properties> PROPERTIES_MAP = new HashMap<String, Properties>();
     /** The loaded extension properties. */
     private static final Map<String, Properties> EXTENDED_PROPERTIES_MAP = new HashMap<String, Properties>();
+
+    /**
+     * Private default constructor to disable construction of utility class.
+     */
+    private PropertiesUtil() {
+
+    }
 
     /**
      * Gets property value String or null if no value is defined.
@@ -76,9 +84,17 @@ public class PropertiesUtil {
     private static Properties getProperties(final String categoryKey) {
         final String propertiesFileName = categoryKey + ".properties";
         final Properties properties = new Properties();
-        final InputStream inputStream = PropertiesUtil.class.getClassLoader().getResourceAsStream(propertiesFileName);
+        InputStream inputStream = PropertiesUtil.class.getClassLoader().getResourceAsStream(propertiesFileName);
         if (inputStream == null) {
-            return null;
+            try {
+                inputStream = new FileInputStream(propertiesFileName);
+            } catch (final IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+            if (inputStream == null) {
+                return null;
+            }
         }
         try {
             properties.load(inputStream);

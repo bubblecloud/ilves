@@ -31,7 +31,8 @@ public interface Viewlet {
 
     /**
      * SiteView constructSite occurred.
+     * @param parameters view parameters
      */
-    void enter();
+    void enter(final String parameters);
 
 }

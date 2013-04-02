@@ -140,8 +140,7 @@ public abstract class AbstractSiteView extends GridLayout implements View, SiteV
     @Override
     public final void enter(final ViewChangeListener.ViewChangeEvent event) {
         LOGGER.debug("View enter: " + event.getViewName() + " (" + this.getViewDescriptor().getName()
-                + "." + this.getViewVersion().getVersion() + ")");
-
+                + "." + this.getViewVersion().getVersion() + ") parameters: " + event.getParameters());
         UI.getCurrent().getPage().setTitle(getViewVersion().getTitle());
 
         if (pageVersion.getViewerRoles().length > 0) {
@@ -163,7 +162,7 @@ public abstract class AbstractSiteView extends GridLayout implements View, SiteV
 
         for (final AbstractComponent component : slotComponentMap.values()) {
             if (component instanceof Viewlet) {
-                ((Viewlet) component).enter();
+                ((Viewlet) component).enter(event.getParameters());
             }
         }
     }

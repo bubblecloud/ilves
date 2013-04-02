@@ -40,6 +40,7 @@ import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.user.UserFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.CompanyFooterViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.CompanyHeaderViewlet;
+import org.vaadin.addons.sitekit.viewlet.anonymous.EmailValidationViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.ImageViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.NavigationViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.login.LoginFlowViewlet;
@@ -178,6 +179,14 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
                         new ViewletDescriptor(
                                 "content", "Flowlet Sheet", "This is flow sheet.", null,
                                 LoginFlowViewlet.class.getCanonicalName())
+                ))));
+        viewDescriptors.add(new ViewDescriptor("validate", null, null, new ViewVersion(
+                0, "master", "Email Validation", "email validation page", "This is email validation page.",
+                FixedWidthView.class.getCanonicalName(), new String[]{"anonymous"},
+                Arrays.asList(
+                        new ViewletDescriptor(
+                                "content", "Email Validation", "This is email validation flowlet.", null,
+                                EmailValidationViewlet.class.getCanonicalName())
                 ))));
 
         final NavigationDescriptor navigationDescriptor = new NavigationDescriptor("navigation", null, null,

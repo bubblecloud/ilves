@@ -23,6 +23,7 @@ import org.vaadin.addons.sitekit.model.User;
 import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
@@ -108,10 +109,24 @@ public class UserDao {
     /**
      * Gets given user.
      * @param entityManager the entity manager.
-     * @param owner the owning company
-     * @param emailAddress the email address
+     * @param userId the user ID
      * @return the group
      */
+    public static final User getUser(final EntityManager entityManager, final String userId) {
+        try {
+        return entityManager.getReference(User.class, userId);
+        } catch (final EntityNotFoundException e) {
+            return null;
+        }
+    }
+
+        /**
+         * Gets given user.
+         * @param entityManager the entity manager.
+         * @param owner the owning company
+         * @param emailAddress the email address
+         * @return the group
+         */
     public static final User getUser(final EntityManager entityManager, final Company owner, final String emailAddress) {
         final TypedQuery<User> query = entityManager.createQuery("select e from User as e where e.owner=:owner and e.emailAddress=:emailAddress",
                 User.class);

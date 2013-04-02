@@ -34,7 +34,7 @@ import java.util.Date;
  * @author Tommi S.E. Laukkanen
  */
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "user_userid", "group_groupid" }) })
+@Table(name = "privilege", uniqueConstraints = { @UniqueConstraint(columnNames = { "user_userid", "group_groupid" }) })
 public final class Privilege implements Serializable {
     /** Java serialization version UID. */
     private static final long serialVersionUID = 1L;

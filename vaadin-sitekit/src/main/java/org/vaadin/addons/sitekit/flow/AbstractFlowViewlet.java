@@ -189,11 +189,8 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
         back();
     }
 
-    /**
-     * SiteView constructSite occurred.
-     */
     @Override
-    public final void enter() {
+    public final void enter(final String parameters) {
         /*for (final Flowlet view : views.values()) {
             view.enter();
         }*/
