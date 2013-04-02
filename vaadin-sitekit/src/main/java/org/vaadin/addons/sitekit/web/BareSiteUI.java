@@ -106,7 +106,7 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
         final ContentProvider contentProvider = this;
 
         final LocalizationProvider localizationProvider =
-                new LocalizationProviderBundleImpl("bare-site-localization");
+                new LocalizationProviderBundleImpl(new String[] {"bare-site-localization"});
         BareSiteFields.initialize(localizationProvider, getLocale());
 
         final SiteContext siteContext = new SiteContext();

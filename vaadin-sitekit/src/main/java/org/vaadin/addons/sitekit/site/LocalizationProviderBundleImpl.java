@@ -15,7 +15,9 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -28,17 +30,17 @@ import java.util.ResourceBundle;
  */
 public final class LocalizationProviderBundleImpl implements LocalizationProvider {
 
-    /** The bundle base name. */
-    private final String bundleBaseName;
+    /** The bundle base names. */
+    private final String[] bundleBaseNames;
     /** The loaded resource bundles. */
-    private final Map<Locale, ResourceBundle> resourceBundles = new HashMap<Locale, ResourceBundle>();
+    private final Map<Locale, List<ResourceBundle>> resourceBundles = new HashMap<>();
 
     /**
-     * Constructor which allows setting bundle base name.
-     * @param bundleBaseName the base name of the bundle.
+     * Constructor which allows setting bundle base names.
+     * @param bundleBaseNames base names of the bundles.
      */
-    public LocalizationProviderBundleImpl(final String bundleBaseName) {
-        this.bundleBaseName = bundleBaseName;
+    public LocalizationProviderBundleImpl(final String[] bundleBaseNames) {
+        this.bundleBaseNames = bundleBaseNames;
     }
 
     /**
@@ -47,14 +49,19 @@ public final class LocalizationProviderBundleImpl implements LocalizationProvide
     @Override
     public String localize(final String key, final Locale locale) {
         if (!resourceBundles.containsKey(locale)) {
-            resourceBundles.put(locale, ResourceBundle.getBundle(bundleBaseName));
+            resourceBundles.put(locale, new ArrayList<ResourceBundle>());
+            final List<ResourceBundle> bundles = resourceBundles.get(locale);
+            for (final String bundleBaseName : bundleBaseNames) {
+                bundles.add(ResourceBundle.getBundle(bundleBaseName, locale));
+            }
         }
 
-        try {
-            return resourceBundles.get(locale).getString(key);
-        } catch (final MissingResourceException e) {
-            return locale.toString() + "." + key;
+        for (final ResourceBundle resourceBundle : resourceBundles.get(locale)) {
+            if (resourceBundle.containsKey(key)) {
+                return resourceBundle.getString(key);
+            }
         }
+        return locale.toString() + "." + key;
     }
 
 }
