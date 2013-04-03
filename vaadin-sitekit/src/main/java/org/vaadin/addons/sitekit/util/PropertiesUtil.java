@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,6 +88,9 @@ public final class PropertiesUtil {
         InputStream inputStream = PropertiesUtil.class.getClassLoader().getResourceAsStream(propertiesFileName);
         if (inputStream == null) {
             try {
+                if (!new File(propertiesFileName).exists()) {
+                    return null;
+                }
                 inputStream = new FileInputStream(propertiesFileName);
             } catch (final IOException e) {
                 e.printStackTrace();

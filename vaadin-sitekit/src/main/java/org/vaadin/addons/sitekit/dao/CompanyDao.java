@@ -51,4 +51,17 @@ public class CompanyDao {
             return null;
         }
     }
+
+    /**
+     * Gets companies.
+     * @param entityManager the entity manager
+     * @return list of companies
+     */
+    public static List<Company> getCompanies(final EntityManager entityManager) {
+        final CriteriaBuilder queryBuilder = entityManager.getCriteriaBuilder();
+        final CriteriaQuery<Company> criteriaQuery = queryBuilder.createQuery(Company.class);
+        final Root<Company> companyRoot = criteriaQuery.from(Company.class);
+        final TypedQuery<Company> typedQuery = entityManager.createQuery(criteriaQuery);
+        return typedQuery.getResultList();
+    }
 }
