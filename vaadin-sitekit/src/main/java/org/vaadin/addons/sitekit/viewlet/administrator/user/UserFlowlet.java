@@ -271,6 +271,7 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
         entityManager.refresh(user);
         entityManager.detach(user);
         editor.setItem(new BeanItem<User>(user), false);
+        childContainer.getQueryView().getQueryDefinition().removeDefaultFilters();
         childContainer.getQueryView().getQueryDefinition().addDefaultFilter(new Compare.Equal("user", user));
         childGrid.refresh();
     }
