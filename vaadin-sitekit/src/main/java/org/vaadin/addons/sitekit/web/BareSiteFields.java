@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.vaadin.addons.sitekit.web;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ import com.vaadin.ui.TextField;
  *
  * @author Tommi S.E. Laukkanen
  */
-public class BareSiteFields {
+public final class BareSiteFields {
     /**
      * Flag reflecting whether initialization of field descriptors has been done
      * for JVM.
