@@ -112,8 +112,14 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
         final SiteContext siteContext = new SiteContext();
         final EntityManager entityManager = entityManagerFactory.createEntityManager();
         siteContext.putObject(EntityManager.class, entityManager);
-        siteContext.putObject(Company.class, CompanyDao.getCompany(entityManager,
-                ((VaadinServletRequest) VaadinService.getCurrentRequest()).getHttpServletRequest().getServerName()));
+
+        Company company = CompanyDao.getCompany(entityManager,
+                ((VaadinServletRequest) VaadinService.getCurrentRequest()).getHttpServletRequest().getServerName());
+        if (company == null) {
+            // If no exact host match exists then try to find global company marked with *.
+            company = CompanyDao.getCompany(entityManager, "*");
+        }
+        siteContext.putObject(Company.class, company);
 
         final SecurityProviderSessionImpl securityProvider = new SecurityProviderSessionImpl(
                 Arrays.asList("administrator", "user"));
