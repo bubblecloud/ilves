@@ -25,6 +25,7 @@ import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Layout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import org.vaadin.addons.lazyquerycontainer.LazyQueryContainer;
@@ -52,13 +53,9 @@ public class Grid extends CustomComponent {
     /** Filter definitions defining filters for the grid. */
     private List<FilterDescriptor> filters;
     /** Table which represents the grid visually. */
-    private final Table table;
-    /** The root layout. */
-    private final GridLayout rootLayout;
-    /** The layout used for table. */
-    private final VerticalLayout tableLayout;
+    private Table table;
     /** The layout used for filter components. */
-    private final HorizontalLayout filterLayout;
+    private Layout filterLayout;
 
     /**
      * Constructor for setting the internal Container to be used as data source.
@@ -67,31 +64,56 @@ public class Grid extends CustomComponent {
      */
     public Grid(final Table table, final LazyQueryContainer container) {
         super();
-        rootLayout = new GridLayout(1, 2);
-        rootLayout.setSpacing(true);
-        rootLayout.setRowExpandRatio(0, 0f);
-        rootLayout.setRowExpandRatio(1, 1f);
-        setCompositionRoot(rootLayout);
-        filterLayout = new HorizontalLayout();
-        filterLayout.setSpacing(true);
-        rootLayout.addComponent(filterLayout, 0, 0);
-        tableLayout = new VerticalLayout();
-        rootLayout.addComponent(tableLayout, 0, 1);
+        construct(table, container, true);
+    }
 
+    /**
+     * Constructor for setting the internal Container to be used as data source.
+     * @param table the Table to be used.
+     * @param container the Container to be used.
+     * @param showFilters true if filters should be shown
+     */
+    public Grid(final Table table, final LazyQueryContainer container, final boolean showFilters) {
+        super();
+        construct(table, container, showFilters);
+    }
+
+    /**
+     * Constructs the grid layout.
+     * @param table the table
+     * @param container the container
+     * @param showFilters true if filters should be shown.
+     */
+    private void construct(final Table table, final LazyQueryContainer container, final boolean showFilters) {
         this.table = table;
-        table.setImmediate(true);
 
+        table.setImmediate(true);
         table.setSelectable(true);
         table.setBuffered(false);
         table.setColumnCollapsingAllowed(true);
-
-        tableLayout.addComponent(table);
         table.setContainerDataSource(container);
-
-        setSizeFull();
-        rootLayout.setSizeFull();
-        tableLayout.setSizeFull();
         table.setSizeFull();
+
+        if (showFilters) {
+            final GridLayout layout = new GridLayout(1, 2);
+            layout.setSpacing(true);
+            layout.setRowExpandRatio(0, 0f);
+            layout.setRowExpandRatio(1, 1f);
+
+            filterLayout = new HorizontalLayout();
+            ((HorizontalLayout) filterLayout).setSpacing(true);
+
+            layout.addComponent(filterLayout, 0, 0);
+            layout.addComponent(table, 0, 1);
+
+            setCompositionRoot(layout);
+            layout.setSizeFull();
+            setSizeFull();
+        } else {
+            setCompositionRoot(table);
+            setSizeFull();
+        }
+
     }
 
     /**
@@ -133,6 +155,10 @@ public class Grid extends CustomComponent {
         for (final FieldDescriptor fieldDefinition : fieldDefinitions) {
             if (fieldDefinition.getWidth() != -1) {
                 table.setColumnWidth(fieldDefinition.getId(), fieldDefinition.getWidth());
+                table.setColumnExpandRatio(fieldDefinition.getId(), 0);
+            } else {
+                table.setColumnWidth(fieldDefinition.getId(), fieldDefinition.getWidth());
+                table.setColumnExpandRatio(fieldDefinition.getId(), 1);
             }
             if (table instanceof FormattingTable && fieldDefinition.getFormatterClass() != null) {
                 try {
@@ -161,21 +187,23 @@ public class Grid extends CustomComponent {
      */
     public final void setFilters(final List<FilterDescriptor> filterDefinitions) {
         this.filters = filterDefinitions;
-        filterLayout.removeAllComponents();
-        for (final FilterDescriptor filterDefinition : filterDefinitions) {
-            filterDefinition.getField().setWidth(filterDefinition.getWidth() + "px");
-            filterDefinition.getField().setCaption(filterDefinition.getLabel());
-            filterDefinition.getField().setValue(filterDefinition.getDefaultValue());
-            ((AbstractComponent) filterDefinition.getField()).setImmediate(true);
-            filterDefinition.getField().addListener(new Property.ValueChangeListener() {
-                private static final long serialVersionUID = 1L;
+        if (filterLayout != null) {
+            filterLayout.removeAllComponents();
+            for (final FilterDescriptor filterDefinition : filterDefinitions) {
+                filterDefinition.getField().setWidth(filterDefinition.getWidth() + "px");
+                filterDefinition.getField().setCaption(filterDefinition.getLabel());
+                filterDefinition.getField().setValue(filterDefinition.getDefaultValue());
+                ((AbstractComponent) filterDefinition.getField()).setImmediate(true);
+                filterDefinition.getField().addListener(new Property.ValueChangeListener() {
+                    private static final long serialVersionUID = 1L;
 
-                @Override
-                public void valueChange(final ValueChangeEvent event) {
-                    refresh();
-                }
-            });
-            filterLayout.addComponent(filterDefinition.getField());
+                    @Override
+                    public void valueChange(final ValueChangeEvent event) {
+                        refresh();
+                    }
+                });
+                filterLayout.addComponent(filterDefinition.getField());
+            }
         }
     }
 
@@ -268,22 +296,8 @@ public class Grid extends CustomComponent {
     /**
      * @return the filterLayout
      */
-    public final HorizontalLayout getFilterLayout() {
+    public final Layout getFilterLayout() {
         return filterLayout;
-    }
-
-    /**
-     * @return the rootLayout
-     */
-    public final GridLayout getRootLayout() {
-        return rootLayout;
-    }
-
-    /**
-     * @return the tableLayout
-     */
-    public final VerticalLayout getTableLayout() {
-        return tableLayout;
     }
 
 }
