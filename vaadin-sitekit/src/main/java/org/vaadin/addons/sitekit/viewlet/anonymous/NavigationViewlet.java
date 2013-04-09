@@ -15,6 +15,10 @@
  */
 package org.vaadin.addons.sitekit.viewlet.anonymous;
 
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinServletRequest;
+import com.vaadin.server.VaadinSession;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
 import org.vaadin.addons.sitekit.site.NavigationVersion;
 import org.vaadin.addons.sitekit.site.ViewVersion;
@@ -30,6 +34,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -146,9 +151,12 @@ public final class NavigationViewlet extends AbstractViewlet {
                 @Override
                 public void buttonClick(final ClickEvent event) {
 
+                    final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
+                            .getHttpServletRequest();
+                    final String url = request.getScheme() + "://" + request.getServerName() + ":"
+                            + request.getServerPort() + request.getContextPath() + request.getServletPath();
                     // Redirect from the page
-                    getUI().getPage().setLocation(
-                            "/");
+                    getUI().getPage().setLocation(url);
 
                     // Close the VaadinSession
                     getSession().close();
