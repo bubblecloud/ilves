@@ -584,3 +584,17 @@ GRANT ALL ON TABLE user_ TO site;
 -- PostgreSQL database dump complete
 --
 
+CREATE TABLE schemaversion
+(
+  created timestamp without time zone NOT NULL,
+  schemaname character varying(255) NOT NULL,
+  schemaversion character varying(255) NOT NULL,
+  CONSTRAINT schemaversion_pkey PRIMARY KEY (created )
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE schemaversion
+  OWNER TO site;
+
+INSERT INTO schemaversion VALUES (NOW(), 'bare', '0001');

@@ -33,6 +33,7 @@ import org.vaadin.addons.sitekit.site.SiteMode;
 import org.vaadin.addons.sitekit.site.ViewDescriptor;
 import org.vaadin.addons.sitekit.site.ViewVersion;
 import org.vaadin.addons.sitekit.site.ViewletDescriptor;
+import org.vaadin.addons.sitekit.util.PersistenceUtil;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
 import org.vaadin.addons.sitekit.viewlet.administrator.company.CompanyFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowViewlet;
@@ -86,6 +87,8 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
     public static void main(final String[] args) throws Exception {
         DOMConfigurator.configure("./log4j.xml");
 
+        entityManagerFactory = PersistenceUtil.getEntityManagerFactory(PERSISTENCE_UNIT, PROPERTIES_CATEGORY);
+
         final String webappUrl = BareSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm();
 
         final Server server = new Server(8081);
@@ -103,6 +106,7 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
 
     @Override
     protected Site constructSite(final VaadinRequest request) {
+
         final ContentProvider contentProvider = this;
 
         final LocalizationProvider localizationProvider =
@@ -205,21 +209,5 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
 
     /** The entity manager factory for test. */
     private static EntityManagerFactory entityManagerFactory;
-    static {
-        //BasicConfigurator.configure();
-        @SuppressWarnings("rawtypes")
-        final Map properties = new HashMap();
-        properties.put(PersistenceUnitProperties.JDBC_DRIVER, PropertiesUtil.getProperty(
-                PROPERTIES_CATEGORY, PersistenceUnitProperties.JDBC_DRIVER));
-        properties.put(PersistenceUnitProperties.JDBC_URL, PropertiesUtil.getProperty(
-                PROPERTIES_CATEGORY, PersistenceUnitProperties.JDBC_URL));
-        properties.put(PersistenceUnitProperties.JDBC_USER, PropertiesUtil.getProperty(
-                PROPERTIES_CATEGORY, PersistenceUnitProperties.JDBC_USER));
-        properties.put(PersistenceUnitProperties.JDBC_PASSWORD, PropertiesUtil.getProperty(
-                PROPERTIES_CATEGORY, PersistenceUnitProperties.JDBC_PASSWORD));
-        properties.put(PersistenceUnitProperties.DDL_GENERATION, PropertiesUtil.getProperty(
-                PROPERTIES_CATEGORY, PersistenceUnitProperties.DDL_GENERATION));
-        entityManagerFactory = Persistence.createEntityManagerFactory(
-                PERSISTENCE_UNIT, properties);
-    }
+
 }

@@ -9,6 +9,7 @@
 		<class>org.vaadin.addons.sitekit.model.Group</class>
 		<class>org.vaadin.addons.sitekit.model.GroupMember</class>
 		<class>org.vaadin.addons.sitekit.model.Privilege</class>
+        <class>org.vaadin.addons.sitekit.model.SchemaVersion</class>
 		<properties>
 			<property name="eclipselink.session.customizer" value="org.vaadin.addons.sitekit.model.UuidSequence"/>
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://127.0.0.1:5432/site"/>
