@@ -27,6 +27,7 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.util.EmailUtil;
+import org.vaadin.addons.sitekit.util.PropertiesUtil;
 import org.vaadin.addons.sitekit.util.StringUtil;
 import org.vaadin.addons.sitekit.web.BareSiteFields;
 import org.vaadin.addons.sitekit.grid.validator.PasswordValidator;
@@ -174,7 +175,8 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                             + request.getServerPort() + request.getContextPath() + request.getServletPath() +
                             "#!validate/" + user.getUserId();
 
-                    EmailUtil.send(user.getEmailAddress(), company.getSupportEmailAddress(), "Email Validation",
+                    EmailUtil.send(PropertiesUtil.getProperty("bare-site", "smtp-host"),
+                            user.getEmailAddress(), company.getSupportEmailAddress(), "Email Validation",
                             "Please validate your email by browsing to this URL: " + url);
 
                     Notification.show(getSite().localize("message-registration-success"),

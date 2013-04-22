@@ -41,16 +41,18 @@ public class EmailUtil {
 
     /**
      * Sends email.
+     * @param smtpHost the SMTP host
      * @param to target email address
      * @param from from email address
      * @param subject the email subject
      * @param body the email body
      * @return
      */
-    public static void send(final String to, final String from, final String subject, final String body) {
+    public static void send(final String smtpHost,
+                            final String to, final String from, final String subject, final String body) {
         try {
             final Properties properties = System.getProperties();
-            properties.put("mail.smtp.host", PropertiesUtil.getProperty("bare-site", "smtp-host"));
+            properties.put("mail.smtp.host", smtpHost);
             final Session session = Session.getDefaultInstance(properties, null);
 
             // Text part

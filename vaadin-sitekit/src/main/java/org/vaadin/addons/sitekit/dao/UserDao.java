@@ -162,6 +162,25 @@ public class UserDao {
     }
 
     /**
+     * Gets list of users in a group
+     * @param entityManager the entity manager.
+     * @param owner the owning company
+     * @param group the group
+     * @return list of groups
+     */
+    public static final List<User> getGroupMembers(final EntityManager entityManager, final Company owner, final Group group) {
+        final TypedQuery<GroupMember> query = entityManager.createQuery("select e from GroupMember as e where e.group=:group order by e.user.firstName, e.user.lastName",
+                GroupMember.class);
+        query.setParameter("group", group);
+        final List<GroupMember> groupMembers = query.getResultList();
+        final List<User> users = new ArrayList<User>();
+        for (final GroupMember groupMember : groupMembers) {
+            users.add(groupMember.getUser());
+        }
+        return users;
+    }
+
+    /**
      * Adds new group to database.
      * @param entityManager the entity manager
      * @param group the group
