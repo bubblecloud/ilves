@@ -33,7 +33,7 @@ public final class LocalizationProviderBundleImpl implements LocalizationProvide
     /** The bundle base names. */
     private final String[] bundleBaseNames;
     /** The loaded resource bundles. */
-    private final Map<Locale, List<ResourceBundle>> resourceBundles = new HashMap<>();
+    private final Map<Locale, List<ResourceBundle>> resourceBundles = new HashMap<Locale, List<ResourceBundle>>();
 
     /**
      * Constructor which allows setting bundle base names.

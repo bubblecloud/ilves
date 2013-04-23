@@ -34,7 +34,7 @@ public final class PersistenceUtil {
     /**
      * The entity manager factory for test.
      */
-    private static Map<String, EntityManagerFactory> entityManagerFactories = new HashMap<>();
+    private static Map<String, EntityManagerFactory> entityManagerFactories = new HashMap<String, EntityManagerFactory>();
 
     /**
      * Private constructor to disable construction of utility class.
