@@ -18,10 +18,13 @@ package org.vaadin.addons.sitekit.grid;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.PropertyFormatter;
 import com.vaadin.ui.Field;
+import com.vaadin.ui.UI;
+import org.vaadin.addons.sitekit.site.AbstractSiteUI;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Value object containing field definition information.
@@ -31,8 +34,8 @@ import java.util.List;
 public final class FieldDescriptor {
     /** ID of the field. */
     private final String id;
-    /** Label of the field. */
-    private final String label;
+    /** Label localization key of the field. */
+    private final String labelKey;
     /** Width of the field. */
     private final int width;
     /** Type of the field value. */
@@ -57,7 +60,7 @@ public final class FieldDescriptor {
     /**
      * Constructor for setting values of the FieldDefinition.
      * @param id ID of the field.
-     * @param label Label of the field.
+     * @param labelKey Localization key of the field.
      * @param fieldClass Field editor component or null.
      * @param formatterClass Field value formatter class.
      * @param width Width of the field.
@@ -68,12 +71,13 @@ public final class FieldDescriptor {
      * @param sortable true if field is sortable.
      * @param required true if field is required.
      */
-    public FieldDescriptor(final String id, final String label, final Class<? extends Field> fieldClass,
-            final Class<? extends PropertyFormatter> formatterClass, final int width, final HorizontalAlignment valueAlignment, final Class<?> valueType,
+    public FieldDescriptor(final String id, final String labelKey, final Class<? extends Field> fieldClass,
+            final Class<? extends PropertyFormatter> formatterClass, final int width,
+            final HorizontalAlignment valueAlignment, final Class<?> valueType,
             final Object defaultValue, final boolean readOnly, final boolean sortable, final boolean required) {
         super();
         this.id = id;
-        this.label = label;
+        this.labelKey = labelKey;
         this.width = width;
         this.valueType = valueType;
         this.defaultValue = defaultValue;
@@ -98,7 +102,10 @@ public final class FieldDescriptor {
      * @return the label
      */
     public String getLabel() {
-        return label;
+        final AbstractSiteUI siteUI = (AbstractSiteUI) UI.getCurrent();
+        final Locale locale = siteUI.getLocale();
+        siteUI.getSite().getLocalizationProvider().localize(labelKey, locale);
+        return labelKey;
     }
 
     /**
