@@ -28,6 +28,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
+import org.apache.log4j.Logger;
 import org.vaadin.addons.lazyquerycontainer.LazyQueryContainer;
 import org.vaadin.addons.lazyquerycontainer.LazyQueryView;
 import org.vaadin.addons.lazyquerycontainer.QueryItemStatusColumnGenerator;
@@ -44,6 +45,8 @@ import java.util.Map;
  * @author Tommi S.E. Laukkanen
  */
 public class Grid extends CustomComponent {
+    /** The logger. */
+    private static final Logger LOGGER = Logger.getLogger(Grid.class);
     /** Width of the status column. */
     private static final int STATUS_COLUMN_WIDTH = 18;
     /** Java serialization version UID. */
@@ -113,7 +116,6 @@ public class Grid extends CustomComponent {
             setCompositionRoot(table);
             setSizeFull();
         }
-
     }
 
     /**

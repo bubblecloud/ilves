@@ -74,9 +74,9 @@ public final class Site implements ViewProvider, ViewChangeListener {
      * Initialize the site.
      */
     public void initialize() {
-        for (final ViewDescriptor view : this.siteDescriptor.getPageDescriptors()) {
-            setPage(view);
-        }
+        /*for (final ViewDescriptor view : this.siteDescriptor.getViewDescriptors()) {
+            constructView(view);
+        }*/
     }
 
     /**
@@ -174,7 +174,7 @@ public final class Site implements ViewProvider, ViewChangeListener {
      * @return The current view version.
      */
     public ViewVersion getCurrentViewVersion(final String viewName) {
-        for (final ViewDescriptor view : siteDescriptor.getPageDescriptors()) {
+        for (final ViewDescriptor view : siteDescriptor.getViewDescriptors()) {
             if (viewName.equals(view.getName())) {
                 ViewVersion viewVersion = null;
                 if (siteMode == SiteMode.DEVELOPMENT) {
@@ -193,10 +193,11 @@ public final class Site implements ViewProvider, ViewChangeListener {
     }
 
     /**
-     * Sets view to the portal.
+     * Constructs view to the portal.
      * @param viewDescriptor The view descriptor of the view to be added.
      */
-    private void setPage(final ViewDescriptor viewDescriptor) {
+    private void constructView(final ViewDescriptor viewDescriptor) {
+        final long startTimeMillis = System.currentTimeMillis();
         views.remove(viewDescriptor.getName());
 
         ViewVersion viewVersion = null;
@@ -226,6 +227,8 @@ public final class Site implements ViewProvider, ViewChangeListener {
             LOGGER.error("Error instantiating view window: " + viewDescriptor.getName(), e);
             throw new SiteException("Error instantiating view window: " + viewDescriptor.getName(), e);
         }
+        LOGGER.debug("Constructing view: " + viewDescriptor.getName() + " took " + (System.currentTimeMillis()
+        - startTimeMillis ) + " ms.");
     }
 
     @Override
@@ -242,6 +245,13 @@ public final class Site implements ViewProvider, ViewChangeListener {
 
     @Override
     public View getView(final String viewName) {
+        if (!views.containsKey(viewName)) {
+            for (final ViewDescriptor viewDescriptor : getSiteDescriptor().getViewDescriptors()) {
+                if (viewDescriptor.getName().equals(viewName)) {
+                    constructView(viewDescriptor);
+                }
+            }
+        }
         return views.get(viewName);
     }
 

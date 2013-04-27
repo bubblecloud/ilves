@@ -32,23 +32,24 @@ public final class SiteDescriptor {
     /** The site navigation. */
     private NavigationDescriptor navigation;
     /** The site pages. */
-    private List<ViewDescriptor> pageDescriptors;
+    private List<ViewDescriptor> viewDescriptors;
 
     /**
      * @param title The site title.
      * @param keywords The site keywords.
      * @param description The site description.
      * @param navigation The site navigation.
-     * @param pageDescriptors The site page descriptors.
+     * @param viewDescriptors The site page descriptors.
      */
     public SiteDescriptor(final String title, final String keywords,
-            final String description, final NavigationDescriptor navigation, final List<ViewDescriptor> pageDescriptors) {
+            final String description, final NavigationDescriptor navigation,
+            final List<ViewDescriptor> viewDescriptors) {
         super();
         this.title = title;
         this.keywords = keywords;
         this.description = description;
         this.navigation = navigation;
-        this.pageDescriptors = pageDescriptors;
+        this.viewDescriptors = viewDescriptors;
     }
     /**
      * @return the title
@@ -101,14 +102,14 @@ public final class SiteDescriptor {
     /**
      * @return the pages
      */
-    public List<ViewDescriptor> getPageDescriptors() {
-        return pageDescriptors;
+    public List<ViewDescriptor> getViewDescriptors() {
+        return viewDescriptors;
     }
     /**
-     * @param pageDescriptors the pages to set
+     * @param viewDescriptors the pages to set
      */
-    public void setPageDescriptors(final List<ViewDescriptor> pageDescriptors) {
-        this.pageDescriptors = pageDescriptors;
+    public void setViewDescriptors(final List<ViewDescriptor> viewDescriptors) {
+        this.viewDescriptors = viewDescriptors;
     }
 
 }
