@@ -16,7 +16,8 @@
 			<property name="javax.persistence.jdbc.user" value="site"/>
 			<property name="javax.persistence.jdbc.password" value="password"/>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-			<property name="eclipselink.cache.type.default" value="NONE"/>
+            <property name="eclipselink.cache.type.default" value="SOFT"/>
+            <property name="eclipselink.cache.shared.default" value="false"/>
 			<property name="eclipselink.ddl-generation.output-mode" value="database"/>
 			<property name="eclipselink.ddl-generation" value="none"/>
 			<property name="eclipselink.logging.level" value="WARNING"/>
