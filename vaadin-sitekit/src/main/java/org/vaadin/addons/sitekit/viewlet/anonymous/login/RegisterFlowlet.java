@@ -110,9 +110,26 @@ public final class RegisterFlowlet extends AbstractFlowlet {
 
         final PasswordValidator passwordValidator = new PasswordValidator(getSite(), originalPasswordProperty, "password2");
 
-        fieldDescriptors.addAll(BareSiteFields.getFieldDescriptors(Customer.class));
-        fieldDescriptors.remove(fieldDescriptors.size() - 1);
-        fieldDescriptors.remove(fieldDescriptors.size() - 1);
+        //fieldDescriptors.addAll(BareSiteFields.getFieldDescriptors(Customer.class));
+
+        for (final FieldDescriptor fieldDescriptor : BareSiteFields.getFieldDescriptors(Customer.class)) {
+            if (fieldDescriptor.getId().equals("adminGroup")) {
+                continue;
+            }
+            if (fieldDescriptor.getId().equals("memberGroup")) {
+                continue;
+            }
+            if (fieldDescriptor.getId().equals("created")) {
+                continue;
+            }
+            if (fieldDescriptor.getId().equals("modified")) {
+                continue;
+            }
+            fieldDescriptors.add(fieldDescriptor);
+        }
+
+        //fieldDescriptors.remove(fieldDescriptors.size() - 1);
+        //fieldDescriptors.remove(fieldDescriptors.size() - 1);
         fieldDescriptors.add(new FieldDescriptor("password1", getSite().localize("input-password"),
                 PasswordField.class, null, 150, null, String.class, null,
                 false, true, true
@@ -166,8 +183,8 @@ public final class RegisterFlowlet extends AbstractFlowlet {
 
                     UserDao.addUser(entityManager, user, UserDao.getGroup(entityManager, company, "user"));
                     CustomerDao.saveCustomer(entityManager, customer);
-                    UserDao.addUserPrivilege(entityManager, user, "member", customer.getCustomerId());
-                    UserDao.addUserPrivilege(entityManager, user, "administrator", customer.getCustomerId());
+                    UserDao.addGroupMember(entityManager, customer.getAdminGroup(), user);
+                    UserDao.addGroupMember(entityManager, customer.getMemberGroup(), user);
 
                     final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
                             .getHttpServletRequest();

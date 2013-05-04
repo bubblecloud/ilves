@@ -455,13 +455,27 @@ public class UserDao {
      * Get user privileges.
      * @param entityManager the entity manager
      * @param user the user
-     * @return true if user has privilege.
+     * @return list of user privileges.
      */
     public static List<Privilege> getUserPrivileges(final EntityManager entityManager, final User user) {
         final TypedQuery<Privilege> query = entityManager.createQuery(
                 "select e from Privilege as e where e.user=:user",
                 Privilege.class);
         query.setParameter("user", user);
+        return query.getResultList();
+    }
+
+    /**
+     * Get group privileges.
+     * @param entityManager the entity manager
+     * @param group the group
+     * @return Llist of group privileges.
+     */
+    public static List<Privilege> getGroupPrivileges(final EntityManager entityManager, final Group group) {
+        final TypedQuery<Privilege> query = entityManager.createQuery(
+                "select e from Privilege as e where e.group=:group",
+                Privilege.class);
+        query.setParameter("group", group);
         return query.getResultList();
     }
 

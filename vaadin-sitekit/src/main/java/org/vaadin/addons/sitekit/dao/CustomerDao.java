@@ -56,9 +56,8 @@ public class CustomerDao {
                 customer.setMemberGroup(memberGroup);
             }
             customer.getMemberGroup().setModified(new Date());
-            customer.getMemberGroup().setName(
-                    customer.toString().toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_")
-                            + "_members");
+            customer.getMemberGroup().setName("customer_members_" +
+                    customer.toString().toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_"));
             customer.getMemberGroup().setDescription("Members of " + customer.toString().toLowerCase());
 
             if (customer.getAdminGroup() == null) {
@@ -68,9 +67,8 @@ public class CustomerDao {
                 customer.setAdminGroup(adminGroup);
             }
             customer.getAdminGroup().setModified(new Date());
-            customer.getAdminGroup().setName(
-                    customer.toString().toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_")
-                            + "_admins");
+            customer.getAdminGroup().setName("customer_admins_" +
+                    customer.toString().toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_"));
             customer.getAdminGroup().setDescription("Administrators of " + customer.toString().toLowerCase());
 
             entityManager.persist(customer);
@@ -82,6 +80,8 @@ public class CustomerDao {
             }
             throw new RuntimeException(e);
         }
+        UserDao.addGroupPrivilege(entityManager, customer.getMemberGroup(), "member", customer.getCustomerId());
+        UserDao.addGroupPrivilege(entityManager, customer.getAdminGroup(), "administrator", customer.getCustomerId());
     }
 
 }

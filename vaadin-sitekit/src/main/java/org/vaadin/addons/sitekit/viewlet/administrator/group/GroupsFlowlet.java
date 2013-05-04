@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.viewlet.administrator.group;
 
+import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.FilterDescriptor;
@@ -22,6 +23,8 @@ import org.vaadin.addons.sitekit.grid.FormattingTable;
 import org.vaadin.addons.sitekit.grid.Grid;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
+import org.vaadin.addons.sitekit.model.Privilege;
+import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
 import org.vaadin.addons.sitekit.web.BareSiteFields;
 import com.vaadin.data.util.filter.Compare;
@@ -140,6 +143,20 @@ public final class GroupsFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                final Group entity = container.getEntity(grid.getSelectedItemId());
+                final List<User> users = UserDao.getGroupMembers(entityManager,
+                        (Company) getSite().getSiteContext().getObject(Company.class), entity);
+
+                for (final User user : users) {
+                    UserDao.removeGroupMember(entityManager, entity, user);
+                }
+
+                final List<Privilege> privileges = UserDao.getGroupPrivileges(entityManager, entity);
+                for (final Privilege privilege : privileges) {
+                    UserDao.removeGroupPrivilege(entityManager, entity, privilege.getKey(), privilege.getDataId());
+                }
+
+
                 container.removeItem(grid.getSelectedItemId());
                 container.commit();
             }
