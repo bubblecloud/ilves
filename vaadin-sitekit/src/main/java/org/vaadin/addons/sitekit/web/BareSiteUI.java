@@ -53,6 +53,8 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
+import org.vaadin.addons.sitekit.viewlet.user.AccountFlowViewlet;
+import org.vaadin.addons.sitekit.viewlet.user.AccountFlowlet;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -190,6 +192,16 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
                                 "content", "Flowlet Sheet", "This is flow sheet.", null,
                                 LoginFlowViewlet.class.getCanonicalName())
                 ))));
+
+        viewDescriptors.add(new ViewDescriptor("account", null, null, new ViewVersion(
+                0, "master", "Account SiteView", "account page", "This is login page.",
+                FixedWidthView.class.getCanonicalName(), new String[]{"user"},
+                Arrays.asList(
+                        new ViewletDescriptor(
+                                "content", "Flowlet Sheet", "This is flow sheet.", null,
+                                AccountFlowViewlet.class.getCanonicalName())
+                ))));
+
         viewDescriptors.add(new ViewDescriptor("validate", null, null, new ViewVersion(
                 0, "master", "Email Validation", "email validation page", "This is email validation page.",
                 FixedWidthView.class.getCanonicalName(), new String[]{"anonymous"},
@@ -200,7 +212,7 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
                 ))));
 
         final NavigationDescriptor navigationDescriptor = new NavigationDescriptor("navigation", null, null,
-                new NavigationVersion(0, "default", "default;customers;users;groups;companies;login", true));
+                new NavigationVersion(0, "default", "default;customers;users;groups;companies;account;login", true));
 
         return new SiteDescriptor("Test site.", "test site", "This is a test site.",
                 navigationDescriptor, viewDescriptors);

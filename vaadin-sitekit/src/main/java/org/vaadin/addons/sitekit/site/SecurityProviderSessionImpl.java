@@ -67,7 +67,7 @@ public final class SecurityProviderSessionImpl implements SecurityProvider {
      * Gets user from session.
      * @return the user or null.
      */
-    private User getUserFromSession() {
+    public User getUserFromSession() {
         return (User) ((AbstractSiteUI) UI.getCurrent()).getSession().getAttribute("user");
     }
 
