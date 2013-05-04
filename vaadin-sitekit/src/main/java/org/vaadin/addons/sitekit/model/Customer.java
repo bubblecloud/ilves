@@ -49,6 +49,14 @@ public final class Customer implements Serializable {
     @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH }, optional = false)
     private Company owner;
 
+    /** Group. */
+    @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST }, optional = false)
+    private Group adminGroup;
+
+    /** Group. */
+    @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST }, optional = false)
+    private Group memberGroup;
+
     /** First name. */
     @Column(nullable = false)
     private String firstName;
@@ -137,6 +145,38 @@ public final class Customer implements Serializable {
      */
     public void setOwner(final Company owner) {
         this.owner = owner;
+    }
+
+    /**
+     * Get the admin group of this customer.
+     * @return the admin group
+     */
+    public Group getAdminGroup() {
+        return adminGroup;
+    }
+
+    /**
+     * Set the admin group of this customer.
+     * @param adminGroup the admin group
+     */
+    public void setAdminGroup(final Group adminGroup) {
+        this.adminGroup = adminGroup;
+    }
+
+    /**
+     * Get the member group of this customer-
+     * @return the member group
+     */
+    public Group getMemberGroup() {
+        return memberGroup;
+    }
+
+    /**
+     * Set the member group of this customer.
+     * @param memberGroup the member group
+     */
+    public void setMemberGroup(final Group memberGroup) {
+        this.memberGroup = memberGroup;
     }
 
     /**

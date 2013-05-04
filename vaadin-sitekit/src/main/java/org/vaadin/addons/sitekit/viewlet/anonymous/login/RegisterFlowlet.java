@@ -165,7 +165,7 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                     }
 
                     UserDao.addUser(entityManager, user, UserDao.getGroup(entityManager, company, "user"));
-                    CustomerDao.addCustomer(entityManager, customer);
+                    CustomerDao.saveCustomer(entityManager, customer);
                     UserDao.addUserPrivilege(entityManager, user, "member", customer.getCustomerId());
                     UserDao.addUserPrivilege(entityManager, user, "administrator", customer.getCustomerId());
 

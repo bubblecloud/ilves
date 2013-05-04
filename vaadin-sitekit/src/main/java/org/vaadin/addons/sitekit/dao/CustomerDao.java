@@ -17,6 +17,7 @@ package org.vaadin.addons.sitekit.dao;
 
 import org.vaadin.addons.sitekit.model.Customer;
 import org.apache.log4j.Logger;
+import org.vaadin.addons.sitekit.model.Group;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -38,12 +39,40 @@ public class CustomerDao {
      * @param entityManager the entity manager
      * @param customer the group
      */
-    public static void addCustomer(final EntityManager entityManager, final Customer customer) {
+    public static void saveCustomer(final EntityManager entityManager, final Customer customer) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
-            customer.setCreated(new Date());
+            if (customer.getCustomerId() != null) {
+                customer.setCreated(new Date());
+            }
             customer.setModified(new Date());
+
+
+            if (customer.getMemberGroup() == null) {
+                final Group memberGroup = new Group();
+                memberGroup.setOwner(customer.getOwner());
+                memberGroup.setCreated(new Date());
+                customer.setMemberGroup(memberGroup);
+            }
+            customer.getMemberGroup().setModified(new Date());
+            customer.getMemberGroup().setName(
+                    customer.toString().toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_")
+                            + "_members");
+            customer.getMemberGroup().setDescription("Members of " + customer.toString().toLowerCase());
+
+            if (customer.getAdminGroup() == null) {
+                final Group adminGroup = new Group();
+                adminGroup.setOwner(customer.getOwner());
+                adminGroup.setCreated(new Date());
+                customer.setAdminGroup(adminGroup);
+            }
+            customer.getAdminGroup().setModified(new Date());
+            customer.getAdminGroup().setName(
+                    customer.toString().toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_")
+                            + "_admins");
+            customer.getAdminGroup().setDescription("Administrators of " + customer.toString().toLowerCase());
+
             entityManager.persist(customer);
             transaction.commit();
         } catch (final Exception e) {
@@ -54,4 +83,5 @@ public class CustomerDao {
             throw new RuntimeException(e);
         }
     }
+
 }
