@@ -102,7 +102,7 @@ public final class BareSiteFields {
         }
         initialized = true;
 
-        BareSiteFields.add(Company.class, new FieldDescriptor("companyName", "Company Name", TextField.class, null, 100, null, String.class, "", false, true, true));
+        BareSiteFields.add(Company.class, new FieldDescriptor("companyName", "Company Name", TextField.class, null, -1, null, String.class, "", false, true, true));
         BareSiteFields.add(Company.class, new FieldDescriptor("companyCode", "Company Code", TextField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(Company.class, new FieldDescriptor("termsAndConditions", "Terms & Conditions", TextArea.class, null, 100, null, String.class, "", false,
                 true, false));
@@ -121,9 +121,10 @@ public final class BareSiteFields {
         BareSiteFields.add(Company.class, new FieldDescriptor("modified", "Modified", TimestampField.class, TimestampFormatter.class, 150, null, Date.class, null,
                 true, true, true));
 
+        BareSiteFields.add(Customer.class, new FieldDescriptor("companyName", "Company Name", TextField.class, null, -1, null, String.class, "", false, true, true));
         BareSiteFields.add(Customer.class, new FieldDescriptor("lastName", "Last Name", TextField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(Customer.class, new FieldDescriptor("firstName", "First Name", TextField.class, null, 100, null, String.class, "", false, true, true));
-        BareSiteFields.add(Customer.class, new FieldDescriptor("phoneNumber", "Phone Number", TextField.class, null, 150, null, String.class, "", false, true, true));
+        BareSiteFields.add(Customer.class, new FieldDescriptor("phoneNumber", "Phone Number", TextField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(Customer.class, new FieldDescriptor("emailAddress", "Email Address", TextField.class, null, 150, null, String.class, "", false, true, true),
                 new EmailValidator("Email address is not valid."));
         BareSiteFields.add(Customer.class, new FieldDescriptor("memberGroup", "Members", GroupField.class, null, 100, null, Group.class,
@@ -131,7 +132,6 @@ public final class BareSiteFields {
         BareSiteFields.add(Customer.class, new FieldDescriptor("adminGroup", "Admins", GroupField.class, null, 100, null, Group.class,
                 null, false, true, false));
         BareSiteFields.add(Customer.class, new FieldDescriptor("company", "Is Company", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
-        BareSiteFields.add(Customer.class, new FieldDescriptor("companyName", "Company Name", TextField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(Customer.class, new FieldDescriptor("companyCode", "Company Code", TextField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(Customer.class, new FieldDescriptor("created", "Created", TimestampField.class, TimestampFormatter.class, 150, null, Date.class, null, true,
                 true, true));
@@ -151,18 +151,18 @@ public final class BareSiteFields {
         BareSiteFields.add(PostalAddress.class, new FieldDescriptor("country", "Country", TextField.class, null, 100, null, String.class, "",
                 false, true, true));
 
-        BareSiteFields.add(Group.class, new FieldDescriptor("name", "Name", TextField.class, null, -1, null, String.class, "", false, true, true));
+        BareSiteFields.add(Group.class, new FieldDescriptor("name", "Name", TextField.class, null, 200, null, String.class, "", false, true, true));
         BareSiteFields.add(Group.class, new FieldDescriptor("description", "Description", TextField.class, null, -1, null, String.class, "", false, true, true));
         BareSiteFields.add(Group.class, new FieldDescriptor("created", "Created", TimestampField.class, TimestampFormatter.class, 150, null, Date.class, null, true,
                 true, true));
         BareSiteFields.add(Group.class, new FieldDescriptor("modified", "Modified", TimestampField.class, TimestampFormatter.class, 150, null, Date.class, null,
                 true, true, true));
 
-        BareSiteFields.add(User.class, new FieldDescriptor("emailAddress", "Email Address", TextField.class, null, 150, null, String.class, "", false, true, true), new EmailValidator("Email address is not valid."));
-        BareSiteFields.add(User.class, new FieldDescriptor("emailAddressValidated", "Email Validated", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
-        BareSiteFields.add(User.class, new FieldDescriptor("passwordHash", "Password", PasswordField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(User.class, new FieldDescriptor("lastName", "Last Name", TextField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(User.class, new FieldDescriptor("firstName", "First Name", TextField.class, null, 100, null, String.class, "", false, true, true));
+        BareSiteFields.add(User.class, new FieldDescriptor("emailAddress", "Email Address", TextField.class, null, -1, null, String.class, "", false, true, true), new EmailValidator("Email address is not valid."));
+        BareSiteFields.add(User.class, new FieldDescriptor("emailAddressValidated", "Email Validated", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
+        BareSiteFields.add(User.class, new FieldDescriptor("passwordHash", "Password", PasswordField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(User.class, new FieldDescriptor("phoneNumber", "Phone Number", TextField.class, null, 150, null, String.class, "", false, true, true));
         BareSiteFields.add(User.class, new FieldDescriptor("created", "Created", TimestampField.class, TimestampFormatter.class, 150, null, Date.class, null, true,
                 true, true));

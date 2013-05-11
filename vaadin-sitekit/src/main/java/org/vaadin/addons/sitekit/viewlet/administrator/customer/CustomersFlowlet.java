@@ -77,7 +77,7 @@ public final class CustomersFlowlet extends AbstractFlowlet {
 
         final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
         entityContainer = new EntityContainer<Customer>(entityManager, true, true, false, Customer.class, 1000, new String[] { "companyName",
-                "lastName" }, new boolean[] { false, false }, "customerId");
+                "lastName", "firstName" }, new boolean[] { true, true, true }, "customerId");
 
         for (final FieldDescriptor fieldDefinition : fieldDefinitions) {
             entityContainer.addContainerProperty(fieldDefinition.getId(), fieldDefinition.getValueType(), fieldDefinition.getDefaultValue(),
