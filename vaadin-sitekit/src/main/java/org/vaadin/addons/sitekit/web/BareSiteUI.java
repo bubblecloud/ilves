@@ -212,7 +212,7 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
                 ))));
 
         final NavigationDescriptor navigationDescriptor = new NavigationDescriptor("navigation", null, null,
-                new NavigationVersion(0, "default", "default;customers;users;groups;companies;account;login", true));
+                new NavigationVersion(0, "default", "default;customers;account;users;groups;companies;login", true));
 
         return new SiteDescriptor("Test site.", "test site", "This is a test site.",
                 navigationDescriptor, viewDescriptors);
