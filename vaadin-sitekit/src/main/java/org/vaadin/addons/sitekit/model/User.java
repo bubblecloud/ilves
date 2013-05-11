@@ -259,7 +259,7 @@ public final class User implements Serializable {
 
     @Override
     public int hashCode() {
-        return userId.hashCode();
+        return userId != null ? userId.hashCode() : 0;
     }
 
     @Override
