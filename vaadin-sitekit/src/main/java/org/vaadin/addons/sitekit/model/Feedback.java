@@ -222,6 +222,13 @@ public final class Feedback implements Serializable {
     }
 
     /**
+     * @return the created
+     */
+    public Date getCreated() {
+        return created;
+    }
+
+    /**
      * @param created the created to set
      */
     public void setCreated(final Date created) {

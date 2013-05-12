@@ -104,8 +104,7 @@ public final class FieldDescriptor {
     public String getLabel() {
         final AbstractSiteUI siteUI = (AbstractSiteUI) UI.getCurrent();
         final Locale locale = siteUI.getLocale();
-        siteUI.getSite().getLocalizationProvider().localize(labelKey, locale);
-        return labelKey;
+        return siteUI.getSite().getLocalizationProvider().localize(labelKey, locale);
     }
 
     /**

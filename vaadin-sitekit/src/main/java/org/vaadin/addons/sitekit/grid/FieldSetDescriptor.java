@@ -66,7 +66,7 @@ public final class FieldSetDescriptor {
                 if ((getMethod != null)
                         && getMethod.getDeclaringClass() != Object.class) {
                     final String fieldId = pd.getName();
-                    final String labelKey = StringUtil.fromCamelCaseToLocalizationKeyConvetion(fieldId);
+                    final String labelKey = "field-" + StringUtil.fromCamelCaseToLocalizationKeyConvetion(fieldId);
                     final Class<?> valueType = pd.getPropertyType();
 
                     final Class<? extends Field> fieldClass;
@@ -75,6 +75,7 @@ public final class FieldSetDescriptor {
                     final HorizontalAlignment valueAlignment;
                     final Object defaultValue;
                     final boolean readOnly;
+                    final boolean required;
                     final List<Validator> validators = new ArrayList<Validator>();
                     if (valueType.equals(String.class)) {
                         fieldClass = TextField.class;
@@ -83,6 +84,7 @@ public final class FieldSetDescriptor {
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
                         readOnly = false;
+                        required = true;
                         validators.add(
                                 new StringLengthValidator("Invalid length.", 0, 255, true));
                     } else if (valueType.equals(Integer.class)) {
@@ -92,6 +94,7 @@ public final class FieldSetDescriptor {
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
                         readOnly = false;
+                        required = true;
                         validators.add(
                                 new IntegerRangeValidator("Not integer.", Integer.MIN_VALUE, Integer.MIN_VALUE));
                     } else if (valueType.equals(Long.class)) {
@@ -101,6 +104,7 @@ public final class FieldSetDescriptor {
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
                         readOnly = false;
+                        required = true;
                         validators.add(
                                 new IntegerRangeValidator("Not integer.", Integer.MIN_VALUE, Integer.MIN_VALUE));
                     }  else if (valueType.equals(Boolean.class)) {
@@ -110,6 +114,7 @@ public final class FieldSetDescriptor {
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
                         readOnly = false;
+                        required = true;
                     } else if (valueType.equals(Date.class)) {
                         fieldClass = TimestampField.class;
                         formatterClass = TimestampFormatter.class;
@@ -117,6 +122,7 @@ public final class FieldSetDescriptor {
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
                         readOnly = false;
+                        required = true;
                     } else {
                         fieldClass = TextField.class;
                         formatterClass = ObjectToStringFormatter.class;
@@ -124,10 +130,10 @@ public final class FieldSetDescriptor {
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
                         readOnly = true;
+                        required = false;
                     }
 
                     final boolean sortable = true;
-                    final boolean required = false;
 
                     final FieldDescriptor fieldDescriptor = new FieldDescriptor(
                             fieldId,

@@ -34,7 +34,6 @@ import org.vaadin.addons.sitekit.site.ViewDescriptor;
 import org.vaadin.addons.sitekit.site.ViewVersion;
 import org.vaadin.addons.sitekit.site.ViewletDescriptor;
 import org.vaadin.addons.sitekit.util.PersistenceUtil;
-import org.vaadin.addons.sitekit.util.PropertiesUtil;
 import org.vaadin.addons.sitekit.viewlet.administrator.company.CompanyFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupFlowViewlet;
@@ -42,6 +41,7 @@ import org.vaadin.addons.sitekit.viewlet.administrator.user.UserFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.CompanyFooterViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.CompanyHeaderViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.EmailValidationViewlet;
+import org.vaadin.addons.sitekit.viewlet.anonymous.FeedbackViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.ImageViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.NavigationViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.login.LoginFlowViewlet;
@@ -52,18 +52,13 @@ import com.vaadin.server.VaadinServletRequest;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.vaadin.addons.sitekit.viewlet.user.AccountFlowViewlet;
-import org.vaadin.addons.sitekit.viewlet.user.AccountFlowlet;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * BareSite UI.
@@ -152,7 +147,9 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
 
         viewDescriptors.add(new ViewDescriptor("default", null, null, new ViewVersion(0, "master", "Default", "",
                 "This is default view.", FixedWidthView.class.getCanonicalName(), new String[]{},
-                Arrays.asList(new ViewletDescriptor[0])
+                Arrays.asList(new ViewletDescriptor(
+                        "content", "Feedback", "This is feedback viewlet.", null,
+                        FeedbackViewlet.class.getCanonicalName()))
         )));
 
         viewDescriptors.add(new ViewDescriptor("users", null, null, new ViewVersion(

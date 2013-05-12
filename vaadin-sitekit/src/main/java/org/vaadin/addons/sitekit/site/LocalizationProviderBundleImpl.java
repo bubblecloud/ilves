@@ -61,7 +61,7 @@ public final class LocalizationProviderBundleImpl implements LocalizationProvide
                 return resourceBundle.getString(key);
             }
         }
-        return locale.toString() + "." + key;
+        return key;
     }
 
 }
