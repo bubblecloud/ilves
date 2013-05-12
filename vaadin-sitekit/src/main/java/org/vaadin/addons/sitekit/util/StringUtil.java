@@ -58,4 +58,26 @@ public class StringUtil {
         return new String(hexChars);
     }
 
+    /**
+     * Converts camel case string to localization key convetion.
+     * This can be used to generate localization keys from property names.
+     *
+     * @param camelCaseString the camel case string
+     * @return the localization key convention string
+     */
+    public static String fromCamelCaseToLocalizationKeyConvetion(final String camelCaseString) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < camelCaseString.length(); i++) {
+            final char character = camelCaseString.charAt(i);
+            if (Character.isLowerCase(character)) {
+                stringBuilder.append(character);
+            } else {
+                if (i != 0) {
+                    stringBuilder.append('-');
+                }
+                stringBuilder.append(Character.toLowerCase(character));
+            }
+        }
+        return stringBuilder.toString();
+    }
 }

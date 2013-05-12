@@ -25,11 +25,14 @@ import java.util.Map;
 
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 
+import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
+import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.grid.field.GroupField;
 import org.vaadin.addons.sitekit.grid.field.TimestampField;
 import org.vaadin.addons.sitekit.grid.formatter.TimestampFormatter;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Customer;
+import org.vaadin.addons.sitekit.model.Feedback;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.GroupMember;
 import org.vaadin.addons.sitekit.model.PostalAddress;
@@ -173,6 +176,9 @@ public final class BareSiteFields {
                 null, false, true, true));
         BareSiteFields.add(GroupMember.class, new FieldDescriptor("created", "Created", TimestampField.class, TimestampFormatter.class, 150, null, Date.class, null, true,
                 true, true));
+
+        final FieldSetDescriptor feedbackDescriptor = new FieldSetDescriptor(Feedback.class);
+        FieldSetDescriptorRegister.registerFieldSetDescriptor("feedback", feedbackDescriptor);
 
     }
 }

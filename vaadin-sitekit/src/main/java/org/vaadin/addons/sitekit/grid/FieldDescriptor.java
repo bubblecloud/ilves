@@ -35,23 +35,23 @@ public final class FieldDescriptor {
     /** ID of the field. */
     private final String id;
     /** Label localization key of the field. */
-    private final String labelKey;
+    private String labelKey;
     /** Width of the field. */
-    private final int width;
+    private int width;
     /** Type of the field value. */
-    private final Class<?> valueType;
+    private Class<?> valueType;
     /** Default value for field. */
-    private final Object defaultValue;
+    private Object defaultValue;
     /** Field editor component. */
-    private final Class<? extends Field> fieldClass;
+    private Class<? extends Field> fieldClass;
     /** Field formatter. */
-    private final Class<? extends PropertyFormatter> formatterClass;
+    private Class<? extends PropertyFormatter> formatterClass;
     /** Reflects whether field is readonly. */
-    private final boolean readOnly;
+    private boolean readOnly;
     /** Reflects whether field is sortable. */
-    private final boolean sortable;
+    private boolean sortable;
     /** Reflects whether field is required. */
-    private final boolean required;
+    private boolean required;
     /** The value alignment. */
     private HorizontalAlignment valueAlignment = HorizontalAlignment.LEFT;
     /** Validators. */
@@ -189,4 +189,73 @@ public final class FieldDescriptor {
         return valueAlignment;
     }
 
+    /**
+     * @param labelKey the labelKey
+     */
+    public void setLabelKey(final String labelKey) {
+        this.labelKey = labelKey;
+    }
+
+    /**
+     * @param width the width
+     */
+    public void setWidth(final int width) {
+        this.width = width;
+    }
+
+    /**
+     * @param valueType the valueType
+     */
+    public void setValueType(final Class<?> valueType) {
+        this.valueType = valueType;
+    }
+
+    /**
+     * @param defaultValue the defaultValue
+     */
+    public void setDefaultValue(final Object defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    /**
+     * @param fieldClass the fieldClass
+     */
+    public void setFieldClass(final Class<? extends Field> fieldClass) {
+        this.fieldClass = fieldClass;
+    }
+
+    /**
+     * @param formatterClass the formatterClass
+     */
+    public void setFormatterClass(final Class<? extends PropertyFormatter> formatterClass) {
+        this.formatterClass = formatterClass;
+    }
+
+    /**
+     * @param readOnly the readOnly
+     */
+    public void setReadOnly(final boolean readOnly) {
+        this.readOnly = readOnly;
+    }
+
+    /**
+     * @param sortable the sortable
+     */
+    public void setSortable(final boolean sortable) {
+        this.sortable = sortable;
+    }
+
+    /**
+     * @param required the required
+     */
+    public void setRequired(final boolean required) {
+        this.required = required;
+    }
+
+    /**
+     * @param valueAlignment the valueAlignment
+     */
+    public void setValueAlignment(final HorizontalAlignment valueAlignment) {
+        this.valueAlignment = valueAlignment;
+    }
 }
