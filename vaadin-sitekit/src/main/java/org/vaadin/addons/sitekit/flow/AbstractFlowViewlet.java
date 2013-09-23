@@ -59,6 +59,10 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
     private Button bottomBackButton;
     /** The tab sheet containing views. */
     private TabSheet tabSheet;
+    /** The top layout. */
+    private HorizontalLayout bottomLayout;
+    /** The bottom layout. */
+    private HorizontalLayout topLayout;
 
     @Override
     public final void attach() {
@@ -71,7 +75,7 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
         layout.setMargin(false);
         layout.setSpacing(true);
 
-        final HorizontalLayout topLayout = new HorizontalLayout();
+        topLayout = new HorizontalLayout();
         layout.addComponent(topLayout, 0, 0);
 
         topBackButton = new Button(getSite().localize("button-back"));
@@ -84,7 +88,7 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
         topLayout.addComponent(topPathLabel);
         topLayout.setComponentAlignment(topPathLabel, Alignment.MIDDLE_LEFT);
 
-        final HorizontalLayout bottomLayout = new HorizontalLayout();
+        bottomLayout = new HorizontalLayout();
         layout.addComponent(bottomLayout, 0, 2);
 
         bottomBackButton = new Button(getSite().localize("button-back"));
@@ -112,6 +116,8 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
      * Refreshes path labels.
      */
     public final void refreshPathLabels() {
+        topLayout.setVisible(views.size() > 1);
+        bottomLayout.setVisible(views.size() > 1);
         final StringBuilder pathLabelBuilder = new StringBuilder();
         for (final Flowlet view : viewPath) {
             if (pathLabelBuilder.length() != 0) {
