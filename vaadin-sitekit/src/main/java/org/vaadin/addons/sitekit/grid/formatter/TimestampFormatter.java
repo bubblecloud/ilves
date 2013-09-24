@@ -53,7 +53,7 @@ public final class TimestampFormatter extends PropertyFormatter {
      */
     private void initialize() {
         if (format == null) {
-            format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         }
     }
 
