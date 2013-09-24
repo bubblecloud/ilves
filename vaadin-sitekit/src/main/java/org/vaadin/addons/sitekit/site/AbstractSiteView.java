@@ -109,7 +109,7 @@ public abstract class AbstractSiteView extends GridLayout implements View, SiteV
             if (viewletDescriptor != null) {
                 final Class<?> componentClass = Class.forName(viewletDescriptor.getComponentClass());
                 final AbstractComponent component = (AbstractComponent) componentClass.newInstance();
-                component.setDescription(viewletDescriptor.getDescription());
+                //component.setDescription(viewletDescriptor.getDescription());
                 if (component instanceof Viewlet) {
                     ((Viewlet) component).setViewletDescriptor(viewletDescriptor);
                 }
