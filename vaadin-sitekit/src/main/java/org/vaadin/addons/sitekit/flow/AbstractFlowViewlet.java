@@ -45,7 +45,7 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
     private Flowlet rootView = null;
     /** The flow path which user has browsed open. */
     private final LinkedList<Flowlet> viewPath = new LinkedList<Flowlet>();
-    /** The views added to this Flow. */
+    /** The flows added to this Flow. */
     private final Map<Class<?>, Flowlet> views = new HashMap<Class<?>, Flowlet>();
     /** The tabs added to this Flow. */
     private final Map<Class<?>, Tab> tabs = new HashMap<Class<?>, Tab>();
@@ -57,7 +57,7 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
     private Button topBackButton;
     /** Bottom back button. */
     private Button bottomBackButton;
-    /** The tab sheet containing views. */
+    /** The tab sheet containing flows. */
     private TabSheet tabSheet;
     /** The top layout. */
     private HorizontalLayout bottomLayout;
@@ -132,7 +132,7 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
     }
 
     /**
-     * Implementations override this class to construct their views.
+     * Implementations override this class to construct their flows.
      */
     protected abstract void addFlowlets();
 
@@ -197,7 +197,7 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
 
     @Override
     public final void enter(final String parameters) {
-        /*for (final Flowlet view : views.values()) {
+        /*for (final Flowlet view : flows.values()) {
             view.enter();
         }*/
         viewPath.getLast().enter();

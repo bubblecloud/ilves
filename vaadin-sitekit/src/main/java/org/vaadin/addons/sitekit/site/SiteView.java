@@ -5,7 +5,7 @@ package org.vaadin.addons.sitekit.site;
 
 
 /**
- * Interface for site views.
+ * Interface for site flows.
  * @author Tommi Laukkanen
  */
 public interface SiteView {

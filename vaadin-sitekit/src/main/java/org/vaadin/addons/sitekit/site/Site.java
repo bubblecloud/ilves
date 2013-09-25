@@ -48,7 +48,7 @@ public final class Site implements ViewProvider, ViewChangeListener {
     private final SecurityProvider securityProvider;
     /** The site context. */
     private final SiteContext siteContext;
-    /** The views. */
+    /** The flows. */
     private final Map<String, View> views = new HashMap<String, View>();
 
     /**

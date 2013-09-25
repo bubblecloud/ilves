@@ -137,7 +137,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
             if (passwordMatch) {
                 final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
                 ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).setUser(user, groups);
-                UI.getCurrent().getNavigator().navigateTo("default");
+                UI.getCurrent().getNavigator().navigateTo(getSite().getCurrentNavigationVersion().getDefaultPageName());
             } else {
                 Notification.show(getSite().localize("message-login-failed"), Notification.TYPE_WARNING_MESSAGE);
             }
