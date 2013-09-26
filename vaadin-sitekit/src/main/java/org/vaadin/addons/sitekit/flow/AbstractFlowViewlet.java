@@ -171,6 +171,7 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
         viewPath.addLast(view);
         refreshPathLabels();
         tabSheet.setSelectedTab((Component) view);
+        view.enter();
         return view;
     }
 
