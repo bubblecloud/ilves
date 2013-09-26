@@ -53,6 +53,7 @@ public final class FixedWidthView extends AbstractSiteView {
         final int rowCount = 3;
 
         final GridLayout layout = this;
+        layout.setMargin(true);
         layout.setColumns(columnCount);
         layout.setRows(rowCount);
         layout.setColumnExpandRatio(0, MARGIN_COLUMN_EXPAND_RATIO);
