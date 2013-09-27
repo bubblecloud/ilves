@@ -119,7 +119,7 @@ public final class CustomerFlowlet extends AbstractFlowlet implements Validating
 
                 CustomerDao.saveCustomer(entityManager, entity);
 
-                entityManager.detach(entity);
+                //entityManager.detach(entity);
             }
         });
 

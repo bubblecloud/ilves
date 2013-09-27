@@ -102,7 +102,7 @@ public final class GroupMemberFlowlet extends AbstractFlowlet implements Validat
                     entity = entityManager.merge(entity);
                     entityManager.persist(entity);
                     entityManager.getTransaction().commit();
-                    entityManager.detach(entity);
+                    //entityManager.detach(entity);
                 } catch (final Throwable t) {
                     if (entityManager.getTransaction().isActive()) {
                         entityManager.getTransaction().rollback();

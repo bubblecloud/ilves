@@ -111,7 +111,7 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
         final List<FieldDescriptor> childFieldDescriptors = BareSiteFields.getFieldDescriptors(GroupMember.class);
         final List<FilterDescriptor> childFilterDescriptors = new ArrayList<FilterDescriptor>();
         childContainer = new EntityContainer<GroupMember>(entityManager, GroupMember.class, "groupMemberId", 1000,
-            true, true, false);
+            true, false, false);
         childContainer.getQueryView().getQueryDefinition().setDefaultSortState(
                 new String[] {"user.firstName", "user.lastName"}, new boolean[] {true, true});
 
@@ -164,7 +164,7 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
                     entityManager.persist(user);
                     entityManager.getTransaction().commit();
                     editor.setItem(new BeanItem<User>(user), false);
-                    entityManager.detach(user);
+                    //entityManager.detach(user);
                 } catch (final Throwable t) {
                     if (entityManager.getTransaction().isActive()) {
                         entityManager.getTransaction().rollback();
@@ -267,10 +267,12 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
 
     @Override
     public void enter() {
-        user = entityManager.merge(user);
-        entityManager.refresh(user);
-        entityManager.detach(user);
-        editor.setItem(new BeanItem<User>(user), false);
+        //user = entityManager.merge(user);
+        if (user.getUserId() != null) {
+            entityManager.refresh(user);
+        }
+        //entityManager.detach(user);
+        //editor.setItem(new BeanItem<User>(user), false);
         childContainer.getQueryView().getQueryDefinition().removeDefaultFilters();
         childContainer.getQueryView().getQueryDefinition().addDefaultFilter(new Compare.Equal("user", user));
         childGrid.refresh();

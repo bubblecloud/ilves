@@ -76,7 +76,7 @@ public final class CustomersFlowlet extends AbstractFlowlet {
         filterDefinitions.add(new FilterDescriptor("lastName", "lastName", "Last Name", new TextField(), 101, "=", String.class, ""));
 
         final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
-        entityContainer = new EntityContainer<Customer>(entityManager, true, true, false, Customer.class, 1000, new String[] { "companyName",
+        entityContainer = new EntityContainer<Customer>(entityManager, true, false, false, Customer.class, 1000, new String[] { "companyName",
                 "lastName", "firstName" }, new boolean[] { true, true, true }, "customerId");
 
         for (final FieldDescriptor fieldDefinition : fieldDefinitions) {

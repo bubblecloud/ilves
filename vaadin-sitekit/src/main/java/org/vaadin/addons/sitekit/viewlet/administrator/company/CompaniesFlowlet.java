@@ -85,7 +85,7 @@ public final class CompaniesFlowlet extends AbstractFlowlet {
         final List<FilterDescriptor> filterDefinitions = new ArrayList<FilterDescriptor>();
         filterDefinitions.add(new FilterDescriptor("companyName", "companyName", "Company Name", new TextField(), 101, "=", String.class, ""));
 
-        entityContainer = new EntityContainer<Company>(entityManager, true, true, false, Company.class, 1000,
+        entityContainer = new EntityContainer<Company>(entityManager, true, false, false, Company.class, 1000,
                 new String[] { "companyName" },
                 new boolean[] { false }, "companyId");
         for (final FieldDescriptor fieldDefinition : fieldDefinitions) {

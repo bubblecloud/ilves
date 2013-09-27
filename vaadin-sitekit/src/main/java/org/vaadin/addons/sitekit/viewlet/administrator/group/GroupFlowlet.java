@@ -101,7 +101,7 @@ public final class GroupFlowlet extends AbstractFlowlet implements ValidatingEdi
                     entity = entityManager.merge(entity);
                     entityManager.persist(entity);
                     entityManager.getTransaction().commit();
-                    entityManager.detach(entity);
+                    //entityManager.detach(entity);
                 } catch (final Throwable t) {
                     if (entityManager.getTransaction().isActive()) {
                         entityManager.getTransaction().rollback();

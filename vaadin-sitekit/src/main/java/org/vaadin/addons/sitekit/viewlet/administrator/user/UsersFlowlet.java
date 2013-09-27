@@ -78,7 +78,7 @@ public final class UsersFlowlet extends AbstractFlowlet {
         final List<FilterDescriptor> filterDefinitions = new ArrayList<FilterDescriptor>();
 
         final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
-        container = new EntityContainer<User>(entityManager, true, true, false, User.class, 1000,
+        container = new EntityContainer<User>(entityManager, true, false, false, User.class, 1000,
                 new String[] {"lastName", "firstName"},
                 new boolean[] {true, true}, "userId");
 
@@ -119,8 +119,9 @@ public final class UsersFlowlet extends AbstractFlowlet {
                 user.setModified(user.getCreated());
                 user.setOwner((Company) getSite().getSiteContext().getObject(Company.class));
 
-                final UserFlowlet userView = getViewSheet().forward(UserFlowlet.class);
+                final UserFlowlet userView = getViewSheet().getFlowlet(UserFlowlet.class);
                 userView.edit(user, true);
+                getViewSheet().forward(UserFlowlet.class);
             }
         });
 
@@ -133,8 +134,9 @@ public final class UsersFlowlet extends AbstractFlowlet {
             @Override
             public void buttonClick(final ClickEvent event) {
                 final User entity = container.getEntity(grid.getSelectedItemId());
-                final UserFlowlet userView = getViewSheet().forward(UserFlowlet.class);
+                final UserFlowlet userView = getViewSheet().getFlowlet(UserFlowlet.class);
                 userView.edit(entity, false);
+                getViewSheet().forward(UserFlowlet.class);
             }
         });
 
