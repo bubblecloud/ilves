@@ -192,9 +192,15 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                             + request.getServerPort() + request.getContextPath() + request.getServletPath() +
                             "#!validate/" + user.getUserId();
 
-                    EmailUtil.send(PropertiesUtil.getProperty("bare-site", "smtp-host"),
-                            user.getEmailAddress(), company.getSupportEmailAddress(), "Email Validation",
-                            "Please validate your email by browsing to this URL: " + url);
+                    final Thread emailThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            EmailUtil.send(PropertiesUtil.getProperty("bare-site", "smtp-host"),
+                                    user.getEmailAddress(), company.getSupportEmailAddress(), "Email Validation",
+                                    "Please validate your email by browsing to this URL: " + url);
+                        }
+                    });
+                    emailThread.start();
 
                     Notification.show(getSite().localize("message-registration-success"),
                             Notification.Type.HUMANIZED_MESSAGE);

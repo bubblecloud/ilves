@@ -193,7 +193,6 @@ public final class UserAccountFlowlet extends AbstractFlowlet implements Validat
     public void enter() {
         user = entityManager.merge(user);
         entityManager.refresh(user);
-        entityManager.detach(user);
         editor.setItem(new BeanItem<User>(user), false);
     }
 

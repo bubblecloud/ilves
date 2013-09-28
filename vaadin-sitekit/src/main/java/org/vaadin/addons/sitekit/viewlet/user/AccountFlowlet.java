@@ -87,7 +87,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
         filterDefinitions.add(new FilterDescriptor("lastName", "lastName", "Last Name", new TextField(), 101, "=", String.class, ""));
 
         final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
-        entityContainer = new EntityContainer<Customer>(entityManager, true, true, false, Customer.class, 1000, new String[] { "companyName",
+        entityContainer = new EntityContainer<Customer>(entityManager, true, false, false, Customer.class, 1000, new String[] { "companyName",
                 "lastName" }, new boolean[] { false, false }, "customerId");
 
         for (final FieldDescriptor fieldDefinition : fieldDefinitions) {
@@ -147,8 +147,9 @@ public final class AccountFlowlet extends AbstractFlowlet {
             public void buttonClick(final ClickEvent event) {
                 final User entity = ((SecurityProviderSessionImpl)
                         getSite().getSecurityProvider()).getUserFromSession();
-                final UserAccountFlowlet customerView = getViewSheet().forward(UserAccountFlowlet.class);
+                final UserAccountFlowlet customerView = getViewSheet().getFlowlet(UserAccountFlowlet.class);
                 customerView.edit(entity, false);
+                getViewSheet().forward(UserAccountFlowlet.class);
             }
         });
 

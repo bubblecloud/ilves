@@ -124,9 +124,8 @@ public final class BareSiteFields {
         BareSiteFields.add(Company.class, new FieldDescriptor("modified", "Modified", TimestampField.class, TimestampFormatter.class, 150, null, Date.class, null,
                 true, true, true));
 
-        BareSiteFields.add(Customer.class, new FieldDescriptor("companyName", "Company Name", TextField.class, null, -1, null, String.class, "", false, true, true));
-        BareSiteFields.add(Customer.class, new FieldDescriptor("lastName", "Last Name", TextField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(Customer.class, new FieldDescriptor("firstName", "First Name", TextField.class, null, 100, null, String.class, "", false, true, true));
+        BareSiteFields.add(Customer.class, new FieldDescriptor("lastName", "Last Name", TextField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(Customer.class, new FieldDescriptor("phoneNumber", "Phone Number", TextField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(Customer.class, new FieldDescriptor("emailAddress", "Email Address", TextField.class, null, 150, null, String.class, "", false, true, true),
                 new EmailValidator("Email address is not valid."));
@@ -135,7 +134,8 @@ public final class BareSiteFields {
         BareSiteFields.add(Customer.class, new FieldDescriptor("adminGroup", "Admins", GroupField.class, null, 100, null, Group.class,
                 null, false, true, false));
         BareSiteFields.add(Customer.class, new FieldDescriptor("company", "Is Company", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
-        BareSiteFields.add(Customer.class, new FieldDescriptor("companyCode", "Company Code", TextField.class, null, 100, null, String.class, "", false, true, true));
+        BareSiteFields.add(Customer.class, new FieldDescriptor("companyName", "Company Name", TextField.class, null, -1, null, String.class, "", false, true, false));
+        BareSiteFields.add(Customer.class, new FieldDescriptor("companyCode", "Company Code", TextField.class, null, 100, null, String.class, "", false, true, false));
         BareSiteFields.add(Customer.class, new FieldDescriptor("created", "Created", TimestampField.class, TimestampFormatter.class, 150, null, Date.class, null, true,
                 true, true));
         BareSiteFields.add(Customer.class, new FieldDescriptor("modified", "Modified", TimestampField.class, TimestampFormatter.class, 150, null, Date.class, null,
