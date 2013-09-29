@@ -35,12 +35,26 @@ public final class PropertiesUtil {
     private static final Map<String, Properties> PROPERTIES_MAP = new HashMap<String, Properties>();
     /** The loaded extension properties. */
     private static final Map<String, Properties> EXTENDED_PROPERTIES_MAP = new HashMap<String, Properties>();
+    /** The category redirection map. */
+    private static Map<String, String> categoryRedirection = new HashMap<String, String>();
 
     /**
      * Private default constructor to disable construction of utility class.
      */
     private PropertiesUtil() {
 
+    }
+
+    /**
+     * Redirect extended property loading from source to target directory.
+     * This enables loading for example site kit built in properties
+     * from application specific property file.
+     *
+     * @param sourceCategory the source category
+     * @param targetCategory the target category
+     */
+    public static void setCategoryRedirection(final String sourceCategory, final String targetCategory){
+        categoryRedirection.put(sourceCategory, targetCategory);
     }
 
     /**
@@ -51,17 +65,23 @@ public final class PropertiesUtil {
      */
     public static String getProperty(final String categoryKey, final String propertyKey) {
 
+        final String extendedCategoryKey;
+        if (categoryRedirection.containsKey(categoryKey)) {
+            extendedCategoryKey = categoryRedirection.get(categoryKey) + "-ext";
+        } else {
+            extendedCategoryKey = categoryKey + "-ext";
+        }
+
         if (!PROPERTIES_MAP.containsKey(categoryKey)) {
             PROPERTIES_MAP.put(categoryKey, getProperties(categoryKey));
         }
 
-        if (!EXTENDED_PROPERTIES_MAP.containsKey(categoryKey)) {
-            final String extendedCategoryKey = categoryKey + "-ext";
-            EXTENDED_PROPERTIES_MAP.put(categoryKey, getProperties(extendedCategoryKey));
+        if (!EXTENDED_PROPERTIES_MAP.containsKey(extendedCategoryKey)) {
+            EXTENDED_PROPERTIES_MAP.put(extendedCategoryKey, getProperties(extendedCategoryKey));
         }
 
-        if (EXTENDED_PROPERTIES_MAP.get(categoryKey) != null) {
-            final String valueString = (String) EXTENDED_PROPERTIES_MAP.get(categoryKey).get(propertyKey);
+        if (EXTENDED_PROPERTIES_MAP.get(extendedCategoryKey) != null) {
+            final String valueString = (String) EXTENDED_PROPERTIES_MAP.get(extendedCategoryKey).get(propertyKey);
             if (valueString != null) {
                 return valueString;
             }
