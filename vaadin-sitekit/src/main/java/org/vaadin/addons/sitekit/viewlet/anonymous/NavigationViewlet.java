@@ -19,6 +19,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.server.VaadinSession;
+import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
 import org.vaadin.addons.sitekit.site.NavigationVersion;
 import org.vaadin.addons.sitekit.site.ViewVersion;
@@ -150,13 +151,10 @@ public final class NavigationViewlet extends AbstractViewlet {
 
                 @Override
                 public void buttonClick(final ClickEvent event) {
-
+                    final Company company = getSite().getSiteContext().getObject(Company.class);
                     final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
                             .getHttpServletRequest();
-                    final String url = request.getScheme() + "://" + request.getServerName() + ":"
-                            + request.getServerPort() + request.getContextPath() + request.getServletPath();
-                    // Redirect from the page
-                    getUI().getPage().setLocation(url);
+                    getUI().getPage().setLocation(company.getUrl());
 
                     // Close the VaadinSession
                     getSession().close();

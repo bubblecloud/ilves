@@ -77,6 +77,10 @@ public final class Company implements Serializable {
     @Column(nullable = false)
     private String host;
 
+    /** URL. */
+    @Column(nullable = false)
+    private String url;
+
     /** IBAN. */
     @Column(nullable = false)
     private String iban;
@@ -121,6 +125,7 @@ public final class Company implements Serializable {
      * @param termsAndConditions termsAndConditions
      * @param companyCode companyCode
      * @param host host
+     * @param url url
      * @param iban iban
      * @param bic bic
      * @param invoicingAddress invoicingAddress
@@ -128,7 +133,7 @@ public final class Company implements Serializable {
      */
     public Company(final String salesEmailAddress, final String supportEmailAddress, final String invoicingEmailAddress, final String phoneNumber,
             final String companyName,
-            final String termsAndConditions, final String companyCode, final String host, final String iban, final String bic,
+            final String termsAndConditions, final String companyCode, final String host, final String url, final String iban, final String bic,
             final PostalAddress invoicingAddress, final PostalAddress deliveryAddress) {
         super();
         this.salesEmailAddress = salesEmailAddress;
@@ -139,6 +144,7 @@ public final class Company implements Serializable {
         this.termsAndConditions = termsAndConditions;
         this.companyCode = companyCode;
         this.host = host;
+        this.url = url;
         this.iban = iban;
         this.bic = bic;
         this.invoicingAddress = invoicingAddress;
@@ -360,6 +366,14 @@ public final class Company implements Serializable {
      */
     public void setHost(final String host) {
         this.host = host;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override

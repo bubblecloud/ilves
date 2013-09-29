@@ -188,8 +188,7 @@ public final class RegisterFlowlet extends AbstractFlowlet {
 
                     final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
                             .getHttpServletRequest();
-                    final String url = request.getScheme() + "://" + request.getServerName() + ":"
-                            + request.getServerPort() + request.getContextPath() + request.getServletPath() +
+                    final String url = company.getUrl() +
                             "#!validate/" + user.getUserId();
 
                     final Thread emailThread = new Thread(new Runnable() {

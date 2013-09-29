@@ -110,6 +110,7 @@ public final class BareSiteFields {
         BareSiteFields.add(Company.class, new FieldDescriptor("termsAndConditions", "Terms & Conditions", TextArea.class, null, 100, null, String.class, "", false,
                 true, false));
         BareSiteFields.add(Company.class, new FieldDescriptor("host", "Host Name", TextField.class, null, 100, null, String.class, "", false, true, true));
+        BareSiteFields.add(Company.class, new FieldDescriptor("url", "Site URL", TextField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(Company.class, new FieldDescriptor("iban", "IBAN", TextField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(Company.class, new FieldDescriptor("bic", "BIC", TextField.class, null, 100, null, String.class, "", false, true, true));
         BareSiteFields.add(Company.class, new FieldDescriptor("phoneNumber", "Phone Number", TextField.class, null, 150, null, String.class, "", false, true, true));

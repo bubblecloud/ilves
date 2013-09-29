@@ -69,7 +69,7 @@ public final class UserTest {
         entityManager.persist(invoicingAddress);
         entityManager.persist(deliveryAddress);
 
-        final Company owner = new Company("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", invoicingAddress, deliveryAddress);
+        final Company owner = new Company("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", invoicingAddress, deliveryAddress);
         entityManager.getTransaction().begin();
         entityManager.persist(owner);
         entityManager.getTransaction().commit();
