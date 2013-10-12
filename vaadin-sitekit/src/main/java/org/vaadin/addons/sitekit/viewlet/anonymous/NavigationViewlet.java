@@ -152,8 +152,6 @@ public final class NavigationViewlet extends AbstractViewlet {
                 @Override
                 public void buttonClick(final ClickEvent event) {
                     final Company company = getSite().getSiteContext().getObject(Company.class);
-                    final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
-                            .getHttpServletRequest();
                     getUI().getPage().setLocation(company.getUrl());
 
                     // Close the VaadinSession
