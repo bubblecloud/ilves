@@ -120,13 +120,35 @@ public class UserDao {
         }
     }
 
-        /**
-         * Gets given user.
-         * @param entityManager the entity manager.
-         * @param owner the owning company
-         * @param emailAddress the email address
-         * @return the group
-         */
+    /**
+     * Gets given user.
+     * @param entityManager the entity manager.
+     * @param owner the owning company
+     * @param firstName the email address
+     * @return the group
+     */
+    public static final User getUserByFirstName(final EntityManager entityManager, final Company owner, final String firstName) {
+        final TypedQuery<User> query = entityManager.createQuery("select e from User as e where e.owner=:owner and e.firstName=:firstName",
+                User.class);
+        query.setParameter("owner", owner);
+        query.setParameter("firstName", firstName);
+        final List<User> users = query.getResultList();
+        if (users.size() == 1) {
+            return users.get(0);
+        } else if (users.size() == 0) {
+            return null;
+        } else {
+            throw new RuntimeException("Multiple users with same owner company and first name in database. Constraint is missing.");
+        }
+    }
+
+    /**
+     * Gets given user.
+     * @param entityManager the entity manager.
+     * @param owner the owning company
+     * @param emailAddress the email address
+     * @return the group
+     */
     public static final User getUser(final EntityManager entityManager, final Company owner, final String emailAddress) {
         final TypedQuery<User> query = entityManager.createQuery("select e from User as e where e.owner=:owner and e.emailAddress=:emailAddress",
                 User.class);
