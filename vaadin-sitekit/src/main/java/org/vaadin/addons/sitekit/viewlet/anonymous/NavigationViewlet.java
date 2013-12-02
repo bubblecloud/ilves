@@ -22,6 +22,7 @@ import com.vaadin.server.VaadinSession;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
 import org.vaadin.addons.sitekit.site.NavigationVersion;
+import org.vaadin.addons.sitekit.site.SiteException;
 import org.vaadin.addons.sitekit.site.ViewVersion;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Alignment;
@@ -69,6 +70,9 @@ public final class NavigationViewlet extends AbstractViewlet {
             final String pageName = indentLastIndex == -1 ? element : element.substring(indentLastIndex + 1);
 
             final ViewVersion pageVersion = getSite().getCurrentViewVersion(pageName);
+            if (pageVersion == null) {
+                throw new SiteException("Unknown page: " + pageName);
+            }
             if (pageVersion.getViewerRoles().length > 0) {
                 boolean roleMatch = false;
                 for (final String role : pageVersion.getViewerRoles()) {

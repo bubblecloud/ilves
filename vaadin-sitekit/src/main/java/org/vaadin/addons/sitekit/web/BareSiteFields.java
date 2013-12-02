@@ -44,6 +44,7 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
+import org.vaadin.addons.sitekit.site.SiteException;
 
 /**
  * Bare Site field descriptors.
@@ -91,6 +92,9 @@ public final class BareSiteFields {
      * @return an unmodifiable list of field descriptors.
      */
     public static List<FieldDescriptor> getFieldDescriptors(final Class<?> entityClass) {
+        if (!fieldDescriptors.containsKey(entityClass)) {
+            throw new SiteException("No fields defined for class: " + entityClass.getCanonicalName());
+        }
         return Collections.unmodifiableList(fieldDescriptors.get(entityClass));
     }
 
