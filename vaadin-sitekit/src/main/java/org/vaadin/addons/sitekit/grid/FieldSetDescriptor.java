@@ -17,14 +17,15 @@ package org.vaadin.addons.sitekit.grid;
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.PropertyFormatter;
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.TextField;
 import org.vaadin.addons.sitekit.grid.field.TimestampField;
-import org.vaadin.addons.sitekit.grid.formatter.ObjectToStringFormatter;
-import org.vaadin.addons.sitekit.grid.formatter.TimestampFormatter;
+import org.vaadin.addons.sitekit.grid.formatter.ObjectConverter;
+import org.vaadin.addons.sitekit.grid.formatter.TimestampConverter;
 import org.vaadin.addons.sitekit.util.StringUtil;
 
 import java.beans.BeanInfo;
@@ -70,7 +71,7 @@ public final class FieldSetDescriptor {
                     final Class<?> valueType = pd.getPropertyType();
 
                     final Class<? extends Field> fieldClass;
-                    final Class<? extends PropertyFormatter> formatterClass;
+                    final Converter<?,?> converter;
                     final int width;
                     final HorizontalAlignment valueAlignment;
                     final Object defaultValue;
@@ -79,7 +80,7 @@ public final class FieldSetDescriptor {
                     final List<Validator> validators = new ArrayList<Validator>();
                     if (valueType.equals(String.class)) {
                         fieldClass = TextField.class;
-                        formatterClass = null;
+                        converter = null;
                         width = 150;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
@@ -89,7 +90,7 @@ public final class FieldSetDescriptor {
                                 new StringLengthValidator("Invalid length.", 0, 255, true));
                     } else if (valueType.equals(Integer.class)) {
                         fieldClass = TextField.class;
-                        formatterClass = null;
+                        converter = null;
                         width = 50;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
@@ -99,7 +100,7 @@ public final class FieldSetDescriptor {
                                 new IntegerRangeValidator("Not integer.", Integer.MIN_VALUE, Integer.MIN_VALUE));
                     } else if (valueType.equals(Long.class)) {
                         fieldClass = TextField.class;
-                        formatterClass = null;
+                        converter = null;
                         width = 50;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
@@ -109,7 +110,7 @@ public final class FieldSetDescriptor {
                                 new IntegerRangeValidator("Not integer.", Integer.MIN_VALUE, Integer.MIN_VALUE));
                     }  else if (valueType.equals(Boolean.class)) {
                         fieldClass = CheckBox.class;
-                        formatterClass = null;
+                        converter = null;
                         width = 50;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
@@ -117,7 +118,7 @@ public final class FieldSetDescriptor {
                         required = true;
                     } else if (valueType.equals(Date.class)) {
                         fieldClass = TimestampField.class;
-                        formatterClass = TimestampFormatter.class;
+                        converter = new TimestampConverter();
                         width = 150;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
@@ -125,7 +126,7 @@ public final class FieldSetDescriptor {
                         required = true;
                     } else {
                         fieldClass = TextField.class;
-                        formatterClass = ObjectToStringFormatter.class;
+                        converter = new ObjectConverter();
                         width = 100;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
@@ -139,7 +140,7 @@ public final class FieldSetDescriptor {
                             fieldId,
                             labelKey,
                             fieldClass,
-                            formatterClass,
+                            converter,
                             width,
                             valueAlignment,
                             valueType,

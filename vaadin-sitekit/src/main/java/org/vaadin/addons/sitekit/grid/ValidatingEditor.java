@@ -22,6 +22,7 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.PropertysetItem;
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.server.Resource;
@@ -142,7 +143,7 @@ public class ValidatingEditor extends CustomComponent implements
     public final void setItem(final Item item, final boolean newItem) {
         disableValueChangeListener = true;
         if (item != null) {
-            form.setItemDataSource(injectFormatters(item));
+            form.setItemDataSource(item);
             form.setVisibleItemProperties(fieldIds);
         } else {
             form.setItemDataSource(null);
@@ -151,30 +152,6 @@ public class ValidatingEditor extends CustomComponent implements
         this.newItem = newItem;
         refreshFieldState(newItem);
         notifyStateChange();
-    }
-
-    /**
-     * Injects formatters to the item.
-     * @param item the item
-     * @return the item with formatters.
-     */
-    private Item injectFormatters(final Item item) {
-        final PropertysetItem newItem = new PropertysetItem();
-
-        for (int i = 0; i < fieldDescriptors.size(); i++) {
-            final FieldDescriptor fieldDefinition = fieldDescriptors.get(i);
-            Property property = item.getItemProperty(fieldDefinition.getId());
-            if (!DateField.class.isAssignableFrom(fieldDefinition.getFieldClass()) && fieldDefinition.getFormatterClass() != null) {
-                try {
-                    property = fieldDefinition.getFormatterClass().getConstructor(Property.class).newInstance(property);
-                } catch (final Throwable t) {
-                    throw new RuntimeException("Error instantiating value formatter for field: " + fieldDefinition.getId(), t);
-                }
-            }
-            newItem.addItemProperty(fieldDefinition.getId(), property);
-        }
-
-        return newItem;
     }
 
     /**
@@ -244,6 +221,7 @@ public class ValidatingEditor extends CustomComponent implements
                         field.addValidator(validator);
                     }
                     field.setRequired(fieldDefinition.isRequired());
+                    ((AbstractField) field).setConverter(fieldDefinition.getConverter());
                     field.setPropertyDataSource(null);
                     field.setWidth(fieldDefinition.getWidth(), UNITS_PIXELS);
                     field.setReadOnly(isReadOnly() || fieldDefinition.isReadOnly());
@@ -410,7 +388,15 @@ public class ValidatingEditor extends CustomComponent implements
         if (fields[fieldIndex].getValidators() != null) {
             for (final Validator validator : fields[fieldIndex].getValidators()) {
                 try {
-                    validator.validate(event.getText());
+                    final Converter converter = ((AbstractField) fields[fieldIndex]).getConverter();
+                    final Object value;
+                    if (converter != null) {
+                        value = converter.convertToModel(event.getText(), converter.getModelType(),
+                                ((AbstractField) fields[fieldIndex]).getLocale());
+                    } else {
+                        value = event.getText();
+                    }
+                    validator.validate(value);
                     fieldIcons[fieldIndex].setDescription("");
                 } catch (final InvalidValueException e) {
                     fieldIcons[fieldIndex].setDescription(e.getMessage());

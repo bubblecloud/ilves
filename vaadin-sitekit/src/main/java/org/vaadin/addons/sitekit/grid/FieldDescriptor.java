@@ -17,6 +17,7 @@ package org.vaadin.addons.sitekit.grid;
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.PropertyFormatter;
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.UI;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
@@ -44,8 +45,8 @@ public final class FieldDescriptor {
     private Object defaultValue;
     /** Field editor component. */
     private Class<? extends Field> fieldClass;
-    /** Field formatter. */
-    private Class<? extends PropertyFormatter> formatterClass;
+    /** Field converter. */
+    private Converter<?,?> converter;
     /** Reflects whether field is readonly. */
     private boolean readOnly;
     /** Reflects whether field is sortable. */
@@ -62,7 +63,7 @@ public final class FieldDescriptor {
      * @param id ID of the field.
      * @param labelKey Localization key of the field.
      * @param fieldClass Field editor component or null.
-     * @param formatterClass Field value formatter class.
+     * @param converter Field converter.
      * @param width Width of the field.
      * @param valueAlignment Value vertical alignment.
      * @param valueType Type of the field value.
@@ -72,7 +73,7 @@ public final class FieldDescriptor {
      * @param required true if field is required.
      */
     public FieldDescriptor(final String id, final String labelKey, final Class<? extends Field> fieldClass,
-            final Class<? extends PropertyFormatter> formatterClass, final int width,
+            final Converter<?,?> converter, final int width,
             final HorizontalAlignment valueAlignment, final Class<?> valueType,
             final Object defaultValue, final boolean readOnly, final boolean sortable, final boolean required) {
         super();
@@ -82,7 +83,7 @@ public final class FieldDescriptor {
         this.valueType = valueType;
         this.defaultValue = defaultValue;
         this.fieldClass = fieldClass;
-        this.formatterClass = formatterClass;
+        this.converter = converter;
         this.readOnly = readOnly;
         this.sortable = sortable;
         this.required = required;
@@ -136,10 +137,10 @@ public final class FieldDescriptor {
     }
 
     /**
-     * @return the propertyFormatterClass
+     * @return the field converter
      */
-    public Class<? extends PropertyFormatter> getFormatterClass() {
-        return formatterClass;
+    public Converter<?,?> getConverter() {
+        return converter;
     }
 
     /**
@@ -224,10 +225,10 @@ public final class FieldDescriptor {
     }
 
     /**
-     * @param formatterClass the formatterClass
+     * @param converter the converter
      */
-    public void setFormatterClass(final Class<? extends PropertyFormatter> formatterClass) {
-        this.formatterClass = formatterClass;
+    public void setFormatterClass(final Converter<?,?> converter) {
+        this.converter = converter;
     }
 
     /**

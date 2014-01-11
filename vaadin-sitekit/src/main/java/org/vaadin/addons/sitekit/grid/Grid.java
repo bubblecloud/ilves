@@ -19,6 +19,7 @@ import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.Like;
 import com.vaadin.ui.AbstractComponent;
@@ -162,10 +163,9 @@ public class Grid extends CustomComponent {
                 //table.setColumnWidth(fieldDefinition.getId(), fieldDefinition.getWidth());
                 //table.setColumnExpandRatio(fieldDefinition.getId(), 1);
             }
-            if (table instanceof FormattingTable && fieldDefinition.getFormatterClass() != null) {
+            if (table instanceof FormattingTable && fieldDefinition.getConverter() != null) {
                 try {
-                    ((FormattingTable) table).setFormatter(fieldDefinition.getId(),
-                            fieldDefinition.getFormatterClass().newInstance());
+                    ((FormattingTable) table).setConverter(fieldDefinition.getId(), (Converter<String, ?>) fieldDefinition.getConverter());
                 } catch (final Throwable t) {
                     throw new RuntimeException("Error instantiating value formatter for field: "
                             + fieldDefinition.getId(), t);
