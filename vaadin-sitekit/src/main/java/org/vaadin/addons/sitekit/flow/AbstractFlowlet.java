@@ -77,7 +77,7 @@ public abstract class AbstractFlowlet extends CustomComponent implements Flowlet
         this.setSizeFull();
 
         rootLayout = new GridLayout(1, 2);
-        rootLayout.setMargin(false);
+        rootLayout.setMargin(true);
         rootLayout.setSpacing(true);
         rootLayout.setSizeFull();
         rootLayout.setRowExpandRatio(0, 0f);
