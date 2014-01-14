@@ -40,7 +40,6 @@ public class FormattingTable extends Table {
      */
     public FormattingTable() {
         super();
-        setPageLength(50);
     }
 
     /**
