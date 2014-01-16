@@ -44,8 +44,8 @@ public class ColorPickerField extends CustomField<Integer> {
 
     @Override
     protected void setInternalValue(Integer newValue) {
-        super.setInternalValue(newValue);
         if (newValue != null) {
+            super.setInternalValue(newValue);
             colorPicker.setColor(new Color(newValue));
         }
     }

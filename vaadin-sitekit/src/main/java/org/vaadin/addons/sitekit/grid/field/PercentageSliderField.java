@@ -42,7 +42,9 @@ public class PercentageSliderField extends CustomField<Double> {
 
     @Override
     protected void setInternalValue(Double newValue) {
-        super.setInternalValue(newValue);
-        slider.setValue(newValue);
+        if (newValue != null) {
+            super.setInternalValue(newValue);
+            slider.setValue(newValue);
+        }
     }
 }
