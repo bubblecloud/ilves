@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.vaadin.addons.sitekit</groupId>
         <artifactId>vaadin-sitekit-root</artifactId>
-        <version>1.1.8</version>
+        <version>1.1.9-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -89,7 +89,7 @@
         <dependency>
             <groupId>org.vaadin.addons.sitekit</groupId>
             <artifactId>vaadin-sitekit</artifactId>
-            <version>1.1.8</version>
+            <version>1.1.9-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>hsqldb</groupId>
