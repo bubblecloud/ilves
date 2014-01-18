@@ -3,7 +3,7 @@
 
     <groupId>org.vaadin.addons.sitekit</groupId>
     <artifactId>vaadin-sitekit-root</artifactId>
-    <version>1.1.9</version>
+    <version>1.1.10-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <scm>
