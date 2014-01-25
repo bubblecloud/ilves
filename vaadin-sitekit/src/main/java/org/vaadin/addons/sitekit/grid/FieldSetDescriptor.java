@@ -49,6 +49,7 @@ public final class FieldSetDescriptor {
      * The field descriptors.
      */
     private List<FieldDescriptor> fieldDescriptors = new ArrayList<FieldDescriptor>();
+    private List<FieldDescriptor> visibleFieldDescriptors;
 
     /**
      * Constructs field set descriptor from bean class.
@@ -75,7 +76,7 @@ public final class FieldSetDescriptor {
                     final int width;
                     final HorizontalAlignment valueAlignment;
                     final Object defaultValue;
-                    final boolean readOnly;
+                    final boolean readOnly = pd.getWriteMethod() == null;
                     final boolean required;
                     final List<Validator> validators = new ArrayList<Validator>();
                     if (valueType.equals(String.class)) {
@@ -84,7 +85,6 @@ public final class FieldSetDescriptor {
                         width = 150;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
-                        readOnly = false;
                         required = true;
                         validators.add(
                                 new StringLengthValidator("Invalid length.", 0, 255, true));
@@ -94,27 +94,20 @@ public final class FieldSetDescriptor {
                         width = 50;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
-                        readOnly = false;
                         required = true;
-                        validators.add(
-                                new IntegerRangeValidator("Not integer.", Integer.MIN_VALUE, Integer.MIN_VALUE));
                     } else if (valueType.equals(Long.class)) {
                         fieldClass = TextField.class;
                         converter = null;
                         width = 50;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
-                        readOnly = false;
                         required = true;
-                        validators.add(
-                                new IntegerRangeValidator("Not integer.", Integer.MIN_VALUE, Integer.MIN_VALUE));
                     }  else if (valueType.equals(Boolean.class)) {
                         fieldClass = CheckBox.class;
                         converter = null;
                         width = 50;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
-                        readOnly = false;
                         required = true;
                     } else if (valueType.equals(Date.class)) {
                         fieldClass = TimestampField.class;
@@ -122,7 +115,6 @@ public final class FieldSetDescriptor {
                         width = 150;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
-                        readOnly = false;
                         required = true;
                     } else {
                         fieldClass = TextField.class;
@@ -130,7 +122,6 @@ public final class FieldSetDescriptor {
                         width = 100;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
-                        readOnly = true;
                         required = false;
                     }
 
@@ -157,16 +148,28 @@ public final class FieldSetDescriptor {
                     fieldDescriptors.add(fieldDescriptor);
                 }
             }
+            visibleFieldDescriptors = fieldDescriptors;
         } catch (final java.beans.IntrospectionException ignored) {
         }
 
+    }
+
+    public void setVisibleFieldIds(final String[] visibleFieldIds) {
+        visibleFieldDescriptors = new ArrayList<FieldDescriptor>();
+        for (final String visibleFieldId : visibleFieldIds) {
+            for (final FieldDescriptor fieldDescriptor : fieldDescriptors) {
+                if (fieldDescriptor.getId().equals(visibleFieldId)) {
+                    visibleFieldDescriptors.add(fieldDescriptor);
+                }
+            }
+        }
     }
 
     /**
      * @return fieldDescriptors
      */
     public List<FieldDescriptor> getFieldDescriptors() {
-        return fieldDescriptors;
+        return visibleFieldDescriptors;
     }
 
     /**
@@ -218,4 +221,6 @@ public final class FieldSetDescriptor {
             return Arrays.asList(info.getPropertyDescriptors());
         }
     }
+
+
 }

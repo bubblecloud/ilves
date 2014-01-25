@@ -19,21 +19,15 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.*;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
 import org.vaadin.addons.sitekit.site.NavigationVersion;
 import org.vaadin.addons.sitekit.site.SiteException;
 import org.vaadin.addons.sitekit.site.ViewVersion;
 import com.vaadin.server.Resource;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Embedded;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,13 +51,12 @@ public final class NavigationViewlet extends AbstractViewlet {
     }
 
     public void refresh() {
-        final VerticalLayout navigationLayout = new VerticalLayout();
-        navigationLayout.setSpacing(true);
-        navigationLayout.setMargin(true);
+        final CssLayout navigationLayout = new CssLayout();
+        //navigationLayout.setSpacing(true);
+        //navigationLayout.setMargin(true);
 
         final NavigationVersion navigationVersion = getSite().getCurrentNavigationVersion();
 
-        //final ViewDescriptor page = getPageWindow().getViewDescriptor();
         final String[] elements = navigationVersion.getTree().split(";");
         for (final String element : elements) {
             final int indentLastIndex = element.lastIndexOf('+');
@@ -104,8 +97,8 @@ public final class NavigationViewlet extends AbstractViewlet {
             itemLayout.addComponent(indent);
             if (iconResource != null) {
                 final Embedded embedded = new Embedded(null, iconResource);
-                embedded.setWidth(32, UNITS_PIXELS);
-                embedded.setHeight(32, UNITS_PIXELS);
+                embedded.setWidth(20, UNITS_PIXELS);
+                embedded.setHeight(20, UNITS_PIXELS);
                 itemLayout.addComponent(embedded);
             }
 
@@ -142,8 +135,8 @@ public final class NavigationViewlet extends AbstractViewlet {
             itemLayout.addComponent(indent);
             if (iconResource != null) {
                 final Embedded embedded = new Embedded(null, iconResource);
-                embedded.setWidth(32, UNITS_PIXELS);
-                embedded.setHeight(32, UNITS_PIXELS);
+                embedded.setWidth(20, UNITS_PIXELS);
+                embedded.setHeight(20, UNITS_PIXELS);
                 itemLayout.addComponent(embedded);
             }
 

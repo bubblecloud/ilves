@@ -1,0 +1,90 @@
+@import url(../reindeer/legacy-styles.css);
+
+div#shield-header {background: #DDDDDD;height: 52px}
+div#shield-shield-header-shield-content {width: 1000px;margin: 0 auto;height: 52px}
+div#shield-logo{background:#FFFFFF;margin: 6px 0px 6px 0px;border:0px;border-radius:10px;}
+div#shield-logo{float:left;width:40px;height: 40px}
+div#shield-logo-margin{margin-top:4px}
+div#shield-navigation{background:#F5F5F5;margin: 6px 0px 6px 6px;border:0px;border-radius:10px;}
+div#shield-navigation{float:right;width:952px;height:40px;}
+div#shield-navigation-margin{margin: 10px}
+div#shield-container{width:1000px;margin:0 auto}
+div#shield-content-wrapper{margin: 12px 0px 12px 0px;}
+div#shield-content{padding: 6px;}
+div#shield-content{background:#F0F0EC;border:0px;border-radius:6px;}
+div#shield-footer{background: #DDDDDD;}
+div#shield-footer{clear:both;width:100%;min-height: 20px;border:0px solid #DDDDDD;border-radius:10px;}
+div#shield-footer-content{padding: 10px 10px 10px 10px;}
+
+h1 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+/* Application background */
+.v-app {
+	 background: rgb(255,255,255);
+}
+
+.v-tabsheet-tabsheetpanel {
+     background: rgb(253,253,253);
+}
+
+.v-tabsheet-deco, .white .v-tabsheet-deco {
+    border-top: 0px;
+}
+
+.v-panel-light {
+    background: rgb(253,253,253);
+}
+
+.white .v-panel .v-panel-content {
+    background: rgb(253,253,253);
+}
+
+.dashboard {
+    background: rgb(253,253,253);
+}
+
+.v-table-body {
+border: 1px solid #eee;
+}
+
+.v-caption .v-icon {
+display: inline-block;
+padding-right: 2px;
+vertical-align: top;
+}
+
+.v-button .v-icon {
+vertical-align: middle;
+margin-right: 3px;
+border: none;
+width: 16px;
+height: 16px;
+}
+
+.v-caption .v-required-field-indicator {
+display: inline-block;
+color: black;
+padding-top: 2px;
+}
+
+.v-colorpicker-button-color {
+margin-right: 0px;
+}
+
+.v-button-link:focus .v-button-caption {
+outline: none;
+}
+
+.v-button-link .v-button-caption {
+line-height: inherit;
+font-weight: normal;
+color: #333333;
+font-size: 11px;
+font-weight: bold;
+text-shadow: 0 1px 0 #fff;
+text-decoration: none;
+text-align: left;
+}
+

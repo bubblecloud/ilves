@@ -95,6 +95,12 @@ public final class Feedback implements Serializable {
         super();
     }
 
+    public Feedback(Company owner, Date created, Date modified) {
+        this.owner = owner;
+        this.created = created;
+        this.modified = modified;
+    }
+
     /**
      * @return the feedbackId
      */
@@ -103,24 +109,10 @@ public final class Feedback implements Serializable {
     }
 
     /**
-     * @param feedbackId the feedbackId
-     */
-    public void setFeedbackId(final String feedbackId) {
-        this.feedbackId = feedbackId;
-    }
-
-    /**
      * @return the owning company
      */
     public Company getOwner() {
         return owner;
-    }
-
-    /**
-     * @param owner the owning company
-     */
-    public void setOwner(final Company owner) {
-        this.owner = owner;
     }
 
     /**
@@ -229,24 +221,10 @@ public final class Feedback implements Serializable {
     }
 
     /**
-     * @param created the created to set
-     */
-    public void setCreated(final Date created) {
-        this.created = created;
-    }
-
-    /**
      * @return the modified
      */
     public Date getModified() {
         return modified;
-    }
-
-    /**
-     * @param modified the modified to set
-     */
-    public void setModified(final Date modified) {
-        this.modified = modified;
     }
 
     @Override

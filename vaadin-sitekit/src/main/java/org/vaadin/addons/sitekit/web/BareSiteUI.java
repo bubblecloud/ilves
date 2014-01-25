@@ -18,28 +18,13 @@ package org.vaadin.addons.sitekit.web;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.vaadin.addons.sitekit.dao.CompanyDao;
 import org.vaadin.addons.sitekit.model.Company;
-import org.vaadin.addons.sitekit.site.AbstractSiteUI;
-import org.vaadin.addons.sitekit.site.ContentProvider;
-import org.vaadin.addons.sitekit.site.FixedWidthView;
-import org.vaadin.addons.sitekit.site.LocalizationProvider;
-import org.vaadin.addons.sitekit.site.LocalizationProviderBundleImpl;
-import org.vaadin.addons.sitekit.site.NavigationDescriptor;
-import org.vaadin.addons.sitekit.site.NavigationVersion;
-import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
-import org.vaadin.addons.sitekit.site.Site;
-import org.vaadin.addons.sitekit.site.SiteContext;
-import org.vaadin.addons.sitekit.site.SiteDescriptor;
-import org.vaadin.addons.sitekit.site.SiteMode;
-import org.vaadin.addons.sitekit.site.ViewDescriptor;
-import org.vaadin.addons.sitekit.site.ViewVersion;
-import org.vaadin.addons.sitekit.site.ViewletDescriptor;
+import org.vaadin.addons.sitekit.site.*;
 import org.vaadin.addons.sitekit.util.PersistenceUtil;
 import org.vaadin.addons.sitekit.viewlet.administrator.company.CompanyFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.user.UserFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.CompanyFooterViewlet;
-import org.vaadin.addons.sitekit.viewlet.anonymous.CompanyHeaderViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.EmailValidationViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.FeedbackViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.ImageViewlet;
@@ -66,7 +51,7 @@ import java.util.List;
  * @author Tommi S.E. Laukkanen
  */
 @SuppressWarnings({ "serial", "unchecked" })
-@Theme("eelis")
+@Theme("sitekit")
 public final class BareSiteUI extends AbstractSiteUI implements ContentProvider {
 
     /** The logger. */
@@ -86,7 +71,15 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
 
         entityManagerFactory = PersistenceUtil.getEntityManagerFactory(PERSISTENCE_UNIT, PROPERTIES_CATEGORY);
 
-        final String webappUrl = BareSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm();
+        final boolean test = BareSiteUI.class.getClassLoader()
+                .getResource("webapp/").toExternalForm().startsWith("file:");
+
+        final String webappUrl;
+        if (test) {
+            webappUrl = "src/main/resources/webapp/";
+        } else {
+            webappUrl = BareSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm();
+        }
 
         final Server server = new Server(8081);
 
@@ -95,7 +88,11 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
         context.setDescriptor(webappUrl + "/WEB-INF/web.xml");
         context.setResourceBase(webappUrl);
         context.setParentLoaderPriority(true);
-
+        if (test) {
+            context.setInitParameter("cacheControl","no-cache");
+            context.setInitParameter("useFileMappedBuffer", "false");
+            context.setInitParameter("maxCachedFiles", "0");
+        }
         server.setHandler(context);
         server.start();
         server.join();
@@ -133,12 +130,10 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
         final List<ViewDescriptor> viewDescriptors = new ArrayList<ViewDescriptor>();
 
         viewDescriptors.add(new ViewDescriptor("master", null, null, new ViewVersion(0, null, "Master", "",
-                "This is a master view.", FixedWidthView.class.getCanonicalName(), new String[]{"admin"},
+                "This is a master view.", DefaultCustomView.class.getCanonicalName(), new String[]{"admin"},
                 Arrays.asList(
-                        new ViewletDescriptor("logo", "Logo", "This is logo.", "eelis-logo-2.png",
+                        new ViewletDescriptor("logo", "Logo", "This is logo.", "logo.png",
                                 ImageViewlet.class.getCanonicalName()),
-                        new ViewletDescriptor("header", "Header", "This is header.", null,
-                                CompanyHeaderViewlet.class.getCanonicalName()),
                         new ViewletDescriptor("navigation", "NavigationDescriptor", "This is navigation.", null,
                                 NavigationViewlet.class.getCanonicalName()),
                         new ViewletDescriptor("footer", "Footer", "This is footer.", null,
@@ -146,7 +141,7 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
                 ))));
 
         viewDescriptors.add(new ViewDescriptor("default", null, null, new ViewVersion(0, "master", "Default", "",
-                "This is default view.", FixedWidthView.class.getCanonicalName(), new String[]{},
+                "This is default view.", DefaultCustomView.class.getCanonicalName(), new String[]{},
                 Arrays.asList(new ViewletDescriptor(
                         "content", "Feedback", "This is feedback viewlet.", null,
                         FeedbackViewlet.class.getCanonicalName()))
@@ -154,28 +149,28 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
 
         viewDescriptors.add(new ViewDescriptor("users", null, null, new ViewVersion(
                 0, "master", "Users", "", "This is users page.",
-                FixedWidthView.class.getCanonicalName(), new String[]{"administrator"},
+                DefaultCustomView.class.getCanonicalName(), new String[]{"administrator"},
                 Arrays.asList(new ViewletDescriptor(
                         "content", "Flowlet Sheet", "This is flow sheet.", null,
                         UserFlowViewlet.class.getCanonicalName())
                 ))));
         viewDescriptors.add(new ViewDescriptor("groups", null, null, new ViewVersion(
                 0, "master", "Groups", "", "This is groups page.",
-                FixedWidthView.class.getCanonicalName(), new String[]{"administrator"},
+                DefaultCustomView.class.getCanonicalName(), new String[]{"administrator"},
                 Arrays.asList(new ViewletDescriptor(
                         "content", "Flowlet Sheet", "This is flow sheet.", null,
                         GroupFlowViewlet.class.getCanonicalName())
                 ))));
         viewDescriptors.add(new ViewDescriptor("customers", null, null, new ViewVersion(
                 0, "master", "Customers", "customers", "This is customers page.",
-                FixedWidthView.class.getCanonicalName(), new String[]{"administrator"},
+                DefaultCustomView.class.getCanonicalName(), new String[]{"administrator"},
                 Arrays.asList(new ViewletDescriptor(
                         "content", "Flowlet Sheet", "This is flow sheet.", null,
                         CustomerFlowViewlet.class.getCanonicalName())
                 ))));
         viewDescriptors.add(new ViewDescriptor("companies", null, null, new ViewVersion(
                 0, "master", "Companies", "companies", "This is companies page.",
-                FixedWidthView.class.getCanonicalName(), new String[]{"administrator"},
+                DefaultCustomView.class.getCanonicalName(), new String[]{"administrator"},
                 Arrays.asList(new ViewletDescriptor(
                         "content", "Flowlet Sheet", "This is flow sheet.", null,
                         CompanyFlowViewlet.class.getCanonicalName())
@@ -183,7 +178,7 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
 
         viewDescriptors.add(new ViewDescriptor("login", null, null, new ViewVersion(
                 0, "master", "Login SiteView", "login page", "This is login page.",
-                FixedWidthView.class.getCanonicalName(), new String[]{"anonymous"},
+                DefaultCustomView.class.getCanonicalName(), new String[]{"anonymous"},
                 Arrays.asList(
                         new ViewletDescriptor(
                                 "content", "Flowlet Sheet", "This is flow sheet.", null,
@@ -192,7 +187,7 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
 
         viewDescriptors.add(new ViewDescriptor("account", null, null, new ViewVersion(
                 0, "master", "Account SiteView", "account page", "This is login page.",
-                FixedWidthView.class.getCanonicalName(), new String[]{"user"},
+                DefaultCustomView.class.getCanonicalName(), new String[]{"user"},
                 Arrays.asList(
                         new ViewletDescriptor(
                                 "content", "Flowlet Sheet", "This is flow sheet.", null,
@@ -201,7 +196,7 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
 
         viewDescriptors.add(new ViewDescriptor("validate", null, null, new ViewVersion(
                 0, "master", "Email Validation", "email validation page", "This is email validation page.",
-                FixedWidthView.class.getCanonicalName(), new String[]{"anonymous"},
+                DefaultCustomView.class.getCanonicalName(), new String[]{"anonymous"},
                 Arrays.asList(
                         new ViewletDescriptor(
                                 "content", "Email Validation", "This is email validation flowlet.", null,

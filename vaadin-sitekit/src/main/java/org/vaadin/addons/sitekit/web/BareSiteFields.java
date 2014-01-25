@@ -183,7 +183,17 @@ public final class BareSiteFields {
                 true, true));
 
         final FieldSetDescriptor feedbackDescriptor = new FieldSetDescriptor(Feedback.class);
+        feedbackDescriptor.setVisibleFieldIds(new String[]{
+                "title",
+                "description",
+                "emailAddress",
+                "firstName",
+                "lastName",
+                "organizationName",
+                "organizationSize"
+        });
         FieldSetDescriptorRegister.registerFieldSetDescriptor("feedback", feedbackDescriptor);
+
 
     }
 }

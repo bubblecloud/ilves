@@ -17,14 +17,11 @@ package org.vaadin.addons.sitekit.viewlet.anonymous;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Embedded;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.BaseTheme;
+import com.vaadin.ui.themes.Reindeer;
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
@@ -77,10 +74,6 @@ public final class FeedbackViewlet extends AbstractViewlet {
                 final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
                 final Company company = getSite().getSiteContext().getObject(Company.class);
 
-                feedback.setCreated(new Date());
-                feedback.setModified(feedback.getCreated());
-                feedback.setOwner(company);
-
                 try {
 
                     Notification.show(getSite().localize("message-feedback-submit-success"),
@@ -125,9 +118,11 @@ public final class FeedbackViewlet extends AbstractViewlet {
         panel.addComponent(editor);
         panel.addComponent(submitButton);
         panel.setSpacing(true);
+        panel.setMargin(true);
 
-        final HorizontalLayout mainLayout = new HorizontalLayout();
-        mainLayout.addComponent(panel);
+        final Panel mainLayout = new Panel();
+        mainLayout.setStyleName(Reindeer.PANEL_LIGHT);
+        mainLayout.setContent(panel);
 
         setCompositionRoot(mainLayout);
 
@@ -137,7 +132,9 @@ public final class FeedbackViewlet extends AbstractViewlet {
      * Reset data.
      */
     public void reset() {
-        feedback = new Feedback();
+        final Company company = getSite().getSiteContext().getObject(Company.class);
+        feedback = new Feedback(company, new Date(), new Date());
+
         final BeanItem<Feedback> customerItem = new BeanItem<Feedback>(feedback);
         editor.setItem(customerItem, true);
     }

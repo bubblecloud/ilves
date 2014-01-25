@@ -38,21 +38,16 @@ public final class CompanyFooterViewlet extends AbstractViewlet {
      * Default constructor which sets up widget content.
      */
     public CompanyFooterViewlet() {
-        final VerticalLayout layout = new VerticalLayout();
-        layout.setMargin(false);
-        layout.addComponent(new Label("<hr />", Label.CONTENT_XHTML));
         companyLabel = new Label();
-        layout.addComponent(companyLabel);
-        layout.setComponentAlignment(companyLabel, Alignment.BOTTOM_CENTER);
-        this.setCompositionRoot(layout);
-
+        companyLabel.setValue("-");
+        this.setCompositionRoot(companyLabel);
     }
 
     @Override
     public void enter(final String parameters) {
         final Company company = getSite().getSiteContext().getObject(Company.class);
         if (company != null) {
-            companyLabel.setCaption(company.getCompanyName() + " (" + company.getCompanyCode() + ")");
+            companyLabel.setValue(company.getCompanyName() + " (" + company.getCompanyCode() + ")");
         }
     }
 

@@ -386,21 +386,30 @@ public class ValidatingEditor extends CustomComponent implements
         boolean valid = true;
         final int fieldIndex = fieldIndexes.get((Field) event.getComponent());
         if (fields[fieldIndex].getValidators() != null) {
-            for (final Validator validator : fields[fieldIndex].getValidators()) {
-                try {
-                    final Converter converter = ((AbstractField) fields[fieldIndex]).getConverter();
-                    final Object value;
-                    if (converter != null) {
-                        value = converter.convertToModel(event.getText(), converter.getModelType(),
+            if ((event.getText() == null || event.getText().length() == 0) &&
+                    fields[fieldIndex].isRequired()) {
+                fieldIcons[fieldIndex].setDescription("");
+                valid = false;
+            } else {
+                for (final Validator validator : fields[fieldIndex].getValidators()) {
+                    try {
+                        final Converter converter = ((AbstractField) fields[fieldIndex]).getConverter();
+                        final Object value;
+                        if (converter != null) {
+                            value = converter.convertToModel(event.getText(), converter.getModelType(),
                                 ((AbstractField) fields[fieldIndex]).getLocale());
-                    } else {
-                        value = event.getText();
+                        } else {
+                            value = event.getText();
+                        }
+                        validator.validate(value);
+                        fieldIcons[fieldIndex].setDescription("");
+                    } catch (final InvalidValueException e) {
+                        fieldIcons[fieldIndex].setDescription(e.getMessage());
+                        valid = false;
+                    } catch (final Exception e) {
+                        fieldIcons[fieldIndex].setDescription("");
+                        valid = false;
                     }
-                    validator.validate(value);
-                    fieldIcons[fieldIndex].setDescription("");
-                } catch (final InvalidValueException e) {
-                    fieldIcons[fieldIndex].setDescription(e.getMessage());
-                    valid = false;
                 }
             }
         }
