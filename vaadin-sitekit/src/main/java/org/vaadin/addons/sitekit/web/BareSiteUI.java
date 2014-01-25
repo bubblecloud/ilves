@@ -187,7 +187,7 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
 
         viewDescriptors.add(new ViewDescriptor("account", null, null, new ViewVersion(
                 0, "master", "Account SiteView", "account page", "This is login page.",
-                DefaultCustomView.class.getCanonicalName(), new String[]{"user"},
+                DefaultCustomView.class.getCanonicalName(), new String[]{"administrator", "user"},
                 Arrays.asList(
                         new ViewletDescriptor(
                                 "content", "Flowlet Sheet", "This is flow sheet.", null,
@@ -204,7 +204,7 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
                 ))));
 
         final NavigationDescriptor navigationDescriptor = new NavigationDescriptor("navigation", null, null,
-                new NavigationVersion(0, "default", "default;customers;account;users;groups;companies;login", true));
+                new NavigationVersion(0, "default", "default;login;customers;users;groups;companies;account", true));
 
         return new SiteDescriptor("Test site.", "test site", "This is a test site.",
                 navigationDescriptor, viewDescriptors);

@@ -82,7 +82,7 @@ public final class CompanyFlowlet extends AbstractFlowlet implements ValidatingE
         setViewContent(gridLayout);
 
         companyEditor = new ValidatingEditor(BareSiteFields.getFieldDescriptors(Company.class));
-        companyEditor.setCaption("Company");
+        companyEditor.setCaption("Site");
         companyEditor.addListener((ValidatingEditorStateListener) this);
         gridLayout.addComponent(companyEditor, 0, 0);
 
