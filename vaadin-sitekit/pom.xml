@@ -119,11 +119,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.vaadin.addons.lazyquerycontainer</groupId>
-            <artifactId>vaadin-lazyquerycontainer</artifactId>
-            <version>2.1.0</version>
-        </dependency>
-        <dependency>
             <groupId>hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>1.8.0.10</version>
