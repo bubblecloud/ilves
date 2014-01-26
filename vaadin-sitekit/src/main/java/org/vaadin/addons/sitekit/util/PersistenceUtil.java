@@ -15,13 +15,22 @@
  */
 package org.vaadin.addons.sitekit.util;
 
+import liquibase.Liquibase;
+import liquibase.database.Database;
+import liquibase.database.DatabaseFactory;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.resource.ClassLoaderResourceAccessor;
+import liquibase.resource.FileSystemResourceAccessor;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.vaadin.addons.sitekit.model.SchemaVersion;
+import org.vaadin.addons.sitekit.site.SiteException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,11 +62,6 @@ public final class PersistenceUtil {
         final String entityManagerFactoryKey = persistenceUnit + "-" + propertiesCategory;
         synchronized (entityManagerFactories) {
             if (!entityManagerFactories.containsKey(entityManagerFactoryKey)) {
-                final String schemaName = PropertiesUtil.getProperty(
-                        propertiesCategory, "schema-name");
-                final String schemaVersion = PropertiesUtil.getProperty(
-                        propertiesCategory, "schema-version");
-
                 final Map properties = new HashMap();
                 properties.put(PersistenceUnitProperties.JDBC_DRIVER, PropertiesUtil.getProperty(
                         propertiesCategory, PersistenceUnitProperties.JDBC_DRIVER));
@@ -73,25 +77,23 @@ public final class PersistenceUtil {
                 final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(
                         persistenceUnit, properties);
 
-                /*final EntityManager entityManager = entityManagerFactory.createEntityManager();
+                final String changeLog = PropertiesUtil.getProperty(
+                        propertiesCategory, "liquibase-change-log");
 
-                final TypedQuery<SchemaVersion> query = entityManager.createQuery("select e from SchemaVersion as e " +
-                        "where e.schemaName=:schemaName order by e.created desc",
-                        SchemaVersion.class);
-
-                query.setParameter("schemaName", schemaName);
-                query.setMaxResults(1);
-
-                final List<SchemaVersion> schemaVersions = query.getResultList();
-
-                if (schemaVersions.size() == 0) {
-                    throw new RuntimeException("Database schema is not installed.");
+                try {
+                    final EntityManager entityManager = entityManagerFactory.createEntityManager();
+                    entityManager.getTransaction().begin();
+                    final Connection connection = entityManager.unwrap(Connection.class);
+                    final Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(
+                            new JdbcConnection(connection));
+                    final Liquibase liquibase = new Liquibase(changeLog, new ClassLoaderResourceAccessor(), database);
+                    liquibase.update("");
+                    if (entityManager.getTransaction().isActive()) {
+                        entityManager.getTransaction().commit();
+                    }
+                } catch (Exception e) {
+                    throw new SiteException("Error updating database.", e);
                 }
-                if (!schemaVersions.get(0).getSchemaVersion().equals(schemaVersion)) {
-                    throw new RuntimeException("Database schema is in version: " +
-                            schemaVersions.get(0).getSchemaVersion() + " but software expects: " + schemaVersion
-                    );
-                }*/
 
                 entityManagerFactories.put(entityManagerFactoryKey, entityManagerFactory);
             }
