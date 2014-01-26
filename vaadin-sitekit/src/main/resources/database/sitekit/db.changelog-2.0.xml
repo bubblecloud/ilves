@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+    <changeSet author="tlaukkan (generated)" id="1390714468164-1">
+        <createTable catalogName="site" schemaName="public" tableName="company">
+            <column name="companyid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phonenumber" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="invoicingemailaddress" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="salesemailaddress" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="companyname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="supportemailaddress" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="companycode" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deliveryaddress_postaladdressid" type="VARCHAR(255)"/>
+            <column name="invoicingaddress_postaladdressid" type="VARCHAR(255)"/>
+            <column name="iban" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bic" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="host" type="VARCHAR(255)"/>
+            <column name="termsandconditions" type="VARCHAR(4096)"/>
+            <column name="url" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-2">
+        <createTable catalogName="site" schemaName="public" tableName="customer">
+            <column name="customerid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phonenumber" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company" type="BOOL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="emailaddress" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="firstname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="companyname" type="VARCHAR(255)"/>
+            <column name="modified" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="companycode" type="VARCHAR(255)"/>
+            <column name="deliveryaddress_postaladdressid" type="VARCHAR(255)"/>
+            <column name="invoicingaddress_postaladdressid" type="VARCHAR(255)"/>
+            <column name="owner_companyid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="admingroup_groupid" type="VARCHAR(255)"/>
+            <column name="membergroup_groupid" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-3">
+        <createTable catalogName="site" schemaName="public" tableName="groupmember">
+            <column name="groupmemberid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_groupid" type="VARCHAR(255)"/>
+            <column name="user_userid" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-4">
+        <createTable catalogName="site" schemaName="public" tableName="privilege">
+            <column name="privilegeid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dataid" type="VARCHAR(255)"/>
+            <column name="key" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_userid" type="VARCHAR(255)"/>
+            <column name="group_groupid" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-5">
+        <createTable catalogName="site" schemaName="public" tableName="schemaversion">
+            <column name="created" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="schemaname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="schemaversion" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-6">
+        <createTable catalogName="site" schemaName="public" tableName="group_">
+            <column name="groupid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_companyid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-7">
+        <createTable catalogName="site" schemaName="public" tableName="postaladdress">
+            <column name="postaladdressid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="addresslinetwo" type="VARCHAR(255)"/>
+            <column name="addresslinethree" type="VARCHAR(255)"/>
+            <column name="postalcode" type="VARCHAR(255)"/>
+            <column name="addresslineone" type="VARCHAR(255)"/>
+            <column name="city" type="VARCHAR(255)"/>
+            <column name="country" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-8">
+        <createTable catalogName="site" schemaName="public" tableName="user_">
+            <column name="userid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phonenumber" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="emailaddress" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="firstname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_companyid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="passwordhash" type="VARCHAR(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="emailaddressvalidated" type="BOOL">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-9">
+        <createTable catalogName="site" schemaName="public" tableName="feedback">
+            <column name="feedbackid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(2048)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="emailaddress" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="firstname" type="VARCHAR(255)"/>
+            <column name="lastname" type="VARCHAR(255)"/>
+            <column name="modified" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="organizationname" type="VARCHAR(255)"/>
+            <column name="organizationsize" type="INT4"/>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_companyid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-10">
+        <addPrimaryKey catalogName="site" columnNames="groupid" constraintName="group__pkey" schemaName="public" tableName="group_"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-11">
+        <addPrimaryKey catalogName="site" columnNames="groupmemberid" constraintName="groupmember_pkey" schemaName="public" tableName="groupmember"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-12">
+        <addPrimaryKey catalogName="site" columnNames="postaladdressid" constraintName="postaladdress_pkey" schemaName="public" tableName="postaladdress"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-13">
+        <addPrimaryKey catalogName="site" columnNames="created" constraintName="schemaversion_pkey" schemaName="public" tableName="schemaversion"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-14">
+        <addPrimaryKey catalogName="site" columnNames="companyid" constraintName="company_pkey" schemaName="public" tableName="company"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-15">
+        <addPrimaryKey catalogName="site" columnNames="customerid" constraintName="customer_pkey" schemaName="public" tableName="customer"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-16">
+        <addPrimaryKey catalogName="site" columnNames="userid" constraintName="user__pkey" schemaName="public" tableName="user_"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-17">
+        <addPrimaryKey catalogName="site" columnNames="feedbackid" constraintName="feedback_pkey" schemaName="public" tableName="feedback"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-18">
+        <addPrimaryKey catalogName="site" columnNames="privilegeid" constraintName="privilege_pkey" schemaName="public" tableName="privilege"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-19">
+        <addForeignKeyConstraint baseColumnNames="owner_companyid" baseTableCatalogName="site" baseTableName="customer" baseTableSchemaName="public" constraintName="fk_customer_owner_companyid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="companyid" referencedTableCatalogName="site" referencedTableName="company" referencedTableSchemaName="public"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-20">
+        <addForeignKeyConstraint baseColumnNames="group_groupid" baseTableCatalogName="site" baseTableName="groupmember" baseTableSchemaName="public" constraintName="fk_groupmember_group_groupid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="groupid" referencedTableCatalogName="site" referencedTableName="group_" referencedTableSchemaName="public"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-21">
+        <addForeignKeyConstraint baseColumnNames="deliveryaddress_postaladdressid" baseTableCatalogName="site" baseTableName="company" baseTableSchemaName="public" constraintName="fk_company_deliveryaddress_postaladdressid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="postaladdressid" referencedTableCatalogName="site" referencedTableName="postaladdress" referencedTableSchemaName="public"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-22">
+        <addForeignKeyConstraint baseColumnNames="user_userid" baseTableCatalogName="site" baseTableName="groupmember" baseTableSchemaName="public" constraintName="fk_groupmember_user_userid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="userid" referencedTableCatalogName="site" referencedTableName="user_" referencedTableSchemaName="public"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-23">
+        <addForeignKeyConstraint baseColumnNames="user_userid" baseTableCatalogName="site" baseTableName="privilege" baseTableSchemaName="public" constraintName="fk_privilege_user_userid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="userid" referencedTableCatalogName="site" referencedTableName="user_" referencedTableSchemaName="public"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-24">
+        <addForeignKeyConstraint baseColumnNames="membergroup_groupid" baseTableCatalogName="site" baseTableName="customer" baseTableSchemaName="public" constraintName="fk_customer_membergroup_groupid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="groupid" referencedTableCatalogName="site" referencedTableName="group_" referencedTableSchemaName="public"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-25">
+        <addForeignKeyConstraint baseColumnNames="invoicingaddress_postaladdressid" baseTableCatalogName="site" baseTableName="customer" baseTableSchemaName="public" constraintName="fk_customer_billingaddress_postaladdressid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="postaladdressid" referencedTableCatalogName="site" referencedTableName="postaladdress" referencedTableSchemaName="public"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-26">
+        <addForeignKeyConstraint baseColumnNames="invoicingaddress_postaladdressid" baseTableCatalogName="site" baseTableName="company" baseTableSchemaName="public" constraintName="fk_company_invoicingaddress_postaladdressid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="postaladdressid" referencedTableCatalogName="site" referencedTableName="postaladdress" referencedTableSchemaName="public"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-27">
+        <addForeignKeyConstraint baseColumnNames="group_groupid" baseTableCatalogName="site" baseTableName="privilege" baseTableSchemaName="public" constraintName="fk_privilege_group_groupid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="groupid" referencedTableCatalogName="site" referencedTableName="group_" referencedTableSchemaName="public"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-28">
+        <addForeignKeyConstraint baseColumnNames="owner_companyid" baseTableCatalogName="site" baseTableName="group_" baseTableSchemaName="public" constraintName="fk_group__owner_companyid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="companyid" referencedTableCatalogName="site" referencedTableName="company" referencedTableSchemaName="public"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-29">
+        <addForeignKeyConstraint baseColumnNames="owner_companyid" baseTableCatalogName="site" baseTableName="user_" baseTableSchemaName="public" constraintName="fk_user__owner_companyid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="companyid" referencedTableCatalogName="site" referencedTableName="company" referencedTableSchemaName="public"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-30">
+        <addForeignKeyConstraint baseColumnNames="deliveryaddress_postaladdressid" baseTableCatalogName="site" baseTableName="customer" baseTableSchemaName="public" constraintName="fk_customer_deliveryaddress_postaladdressid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="postaladdressid" referencedTableCatalogName="site" referencedTableName="postaladdress" referencedTableSchemaName="public"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-31">
+        <addForeignKeyConstraint baseColumnNames="admingroup_groupid" baseTableCatalogName="site" baseTableName="customer" baseTableSchemaName="public" constraintName="fk_customer_admingroup_groupid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="groupid" referencedTableCatalogName="site" referencedTableName="group_" referencedTableSchemaName="public"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-32">
+        <addForeignKeyConstraint baseColumnNames="owner_companyid" baseTableCatalogName="site" baseTableName="feedback" baseTableSchemaName="public" constraintName="fk_feedback_owner_companyid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="companyid" referencedTableCatalogName="site" referencedTableName="company" referencedTableSchemaName="public"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-33">
+        <createIndex catalogName="site" indexName="unq_group__0" schemaName="public" tableName="group_" unique="true">
+            <column name="owner_companyid"/>
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-34">
+        <createIndex catalogName="site" indexName="unq_user__0" schemaName="public" tableName="user_" unique="true">
+            <column name="owner_companyid"/>
+            <column name="emailaddress"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-35">
+        <createIndex catalogName="site" indexName="unq_groupmember_0" schemaName="public" tableName="groupmember" unique="true">
+            <column name="user_userid"/>
+            <column name="group_groupid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1390714468164-36">
+        <createIndex catalogName="site" indexName="unq_privilege_0" schemaName="public" tableName="privilege" unique="true">
+            <column name="user_userid"/>
+            <column name="group_groupid"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
