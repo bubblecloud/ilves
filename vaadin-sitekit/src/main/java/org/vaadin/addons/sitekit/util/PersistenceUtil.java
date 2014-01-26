@@ -73,7 +73,7 @@ public final class PersistenceUtil {
                 final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(
                         persistenceUnit, properties);
 
-                final EntityManager entityManager = entityManagerFactory.createEntityManager();
+                /*final EntityManager entityManager = entityManagerFactory.createEntityManager();
 
                 final TypedQuery<SchemaVersion> query = entityManager.createQuery("select e from SchemaVersion as e " +
                         "where e.schemaName=:schemaName order by e.created desc",
@@ -91,7 +91,7 @@ public final class PersistenceUtil {
                     throw new RuntimeException("Database schema is in version: " +
                             schemaVersions.get(0).getSchemaVersion() + " but software expects: " + schemaVersion
                     );
-                }
+                }*/
 
                 entityManagerFactories.put(entityManagerFactoryKey, entityManagerFactory);
             }
