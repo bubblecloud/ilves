@@ -311,4 +311,76 @@
             <column name="group_groupid"/>
         </createIndex>
     </changeSet>
+    <changeSet author="tlaukkan" id="default-data">
+        <insert tableName="postaladdress" schemaName="public">
+            <column name="postaladdressid" value="4EA7E643-3C80-49B2-8D1C-AAFA7E66A28C"/>
+            <column name="addresslineone" value="Invoice"/>
+            <column name="addresslinetwo" value="Example"/>
+            <column name="addresslinethree" value="Address"/>
+            <column name="postalcode" value="123213"/>
+            <column name="city" value="Helsinki"/>
+            <column name="country" value="Finland"/>
+        </insert>
+        <insert tableName="postaladdress" schemaName="public">
+            <column name="postaladdressid" value="CFE997C0-3FAF-4F6C-BBED-DB09689936B6"/>
+            <column name="addresslineone" value="Delivery"/>
+            <column name="addresslinetwo" value="Example"/>
+            <column name="addresslinethree" value="Address"/>
+            <column name="postalcode" value="123123"/>
+            <column name="city" value="Helsinki"/>
+            <column name="country" value="Finland"/>
+        </insert>
+        <insert tableName="company" schemaName="public">
+            <column name="companyid" value="3248528E-4D90-41F7-968F-AF255AD16901"/>
+            <column name="companycode" value="0000000-0"/>
+            <column name="companyname" value="Test Company"/>
+            <column name="phonenumber" value="+123 12 123123"/>
+            <column name="iban" value="-"/>
+            <column name="bic" value="-"/>
+            <column name="salesemailaddress" value ="sales@test.test"/>
+            <column name="supportemailaddress" value="support@test.test"/>
+            <column name="invoicingemailaddress" value="invoice@test.test"/>
+            <column name="host" value="*"/>
+            <column name="url" value="http://127.0.0.1:8081/"/>
+            <column name="termsandconditions" value="Test terms."/>
+            <column name="created" value="2000-01-01T00:00:00"/>
+            <column name="modified" value="2000-01-01T00:00:00"/>
+            <column name="invoicingaddress_postaladdressid" value="4EA7E643-3C80-49B2-8D1C-AAFA7E66A28C"/>
+            <column name="deliveryaddress_postaladdressid" value="CFE997C0-3FAF-4F6C-BBED-DB09689936B6"/>
+        </insert>
+        <insert tableName="group_" schemaName="public">
+            <column name="groupid" value="1DE5D850-B015-44C1-904C-86DC2B0276A3"/>
+            <column name="owner_companyid" value="3248528E-4D90-41F7-968F-AF255AD16901"/>
+            <column name="name" value="administrator"/>
+            <column name="description" value="Administrators"/>
+            <column name="created" value="2000-01-01T00:00:00"/>
+            <column name="modified" value="2000-01-01T00:00:00"/>
+        </insert>
+        <insert tableName="group_" schemaName="public">
+            <column name="groupid" value="3DE5D850-B015-44C1-904C-86DC2B0276A4"/>
+            <column name="owner_companyid" value="3248528E-4D90-41F7-968F-AF255AD16901"/>
+            <column name="name" value="user"/>
+            <column name="description" value="User"/>
+            <column name="created" value="2000-01-01T00:00:00"/>
+            <column name="modified" value="2000-01-01T00:00:00"/>
+        </insert>
+        <insert tableName="user_" schemaName="public">
+            <column name="userid" value="A591FCB8-772E-4157-B64B-4371A6C7CAE0"/>
+            <column name="owner_companyid" value="3248528E-4D90-41F7-968F-AF255AD16901"/>
+            <column name="emailaddress" value="admin@admin.org"/>
+            <column name="emailaddressvalidated" value="false"/>
+            <column name="firstname" value="Default"/>
+            <column name="lastname" value="Administrator"/>
+            <column name="phonenumber" value="+123 12 123123"/>
+            <column name="passwordhash" value="c8213c753f70e6ef82a3bbece671c183cc9aa70d944f2d8abbbc50ab7432f2b4"/>
+            <column name="created" value="2000-01-01T00:00:00"/>
+            <column name="modified" value="2000-01-01T00:00:00"/>
+        </insert>
+        <insert tableName="groupmember" schemaName="public">
+            <column name="groupmemberid" value="50413BBB-DB86-402E-9E98-C7E73F219827"/>
+            <column name="group_groupid" value="1DE5D850-B015-44C1-904C-86DC2B0276A3"/>
+            <column name="user_userid" value="A591FCB8-772E-4157-B64B-4371A6C7CAE0"/>
+            <column name="created" value="2000-01-01T00:00:00"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
