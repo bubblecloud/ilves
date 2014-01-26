@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ public final class ViewVersion {
     /** The view description. */
     private String description;
     /** The view window class. */
-    private String windowClass;
+    private String viewClass;
     /** The view viewer roles. */
     private String[] viewerRoles;
     /** The view viewlet descriptors. */
@@ -46,7 +47,7 @@ public final class ViewVersion {
      * @param title The view title.
      * @param keywords The view keywords.
      * @param description The view description.
-     * @param viewClass The view window class.
+     * @param viewClass The view class.
      * @param viewerRoles The view viewer roles.
      * @param viewletDescriptors The view descriptors.
      */
@@ -60,9 +61,26 @@ public final class ViewVersion {
         this.title = title;
         this.keywords = keywords;
         this.description = description;
-        this.windowClass = viewClass;
+        this.viewClass = viewClass;
         this.viewerRoles = viewerRoles;
         this.viewletDescriptors = viewletDescriptors;
+    }
+
+    /**
+     * Sets master to view name to default and version to 0 and sets no viewer role limitations i.e.
+     * allows for anonymous access.
+     * @param title The view title.
+     * @param viewClass The view class.
+     */
+    public ViewVersion(String title, String viewClass) {
+        this.version = 0;
+        this.masterViewName = "master";
+        this.title = title;
+        this.keywords = "";
+        this.description = "";
+        this.viewClass = viewClass;
+        this.viewerRoles = new String[]{};
+        this.viewletDescriptors = new ArrayList<ViewletDescriptor>();
     }
 
     /**
@@ -136,17 +154,17 @@ public final class ViewVersion {
     }
 
     /**
-     * @return the windowClass
+     * @return the viewClass
      */
-    public String getWindowClass() {
-        return windowClass;
+    public String getViewClass() {
+        return viewClass;
     }
 
     /**
-     * @param windowClass the windowClass to set
+     * @param viewClass the viewClass to set
      */
-    public void setWindowClass(final String windowClass) {
-        this.windowClass = windowClass;
+    public void setViewClass(final String viewClass) {
+        this.viewClass = viewClass;
     }
 
     /**
@@ -157,10 +175,10 @@ public final class ViewVersion {
     }
 
     /**
-     * @param viewerRoles the viewerRoles to set
+     * @param viewerRole the viewerRoles to set
      */
-    public void setViewerRoles(final String[] viewerRoles) {
-        this.viewerRoles = viewerRoles;
+    public void setViewerRoles(final String... viewerRole) {
+        this.viewerRoles = viewerRole;
     }
 
     /**

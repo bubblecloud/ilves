@@ -15,6 +15,9 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import com.vaadin.navigator.View;
+import org.vaadin.addons.sitekit.viewlet.anonymous.FeedbackViewlet;
+
 /**
  * SiteView descriptor class.
  *
@@ -43,6 +46,49 @@ public final class ViewDescriptor {
         this.developmentVersion = developmentVersion;
         this.testVersion = testVersion;
         this.productionVersion = productionVersion;
+    }
+
+    /**
+     * @param name The view name.
+     */
+    public ViewDescriptor(String name, String title, Class<? extends View> viewClass) {
+        this.name = name;
+        this.productionVersion = new ViewVersion(title, viewClass.getCanonicalName());
+    }
+
+    /**
+     * Sets viewlet descriptor to production version.
+     *
+     * @param slot the viewlet slot
+     * @param componentClass the viewlet component class
+     */
+    public void setViewletClass(final String slot, final Class<? extends Viewlet> componentClass) {
+        final ViewletDescriptor viewletDescriptor = new ViewletDescriptor(
+                slot, "", "", null,
+                componentClass.getCanonicalName());
+        this.productionVersion.getViewletDescriptors().add(viewletDescriptor);
+    }
+
+    /**
+     * @param viewerRole the viewerRoles to production version.
+     */
+    public void setViewerRoles(final String... viewerRole) {
+        this.productionVersion.setViewerRoles(viewerRole);
+    }
+
+    /**
+     * Sets viewlet descriptor to production version.
+     *
+     * @param slot the viewlet slot
+     * @param componentClass the viewlet component class
+     * @param configuration the viewlet configuration
+     */
+    public void setViewletClass(final String slot, final Class<? extends Viewlet> componentClass,
+                                final String configuration) {
+        final ViewletDescriptor viewletDescriptor = new ViewletDescriptor(
+                slot, "", "", configuration,
+                componentClass.getCanonicalName());
+        this.productionVersion.getViewletDescriptors().add(viewletDescriptor);
     }
 
     /**

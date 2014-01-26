@@ -129,79 +129,50 @@ public final class BareSiteUI extends AbstractSiteUI implements ContentProvider 
     public SiteDescriptor getSiteDescriptor() {
         final List<ViewDescriptor> viewDescriptors = new ArrayList<ViewDescriptor>();
 
-        viewDescriptors.add(new ViewDescriptor("master", null, null, new ViewVersion(0, null, "Master", "",
-                "This is a master view.", DefaultCustomView.class.getCanonicalName(), new String[]{"admin"},
-                Arrays.asList(
-                        new ViewletDescriptor("logo", "Logo", "This is logo.", "logo.png",
-                                ImageViewlet.class.getCanonicalName()),
-                        new ViewletDescriptor("navigation", "NavigationDescriptor", "This is navigation.", null,
-                                NavigationViewlet.class.getCanonicalName()),
-                        new ViewletDescriptor("footer", "Footer", "This is footer.", null,
-                                CompanyFooterViewlet.class.getCanonicalName())
-                ))));
+        final ViewDescriptor master = new ViewDescriptor("master", "Master", DefaultCustomView.class);
+        master.setViewerRoles("superuser");
+        master.setViewletClass("logo", ImageViewlet.class, "logo.png");
+        master.setViewletClass("navigation", NavigationViewlet.class);
+        master.setViewletClass("footer", CompanyFooterViewlet.class);
+        viewDescriptors.add(master);
 
-        viewDescriptors.add(new ViewDescriptor("default", null, null, new ViewVersion(0, "master", "Default", "",
-                "This is default view.", DefaultCustomView.class.getCanonicalName(), new String[]{},
-                Arrays.asList(new ViewletDescriptor(
-                        "content", "Feedback", "This is feedback viewlet.", null,
-                        FeedbackViewlet.class.getCanonicalName()))
-        )));
+        final ViewDescriptor feedback = new ViewDescriptor("default", "Default", DefaultCustomView.class);
+        feedback.setViewletClass("content", FeedbackViewlet.class);
+        viewDescriptors.add(feedback);
 
-        viewDescriptors.add(new ViewDescriptor("users", null, null, new ViewVersion(
-                0, "master", "Users", "", "This is users page.",
-                DefaultCustomView.class.getCanonicalName(), new String[]{"administrator"},
-                Arrays.asList(new ViewletDescriptor(
-                        "content", "Flowlet Sheet", "This is flow sheet.", null,
-                        UserFlowViewlet.class.getCanonicalName())
-                ))));
-        viewDescriptors.add(new ViewDescriptor("groups", null, null, new ViewVersion(
-                0, "master", "Groups", "", "This is groups page.",
-                DefaultCustomView.class.getCanonicalName(), new String[]{"administrator"},
-                Arrays.asList(new ViewletDescriptor(
-                        "content", "Flowlet Sheet", "This is flow sheet.", null,
-                        GroupFlowViewlet.class.getCanonicalName())
-                ))));
-        viewDescriptors.add(new ViewDescriptor("customers", null, null, new ViewVersion(
-                0, "master", "Customers", "customers", "This is customers page.",
-                DefaultCustomView.class.getCanonicalName(), new String[]{"administrator"},
-                Arrays.asList(new ViewletDescriptor(
-                        "content", "Flowlet Sheet", "This is flow sheet.", null,
-                        CustomerFlowViewlet.class.getCanonicalName())
-                ))));
-        viewDescriptors.add(new ViewDescriptor("companies", null, null, new ViewVersion(
-                0, "master", "Companies", "companies", "This is companies page.",
-                DefaultCustomView.class.getCanonicalName(), new String[]{"administrator"},
-                Arrays.asList(new ViewletDescriptor(
-                        "content", "Flowlet Sheet", "This is flow sheet.", null,
-                        CompanyFlowViewlet.class.getCanonicalName())
-                ))));
+        final ViewDescriptor users = new ViewDescriptor("users", "Users", DefaultCustomView.class);
+        users.setViewerRoles("administrator");
+        users.setViewletClass("content", UserFlowViewlet.class);
+        viewDescriptors.add(users);
 
-        viewDescriptors.add(new ViewDescriptor("login", null, null, new ViewVersion(
-                0, "master", "Login SiteView", "login page", "This is login page.",
-                DefaultCustomView.class.getCanonicalName(), new String[]{"anonymous"},
-                Arrays.asList(
-                        new ViewletDescriptor(
-                                "content", "Flowlet Sheet", "This is flow sheet.", null,
-                                LoginFlowViewlet.class.getCanonicalName())
-                ))));
+        final ViewDescriptor groups = new ViewDescriptor("groups", "Groups", DefaultCustomView.class);
+        groups.setViewerRoles("administrator");
+        groups.setViewletClass("content", GroupFlowViewlet.class);
+        viewDescriptors.add(groups);
 
-        viewDescriptors.add(new ViewDescriptor("account", null, null, new ViewVersion(
-                0, "master", "Account SiteView", "account page", "This is login page.",
-                DefaultCustomView.class.getCanonicalName(), new String[]{"administrator", "user"},
-                Arrays.asList(
-                        new ViewletDescriptor(
-                                "content", "Flowlet Sheet", "This is flow sheet.", null,
-                                AccountFlowViewlet.class.getCanonicalName())
-                ))));
+        final ViewDescriptor customers = new ViewDescriptor("customers", "Customers", DefaultCustomView.class);
+        customers.setViewerRoles("administrator");
+        customers.setViewletClass("content", CustomerFlowViewlet.class);
+        viewDescriptors.add(customers);
 
-        viewDescriptors.add(new ViewDescriptor("validate", null, null, new ViewVersion(
-                0, "master", "Email Validation", "email validation page", "This is email validation page.",
-                DefaultCustomView.class.getCanonicalName(), new String[]{"anonymous"},
-                Arrays.asList(
-                        new ViewletDescriptor(
-                                "content", "Email Validation", "This is email validation flowlet.", null,
-                                EmailValidationViewlet.class.getCanonicalName())
-                ))));
+        final ViewDescriptor companies = new ViewDescriptor("companies", "Companies", DefaultCustomView.class);
+        companies.setViewerRoles("administrator");
+        companies.setViewletClass("content", CompanyFlowViewlet.class);
+        viewDescriptors.add(companies);
+
+        final ViewDescriptor login = new ViewDescriptor("login", "Login", DefaultCustomView.class);
+        login.setViewerRoles("anonymous");
+        login.setViewletClass("content", LoginFlowViewlet.class);
+        viewDescriptors.add(login);
+
+        final ViewDescriptor account = new ViewDescriptor("account", "Account", DefaultCustomView.class);
+        account.setViewerRoles("user", "administrator");
+        account.setViewletClass("content", AccountFlowViewlet.class);
+        viewDescriptors.add(account);
+
+        final ViewDescriptor validate = new ViewDescriptor("validate", "Email Validation", DefaultCustomView.class);
+        validate.setViewletClass("content", EmailValidationViewlet.class);
+        viewDescriptors.add(validate);
 
         final NavigationDescriptor navigationDescriptor = new NavigationDescriptor("navigation", null, null,
                 new NavigationVersion(0, "default", "default;login;customers;users;groups;companies;account", true));

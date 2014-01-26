@@ -212,7 +212,7 @@ public final class Site implements ViewProvider, ViewChangeListener {
         }
 
         try {
-            final Class<?> windowClass = Class.forName(viewVersion.getWindowClass());
+            final Class<?> windowClass = Class.forName(viewVersion.getViewClass());
             final View view = (View) windowClass.newInstance();
 
             if (view instanceof SiteView) {
