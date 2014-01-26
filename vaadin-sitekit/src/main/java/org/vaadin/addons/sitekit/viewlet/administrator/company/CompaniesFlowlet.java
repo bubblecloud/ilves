@@ -21,7 +21,7 @@ import org.vaadin.addons.sitekit.grid.FilterDescriptor;
 import org.vaadin.addons.sitekit.grid.Grid;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.PostalAddress;
-import org.vaadin.addons.sitekit.web.BareSiteFields;
+import org.vaadin.addons.sitekit.site.SiteFields;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -80,7 +80,7 @@ public final class CompaniesFlowlet extends AbstractFlowlet {
         gridLayout.setRowExpandRatio(1, 1f);
         setViewContent(gridLayout);
 
-        final List<FieldDescriptor> fieldDefinitions = BareSiteFields.getFieldDescriptors(Company.class);
+        final List<FieldDescriptor> fieldDefinitions = SiteFields.getFieldDescriptors(Company.class);
 
         final List<FilterDescriptor> filterDefinitions = new ArrayList<FilterDescriptor>();
         filterDefinitions.add(new FilterDescriptor("companyName", "companyName", "Company Name", new TextField(), 101, "=", String.class, ""));

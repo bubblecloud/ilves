@@ -26,10 +26,10 @@ import javax.servlet.http.HttpServletRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
+import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.EmailUtil;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
 import org.vaadin.addons.sitekit.util.StringUtil;
-import org.vaadin.addons.sitekit.web.BareSiteFields;
 import org.vaadin.addons.sitekit.grid.validator.PasswordValidator;
 import org.vaadin.addons.sitekit.grid.validator.PasswordVerificationValidator;
 import com.vaadin.ui.Notification;
@@ -110,9 +110,9 @@ public final class RegisterFlowlet extends AbstractFlowlet {
 
         final PasswordValidator passwordValidator = new PasswordValidator(getSite(), originalPasswordProperty, "password2");
 
-        //fieldDescriptors.addAll(BareSiteFields.getFieldDescriptors(Customer.class));
+        //fieldDescriptors.addAll(SiteFields.getFieldDescriptors(Customer.class));
 
-        for (final FieldDescriptor fieldDescriptor : BareSiteFields.getFieldDescriptors(Customer.class)) {
+        for (final FieldDescriptor fieldDescriptor : SiteFields.getFieldDescriptors(Customer.class)) {
             if (fieldDescriptor.getId().equals("adminGroup")) {
                 continue;
             }

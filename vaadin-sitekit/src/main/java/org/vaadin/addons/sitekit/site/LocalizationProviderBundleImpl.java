@@ -39,7 +39,7 @@ public final class LocalizationProviderBundleImpl implements LocalizationProvide
      * Constructor which allows setting bundle base names.
      * @param bundleBaseNames base names of the bundles.
      */
-    public LocalizationProviderBundleImpl(final String[] bundleBaseNames) {
+    public LocalizationProviderBundleImpl(final String... bundleBaseNames) {
         this.bundleBaseNames = bundleBaseNames;
     }
 

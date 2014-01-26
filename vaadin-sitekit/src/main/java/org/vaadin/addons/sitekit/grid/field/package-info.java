@@ -1,5 +1,5 @@
 /**
- * This package contains implementation of customized grid BareSiteFields.
+ * This package contains implementation of customized grid SiteFields.
  *
  * @author Tommi S.E. Laukkanen
  */

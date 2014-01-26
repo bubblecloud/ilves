@@ -35,18 +35,15 @@ import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.FilterDescriptor;
 import org.vaadin.addons.sitekit.grid.Grid;
-import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Customer;
 import org.vaadin.addons.sitekit.model.Group;
-import org.vaadin.addons.sitekit.model.PostalAddress;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowlet;
-import org.vaadin.addons.sitekit.web.BareSiteFields;
+import org.vaadin.addons.sitekit.site.SiteFields;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -80,7 +77,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
 
     @Override
     public void initialize() {
-        final List<FieldDescriptor> fieldDefinitions = BareSiteFields.getFieldDescriptors(Customer.class);
+        final List<FieldDescriptor> fieldDefinitions = SiteFields.getFieldDescriptors(Customer.class);
 
         final List<FilterDescriptor> filterDefinitions = new ArrayList<FilterDescriptor>();
         filterDefinitions.add(new FilterDescriptor("companyName", "companyName", "Company Name", new TextField(), 101, "=", String.class, ""));

@@ -19,7 +19,7 @@ import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.model.Group;
-import org.vaadin.addons.sitekit.web.BareSiteFields;
+import org.vaadin.addons.sitekit.site.SiteFields;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -77,7 +77,7 @@ public final class GroupFlowlet extends AbstractFlowlet implements ValidatingEdi
         gridLayout.setRowExpandRatio(1, 1f);
         setViewContent(gridLayout);
 
-        groupEditor = new ValidatingEditor(BareSiteFields.getFieldDescriptors(Group.class));
+        groupEditor = new ValidatingEditor(SiteFields.getFieldDescriptors(Group.class));
         groupEditor.setCaption("Group");
         groupEditor.addListener((ValidatingEditorStateListener) this);
         gridLayout.addComponent(groupEditor, 0, 0);

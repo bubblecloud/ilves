@@ -26,7 +26,7 @@ import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.Privilege;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
-import org.vaadin.addons.sitekit.web.BareSiteFields;
+import org.vaadin.addons.sitekit.site.SiteFields;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -72,7 +72,7 @@ public final class GroupsFlowlet extends AbstractFlowlet {
 
     @Override
     public void initialize() {
-        final List<FieldDescriptor> fieldDescriptors = BareSiteFields.getFieldDescriptors(Group.class);
+        final List<FieldDescriptor> fieldDescriptors = SiteFields.getFieldDescriptors(Group.class);
 
         final List<FilterDescriptor> filterDefinitions = new ArrayList<FilterDescriptor>();
 

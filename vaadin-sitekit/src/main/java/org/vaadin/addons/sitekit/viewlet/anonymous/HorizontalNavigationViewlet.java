@@ -38,7 +38,7 @@ import java.util.List;
  *
  * @author Tommi S.E. Laukkanen
  */
-public final class NavigationViewlet extends AbstractViewlet {
+public final class HorizontalNavigationViewlet extends AbstractViewlet {
 
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;

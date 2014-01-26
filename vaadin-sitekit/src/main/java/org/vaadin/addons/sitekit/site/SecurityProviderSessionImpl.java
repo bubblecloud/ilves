@@ -16,6 +16,7 @@
 package org.vaadin.addons.sitekit.site;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,6 +49,15 @@ public final class SecurityProviderSessionImpl implements SecurityProvider {
      */
     public SecurityProviderSessionImpl(final List<String> availableRoles) {
         this.availableRoles = availableRoles;
+    }
+
+    /**
+     * Constructor which allows setting of the available application roles
+     * matched against users roles.
+     * @param availableRoles List of available application roles.
+     */
+    public SecurityProviderSessionImpl(final String... availableRoles) {
+        this.availableRoles = Arrays.asList(availableRoles);
     }
 
     /**

@@ -16,35 +16,22 @@
 package org.vaadin.addons.sitekit.viewlet.user;
 
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.util.filter.Compare;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Table;
-import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
-import org.vaadin.addons.sitekit.grid.FieldDescriptor;
-import org.vaadin.addons.sitekit.grid.FilterDescriptor;
-import org.vaadin.addons.sitekit.grid.FormattingTable;
-import org.vaadin.addons.sitekit.grid.Grid;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
-import org.vaadin.addons.sitekit.model.GroupMember;
 import org.vaadin.addons.sitekit.model.User;
-import org.vaadin.addons.sitekit.util.ContainerUtil;
+import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.StringUtil;
-import org.vaadin.addons.sitekit.viewlet.administrator.user.GroupMemberFlowlet;
-import org.vaadin.addons.sitekit.web.BareSiteFields;
 
 import javax.persistence.EntityManager;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * User edit Flowlet.
@@ -95,7 +82,7 @@ public final class UserAccountFlowlet extends AbstractFlowlet implements Validat
         layout.setColumnExpandRatio(1, 1f);
         setViewContent(layout);
 
-        editor = new ValidatingEditor(BareSiteFields.getFieldDescriptors(User.class));
+        editor = new ValidatingEditor(SiteFields.getFieldDescriptors(User.class));
         editor.setCaption("User");
         editor.addListener((ValidatingEditorStateListener) this);
         editor.setWidth("380px");

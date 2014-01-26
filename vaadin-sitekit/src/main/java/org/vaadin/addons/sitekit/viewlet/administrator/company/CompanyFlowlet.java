@@ -20,7 +20,7 @@ import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.PostalAddress;
-import org.vaadin.addons.sitekit.web.BareSiteFields;
+import org.vaadin.addons.sitekit.site.SiteFields;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -81,17 +81,17 @@ public final class CompanyFlowlet extends AbstractFlowlet implements ValidatingE
         gridLayout.setRowExpandRatio(1, 1f);
         setViewContent(gridLayout);
 
-        companyEditor = new ValidatingEditor(BareSiteFields.getFieldDescriptors(Company.class));
+        companyEditor = new ValidatingEditor(SiteFields.getFieldDescriptors(Company.class));
         companyEditor.setCaption("Site");
         companyEditor.addListener((ValidatingEditorStateListener) this);
         gridLayout.addComponent(companyEditor, 0, 0);
 
-        invoicingAddressEditor = new ValidatingEditor(BareSiteFields.getFieldDescriptors(PostalAddress.class));
+        invoicingAddressEditor = new ValidatingEditor(SiteFields.getFieldDescriptors(PostalAddress.class));
         invoicingAddressEditor.setCaption("Invoicing Address");
         invoicingAddressEditor.addListener((ValidatingEditorStateListener) this);
         gridLayout.addComponent(invoicingAddressEditor, 1, 0);
 
-        deliveryAddressEditor = new ValidatingEditor(BareSiteFields.getFieldDescriptors(PostalAddress.class));
+        deliveryAddressEditor = new ValidatingEditor(SiteFields.getFieldDescriptors(PostalAddress.class));
         deliveryAddressEditor.setCaption("Delivery Address");
         deliveryAddressEditor.addListener((ValidatingEditorStateListener) this);
         gridLayout.addComponent(deliveryAddressEditor, 2, 0);

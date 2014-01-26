@@ -22,7 +22,7 @@ import org.vaadin.addons.sitekit.grid.Grid;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Customer;
 import org.vaadin.addons.sitekit.model.PostalAddress;
-import org.vaadin.addons.sitekit.web.BareSiteFields;
+import org.vaadin.addons.sitekit.site.SiteFields;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -69,7 +69,7 @@ public final class CustomersFlowlet extends AbstractFlowlet {
 
     @Override
     public void initialize() {
-        final List<FieldDescriptor> fieldDefinitions = BareSiteFields.getFieldDescriptors(Customer.class);
+        final List<FieldDescriptor> fieldDefinitions = SiteFields.getFieldDescriptors(Customer.class);
 
         final List<FilterDescriptor> filterDefinitions = new ArrayList<FilterDescriptor>();
         filterDefinitions.add(new FilterDescriptor("companyName", "companyName", "Company Name", new TextField(), 101, "=", String.class, ""));

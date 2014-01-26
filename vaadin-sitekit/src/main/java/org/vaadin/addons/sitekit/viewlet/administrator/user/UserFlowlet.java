@@ -24,9 +24,9 @@ import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.model.GroupMember;
+import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
 import org.vaadin.addons.sitekit.util.StringUtil;
-import org.vaadin.addons.sitekit.web.BareSiteFields;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.ui.Button;
@@ -101,14 +101,14 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
         layout.setColumnExpandRatio(1, 1f);
         setViewContent(layout);
 
-        editor = new ValidatingEditor(BareSiteFields.getFieldDescriptors(User.class));
+        editor = new ValidatingEditor(SiteFields.getFieldDescriptors(User.class));
         editor.setCaption("User");
         editor.addListener((ValidatingEditorStateListener) this);
         editor.setWidth("380px");
         layout.addComponent(editor, 0, 1);
 
 
-        final List<FieldDescriptor> childFieldDescriptors = BareSiteFields.getFieldDescriptors(GroupMember.class);
+        final List<FieldDescriptor> childFieldDescriptors = SiteFields.getFieldDescriptors(GroupMember.class);
         final List<FilterDescriptor> childFilterDescriptors = new ArrayList<FilterDescriptor>();
         childContainer = new EntityContainer<GroupMember>(entityManager, GroupMember.class, "groupMemberId", 1000,
             true, false, false);

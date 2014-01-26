@@ -23,11 +23,10 @@ import org.vaadin.addons.sitekit.grid.FormattingTable;
 import org.vaadin.addons.sitekit.grid.Grid;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
-import org.vaadin.addons.sitekit.model.GroupMember;
 import org.vaadin.addons.sitekit.model.Privilege;
 import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
-import org.vaadin.addons.sitekit.web.BareSiteFields;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -73,7 +72,7 @@ public final class UsersFlowlet extends AbstractFlowlet {
 
     @Override
     public void initialize() {
-        final List<FieldDescriptor> fieldDescriptors = BareSiteFields.getFieldDescriptors(User.class);
+        final List<FieldDescriptor> fieldDescriptors = SiteFields.getFieldDescriptors(User.class);
 
         final List<FilterDescriptor> filterDefinitions = new ArrayList<FilterDescriptor>();
 
