@@ -27,7 +27,7 @@ public final class ViewletDescriptor {
     /** The viewlet description. */
     private String description;
     /** The viewlet configuration. */
-    private String configuration;
+    private Object configuration;
     /** The viewlet component class. */
     private String componentClass;
     /**
@@ -38,7 +38,7 @@ public final class ViewletDescriptor {
      * @param componentClass The viewlet component class.
      */
     public ViewletDescriptor(final String slot, final String caption,
-                            final String description, final String configuration, final String componentClass) {
+                            final String description, final Object configuration, final String componentClass) {
         super();
         this.slot = slot;
         this.caption = caption;
@@ -85,8 +85,8 @@ public final class ViewletDescriptor {
     /**
      * @return the configuration
      */
-    public String getConfiguration() {
-        return configuration;
+    public <T> T getConfiguration() {
+        return (T) configuration;
     }
     /**
      * @param configuration the configuration to set

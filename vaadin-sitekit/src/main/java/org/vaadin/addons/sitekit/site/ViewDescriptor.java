@@ -84,7 +84,7 @@ public final class ViewDescriptor {
      * @param configuration the viewlet configuration
      */
     public void setViewletClass(final String slot, final Class<? extends Viewlet> componentClass,
-                                final String configuration) {
+                                final Object configuration) {
         final ViewletDescriptor viewletDescriptor = new ViewletDescriptor(
                 slot, "", "", configuration,
                 componentClass.getCanonicalName());
