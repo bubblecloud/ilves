@@ -18,20 +18,25 @@ package org.vaadin.addons.sitekit.example;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
+import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
+import org.vaadin.addons.sitekit.model.Feedback;
 import org.vaadin.addons.sitekit.site.*;
 import org.vaadin.addons.sitekit.util.PersistenceUtil;
-import org.vaadin.addons.sitekit.viewlet.anonymous.FeedbackViewlet;
 
 /**
- * Example bare site embedded jetty main class.
+ * Example site main class.
  *
  * @author Tommi S.E. Laukkanen
  */
 public class ExampleSiteMain {
+
     /** The properties category used in instantiating default services. */
     private static final String PROPERTIES_CATEGORY = "bare-site";
     /** The persistence unit to be used. */
     public static final String PERSISTENCE_UNIT = "bare-site";
+    /** The localization bundle. */
+    public static final String LOCALIZATION_BUNDLE = "bare-site-localization";
 
     /**
      * Main method for running DefaultSiteUI.
@@ -40,34 +45,43 @@ public class ExampleSiteMain {
      */
     public static void main(final String[] args) throws Exception {
         // Configure logging.
+        // ------------------
         DOMConfigurator.configure("./log4j.xml");
 
         // Configure Java Persistence API.
+        // -------------------------------
         DefaultSiteUI.setEntityManagerFactory(PersistenceUtil.getEntityManagerFactory(
                 PERSISTENCE_UNIT, PROPERTIES_CATEGORY));
 
+        // Configure providers.
+        // --------------------
         // Configure security provider.
         DefaultSiteUI.setSecurityProvider(new SecurityProviderSessionImpl("administrator", "user"));
-
         // Configure content provider.
         DefaultSiteUI.setContentProvider(new DefaultContentProvider());
-
         // Configure localization provider.
-        DefaultSiteUI.setLocalizationProvider(new LocalizationProviderBundleImpl("bare-site-localization"));
+        DefaultSiteUI.setLocalizationProvider(new LocalizationProviderBundleImpl(LOCALIZATION_BUNDLE));
 
-        // Configure fields.
-        SiteFields.initialize(DefaultSiteUI.getLocalizationProvider());
-
-        // Add custom view and set it default.
+        // Add feedback view and set it default.
         // -----------------------------------
         final SiteDescriptor siteDescriptor = DefaultSiteUI.getContentProvider().getSiteDescriptor();
+
+        // Customize navigation tree.
+        final NavigationVersion navigationVersion = siteDescriptor.getNavigation().getProductionVersion();
+        navigationVersion.setDefaultPageName("feedback");
+        navigationVersion.setTree("feedback;" + navigationVersion.getTree());
+
+        // Describe feedback view.
         final ViewDescriptor feedback = new ViewDescriptor("feedback", "Feedback", DefaultView.class);
         feedback.setViewletClass("content", FeedbackViewlet.class);
         siteDescriptor.getViewDescriptors().add(feedback);
 
-        final NavigationVersion navigationVersion = siteDescriptor.getNavigation().getProductionVersion();
-        navigationVersion.setDefaultPageName("feedback");
-        navigationVersion.setTree("feedback;" + navigationVersion.getTree());
+        // Describe feedback view fields.
+        final FieldSetDescriptor feedbackFieldSetDescriptor = new FieldSetDescriptor(Feedback.class);
+        feedbackFieldSetDescriptor.setVisibleFieldIds(new String[]{
+                "title", "description", "emailAddress", "firstName", "lastName", "organizationName", "organizationSize"
+        });
+        FieldSetDescriptorRegister.registerFieldSetDescriptor("feedback", feedbackFieldSetDescriptor);
 
         // Configure Embedded jetty.
         // -------------------------

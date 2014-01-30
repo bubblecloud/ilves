@@ -179,18 +179,5 @@ public final class SiteFields {
         SiteFields.add(GroupMember.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
                 true, true));
 
-        final FieldSetDescriptor feedbackDescriptor = new FieldSetDescriptor(Feedback.class);
-        feedbackDescriptor.setVisibleFieldIds(new String[]{
-                "title",
-                "description",
-                "emailAddress",
-                "firstName",
-                "lastName",
-                "organizationName",
-                "organizationSize"
-        });
-        FieldSetDescriptorRegister.registerFieldSetDescriptor("feedback", feedbackDescriptor);
-
-
     }
 }

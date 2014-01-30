@@ -16,7 +16,6 @@
 package org.vaadin.addons.sitekit.site;
 
 import com.vaadin.navigator.View;
-import org.vaadin.addons.sitekit.viewlet.anonymous.FeedbackViewlet;
 
 /**
  * SiteView descriptor class.

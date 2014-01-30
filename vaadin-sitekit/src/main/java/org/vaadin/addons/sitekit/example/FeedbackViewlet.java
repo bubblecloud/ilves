@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.viewlet.anonymous;
+package org.vaadin.addons.sitekit.example;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.themes.Reindeer;
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
@@ -63,7 +63,7 @@ public final class FeedbackViewlet extends AbstractViewlet {
         editor = new ValidatingEditor(fieldDescriptors);
 
         final Button submitButton = new Button(getSite().localize("button-submit"));
-        submitButton.addListener(new ClickListener() {
+        submitButton.addClickListener(new ClickListener() {
             /** The default serial version ID. */
             private static final long serialVersionUID = 1L;
 
@@ -82,7 +82,7 @@ public final class FeedbackViewlet extends AbstractViewlet {
                 } catch (final Exception e) {
                     LOGGER.error("Error adding user.", e);
                     Notification.show(getSite().localize("message-feedback-submit-error"),
-                            Notification.TYPE_WARNING_MESSAGE);
+                            Notification.Type.WARNING_MESSAGE);
                 }
                 reset();
             }
@@ -106,11 +106,11 @@ public final class FeedbackViewlet extends AbstractViewlet {
         titleLayout.setMargin(new MarginInfo(true, false, true, false));
         titleLayout.setSpacing(true);
         final Embedded titleIcon = new Embedded(null, getSite().getIcon("view-icon-feedback"));
-        titleIcon.setWidth(32, UNITS_PIXELS);
-        titleIcon.setHeight(32, UNITS_PIXELS);
+        titleIcon.setWidth(32, Unit.PIXELS);
+        titleIcon.setHeight(32, Unit.PIXELS);
         titleLayout.addComponent(titleIcon);
         final Label titleLabel = new Label(
-                "<h1>" + getSite().localize("view-feedback") + "</h1>", Label.CONTENT_XHTML);
+                "<h1>" + getSite().localize("view-feedback") + "</h1>", ContentMode.HTML);
         titleLayout.addComponent(titleLabel);
 
         final VerticalLayout panel = new VerticalLayout();
