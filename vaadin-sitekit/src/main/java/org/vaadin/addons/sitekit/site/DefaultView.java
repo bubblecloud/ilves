@@ -23,15 +23,15 @@ import java.io.IOException;
  * Fixed width implementation of PageWindow.
  * @author Tommi S.E. Laukkanen
  */
-public final class DefaultCustomView extends AbstractCustomView {
+public final class DefaultView extends AbstractCustomView {
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
 
     /**
      * The default portal window.
      */
-    public DefaultCustomView() throws IOException {
-        super(DefaultCustomView.class.getResourceAsStream("/VAADIN/themes/sitekit/layouts/default.html"));
+    public DefaultView() throws IOException {
+        super(DefaultView.class.getResourceAsStream("/VAADIN/themes/sitekit/layouts/default.html"));
         setImmediate(true);
     }
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.web;
+package org.vaadin.addons.sitekit.site;
 
 import org.vaadin.addons.sitekit.site.*;
 import org.vaadin.addons.sitekit.viewlet.administrator.company.CompanyFlowViewlet;
@@ -25,67 +25,73 @@ import org.vaadin.addons.sitekit.viewlet.anonymous.login.LoginFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.user.AccountFlowViewlet;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Bare site content provider.
  */
-public class BareSiteContentProvider implements ContentProvider {
+public class DefaultContentProvider implements ContentProvider {
 
-    @Override
-    public SiteDescriptor getSiteDescriptor() {
-        final List<ViewDescriptor> viewDescriptors = new ArrayList<ViewDescriptor>();
+    /**
+     * The site descriptor.
+     */
+    private final SiteDescriptor siteDescriptor;
 
-        final ViewDescriptor master = new ViewDescriptor("master", "Master", DefaultCustomView.class);
+    public DefaultContentProvider() {
+        final List<ViewDescriptor> viewDescriptors = Collections.synchronizedList(new ArrayList<ViewDescriptor>());
+
+        final ViewDescriptor master = new ViewDescriptor("master", "Master", DefaultView.class);
         master.setViewerRoles("superuser");
         master.setViewletClass("logo", ImageViewlet.class, "logo.png");
         master.setViewletClass("navigation", HorizontalNavigationViewlet.class);
         master.setViewletClass("footer", CompanyFooterViewlet.class);
         viewDescriptors.add(master);
 
-        final ViewDescriptor feedback = new ViewDescriptor("default", "Default", DefaultCustomView.class);
-        feedback.setViewletClass("content", FeedbackViewlet.class);
-        viewDescriptors.add(feedback);
-
-        final ViewDescriptor users = new ViewDescriptor("users", "Users", DefaultCustomView.class);
+        final ViewDescriptor users = new ViewDescriptor("users", "Users", DefaultView.class);
         users.setViewerRoles("administrator");
         users.setViewletClass("content", UserFlowViewlet.class);
         viewDescriptors.add(users);
 
-        final ViewDescriptor groups = new ViewDescriptor("groups", "Groups", DefaultCustomView.class);
+        final ViewDescriptor groups = new ViewDescriptor("groups", "Groups", DefaultView.class);
         groups.setViewerRoles("administrator");
         groups.setViewletClass("content", GroupFlowViewlet.class);
         viewDescriptors.add(groups);
 
-        final ViewDescriptor customers = new ViewDescriptor("customers", "Customers", DefaultCustomView.class);
+        final ViewDescriptor customers = new ViewDescriptor("customers", "Customers", DefaultView.class);
         customers.setViewerRoles("administrator");
         customers.setViewletClass("content", CustomerFlowViewlet.class);
         viewDescriptors.add(customers);
 
-        final ViewDescriptor companies = new ViewDescriptor("companies", "Companies", DefaultCustomView.class);
+        final ViewDescriptor companies = new ViewDescriptor("companies", "Companies", DefaultView.class);
         companies.setViewerRoles("administrator");
         companies.setViewletClass("content", CompanyFlowViewlet.class);
         viewDescriptors.add(companies);
 
-        final ViewDescriptor login = new ViewDescriptor("login", "Login", DefaultCustomView.class);
+        final ViewDescriptor login = new ViewDescriptor("login", "Login", DefaultView.class);
         login.setViewerRoles("anonymous");
         login.setViewletClass("content", LoginFlowViewlet.class);
         viewDescriptors.add(login);
 
-        final ViewDescriptor account = new ViewDescriptor("account", "Account", DefaultCustomView.class);
+        final ViewDescriptor account = new ViewDescriptor("account", "Account", DefaultView.class);
         account.setViewerRoles("user", "administrator");
         account.setViewletClass("content", AccountFlowViewlet.class);
         viewDescriptors.add(account);
 
-        final ViewDescriptor validate = new ViewDescriptor("validate", "Email Validation", DefaultCustomView.class);
+        final ViewDescriptor validate = new ViewDescriptor("validate", "Email Validation", DefaultView.class);
         validate.setViewletClass("content", EmailValidationViewlet.class);
         viewDescriptors.add(validate);
 
         final NavigationDescriptor navigationDescriptor = new NavigationDescriptor("navigation", null, null,
-                new NavigationVersion(0, "default", "default;login;customers;users;groups;companies;account", true));
+                new NavigationVersion(0, "login", "login;customers;users;groups;companies;account", true));
 
-        return new SiteDescriptor("Test site.", "test site", "This is a test site.",
+        siteDescriptor = new  SiteDescriptor("Test site.", "test site", "This is a test site.",
                 navigationDescriptor, viewDescriptors);
+    }
+
+    @Override
+    public SiteDescriptor getSiteDescriptor() {
+        return siteDescriptor;
     }
 
 }

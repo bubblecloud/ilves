@@ -77,7 +77,7 @@
                     <manifest>
                         <addClasspath>true</addClasspath>
                         <classpathPrefix>lib/</classpathPrefix>
-                        <mainClass>org.vaadin.addons.sitekit.web.BareSiteUI</mainClass>
+                        <mainClass>org.vaadin.addons.sitekit.example.ExampleSiteMain</mainClass>
                     </manifest>
                 </archive>
             </configuration>

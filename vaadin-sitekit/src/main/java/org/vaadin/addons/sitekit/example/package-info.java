@@ -3,4 +3,4 @@
  *
  * @author Tommi S.E. Laukkanen
  */
-package org.vaadin.addons.sitekit.web;
+package org.vaadin.addons.sitekit.example;

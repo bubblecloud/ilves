@@ -13,34 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.web;
+package org.vaadin.addons.sitekit.site;
 
-import org.apache.log4j.xml.DOMConfigurator;
 import org.vaadin.addons.sitekit.dao.CompanyDao;
 import org.vaadin.addons.sitekit.model.Company;
-import org.vaadin.addons.sitekit.site.*;
-import org.vaadin.addons.sitekit.util.PersistenceUtil;
-import org.vaadin.addons.sitekit.viewlet.administrator.company.CompanyFlowViewlet;
-import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowViewlet;
-import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupFlowViewlet;
-import org.vaadin.addons.sitekit.viewlet.administrator.user.UserFlowViewlet;
-import org.vaadin.addons.sitekit.viewlet.anonymous.*;
-import org.vaadin.addons.sitekit.viewlet.anonymous.HorizontalNavigationViewlet;
-import org.vaadin.addons.sitekit.viewlet.anonymous.login.LoginFlowViewlet;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import org.apache.log4j.Logger;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
-import org.vaadin.addons.sitekit.viewlet.user.AccountFlowViewlet;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * BareSite UI.
@@ -49,35 +33,18 @@ import java.util.List;
  */
 @SuppressWarnings({ "serial", "unchecked" })
 @Theme("sitekit")
-public final class BareSiteUI extends AbstractSiteUI {
+public final class DefaultSiteUI extends AbstractSiteUI {
 
     /** The logger. */
-    private static final Logger LOG = Logger.getLogger(BareSiteUI.class);
-    /** The properties category used in instantiating default services. */
-    private static final String PROPERTIES_CATEGORY = "bare-site";
-    /** The persistence unit to be used. */
-    public static final String PERSISTENCE_UNIT = "bare-site";
+    private static final Logger LOG = Logger.getLogger(DefaultSiteUI.class);
     /** The shared entity manager factory. */
     private static EntityManagerFactory entityManagerFactory;
     /** The shared security provider. */
-    private static final SecurityProviderSessionImpl securityProvider;
+    private static SecurityProviderSessionImpl securityProvider;
     /** The shared content provider. */
-    private static final ContentProvider contentProvider;
+    private static ContentProvider contentProvider;
     /** The shared localization provider. */
-    private static final LocalizationProvider localizationProvider;
-
-    /**
-     * Static initialization.
-     */
-    static {
-        DOMConfigurator.configure("./log4j.xml");
-
-        entityManagerFactory = PersistenceUtil.getEntityManagerFactory(PERSISTENCE_UNIT, PROPERTIES_CATEGORY);
-        securityProvider = new SecurityProviderSessionImpl("administrator", "user");
-        contentProvider = new BareSiteContentProvider();
-        localizationProvider = new LocalizationProviderBundleImpl("bare-site-localization");
-        SiteFields.initialize(localizationProvider);
-    }
+    private static LocalizationProvider localizationProvider;
 
     @Override
     protected Site constructSite(final VaadinRequest request) {
@@ -100,4 +67,75 @@ public final class BareSiteUI extends AbstractSiteUI {
         return new Site(SiteMode.PRODUCTION, contentProvider, localizationProvider, securityProvider, siteContext);
     }
 
+    /**
+     * Setter for entity manager factory.
+     *
+     * @param entityManagerFactory the entity manager factory
+     */
+    public static void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+        DefaultSiteUI.entityManagerFactory = entityManagerFactory;
+    }
+
+    /**
+     * Sets the security provider.
+     *
+     * @param securityProvider the security provider.
+     */
+    public static void setSecurityProvider(SecurityProviderSessionImpl securityProvider) {
+        DefaultSiteUI.securityProvider = securityProvider;
+    }
+
+    /**
+     * Sets the content provider.
+     *
+     * @param contentProvider the content provider
+     */
+    public static void setContentProvider(ContentProvider contentProvider) {
+        DefaultSiteUI.contentProvider = contentProvider;
+    }
+
+    /**
+     * Sets the localization provider.
+     *
+     * @param localizationProvider the localization provider
+     */
+    public static void setLocalizationProvider(LocalizationProvider localizationProvider) {
+        DefaultSiteUI.localizationProvider = localizationProvider;
+    }
+
+    /**
+     * Gets the entity manager factory.
+     *
+     * @return the entity manager factory
+     */
+    public static EntityManagerFactory getEntityManagerFactory() {
+        return entityManagerFactory;
+    }
+
+    /**
+     * Gets the security provider.
+     *
+     * @return the security provider
+     */
+    public static SecurityProviderSessionImpl getSecurityProvider() {
+        return securityProvider;
+    }
+
+    /**
+     * Gets the content provider.
+     *
+     * @return the content provider
+     */
+    public static ContentProvider getContentProvider() {
+        return contentProvider;
+    }
+
+    /**
+     * Gets the localization provider.
+     *
+     * @return the localization provider
+     */
+    public static LocalizationProvider getLocalizationProvider() {
+        return localizationProvider;
+    }
 }
