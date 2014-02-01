@@ -27,17 +27,21 @@ import java.util.Map;
 public class NavigationTreeParserTest {
 
     /**
-     * Tests navigation tree parsing.
+     * Tests navigation tree parsing and formatting.
      */
     @Test
-    public void testParsing() {
-        final Map<String, List<String>> navigationTreeMap = NavigationTreeParser.parse("a;#aa;#ab;##aba;b;c;#ca");
+    public void testParsingAndFormatting() {
+        final String originalNavigationString = "a;#aa;#ab;##aba;b;c;#ca";
+        final Map<String, List<String>> navigationMap = NavigationTreeParser.parse(originalNavigationString);
 
-        Assert.assertEquals("[a, b, c]", navigationTreeMap.get(NavigationTreeParser.ROOTS).toString());
-        Assert.assertEquals("[aa, ab]", navigationTreeMap.get("a").toString());
-        Assert.assertEquals("[aba]", navigationTreeMap.get("ab").toString());
-        Assert.assertEquals("[ca]", navigationTreeMap.get("c").toString());
-        Assert.assertEquals(4, navigationTreeMap.size());
+        Assert.assertEquals("[a, b, c]", navigationMap.get(NavigationTreeParser.ROOTS).toString());
+        Assert.assertEquals("[aa, ab]", navigationMap.get("a").toString());
+        Assert.assertEquals("[aba]", navigationMap.get("ab").toString());
+        Assert.assertEquals("[ca]", navigationMap.get("c").toString());
+        Assert.assertEquals(4, navigationMap.size());
+
+        final String formattedNavigationString = NavigationTreeParser.format(navigationMap);
+        Assert.assertEquals(originalNavigationString, formattedNavigationString);
     }
 
 }

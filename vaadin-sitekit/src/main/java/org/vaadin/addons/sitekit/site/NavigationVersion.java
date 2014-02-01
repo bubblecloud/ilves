@@ -16,6 +16,13 @@
 package org.vaadin.addons.sitekit.site;
 
 
+import org.vaadin.addons.sitekit.util.NavigationTreeParser;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 /**
  * The navigation version.
  * @author Tommi S.E. Laukkanen
@@ -25,8 +32,8 @@ public final class NavigationVersion {
     private int version;
     /** The name of the default page. */
     private String defaultPageName;
-    /** The navigation tree. */
-    private String tree;
+    /** The navigation hierarchy as map. */
+    private Map<String, List<String>> navigationMap;
     /** True if navigation is enabled. */
     private boolean enabled;
 
@@ -42,7 +49,7 @@ public final class NavigationVersion {
         super();
         this.version = version;
         this.defaultPageName = defaultPageName;
-        this.tree = tree;
+        this.navigationMap = NavigationTreeParser.parse(tree);
         this.enabled = enabled;
     }
 
@@ -93,7 +100,7 @@ public final class NavigationVersion {
      * @return the tree
      */
     public String getTree() {
-        return tree;
+        return NavigationTreeParser.format(navigationMap);
     }
 
     /**
@@ -101,7 +108,74 @@ public final class NavigationVersion {
      * @param tree the tree to set
      */
     public void setTree(final String tree) {
-        this.tree = tree;
+        navigationMap = NavigationTreeParser.parse(tree);
     }
 
+    /**
+     * Gets list of root page names.
+     * @return list of root page names
+     */
+    public List<String> getRootPages() {
+        return Collections.unmodifiableList(navigationMap.get(NavigationTreeParser.ROOTS));
+    }
+
+    /**
+     * Checks whether page with given name has child pages.
+     * @param parentPage the parent page name
+     * @return true if child pages exist.
+     */
+    public boolean hasChildPages(final String parentPage) {
+        return navigationMap.containsKey(parentPage);
+    }
+
+    /**
+     * Gets list of child page names.
+     * @param parentPage the parent page name
+     * @return list of child page names or null if no child pages exists.
+     */
+    public List<String> getChildPages(final String parentPage) {
+        return Collections.unmodifiableList(navigationMap.get(parentPage));
+    }
+
+    /**
+     * Adds root page as last to the root page list.
+     * @param rootPage the root page name
+     */
+    public void addRootPage(final String rootPage) {
+        addChildPage(NavigationTreeParser.ROOTS, rootPage);
+    }
+
+    /**
+     * Adds root page as last to the root page list.
+     * @param index the index in the root page list where the new root page should be inserted at
+     * @param rootPage the root page name
+     */
+    public void addRootPage(int index, final String rootPage) {
+        addChildPage(NavigationTreeParser.ROOTS, index, rootPage);
+    }
+
+    /**
+     * Adds child page as last to the child page list.
+     * @param parentPage the parent page name
+     * @param childPage the child page name
+     */
+    public void addChildPage(final String parentPage, final String childPage) {
+        if (!navigationMap.containsKey(parentPage)) {
+            navigationMap.put(parentPage, new ArrayList<String>());
+        }
+        navigationMap.get(parentPage).add(childPage);
+    }
+
+    /**
+     * Adds child page at given index in the child page list.
+     * @param parentPage the parent page name
+     * @param index the index in the child page list where the new child page should be inserted at
+     * @param childPage the child page name
+     */
+    public void addChildPage(final String parentPage, int index, final String childPage) {
+        if (!navigationMap.containsKey(parentPage)) {
+            navigationMap.put(parentPage, new ArrayList<String>());
+        }
+        navigationMap.get(parentPage).add(index, childPage);
+    }
 }

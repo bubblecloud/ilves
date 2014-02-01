@@ -69,7 +69,7 @@ public class ExampleSiteMain {
         // Customize navigation tree.
         final NavigationVersion navigationVersion = siteDescriptor.getNavigation().getProductionVersion();
         navigationVersion.setDefaultPageName("feedback");
-        navigationVersion.setTree("feedback;" + navigationVersion.getTree());
+        navigationVersion.addRootPage(0, "feedback");
 
         // Describe feedback view.
         final ViewDescriptor feedback = new ViewDescriptor("feedback", "Feedback", DefaultView.class);

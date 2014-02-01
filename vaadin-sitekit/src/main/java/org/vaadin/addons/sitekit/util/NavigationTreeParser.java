@@ -77,4 +77,35 @@ public class NavigationTreeParser {
         }
         return treeMap;
     }
+
+    /**
+     * Formats the navigation string as map.
+     *
+     * @param navigationMap
+     * @return
+     */
+    public static String format(final Map<String, List<String>> navigationMap) {
+        final StringBuilder tree = new StringBuilder();
+        format(ROOTS, -1, navigationMap, tree);
+        return tree.toString();
+    }
+
+    private static void format(final String parent, final int depth, final Map<String, List<String>> navigationMap,
+                               final StringBuilder tree) {
+        if (depth >= 0) {
+            if (tree.length() > 0) {
+                tree.append(';');
+            }
+            for (int i = 0; i < depth; i++) {
+                tree.append('#');
+            }
+            tree.append(parent);
+        }
+        if (!navigationMap.containsKey(parent)) {
+            return;
+        }
+        for (final String child : navigationMap.get(parent)) {
+            format(child, depth + 1, navigationMap, tree);
+        }
+    }
 }
