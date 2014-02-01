@@ -24,7 +24,7 @@ import org.vaadin.addons.sitekit.util.PropertiesUtil;
  */
 public final class CompanyTest {
     /** The properties category used in instantiating default services. */
-    private static final String PROPERTIES_CATEGORY = "bare-site";
+    private static final String PROPERTIES_CATEGORY = "site";
     /** The persistence unit to be used. */
     public static final String PERSISTENCE_UNIT = PROPERTIES_CATEGORY;
     /** The entity manager factory for test. */
