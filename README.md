@@ -16,55 +16,50 @@ User password: "password"
 Features
 --------
 
-- Site description model which can be persisted for example to database.
--- Custom layouts and themes
--- Master pages
--- Page flows
--- Page versions
--- Navigation versions
-
-- Virtual hosting
-- Localization
-- Privilege framework
-- Access control
-- Login / Logout
-- Registration
-- Email verification
-- User Management
-- Group Management
-
-- Customer self registration with optional company registration
-- Automatic creation of customer user groups
-- Customer company self service on user group management
-- User account information self service
-
-- Example bare website
-- Example theme
-- Example site layout
-
-- Components
--- Site views with viewlet slots
--- Viewlets
--- Flow Viewlet (~component flows)
--- Flowlets (individual components which can be added to flows)
---- Navigating in the flow disabled when having dirty data.
--- Real time Vaadin 7 filtering data grid.
--- Real time validating data editor
---- Field status indicators and error messages.
---- Real time enabled Save / Discard buttons.
-- Navigation Viewlet
-- User Management Viewlet
-- Group Management Viewlet
-- Company Management Viewlet
-- Customer Management Viewlet
-- Extra validators and formatters
+* Site description model which can be persisted for example to database.
+** Custom layouts and themes
+** Master pages
+** Page flows
+** Page versions
+** Navigation versions
+* Virtual hosting
+* Localization
+* Privilege framework
+* Access control
+* Login / Logout
+* Registration
+* Email verification
+* User Management
+* Group Management
+* Customer self registration with optional company registration
+* Automatic creation of customer user groups
+* Customer company self service on user group management
+* User account information self service
+* Example site
+* Example theme
+* Components
+** Site views with viewlet slots
+** Viewlets
+** Flow Viewlet (~component flows)
+** Flowlets (individual components which can be added to flows)
+*** Navigating in the flow disabled when having dirty data.
+** Real time Vaadin 7 filtering data grid.
+** Real time validating data editor
+*** Field status indicators and error messages.
+*** Real time enabled Save / Discard buttons.
+* Navigation Viewlet
+* User Management Viewlet
+* Group Management Viewlet
+* Company Management Viewlet
+* Customer Management Viewlet
+* Extra validators and formatters
 
 Requirements
 ------------
 
-* Java 7
-* Maven 3
-* Postgresql database (JPA, Liquibase used but Postgresql is the only tested database)
+1. Java 7
+2. Maven 3
+3. Postgresql database (JPA, Liquibase used but Postgresql is the only tested database)
 
 Usage
 -----
