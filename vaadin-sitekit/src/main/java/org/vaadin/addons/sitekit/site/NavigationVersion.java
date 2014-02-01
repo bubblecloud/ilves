@@ -89,6 +89,7 @@ public final class NavigationVersion {
     }
 
     /**
+     * Gets the navigation tree in format: "a;#aa;#ab;##aba;b;c;#ca".
      * @return the tree
      */
     public String getTree() {
@@ -96,6 +97,7 @@ public final class NavigationVersion {
     }
 
     /**
+     * Sets the navigation tree in format: "a;#aa;#ab;##aba;b;c;#ca".
      * @param tree the tree to set
      */
     public void setTree(final String tree) {
