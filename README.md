@@ -17,11 +17,11 @@ Features
 --------
 
 * Site description model which can be persisted for example to database.
-** Custom layouts and themes
-** Master pages
-** Page flows
-** Page versions
-** Navigation versions
+    * Custom layouts and themes
+    * Master pages
+    * Page flows
+    * Page versions
+    * Navigation versions
 * Virtual hosting
 * Localization
 * Privilege framework
@@ -38,15 +38,15 @@ Features
 * Example site
 * Example theme
 * Components
-** Site views with viewlet slots
-** Viewlets
-** Flow Viewlet (~component flows)
-** Flowlets (individual components which can be added to flows)
-*** Navigating in the flow disabled when having dirty data.
-** Real time Vaadin 7 filtering data grid.
-** Real time validating data editor
-*** Field status indicators and error messages.
-*** Real time enabled Save / Discard buttons.
+    * Site views with viewlet slots
+    * Viewlets
+    * Flow Viewlet (~component flows)
+    * Flowlets (individual components which can be added to flows)
+        * Navigating in the flow disabled when having dirty data.
+    * Real time Vaadin 7 filtering data grid.
+    * Real time validating data editor
+        * Field status indicators and error messages.
+        * Real time enabled Save / Discard buttons.
 * Navigation Viewlet
 * User Management Viewlet
 * Group Management Viewlet
