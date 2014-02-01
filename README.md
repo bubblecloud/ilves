@@ -59,7 +59,7 @@ Requirements
 
 1. Java 7
 2. Maven 3
-3. Postgresql database (JPA, Liquibase used but Postgresql is the only tested database)
+3. Postgresql or MySQL (JPA, Eclipse Link and Liquibase used but other databases not tested.)
 
 Usage
 -----
