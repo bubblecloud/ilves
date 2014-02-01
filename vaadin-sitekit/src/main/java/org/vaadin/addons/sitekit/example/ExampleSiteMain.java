@@ -32,11 +32,11 @@ import org.vaadin.addons.sitekit.util.PersistenceUtil;
 public class ExampleSiteMain {
 
     /** The properties category used in instantiating default services. */
-    private static final String PROPERTIES_CATEGORY = "bare-site";
+    private static final String PROPERTIES_CATEGORY = "site";
     /** The persistence unit to be used. */
-    public static final String PERSISTENCE_UNIT = "bare-site";
+    public static final String PERSISTENCE_UNIT = "site";
     /** The localization bundle. */
-    public static final String LOCALIZATION_BUNDLE = "bare-site-localization";
+    public static final String LOCALIZATION_BUNDLE = "site-localization";
 
     /**
      * Main method for running DefaultSiteUI.
@@ -85,12 +85,13 @@ public class ExampleSiteMain {
 
         // Configure Embedded jetty.
         // -------------------------
-        final boolean test = ExampleSiteMain.class.getClassLoader()
+        final boolean developmentEnvironment = ExampleSiteMain.class.getClassLoader()
                 .getResource("webapp/").toExternalForm().startsWith("file:");
 
         final String webappUrl;
-        if (test) {
-            webappUrl = "src/main/resources/webapp/";
+        if (developmentEnvironment) {
+            webappUrl = DefaultSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm().replace(
+                    "target/classes", "src/main/resources");
         } else {
             webappUrl = DefaultSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm();
         }
@@ -102,7 +103,7 @@ public class ExampleSiteMain {
         context.setDescriptor(webappUrl + "/WEB-INF/web.xml");
         context.setResourceBase(webappUrl);
         context.setParentLoaderPriority(true);
-        if (test) {
+        if (developmentEnvironment) {
             context.setInitParameter("cacheControl","no-cache");
             context.setInitParameter("useFileMappedBuffer", "false");
             context.setInitParameter("maxCachedFiles", "0");

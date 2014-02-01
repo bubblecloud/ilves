@@ -8,3 +8,4 @@ target
 release.properties
 *.releaseBackup
 .directory
+*.log
