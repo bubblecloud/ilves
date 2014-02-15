@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.example;
 
+import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -24,13 +25,16 @@ import org.vaadin.addons.sitekit.model.Feedback;
 import org.vaadin.addons.sitekit.site.*;
 import org.vaadin.addons.sitekit.util.PersistenceUtil;
 
+import java.net.BindException;
+
 /**
  * Example site main class.
  *
  * @author Tommi S.E. Laukkanen
  */
 public class ExampleSiteMain {
-
+    /** The logger. */
+    private static final Logger LOGGER = Logger.getLogger(ExampleSiteMain.class);
     /** The properties category used in instantiating default services. */
     private static final String PROPERTIES_CATEGORY = "site";
     /** The persistence unit to be used. */
@@ -96,7 +100,8 @@ public class ExampleSiteMain {
             webappUrl = DefaultSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm();
         }
 
-        final Server server = new Server(8081);
+        final int port = 8081;
+        final Server server = new Server(port);
 
         final WebAppContext context = new WebAppContext();
         context.setContextPath("/");
@@ -109,7 +114,12 @@ public class ExampleSiteMain {
             context.setInitParameter("maxCachedFiles", "0");
         }
         server.setHandler(context);
-        server.start();
+        try {
+            server.start();
+        } catch (final BindException e) {
+            LOGGER.warn("Jetty port (" + port + ") binding failed: " + e.getMessage());
+            return;
+        }
         server.join();
     }
 }

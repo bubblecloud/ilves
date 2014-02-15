@@ -89,6 +89,10 @@ public final class Company implements Serializable {
     @Column(nullable = false)
     private String bic;
 
+    /** Flag for enabling email password reset. */
+    @Column(nullable = false)
+    private boolean emailPasswordReset;
+
     /** Created time of the task. */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
@@ -368,12 +372,32 @@ public final class Company implements Serializable {
         this.host = host;
     }
 
+    /**
+     * @return the site URL
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * @param url the site URL to set
+     */
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    /**
+     * @return true if email password reset is enabled.
+     */
+    public boolean isEmailPasswordReset() {
+        return emailPasswordReset;
+    }
+
+    /**
+     * @param emailPasswordReset whether email password reset is enabled
+     */
+    public void setEmailPasswordReset(boolean emailPasswordReset) {
+        this.emailPasswordReset = emailPasswordReset;
     }
 
     @Override

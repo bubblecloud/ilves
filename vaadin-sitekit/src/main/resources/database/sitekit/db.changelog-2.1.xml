@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
-    <include file="database/sitekit/db.changelog-2.0.xml"/>
-    <include file="database/sitekit/db.changelog-2.1.xml"/>
+    <changeSet author="tlaukkan" id="716a38f0-9625-11e3-a5e2-0800200c9a66">
+        <addColumn  tableName="company">
+            <column name="emailpasswordreset" type="boolean" defaultValueBoolean="false"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
+
