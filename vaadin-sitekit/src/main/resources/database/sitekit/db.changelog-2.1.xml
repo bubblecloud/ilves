@@ -5,5 +5,20 @@
             <column name="emailpasswordreset" type="boolean" defaultValueBoolean="false"/>
         </addColumn>
     </changeSet>
+    <changeSet author="tlaukkan" id="52547bd0-962d-11e3-a5e2-0800200c9a66">
+        <createTable tableName="emailpasswordreset">
+            <column name="emailpasswordresetid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_userid" type="VARCHAR(255)"/>
+            <column name="pinhash" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="emailpasswordresetid" constraintName="emailpasswordreset_pkey" tableName="emailpasswordreset"/>
+    </changeSet>
 </databaseChangeLog>
 
