@@ -19,7 +19,10 @@ import java.security.MessageDigest;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 
+import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinServletRequest;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
 import org.vaadin.addons.sitekit.util.StringUtil;
@@ -50,7 +53,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
     private static final long serialVersionUID = 1L;
 
     /** The logger. */
-    private static final Logger LOG = Logger.getLogger(LoginFlowlet.class);
+    private static final Logger LOGGER = Logger.getLogger(LoginFlowlet.class);
 
     /** The login form. */
     private LoginForm loginForm;;
@@ -126,13 +129,18 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
 
     @Override
     public void onLogin(final LoginEvent event) {
+        final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
+                .getHttpServletRequest();
+        final String userEmailAddress = event.getLoginParameter("username");
         try {
+
             final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
             final Company company = getSite().getSiteContext().getObject(Company.class);
-            final String userEmailAddress = event.getLoginParameter("username");
             final User user = UserDao.getUser(entityManager, company, userEmailAddress);
 
             if (user == null) {
+                LOGGER.warn("User login, not registered email address: " + userEmailAddress
+                        + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
                 Notification.show(getSite().localize("message-login-failed"), Notification.TYPE_WARNING_MESSAGE);
                 return;
             }
@@ -145,14 +153,20 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
 
             final boolean passwordMatch = passwordAndSaltDigest.equals(user.getPasswordHash());
             if (passwordMatch) {
+                LOGGER.info("User login: " + user.getEmailAddress()
+                        + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
+
                 final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
                 ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).setUser(user, groups);
                 UI.getCurrent().getNavigator().navigateTo(getSite().getCurrentNavigationVersion().getDefaultPageName());
             } else {
+                LOGGER.warn("User login, password mismatch: " + user.getEmailAddress()
+                        + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
                 Notification.show(getSite().localize("message-login-failed"), Notification.TYPE_WARNING_MESSAGE);
             }
         } catch (final Exception e) {
-            LOG.error("Error logging in user.", e);
+            LOGGER.error("Error logging in user: " + userEmailAddress
+                    + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")", e);
             Notification.show(getSite().localize("message-login-error"), Notification.TYPE_ERROR_MESSAGE);
         }
 

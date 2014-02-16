@@ -149,6 +149,11 @@ public final class ForgotPasswordFlowlet extends AbstractFlowlet {
                             + getSite().localize("message-your-password-reset-pin-is") + pin,
                             Notification.Type.HUMANIZED_MESSAGE);
 
+                    final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
+                            .getHttpServletRequest();
+                    LOGGER.info("Password reset email sent to " + user.getEmailAddress()
+                            + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
+
                     getViewSheet().back();
                 } catch (final Exception e) {
                     LOGGER.error("Error preparing password reset.", e);

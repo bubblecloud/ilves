@@ -170,6 +170,9 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                     return;
                 }
 
+                final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
+                        .getHttpServletRequest();
+
                 try {
                     final byte[] passwordAndSaltBytes = (customer.getEmailAddress()
                             + ":" + ((String) originalPasswordProperty.getValue()))
@@ -190,8 +193,6 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                     UserDao.addGroupMember(entityManager, customer.getAdminGroup(), user);
                     UserDao.addGroupMember(entityManager, customer.getMemberGroup(), user);
 
-                    final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
-                            .getHttpServletRequest();
                     final String url = company.getUrl() +
                             "#!validate/" + user.getUserId();
 
@@ -205,12 +206,15 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                     });
                     emailThread.start();
 
+                    LOGGER.info("User registered " + user.getEmailAddress()
+                            + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
                     Notification.show(getSite().localize("message-registration-success"),
                             Notification.Type.HUMANIZED_MESSAGE);
 
                     getViewSheet().back();
                 } catch (final Exception e) {
-                    LOGGER.error("Error adding user.", e);
+                    LOGGER.error("Error adding user. (IP: " + request.getRemoteHost()
+                            + ":" + request.getRemotePort() + ")", e);
                     Notification.show(getSite().localize("message-registration-error"),
                             Notification.TYPE_WARNING_MESSAGE);
                 }
