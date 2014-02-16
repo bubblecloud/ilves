@@ -120,7 +120,7 @@ public class UserDao {
      * Gets given email password reset.
      * @param entityManager the entity manager.
      * @param emailPasswordResetId the email password reset ID
-     * @return the group
+     * @return the email password reset
      */
     public static final EmailPasswordReset getEmailPasswordReset(final EntityManager entityManager,
                                                    final String emailPasswordResetId) {
@@ -129,6 +129,21 @@ public class UserDao {
         } catch (final EntityNotFoundException e) {
             return null;
         }
+    }
+
+    /**
+     * Gets active email password resets for given user.
+     * @param entityManager the entity manager.
+     * @param user the user
+     * @return list of email password reset
+     */
+    public static final List<EmailPasswordReset> getEmailPasswordResetByEmailAddress(final EntityManager entityManager,
+                                                                 final User user) {
+        final TypedQuery<EmailPasswordReset> query = entityManager.createQuery(
+                "select e from EmailPasswordReset as e where e.user=:user",
+                EmailPasswordReset.class);
+        query.setParameter("user", user);
+        return query.getResultList();
     }
 
     /**

@@ -117,6 +117,29 @@ public final class ForgotPasswordFlowlet extends AbstractFlowlet {
                     return;
                 }
 
+                final List<EmailPasswordReset> emailPasswordResets = UserDao.getEmailPasswordResetByEmailAddress(
+                        entityManager, user);
+                final Date now = new Date();
+
+                for (final EmailPasswordReset emailPasswordReset : emailPasswordResets) {
+                    if (now.getTime() - emailPasswordReset.getCreated().getTime() < 24 * 60 * 60 * 1000) {
+                        Notification.show(getSite().localize("message-password-reset-email-already-sent"),
+                                Notification.Type.ERROR_MESSAGE);
+                        return;
+                    } else {
+                        entityManager.getTransaction().begin();
+                        try {
+                            entityManager.remove(emailPasswordReset);
+                            entityManager.getTransaction().commit();
+                        } catch (final Exception e) {
+                            if (entityManager.getTransaction().isActive()) {
+                                entityManager.getTransaction().rollback();
+                            }
+                            throw new SiteException("Error removing old email password reset.", e);
+                        }
+                    }
+                }
+
                 try {
                     final String pin = (String) pinProperty.getValue();
                     final byte[] pinAndSaltBytes = (user.getEmailAddress() + ":" + pin).getBytes("UTF-8");
@@ -126,7 +149,7 @@ public final class ForgotPasswordFlowlet extends AbstractFlowlet {
                     final EmailPasswordReset emailPasswordReset = new EmailPasswordReset();
                     emailPasswordReset.setUser(user);
                     emailPasswordReset.setPinHash(StringUtil.toHexString(pinAndSaltDigest));
-                    emailPasswordReset.setCreated(new Date());
+                    emailPasswordReset.setCreated(now);
 
                     entityManager.getTransaction().begin();
                     try {
@@ -155,7 +178,7 @@ public final class ForgotPasswordFlowlet extends AbstractFlowlet {
 
                     Notification.show(getSite().localize("message-password-reset-email-sent")
                             + getSite().localize("message-your-password-reset-pin-is") + pin,
-                            Notification.Type.ERROR_MESSAGE);
+                            Notification.Type.WARNING_MESSAGE);
 
                     final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
                             .getHttpServletRequest();
