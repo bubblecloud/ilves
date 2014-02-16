@@ -14,6 +14,7 @@ import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
+import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.EmailPasswordReset;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
@@ -49,6 +50,14 @@ public class PasswordResetViewlet extends AbstractViewlet {
         final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
                 .getHttpServletRequest();
 
+        final Company company = getSite().getSiteContext().getObject(Company.class);
+        if (!company.isEmailPasswordReset()) {
+            LOGGER.error("Password reset attempted but email password reset is disabled in company. "
+                    + "Email password reset ID: " + parameters
+                    + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
+            return;
+        }
+
         final String emailPasswordResetId = parameters;
         final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
 
@@ -57,6 +66,11 @@ public class PasswordResetViewlet extends AbstractViewlet {
 
         if (emailPasswordReset != null) {
             final User user = emailPasswordReset.getUser();
+            if (!user.getOwner().getCompanyId().equals(company.getCompanyId())) {
+                LOGGER.error("Password reset attempted through wrong company: " + user.getEmailAddress()
+                        + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
+                return;
+            }
             final List<FieldDescriptor> fieldDescriptors = new ArrayList<FieldDescriptor>();
             fieldDescriptors.add(new FieldDescriptor("pin", getSite().localize("input-password-reset-pin"),
                     TextField.class, null, 150, null, String.class, "",
@@ -130,6 +144,9 @@ public class PasswordResetViewlet extends AbstractViewlet {
                                     + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
                             Notification.show(getSite().localize("message-invalid-password-reset-pin"),
                                     Notification.Type.WARNING_MESSAGE);
+                            final Company company = getSite().getSiteContext().getObject(Company.class);
+                            getUI().getPage().setLocation(company.getUrl() + "#!reset");
+                            getSession().close();
                         }
 
                     } catch (final Exception e) {
@@ -171,7 +188,7 @@ public class PasswordResetViewlet extends AbstractViewlet {
             panel.setMargin(true);
             setCompositionRoot(panel);
         } else {
-            Notification.show(getSite().localize("message-password-reset-already-completed"),
+            Notification.show(getSite().localize("message-password-reset-consumed"),
                     Notification.Type.WARNING_MESSAGE);
         }
 
