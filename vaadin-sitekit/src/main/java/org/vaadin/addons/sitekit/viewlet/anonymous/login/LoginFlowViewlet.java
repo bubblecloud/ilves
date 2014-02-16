@@ -17,6 +17,7 @@ package org.vaadin.addons.sitekit.viewlet.anonymous.login;
 
 import org.vaadin.addons.sitekit.flow.AbstractFlowViewlet;
 import org.vaadin.addons.sitekit.flow.Flowlet;
+import org.vaadin.addons.sitekit.model.Company;
 
 /**
  * Login Flow.
@@ -35,6 +36,12 @@ public final class LoginFlowViewlet extends AbstractFlowViewlet {
         final Flowlet rootView = new LoginFlowlet();
         addFlowlet(rootView);
         addFlowlet(new RegisterFlowlet());
+
+        final Company company = getSite().getSiteContext().getObject(Company.class);
+        if (company.isEmailPasswordReset()) {
+            addFlowlet(new ForgotPasswordFlowlet());
+        }
+
         setRootFlowlet(rootView);
     }
 

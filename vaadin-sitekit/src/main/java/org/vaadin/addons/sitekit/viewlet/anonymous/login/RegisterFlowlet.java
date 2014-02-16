@@ -89,13 +89,17 @@ public final class RegisterFlowlet extends AbstractFlowlet {
      */
     public void reset() {
         customer = new Customer();
-        final BeanItem<Customer> customerItem = new BeanItem<Customer>(customer);
-        final PropertysetItem passwordItem = new PropertysetItem();
-        passwordItem.addItemProperty("password1", originalPasswordProperty);
-        passwordItem.addItemProperty("password2", verifiedPasswordProperty);
         final CompositeItem compositeItem = new CompositeItem();
-        compositeItem.addItem(CompositeItem.DEFAULT_ITEM_KEY, customerItem);
-        compositeItem.addItem("passwordItem", passwordItem);
+
+        final PropertysetItem defaultItem = (PropertysetItem) compositeItem.getItem(CompositeItem.DEFAULT_ITEM_KEY);
+        originalPasswordProperty.setValue("");
+        verifiedPasswordProperty.setValue("");
+        defaultItem.addItemProperty("password1", originalPasswordProperty);
+        defaultItem.addItemProperty("password2", verifiedPasswordProperty);
+
+        final BeanItem<Customer> customerItem = new BeanItem<Customer>(customer);
+        compositeItem.addItem("customer", customerItem);
+
         originalPasswordProperty.setValue(null);
         verifiedPasswordProperty.setValue(null);
         editor.setItem(compositeItem, true);
@@ -194,7 +198,7 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                     final Thread emailThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            EmailUtil.send(PropertiesUtil.getProperty("bare-site", "smtp-host"),
+                            EmailUtil.send(PropertiesUtil.getProperty("site", "smtp-host"),
                                     user.getEmailAddress(), company.getSupportEmailAddress(), "Email Validation",
                                     "Please validate your email by browsing to this URL: " + url);
                         }

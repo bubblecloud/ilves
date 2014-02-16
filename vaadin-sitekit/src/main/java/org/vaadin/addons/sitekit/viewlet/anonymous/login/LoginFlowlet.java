@@ -65,7 +65,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
     public void initialize() {
 
         final VerticalLayout layout = new VerticalLayout();
-        //layout.setSpacing(true);
+        layout.setSpacing(true);
         layout.setWidth(200, AbstractComponent.UNITS_PIXELS);
 
         loginForm = new LoginForm() {
@@ -84,9 +84,6 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
 
         layout.addComponent(loginForm);
 
-
-
-
         final Button registerButton = new Button(getSite().localize("button-register") + " >>");
         registerButton.addListener(new ClickListener() {
             @Override
@@ -95,6 +92,19 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
             }
         });
         layout.addComponent(registerButton);
+
+        final Company company = getSite().getSiteContext().getObject(Company.class);
+
+        if (company.isEmailPasswordReset()) {
+            final Button forgotPasswordButton = new Button(getSite().localize("button-forgot-password") + " >>");
+            forgotPasswordButton.addListener(new ClickListener() {
+                @Override
+                public void buttonClick(final ClickEvent event) {
+                    getViewSheet().forward(ForgotPasswordFlowlet.class);
+                }
+            });
+            layout.addComponent(forgotPasswordButton);
+        }
 
         setViewContent(layout);
 
