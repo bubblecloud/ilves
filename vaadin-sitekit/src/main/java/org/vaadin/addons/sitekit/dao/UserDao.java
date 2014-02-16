@@ -15,11 +15,7 @@
  */
 package org.vaadin.addons.sitekit.dao;
 
-import org.vaadin.addons.sitekit.model.Company;
-import org.vaadin.addons.sitekit.model.Group;
-import org.vaadin.addons.sitekit.model.GroupMember;
-import org.vaadin.addons.sitekit.model.Privilege;
-import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.model.*;
 import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
@@ -114,7 +110,22 @@ public class UserDao {
      */
     public static final User getUser(final EntityManager entityManager, final String userId) {
         try {
-        return entityManager.getReference(User.class, userId);
+            return entityManager.getReference(User.class, userId);
+        } catch (final EntityNotFoundException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Gets given email password reset.
+     * @param entityManager the entity manager.
+     * @param emailPasswordResetId the email password reset ID
+     * @return the group
+     */
+    public static final EmailPasswordReset getEmailPasswordReset(final EntityManager entityManager,
+                                                   final String emailPasswordResetId) {
+        try {
+            return entityManager.getReference(EmailPasswordReset.class, emailPasswordResetId);
         } catch (final EntityNotFoundException e) {
             return null;
         }

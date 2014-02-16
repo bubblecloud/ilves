@@ -33,6 +33,7 @@ import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.grid.validator.PasswordVerificationValidator;
 import org.vaadin.addons.sitekit.model.*;
+import org.vaadin.addons.sitekit.site.SiteException;
 import org.vaadin.addons.sitekit.util.EmailUtil;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
 import org.vaadin.addons.sitekit.util.StringUtil;
@@ -128,8 +129,15 @@ public final class ForgotPasswordFlowlet extends AbstractFlowlet {
                     emailPasswordReset.setCreated(new Date());
 
                     entityManager.getTransaction().begin();
-                    entityManager.persist(emailPasswordReset);
-                    entityManager.getTransaction().commit();
+                    try {
+                        entityManager.persist(emailPasswordReset);
+                        entityManager.getTransaction().commit();
+                    } catch (final Exception e) {
+                        if (entityManager.getTransaction().isActive()) {
+                            entityManager.getTransaction().rollback();
+                        }
+                        throw new SiteException("Error saving email password reset", e);
+                    }
 
                     final String url = company.getUrl() +
                             "#!reset/" + emailPasswordReset.getEmailPasswordResetId();
@@ -147,7 +155,7 @@ public final class ForgotPasswordFlowlet extends AbstractFlowlet {
 
                     Notification.show(getSite().localize("message-password-reset-email-sent")
                             + getSite().localize("message-your-password-reset-pin-is") + pin,
-                            Notification.Type.HUMANIZED_MESSAGE);
+                            Notification.Type.ERROR_MESSAGE);
 
                     final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
                             .getHttpServletRequest();

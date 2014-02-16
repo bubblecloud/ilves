@@ -82,6 +82,10 @@ public class DefaultContentProvider implements ContentProvider {
         validate.setViewletClass("content", EmailValidationViewlet.class);
         viewDescriptors.add(validate);
 
+        final ViewDescriptor reset = new ViewDescriptor("reset", "Password Reset", DefaultView.class);
+        reset.setViewletClass("content", PasswordResetViewlet.class);
+        viewDescriptors.add(reset);
+
         final NavigationDescriptor navigationDescriptor = new NavigationDescriptor("navigation", null, null,
                 new NavigationVersion(0, "login", "login;customers;users;groups;companies;account", true));
 
