@@ -164,6 +164,10 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
                         + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
 
                 final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
+
+                user.setFailedLoginCount(0);
+                UserDao.updateUser(entityManager, user);
+
                 ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).setUser(user, groups);
                 UI.getCurrent().getNavigator().navigateTo(getSite().getCurrentNavigationVersion().getDefaultPageName());
             } else {
