@@ -102,6 +102,7 @@ public final class CompaniesFlowlet extends AbstractFlowlet {
         table.setColumnCollapsed("modified", true);
         table.setColumnCollapsed("company", true);
         table.setColumnCollapsed("emailPasswordReset", true);
+        table.setColumnCollapsed("maxFailedLoginCount", true);
         table.setColumnCollapsed("salesEmailAddress", true);
         table.setColumnCollapsed("supportEmailAddress", true);
         table.setColumnCollapsed("invoicingEmailAddress", true);

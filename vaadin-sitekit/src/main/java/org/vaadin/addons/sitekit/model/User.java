@@ -74,6 +74,14 @@ public final class User implements Serializable {
     @Column(nullable = false)
     private String phoneNumber;
 
+    /** Failed login count. */
+    @Column(nullable = false)
+    private int failedLoginCount;
+
+    /** Flag reflecting whether user has been locked out. */
+    @Column(nullable = false)
+    private boolean lockedOut;
+
     /** Created time of the task. */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
@@ -222,6 +230,34 @@ public final class User implements Serializable {
      */
     public void setPhoneNumber(final String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * @return the failed login count
+     */
+    public int getFailedLoginCount() {
+        return failedLoginCount;
+    }
+
+    /**
+     * @param failedLoginCount the failed login count to set
+     */
+    public void setFailedLoginCount(final int failedLoginCount) {
+        this.failedLoginCount = failedLoginCount;
+    }
+
+    /**
+     * @return the locked out state
+     */
+    public boolean isLockedOut() {
+        return lockedOut;
+    }
+
+    /**
+     * @param lockedOut the locked out state to set
+     */
+    public void setLockedOut(boolean lockedOut) {
+        this.lockedOut = lockedOut;
     }
 
     /**

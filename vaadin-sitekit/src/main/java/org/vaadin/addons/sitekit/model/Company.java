@@ -93,6 +93,10 @@ public final class Company implements Serializable {
     @Column(nullable = false)
     private boolean emailPasswordReset;
 
+    /** Maximum failed login count. */
+    @Column(nullable = true)
+    private Integer maxFailedLoginCount;
+
     /** Created time of the task. */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
@@ -398,6 +402,20 @@ public final class Company implements Serializable {
      */
     public void setEmailPasswordReset(boolean emailPasswordReset) {
         this.emailPasswordReset = emailPasswordReset;
+    }
+
+    /**
+     * @return the max failed login count
+     */
+    public Integer getMaxFailedLoginCount() {
+        return maxFailedLoginCount;
+    }
+
+    /**
+     * @param maxFailedLoginCount the max failed login count
+     */
+    public void setMaxFailedLoginCount(final Integer maxFailedLoginCount) {
+        this.maxFailedLoginCount = maxFailedLoginCount;
     }
 
     @Override

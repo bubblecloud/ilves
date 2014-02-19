@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.vaadin.data.util.converter.StringToIntegerConverter;
+import com.vaadin.data.validator.IntegerRangeValidator;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
@@ -122,6 +124,8 @@ public final class SiteFields {
         SiteFields.add(Company.class, new FieldDescriptor("invoicingEmailAddress", "Invoicing Email Address", TextField.class, null, 150, null, String.class, "",
                 false, true, true), new EmailValidator("Email address is not valid."));
         SiteFields.add(Company.class, new FieldDescriptor("emailPasswordReset", "Email Password Reset", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
+        SiteFields.add(Company.class, new FieldDescriptor("maxFailedLoginCount", "Max Failed Logins", TextField.class, new StringToIntegerConverter(), 50, null, Integer.class, null,
+                false, true, false).addValidator(new IntegerRangeValidator("Invalid value", 1, 10)));
         SiteFields.add(Company.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
                 true, true));
         SiteFields.add(Company.class, new FieldDescriptor("modified", "Modified", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null,
@@ -170,6 +174,9 @@ public final class SiteFields {
         SiteFields.add(User.class, new FieldDescriptor("emailAddressValidated", "Email Validated", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
         SiteFields.add(User.class, new FieldDescriptor("passwordHash", "Password", PasswordField.class, null, 100, null, String.class, "", false, true, true));
         SiteFields.add(User.class, new FieldDescriptor("phoneNumber", "Phone Number", TextField.class, null, 150, null, String.class, "", false, true, true));
+        SiteFields.add(User.class, new FieldDescriptor("lockedOut", "Locked Out", CheckBox.class, null, 100, null, Boolean.class, false, true, true, true));
+        SiteFields.add(User.class, new FieldDescriptor("failedLoginCount", "Failed Logins", TextField.class, new StringToIntegerConverter(), 50, null, Integer.class, null,
+                true, true, true));
         SiteFields.add(User.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
                 true, true));
         SiteFields.add(User.class, new FieldDescriptor("modified", "Modified", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null,

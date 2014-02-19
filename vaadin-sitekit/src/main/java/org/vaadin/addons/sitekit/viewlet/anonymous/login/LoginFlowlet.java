@@ -139,7 +139,14 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
             final User user = UserDao.getUser(entityManager, company, userEmailAddress);
 
             if (user == null) {
-                LOGGER.warn("User login, not registered email address: " + userEmailAddress
+                LOGGER.warn("User login failed due to not registered email address: " + userEmailAddress
+                        + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
+                Notification.show(getSite().localize("message-login-failed"), Notification.TYPE_WARNING_MESSAGE);
+                return;
+            }
+
+            if (user.isLockedOut()) {
+                LOGGER.warn("User login failed due to user being locked out: " + userEmailAddress
                         + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
                 Notification.show(getSite().localize("message-login-failed"), Notification.TYPE_WARNING_MESSAGE);
                 return;
@@ -162,6 +169,13 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
             } else {
                 LOGGER.warn("User login, password mismatch: " + user.getEmailAddress()
                         + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
+                user.setFailedLoginCount(user.getFailedLoginCount() + 1);
+                if (user.getFailedLoginCount() > company.getMaxFailedLoginCount()) {
+                    user.setLockedOut(true);
+                    LOGGER.warn("User locked out due to too many failed login attempts: " + user.getEmailAddress()
+                            + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
+                }
+                UserDao.updateUser(entityManager, user);
                 Notification.show(getSite().localize("message-login-failed"), Notification.TYPE_WARNING_MESSAGE);
             }
         } catch (final Exception e) {

@@ -20,5 +20,22 @@
         </createTable>
         <addPrimaryKey columnNames="emailpasswordresetid" constraintName="emailpasswordreset_pkey" tableName="emailpasswordreset"/>
     </changeSet>
+    <changeSet author="tlaukkan" id="b2624400-9973-11e3-a5e2-0800200c9a66">
+        <addColumn tableName="user_">
+            <column name="lockedout" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="user_">
+            <column name="failedlogincount" type="INT4" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="company">
+            <column name="maxfailedlogincount" type="INT4" defaultValueNumeric="0">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
 
