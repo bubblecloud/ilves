@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.viewlet.administrator.company.CompanyFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupFlowViewlet;
@@ -83,10 +84,10 @@ public class DefaultContentProvider implements ContentProvider {
         validate.setViewletClass("content", EmailValidationViewlet.class);
         viewDescriptors.add(validate);
 
-        final ViewDescriptor link = new ViewDescriptor("openidlink", "OpenID Link", DefaultView.class);
-        link.setViewerRoles("user", "administrator");
-        link.setViewletClass("content", OpenIdLinkViewlet.class);
-        viewDescriptors.add(link);
+        final ViewDescriptor openidlink = new ViewDescriptor("openidlink", "OpenID Link", DefaultView.class);
+        openidlink.setViewerRoles("user", "administrator");
+        openidlink.setViewletClass("content", OpenIdLinkViewlet.class);
+        viewDescriptors.add(openidlink);
 
         final ViewDescriptor openidlogin = new ViewDescriptor("openidlogin", "OpenID Login", DefaultView.class);
         openidlogin.setViewerRoles("anonymous");

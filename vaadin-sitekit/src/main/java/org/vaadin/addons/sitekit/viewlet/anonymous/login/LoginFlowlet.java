@@ -110,25 +110,27 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
             layout.addComponent(forgotPasswordButton);
         }
 
-        final Button googleOpenIdButton = new Button("");
-        googleOpenIdButton.setIcon(getSite().getIcon("openid/google_32"));
-        googleOpenIdButton.addClickListener(new ClickListener() {
-            @Override
-            public void buttonClick(ClickEvent event) {
-                try {
-                    final String openIdIdentifier = "https://www.google.com/accounts/o8/id";
-                    final Company company = getSite().getSiteContext().getObject(Company.class);
-                    final String authenticationUrl = OpenIdUtil.prepareAuthenticationUrl(openIdIdentifier,
-                            company.getUrl(), "openidlogin");
-                    getUI().getPage().setLocation(authenticationUrl);
-                } catch (final Exception e) {
-                    LOGGER.error("Error in open ID discovery.", e);
-                    Notification.show("Error in open ID discovery.", Notification.Type.ERROR_MESSAGE);
-                }
+        if (company.isOpenIdLogin()) {
+            final Button googleOpenIdButton = new Button("");
+            googleOpenIdButton.setIcon(getSite().getIcon("openid/google_32"));
+            googleOpenIdButton.addClickListener(new ClickListener() {
+                @Override
+                public void buttonClick(ClickEvent event) {
+                    try {
+                        final String openIdIdentifier = "https://www.google.com/accounts/o8/id";
+                        final Company company = getSite().getSiteContext().getObject(Company.class);
+                        final String authenticationUrl = OpenIdUtil.prepareAuthenticationUrl(openIdIdentifier,
+                                company.getUrl(), "openidlogin");
+                        getUI().getPage().setLocation(authenticationUrl);
+                    } catch (final Exception e) {
+                        LOGGER.error("Error in open ID discovery.", e);
+                        Notification.show("Error in open ID discovery.", Notification.Type.ERROR_MESSAGE);
+                    }
 
-            }
-        });
-        layout.addComponent(googleOpenIdButton);
+                }
+            });
+            layout.addComponent(googleOpenIdButton);
+        }
 
         setViewContent(layout);
 

@@ -44,5 +44,12 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet author="tlaukkan" id="c869d4b0-9bbd-11e3-a5e2-0800200c9a66">
+        <addColumn tableName="company">
+            <column name="openidlogin" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
 

@@ -97,6 +97,10 @@ public final class Company implements Serializable {
     @Column(nullable = true)
     private Integer maxFailedLoginCount;
 
+    /** Flag for enabling open ID login. */
+    @Column(nullable = false)
+    private boolean openIdLogin;
+
     /** Created time of the task. */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
@@ -391,14 +395,14 @@ public final class Company implements Serializable {
     }
 
     /**
-     * @return true if email password reset is enabled.
+     * @return true if email password reset is enabled
      */
     public boolean isEmailPasswordReset() {
         return emailPasswordReset;
     }
 
     /**
-     * @param emailPasswordReset whether email password reset is enabled
+     * @param emailPasswordReset true if email password reset is to be enabled
      */
     public void setEmailPasswordReset(boolean emailPasswordReset) {
         this.emailPasswordReset = emailPasswordReset;
@@ -416,6 +420,20 @@ public final class Company implements Serializable {
      */
     public void setMaxFailedLoginCount(final Integer maxFailedLoginCount) {
         this.maxFailedLoginCount = maxFailedLoginCount;
+    }
+
+    /**
+     * @return true if open ID login is enabled
+     */
+    public boolean isOpenIdLogin() {
+        return openIdLogin;
+    }
+
+    /**
+     * @param openIdLogin true if open ID login is to be enabled
+     */
+    public void setOpenIdLogin(boolean openIdLogin) {
+        this.openIdLogin = openIdLogin;
     }
 
     @Override
