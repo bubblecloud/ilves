@@ -1,10 +1,11 @@
 package org.vaadin.addons.sitekit.util;
 
+import com.vaadin.event.MouseEvents;
+import com.vaadin.server.Sizeable;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.BaseTheme;
 import org.apache.log4j.Logger;
 import org.openid4java.association.AssociationException;
 import org.openid4java.consumer.ConsumerException;
@@ -20,6 +21,7 @@ import org.vaadin.addons.sitekit.site.AbstractSiteUI;
 import org.vaadin.addons.sitekit.site.Site;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -30,14 +32,34 @@ import java.util.TreeMap;
 public class OpenIdUtil {
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(OpenIdUtil.class);
+    private static Map<String,String> urlIconMap;
 
-    public static Button getLoginButton(final String openIdIdentifier, String icon, final String returnViewName) {
-        final Button googleOpenIdButton = new Button("");
+    /**
+     * Gets open ID provider discovery URL and icon mapping. This map can be modified
+     * to add or remove OpenId providers.
+     *
+     * @return map of open ID provider discovery URLs and icons.
+     */
+    public synchronized static Map<String, String> getOpenIdProviderUrlIconMap() {
+        if (urlIconMap == null) {
+            urlIconMap = Collections.synchronizedMap(new TreeMap<String, String>());
+            urlIconMap.put("https://www.google.com/accounts/o8/id", "openid/google_32");
+            urlIconMap.put("https://me.yahoo.com", "openid/yahoo_32");
+            urlIconMap.put("https://openid.aol.com/username", "openid/aol_32");
+        }
+        return urlIconMap;
+    }
+
+    public static Component getLoginButton(final String openIdIdentifier, String icon, final String returnViewName) {
+        //final Button googleOpenIdButton = new Button("");
         final Site site = ((AbstractSiteUI) UI.getCurrent()).getSite();
-        googleOpenIdButton.setIcon(site.getIcon(icon));
-        googleOpenIdButton.addClickListener(new Button.ClickListener() {
+        //googleOpenIdButton.setIcon(site.getIcon(icon));
+        //googleOpenIdButton.setWidth(16, Sizeable.Unit.PIXELS);
+        final Embedded embedded = new Embedded(null, site.getIcon(icon));
+        embedded.setStyleName("image-button");
+        embedded.addClickListener(new MouseEvents.ClickListener() {
             @Override
-            public void buttonClick(Button.ClickEvent event) {
+            public void click(MouseEvents.ClickEvent event) {
                 try {
                     final Company company = site.getSiteContext().getObject(Company.class);
                     final String authenticationUrl = OpenIdUtil.prepareAuthenticationUrl(openIdIdentifier,
@@ -50,7 +72,7 @@ public class OpenIdUtil {
 
             }
         });
-        return googleOpenIdButton;
+        return embedded;
     }
 
     /**
@@ -114,13 +136,4 @@ public class OpenIdUtil {
                 openidResp, discovered);
     }
 
-    /**
-     * Gets open ID provider discovery URL and icon mapping.
-     * @return map of open ID provider discovery URLs and icons.
-     */
-    public static Map<String, String> getOpenIdProviderUrlIconMap() {
-        final Map<String, String> urlIconMap = new TreeMap<String, String>();
-        urlIconMap.put("https://www.google.com/accounts/o8/id", "openid/google_32");
-        return urlIconMap;
-    }
 }

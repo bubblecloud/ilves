@@ -20,31 +20,29 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Embedded;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.themes.Reindeer;
 import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.FilterDescriptor;
 import org.vaadin.addons.sitekit.grid.Grid;
+import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Customer;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
+import org.vaadin.addons.sitekit.util.OpenIdUtil;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowlet;
 import org.vaadin.addons.sitekit.site.SiteFields;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Customer list flow.
@@ -92,7 +90,14 @@ public final class AccountFlowlet extends AbstractFlowlet {
                     fieldDefinition.isReadOnly(), fieldDefinition.isSortable());
         }
 
-        final GridLayout gridLayout = new GridLayout(1, 5);
+        final GridLayout gridLayout = new GridLayout(1, 6);
+        gridLayout.setRowExpandRatio(0, 0.0f);
+        gridLayout.setRowExpandRatio(1, 0.0f);
+        gridLayout.setRowExpandRatio(2, 0.0f);
+        gridLayout.setRowExpandRatio(3, 0.0f);
+        gridLayout.setRowExpandRatio(4, 0.0f);
+        gridLayout.setRowExpandRatio(5, 1.0f);
+
         gridLayout.setSizeFull();
         gridLayout.setMargin(false);
         gridLayout.setSpacing(true);
@@ -100,7 +105,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
         setViewContent(gridLayout);
 
         final HorizontalLayout userAccountTitle = new HorizontalLayout();
-        userAccountTitle.setMargin(new MarginInfo(true, false, true, false));
+        userAccountTitle.setMargin(new MarginInfo(false, false, false, false));
         userAccountTitle.setSpacing(true);
         final Embedded userAccountTitleIcon = new Embedded(null, getSite().getIcon("view-icon-user"));
         userAccountTitleIcon.setWidth(32, UNITS_PIXELS);
@@ -111,7 +116,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
         gridLayout.addComponent(userAccountTitle, 0, 0);
 
         final HorizontalLayout titleLayout = new HorizontalLayout();
-        titleLayout.setMargin(new MarginInfo(true, false, true, false));
+        titleLayout.setMargin(new MarginInfo(true, false, false, false));
         titleLayout.setSpacing(true);
         final Embedded titleIcon = new Embedded(null, getSite().getIcon("view-icon-customer"));
         titleIcon.setWidth(32, UNITS_PIXELS);
@@ -119,9 +124,10 @@ public final class AccountFlowlet extends AbstractFlowlet {
         titleLayout.addComponent(titleIcon);
         final Label titleLabel = new Label("<h2>Customer Accounts</h2>", Label.CONTENT_XHTML);
         titleLayout.addComponent(titleLabel);
-        gridLayout.addComponent(titleLayout, 0, 2);
+        gridLayout.addComponent(titleLayout, 0, 3);
 
         final Table table = new Table();
+        table.setPageLength(10);
         entityGrid = new Grid(table, entityContainer);
         entityGrid.setFields(fieldDefinitions);
         entityGrid.setFilters(filterDefinitions);
@@ -130,12 +136,11 @@ public final class AccountFlowlet extends AbstractFlowlet {
         table.setColumnCollapsed("created", true);
         table.setColumnCollapsed("modified", true);
         table.setColumnCollapsed("company", true);
-        gridLayout.addComponent(entityGrid, 0, 4);
+        gridLayout.addComponent(entityGrid, 0, 5);
 
         final Button editUserButton = new Button("Edit User Account");
         editUserButton.setIcon(getSite().getIcon("button-icon-edit"));
-        editUserButton.setWidth(200, UNITS_PIXELS);
-        gridLayout.addComponent(editUserButton, 0, 1);
+        gridLayout.addComponent(editUserButton, 0, 2);
         editUserButton.addListener(new ClickListener() {
             /** Serial version UID. */
             private static final long serialVersionUID = 1L;
@@ -150,12 +155,28 @@ public final class AccountFlowlet extends AbstractFlowlet {
             }
         });
 
+        final Company company = getSite().getSiteContext().getObject(Company.class);
+        if (company.isOpenIdLogin()) {
+            final Panel openIdPanel = new Panel();
+            openIdPanel.setStyleName(Reindeer.PANEL_LIGHT);
+            openIdPanel.setCaption("Choose OpenID Provider:");
+            gridLayout.addComponent(openIdPanel, 0, 1);
+            final HorizontalLayout openIdLayout = new HorizontalLayout();
+            openIdPanel.setContent(openIdLayout);
+            openIdLayout.setMargin(new MarginInfo(false, false, true, false));
+            openIdLayout.setSpacing(true);
+            final String returnViewName = "openidlink";
+            final Map<String, String> urlIconMap = OpenIdUtil.getOpenIdProviderUrlIconMap();
+            for (final String url : urlIconMap.keySet()) {
+                openIdLayout.addComponent(OpenIdUtil.getLoginButton(url,urlIconMap.get(url), returnViewName));
+            }
+        }
 
         final Button editContactDetailsButton = new Button("Edit Customer Account");
         editContactDetailsButton.setEnabled(false);
         editContactDetailsButton.setIcon(getSite().getIcon("button-icon-edit"));
         editContactDetailsButton.setWidth(200, UNITS_PIXELS);
-        gridLayout.addComponent(editContactDetailsButton, 0, 3);
+        gridLayout.addComponent(editContactDetailsButton, 0, 4);
 
         editContactDetailsButton.addListener(new ClickListener() {
             /** Serial version UID. */

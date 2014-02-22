@@ -88,3 +88,18 @@ text-decoration: none;
 text-align: left;
 }
 
+.image-button {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    padding: 4px 4px 4px 4px;
+    background-image: url('button/img/image-button.png');
+}
+
+.image-button:focus {
+    background-image: url('button/img/image-button-focused.png');
+}
+
+.image-button:active {
+    background-image: url('button/img/image-button-pressed.png');
+}

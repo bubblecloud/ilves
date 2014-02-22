@@ -154,14 +154,6 @@ public final class UserAccountFlowlet extends AbstractFlowlet implements Validat
             }
         });
 
-        final Company company = getSite().getSiteContext().getObject(Company.class);
-        if (company.isOpenIdLogin()) {
-            final String returnViewName = "openidlink";
-            final Map<String, String> urlIconMap = OpenIdUtil.getOpenIdProviderUrlIconMap();
-            for (final String url : urlIconMap.keySet()) {
-                editorButtonLayout.addComponent(OpenIdUtil.getLoginButton(url,urlIconMap.get(url), returnViewName));
-            }
-        }
     }
 
     /**

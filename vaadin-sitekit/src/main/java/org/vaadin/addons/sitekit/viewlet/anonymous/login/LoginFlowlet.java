@@ -24,15 +24,16 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
+import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.BaseTheme;
+import com.vaadin.ui.themes.Reindeer;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
 import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
 import org.vaadin.addons.sitekit.site.Site;
 import org.vaadin.addons.sitekit.util.OpenIdUtil;
 import org.vaadin.addons.sitekit.util.StringUtil;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import org.apache.log4j.Logger;
 
 import org.vaadin.addons.sitekit.dao.UserDao;
@@ -40,11 +41,8 @@ import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
 
-import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.LoginForm;
 import com.vaadin.ui.LoginForm.LoginEvent;
 
 /**
@@ -73,7 +71,23 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
 
         final VerticalLayout layout = new VerticalLayout();
         layout.setSpacing(true);
-        layout.setWidth(200, AbstractComponent.UNITS_PIXELS);
+
+        final Company company = getSite().getSiteContext().getObject(Company.class);
+        if (company.isOpenIdLogin()) {
+            final Panel openIdPanel = new Panel();
+            openIdPanel.setStyleName(Reindeer.PANEL_LIGHT);
+            openIdPanel.setCaption("OpenID Login");
+            layout.addComponent(openIdPanel);
+            final HorizontalLayout openIdLayout = new HorizontalLayout();
+            openIdPanel.setContent(openIdLayout);
+            openIdLayout.setMargin(new MarginInfo(false, false, true, false));
+            openIdLayout.setSpacing(true);
+            final String returnViewName = "openidlogin";
+            final Map<String, String> urlIconMap = OpenIdUtil.getOpenIdProviderUrlIconMap();
+            for (final String url : urlIconMap.keySet()) {
+                openIdLayout.addComponent(OpenIdUtil.getLoginButton(url,urlIconMap.get(url), returnViewName));
+            }
+        }
 
         loginForm = new LoginForm() {
             @Override
@@ -100,8 +114,6 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
         });
         layout.addComponent(registerButton);
 
-        final Company company = getSite().getSiteContext().getObject(Company.class);
-
         if (company.isEmailPasswordReset()) {
             final Button forgotPasswordButton = new Button(getSite().localize("button-forgot-password") + " >>");
             forgotPasswordButton.addListener(new ClickListener() {
@@ -111,14 +123,6 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
                 }
             });
             layout.addComponent(forgotPasswordButton);
-        }
-
-        if (company.isOpenIdLogin()) {
-            final String returnViewName = "openidlogin";
-            final Map<String, String> urlIconMap = OpenIdUtil.getOpenIdProviderUrlIconMap();
-            for (final String url : urlIconMap.keySet()) {
-                layout.addComponent(OpenIdUtil.getLoginButton(url,urlIconMap.get(url), returnViewName));
-            }
         }
 
         setViewContent(layout);
