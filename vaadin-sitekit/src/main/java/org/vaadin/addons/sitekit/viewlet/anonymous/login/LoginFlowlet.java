@@ -17,6 +17,7 @@ package org.vaadin.addons.sitekit.viewlet.anonymous.login;
 
 import java.security.MessageDigest;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
@@ -114,9 +115,10 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
 
         if (company.isOpenIdLogin()) {
             final String returnViewName = "openidlogin";
-            layout.addComponent(OpenIdUtil.getLoginButton(
-                    "https://www.google.com/accounts/o8/id",
-                    "openid/google_32", returnViewName));
+            final Map<String, String> urlIconMap = OpenIdUtil.getOpenIdProviderUrlIconMap();
+            for (final String url : urlIconMap.keySet()) {
+                layout.addComponent(OpenIdUtil.getLoginButton(url,urlIconMap.get(url), returnViewName));
+            }
         }
 
         setViewContent(layout);

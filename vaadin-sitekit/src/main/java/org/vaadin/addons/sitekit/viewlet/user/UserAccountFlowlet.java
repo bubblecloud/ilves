@@ -33,6 +33,7 @@ import javax.persistence.EntityManager;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 /**
  * User edit Flowlet.
@@ -156,9 +157,10 @@ public final class UserAccountFlowlet extends AbstractFlowlet implements Validat
         final Company company = getSite().getSiteContext().getObject(Company.class);
         if (company.isOpenIdLogin()) {
             final String returnViewName = "openidlink";
-            editorButtonLayout.addComponent(OpenIdUtil.getLoginButton(
-                    "https://www.google.com/accounts/o8/id",
-                    "openid/google_32", returnViewName));
+            final Map<String, String> urlIconMap = OpenIdUtil.getOpenIdProviderUrlIconMap();
+            for (final String url : urlIconMap.keySet()) {
+                editorButtonLayout.addComponent(OpenIdUtil.getLoginButton(url,urlIconMap.get(url), returnViewName));
+            }
         }
     }
 

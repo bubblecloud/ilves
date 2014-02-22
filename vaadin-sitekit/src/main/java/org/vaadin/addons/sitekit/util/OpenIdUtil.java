@@ -21,6 +21,8 @@ import org.vaadin.addons.sitekit.site.Site;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Utility class for OpenID authentication.
@@ -91,6 +93,8 @@ public class OpenIdUtil {
         final ConsumerManager consumerManager = UI.getCurrent().getSession().getAttribute(ConsumerManager.class);
         final DiscoveryInformation discovered = UI.getCurrent().getSession().getAttribute(
                 DiscoveryInformation.class);
+        UI.getCurrent().getSession().setAttribute(ConsumerManager.class, null);
+        UI.getCurrent().getSession().setAttribute(DiscoveryInformation.class, null);
 
         final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
                 .getHttpServletRequest();
@@ -110,4 +114,13 @@ public class OpenIdUtil {
                 openidResp, discovered);
     }
 
+    /**
+     * Gets open ID provider discovery URL and icon mapping.
+     * @return map of open ID provider discovery URLs and icons.
+     */
+    public static Map<String, String> getOpenIdProviderUrlIconMap() {
+        final Map<String, String> urlIconMap = new TreeMap<String, String>();
+        urlIconMap.put("https://www.google.com/accounts/o8/id", "openid/google_32");
+        return urlIconMap;
+    }
 }
