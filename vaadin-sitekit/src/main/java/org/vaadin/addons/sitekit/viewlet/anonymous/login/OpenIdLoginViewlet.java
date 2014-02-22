@@ -84,6 +84,7 @@ public final class OpenIdLoginViewlet extends AbstractViewlet {
                 ((AbstractSiteUI) UI.getCurrent()).redirectTo(company.getUrl(), "login",
                         getSite().localize("message-login-failed"),
                         Notification.Type.WARNING_MESSAGE);
+                return;
             }
 
             if (user.isLockedOut()) {
@@ -92,6 +93,7 @@ public final class OpenIdLoginViewlet extends AbstractViewlet {
                 ((AbstractSiteUI) UI.getCurrent()).redirectTo(company.getUrl(), "login",
                         getSite().localize("message-login-failed"),
                         Notification.Type.WARNING_MESSAGE);
+                return;
             }
 
             LOGGER.info("User login: " + user.getEmailAddress()
@@ -102,7 +104,6 @@ public final class OpenIdLoginViewlet extends AbstractViewlet {
             UserDao.updateUser(entityManager, user);
 
             ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).setUser(user, groups);
-            UI.getCurrent().getNavigator().navigateTo(getSite().getCurrentNavigationVersion().getDefaultPageName());
 
             ((AbstractSiteUI) UI.getCurrent()).redirectTo(company.getUrl(),
                     getSite().getCurrentNavigationVersion().getDefaultPageName(),

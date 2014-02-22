@@ -178,7 +178,7 @@ public final class SiteFields {
         SiteFields.add(User.class, new FieldDescriptor("lockedOut", "Locked Out", CheckBox.class, null, 100, null, Boolean.class, false, true, true, true));
         SiteFields.add(User.class, new FieldDescriptor("failedLoginCount", "Failed Logins", TextField.class, new StringToIntegerConverter(), 50, null, Integer.class, null,
                 true, true, true));
-        SiteFields.add(User.class, new FieldDescriptor("openIdIdentifier", "Open ID Identifier", TextField.class, null, -1, null, String.class, "", false, true, true), new EmailValidator("Email address is not valid."));
+        SiteFields.add(User.class, new FieldDescriptor("openIdIdentifier", "Open ID Identifier", TextField.class, null, -1, null, String.class, "", false, true, false), new EmailValidator("Email address is not valid."));
         SiteFields.add(User.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
                 true, true));
         SiteFields.add(User.class, new FieldDescriptor("modified", "Modified", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null,

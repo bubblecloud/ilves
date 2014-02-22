@@ -155,24 +155,10 @@ public final class UserAccountFlowlet extends AbstractFlowlet implements Validat
 
         final Company company = getSite().getSiteContext().getObject(Company.class);
         if (company.isOpenIdLogin()) {
-            final Button googleOpenIdButton = new Button("");
-            googleOpenIdButton.setIcon(getSite().getIcon("openid/google_32"));
-            googleOpenIdButton.addClickListener(new ClickListener() {
-                @Override
-                public void buttonClick(ClickEvent event) {
-                    try {
-                        final String openIdIdentifier = "https://www.google.com/accounts/o8/id";
-                        final String authenticationUrl = OpenIdUtil.prepareAuthenticationUrl(openIdIdentifier,
-                                company.getUrl(), "openidlink");
-                        getUI().getPage().setLocation(authenticationUrl);
-                    } catch (final Exception e) {
-                        LOGGER.error("Error in open ID discovery.", e);
-                        Notification.show("Error in open ID discovery.", Notification.Type.ERROR_MESSAGE);
-                    }
-
-                }
-            });
-            editorButtonLayout.addComponent(googleOpenIdButton);
+            final String returnViewName = "openidlink";
+            editorButtonLayout.addComponent(OpenIdUtil.getLoginButton(
+                    "https://www.google.com/accounts/o8/id",
+                    "openid/google_32", returnViewName));
         }
     }
 
