@@ -25,6 +25,7 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
+import org.vaadin.addons.sitekit.util.OpenIdUtil;
 import org.vaadin.addons.sitekit.util.StringUtil;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
@@ -108,6 +109,26 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
             });
             layout.addComponent(forgotPasswordButton);
         }
+
+        final Button googleOpenIdButton = new Button("");
+        googleOpenIdButton.setIcon(getSite().getIcon("openid/google_32"));
+        googleOpenIdButton.addClickListener(new ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                try {
+                    final String openIdIdentifier = "https://www.google.com/accounts/o8/id";
+                    final Company company = getSite().getSiteContext().getObject(Company.class);
+                    final String authenticationUrl = OpenIdUtil.prepareAuthenticationUrl(openIdIdentifier,
+                            company.getUrl(), "openidlogin");
+                    getUI().getPage().setLocation(authenticationUrl);
+                } catch (final Exception e) {
+                    LOGGER.error("Error in open ID discovery.", e);
+                    Notification.show("Error in open ID discovery.", Notification.Type.ERROR_MESSAGE);
+                }
+
+            }
+        });
+        layout.addComponent(googleOpenIdButton);
 
         setViewContent(layout);
 

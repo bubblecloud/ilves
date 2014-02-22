@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import com.vaadin.ui.Notification;
 import org.vaadin.addons.sitekit.dao.CompanyDao;
 import org.vaadin.addons.sitekit.model.Company;
 import com.vaadin.annotations.Theme;
@@ -25,6 +26,7 @@ import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.util.Map;
 
 /**
  * BareSite UI.
@@ -140,4 +142,5 @@ public final class DefaultSiteUI extends AbstractSiteUI {
     public static LocalizationProvider getLocalizationProvider() {
         return localizationProvider;
     }
+
 }

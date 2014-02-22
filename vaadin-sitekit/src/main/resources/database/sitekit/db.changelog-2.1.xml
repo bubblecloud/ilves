@@ -37,5 +37,12 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet author="tlaukkan" id="20618f20-9b8f-11e3-a5e2-0800200c9a66">
+        <addColumn tableName="user_">
+            <column name="openididentifier" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
 

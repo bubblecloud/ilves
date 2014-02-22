@@ -15,7 +15,6 @@
  */
 package org.vaadin.addons.sitekit.site;
 
-import org.vaadin.addons.sitekit.site.*;
 import org.vaadin.addons.sitekit.viewlet.administrator.company.CompanyFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupFlowViewlet;
@@ -23,6 +22,8 @@ import org.vaadin.addons.sitekit.viewlet.administrator.user.UserFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.*;
 import org.vaadin.addons.sitekit.viewlet.anonymous.login.LoginFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.user.AccountFlowViewlet;
+import org.vaadin.addons.sitekit.viewlet.user.OpenIdLinkViewlet;
+import org.vaadin.addons.sitekit.viewlet.anonymous.login.OpenIdLoginViewlet;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,6 +82,17 @@ public class DefaultContentProvider implements ContentProvider {
         final ViewDescriptor validate = new ViewDescriptor("validate", "Email Validation", DefaultView.class);
         validate.setViewletClass("content", EmailValidationViewlet.class);
         viewDescriptors.add(validate);
+
+        final ViewDescriptor link = new ViewDescriptor("openidlink", "OpenID Link", DefaultView.class);
+        link.setViewerRoles("user", "administrator");
+        link.setViewletClass("content", OpenIdLinkViewlet.class);
+        viewDescriptors.add(link);
+
+        final ViewDescriptor openidlogin = new ViewDescriptor("openidlogin", "OpenID Login", DefaultView.class);
+        openidlogin.setViewerRoles("anonymous");
+        openidlogin.setViewletClass("content", OpenIdLoginViewlet.class);
+        viewDescriptors.add(openidlogin);
+
 
         final ViewDescriptor reset = new ViewDescriptor("reset", "Password Reset", DefaultView.class);
         reset.setViewletClass("content", PasswordResetViewlet.class);

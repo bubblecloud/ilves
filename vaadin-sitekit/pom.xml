@@ -89,18 +89,6 @@
                     </archive>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <version>3.0.8</version>
-                <configuration>
-                    <changeLogFile>src/main/resources/database/sitekit/db.changelog-master.xml</changeLogFile>
-                    <driver>org.postgresql.Driver</driver>
-                    <url>jdbc:postgresql://127.0.0.1:5432/site</url>
-                    <username>site</username>
-                    <password>password</password>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -182,6 +170,11 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>3.0.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openid4java</groupId>
+            <artifactId>openid4java</artifactId>
+            <version>0.9.8</version>
         </dependency>
     </dependencies>
 

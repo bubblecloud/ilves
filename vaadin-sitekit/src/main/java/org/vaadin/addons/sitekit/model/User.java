@@ -82,6 +82,10 @@ public final class User implements Serializable {
     @Column(nullable = false)
     private boolean lockedOut;
 
+    /** Open ID identifier. */
+    @Column(nullable = true)
+    private String openIdIdentifier;
+
     /** Created time of the task. */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
@@ -286,6 +290,20 @@ public final class User implements Serializable {
      */
     public void setModified(final Date modified) {
         this.modified = modified;
+    }
+
+    /**
+     * @return the OpenID identifier
+     */
+    public String getOpenIdIdentifier() {
+        return openIdIdentifier;
+    }
+
+    /**
+     * @param openIdIdentifier the OpenID identifier to set
+     */
+    public void setOpenIdIdentifier(final String openIdIdentifier) {
+        this.openIdIdentifier = openIdIdentifier;
     }
 
     @Override

@@ -16,16 +16,17 @@
 package org.vaadin.addons.sitekit.viewlet.user;
 
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
+import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
+import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.SiteFields;
+import org.vaadin.addons.sitekit.util.OpenIdUtil;
 import org.vaadin.addons.sitekit.util.StringUtil;
 
 import javax.persistence.EntityManager;
@@ -39,6 +40,9 @@ import java.security.NoSuchAlgorithmException;
  * @author Tommi S.E. Laukkanen
  */
 public final class UserAccountFlowlet extends AbstractFlowlet implements ValidatingEditorStateListener {
+
+    /** The logger. */
+    private static final Logger LOGGER = Logger.getLogger(UserAccountFlowlet.class);
 
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
@@ -149,6 +153,25 @@ public final class UserAccountFlowlet extends AbstractFlowlet implements Validat
             }
         });
 
+        final Button googleOpenIdButton = new Button("");
+        googleOpenIdButton.setIcon(getSite().getIcon("openid/google_32"));
+        googleOpenIdButton.addClickListener(new ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                try {
+                    final String openIdIdentifier = "https://www.google.com/accounts/o8/id";
+                    final Company company = getSite().getSiteContext().getObject(Company.class);
+                    final String authenticationUrl = OpenIdUtil.prepareAuthenticationUrl(openIdIdentifier,
+                            company.getUrl(), "openidlink");
+                    getUI().getPage().setLocation(authenticationUrl);
+                } catch (final Exception e) {
+                    LOGGER.error("Error in open ID discovery.", e);
+                    Notification.show("Error in open ID discovery.", Notification.Type.ERROR_MESSAGE);
+                }
+
+            }
+        });
+        editorButtonLayout.addComponent(googleOpenIdButton);
     }
 
     /**

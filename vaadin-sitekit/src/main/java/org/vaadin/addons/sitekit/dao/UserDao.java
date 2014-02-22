@@ -173,7 +173,7 @@ public class UserDao {
      * @param entityManager the entity manager.
      * @param owner the owning company
      * @param emailAddress the email address
-     * @return the group
+     * @return the user
      */
     public static final User getUser(final EntityManager entityManager, final Company owner, final String emailAddress) {
         final TypedQuery<User> query = entityManager.createQuery("select e from User as e where e.owner=:owner and e.emailAddress=:emailAddress",
@@ -187,6 +187,28 @@ public class UserDao {
             return null;
         } else {
             throw new RuntimeException("Multiple users with same owner company and email address in database. Constraint is missing.");
+        }
+    }
+
+    /**
+     * Gets given user.
+     * @param entityManager the entity manager.
+     * @param owner the owning company
+     * @param openIdIdentifier the user open ID identifier
+     * @return the user
+     */
+    public static final User getUserByOpenIdIdentifier(final EntityManager entityManager, final Company owner, final String openIdIdentifier) {
+        final TypedQuery<User> query = entityManager.createQuery("select e from User as e where e.owner=:owner and e.openIdIdentifier=:openIdIdentifier",
+                User.class);
+        query.setParameter("owner", owner);
+        query.setParameter("openIdIdentifier", openIdIdentifier);
+        final List<User> users = query.getResultList();
+        if (users.size() == 1) {
+            return users.get(0);
+        } else if (users.size() == 0) {
+            return null;
+        } else {
+            throw new RuntimeException("Multiple users with same owner company and open ID identifier in database. Constraint is missing.");
         }
     }
 

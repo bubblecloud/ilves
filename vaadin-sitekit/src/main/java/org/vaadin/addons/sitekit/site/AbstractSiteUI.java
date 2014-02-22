@@ -17,7 +17,13 @@ package org.vaadin.addons.sitekit.site;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinServletRequest;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
+import org.vaadin.addons.sitekit.model.Company;
+
+import java.util.Map;
 
 /**
  * Abstract base class for UI which need to track page requests
@@ -35,11 +41,25 @@ public abstract class AbstractSiteUI extends UI {
 
     @Override
     protected final void init(final VaadinRequest request) {
-        navigator = new Navigator(this, this);
+        final VaadinServletRequest servletRequest = (VaadinServletRequest) VaadinService.getCurrentRequest();
+        final StringBuffer urlBuilder = servletRequest.getHttpServletRequest().getRequestURL();
+        final String queryString = servletRequest.getHttpServletRequest().getQueryString();
+        if (queryString != null) {
+            urlBuilder.append('?');
+            urlBuilder.append(queryString);
+        }
+
+        navigator = new SiteNavigator(this, this);
         site = constructSite(request);
         navigator.addViewChangeListener(site);
         navigator.addProvider(site);
         site.initialize();
+
+        // Show redirect notification
+        if (getSession().getAttribute("redirectNotification") != null) {
+            Notification.show((String) getSession().getAttribute("redirectNotification"),
+                    (Notification.Type) getSession().getAttribute("redirectNotificationType"));
+        }
     }
 
     /**
@@ -59,4 +79,19 @@ public abstract class AbstractSiteUI extends UI {
      * @return the constructed site
      */
     protected abstract Site constructSite(final VaadinRequest request);
+
+    /**
+     * Redirects user to given view and shows notification.
+     *
+     * @param siteUrl the site URL
+     * @param viewName the view name
+     * @param notification the notification message
+     * @param notificationType the notification type
+     */
+    public void redirectTo(final String siteUrl,
+                           final String viewName, final String notification, final Notification.Type notificationType) {
+        getUI().getPage().setLocation(siteUrl + "#!" + viewName);
+        getSession().setAttribute("redirectNotification", notification);
+        getSession().setAttribute("redirectNotificationType", notificationType);
+    }
 }
