@@ -65,6 +65,17 @@ public final class GroupFlowlet extends AbstractFlowlet implements ValidatingEdi
     private HorizontalLayout childListButtonLayout;
     /** The user element grid. */
     private Grid childGrid;
+    /** If group details are in read only mode. */
+    private final boolean detailsReadonly;
+
+    /**
+     * Constructor which sets read only statuses.
+     *
+     * @param detailsReadonly if group details should be read only.
+     */
+    public GroupFlowlet(boolean detailsReadonly) {
+        this.detailsReadonly = detailsReadonly;
+    }
 
     @Override
     public String getFlowletKey() {
@@ -95,6 +106,7 @@ public final class GroupFlowlet extends AbstractFlowlet implements ValidatingEdi
         groupEditor = new ValidatingEditor(SiteFields.getFieldDescriptors(Group.class));
         groupEditor.setCaption("Group");
         groupEditor.addListener((ValidatingEditorStateListener) this);
+        groupEditor.setReadOnly(detailsReadonly);
         layout.addComponent(groupEditor, 0, 1);
 
         final List<FieldDescriptor> childFieldDescriptors = SiteFields.getFieldDescriptors(GroupMember.class);

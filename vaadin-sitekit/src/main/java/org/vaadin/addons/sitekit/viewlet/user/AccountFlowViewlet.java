@@ -19,6 +19,8 @@ import org.vaadin.addons.sitekit.flow.AbstractFlowViewlet;
 import org.vaadin.addons.sitekit.flow.Flowlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomersFlowlet;
+import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupFlowlet;
+import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupUserMemberFlowlet;
 
 /**
  * @author Tommi S.E. Laukkanen
@@ -38,6 +40,10 @@ public final class AccountFlowViewlet extends AbstractFlowViewlet {
         addFlowlet(userView);
         final Flowlet customerView = new CustomerFlowlet();
         addFlowlet(customerView);
+        final Flowlet groupView = new GroupFlowlet(true);
+        addFlowlet(groupView);
+        final Flowlet groupUserMemberFlowletView = new GroupUserMemberFlowlet();
+        addFlowlet(groupUserMemberFlowletView);
         setRootFlowlet(accountView);
     }
 

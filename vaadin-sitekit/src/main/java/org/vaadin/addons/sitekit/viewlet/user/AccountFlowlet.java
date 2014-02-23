@@ -38,6 +38,8 @@ import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
 import org.vaadin.addons.sitekit.util.OpenIdUtil;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowlet;
 import org.vaadin.addons.sitekit.site.SiteFields;
+import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupFlowlet;
+import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupsFlowlet;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -172,13 +174,16 @@ public final class AccountFlowlet extends AbstractFlowlet {
             }
         }
 
-        final Button editContactDetailsButton = new Button("Edit Customer Account");
-        editContactDetailsButton.setEnabled(false);
-        editContactDetailsButton.setIcon(getSite().getIcon("button-icon-edit"));
-        editContactDetailsButton.setWidth(200, UNITS_PIXELS);
-        gridLayout.addComponent(editContactDetailsButton, 0, 4);
+        final HorizontalLayout customerButtonsLayout = new HorizontalLayout();
+        gridLayout.addComponent(customerButtonsLayout, 0, 4);
+        customerButtonsLayout.setMargin(false);
+        customerButtonsLayout.setSpacing(true);
 
-        editContactDetailsButton.addListener(new ClickListener() {
+        final Button editCustomerDetailsButton = new Button("Edit Customer Details");
+        customerButtonsLayout.addComponent(editCustomerDetailsButton);
+        editCustomerDetailsButton.setEnabled(false);
+        editCustomerDetailsButton.setIcon(getSite().getIcon("button-icon-edit"));
+        editCustomerDetailsButton.addListener(new ClickListener() {
             /** Serial version UID. */
             private static final long serialVersionUID = 1L;
 
@@ -190,10 +195,44 @@ public final class AccountFlowlet extends AbstractFlowlet {
             }
         });
 
+        final Button editCustomerMembersButton = new Button("Edit Customer Members");
+        customerButtonsLayout.addComponent(editCustomerMembersButton);
+        editCustomerMembersButton.setEnabled(false);
+        editCustomerMembersButton.setIcon(getSite().getIcon("button-icon-edit"));
+        editCustomerMembersButton.addListener(new ClickListener() {
+            /** Serial version UID. */
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void buttonClick(final ClickEvent event) {
+                final Customer entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
+                final GroupFlowlet view = getViewSheet().forward(GroupFlowlet.class);
+                view.edit(entity.getMemberGroup(), false);
+            }
+        });
+
+        final Button editCustomerAdminsButton = new Button("Edit Customer Admins");
+        customerButtonsLayout.addComponent(editCustomerAdminsButton);
+        editCustomerAdminsButton.setEnabled(false);
+        editCustomerAdminsButton.setIcon(getSite().getIcon("button-icon-edit"));
+        editCustomerAdminsButton.addListener(new ClickListener() {
+            /** Serial version UID. */
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void buttonClick(final ClickEvent event) {
+                final Customer entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
+                final GroupFlowlet view = getViewSheet().forward(GroupFlowlet.class);
+                view.edit(entity.getAdminGroup(), false);
+            }
+        });
+
         table.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(final Property.ValueChangeEvent event) {
-                editContactDetailsButton.setEnabled(table.getValue() != null);
+                editCustomerDetailsButton.setEnabled(table.getValue() != null);
+                editCustomerMembersButton.setEnabled(table.getValue() != null);
+                editCustomerAdminsButton.setEnabled(table.getValue() != null);
             }
         });
 
