@@ -13,28 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.viewlet.administrator.user;
+package org.vaadin.addons.sitekit.viewlet.administrator.group;
 
-import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
-import org.vaadin.addons.sitekit.grid.ValidatingEditor;
-import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
-import org.vaadin.addons.sitekit.model.GroupMember;
-import org.vaadin.addons.sitekit.site.SiteFields;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
+import org.vaadin.addons.sitekit.grid.FieldDescriptor;
+import org.vaadin.addons.sitekit.grid.ValidatingEditor;
+import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
+import org.vaadin.addons.sitekit.model.GroupMember;
+import org.vaadin.addons.sitekit.site.SiteFields;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GroupMember edit Flowlet.
  *
  * @author Tommi S.E. Laukkanen
  */
-public final class GroupMemberFlowlet extends AbstractFlowlet implements ValidatingEditorStateListener {
+public final class GroupUserMemberFlowlet extends AbstractFlowlet implements ValidatingEditorStateListener {
 
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
@@ -77,9 +80,19 @@ public final class GroupMemberFlowlet extends AbstractFlowlet implements Validat
         gridLayout.setRowExpandRatio(1, 1f);
         setViewContent(gridLayout);
 
-        groupMemberEditor = new ValidatingEditor(SiteFields.getFieldDescriptors(GroupMember.class));
+        final List<FieldDescriptor> fieldDescriptors = new ArrayList<FieldDescriptor>(
+                SiteFields.getFieldDescriptors(GroupMember.class));
+
+        for (final FieldDescriptor fieldDescriptor : fieldDescriptors) {
+            if ("group".equals(fieldDescriptor.getId())) {
+                fieldDescriptors.remove(fieldDescriptor);
+                break;
+            }
+        }
+
+        groupMemberEditor = new ValidatingEditor(fieldDescriptors);
         groupMemberEditor.setCaption("GroupMember");
-        groupMemberEditor.addListener((ValidatingEditorStateListener) this);
+        groupMemberEditor.addListener(this);
         gridLayout.addComponent(groupMemberEditor, 0, 0);
 
         final HorizontalLayout buttonLayout = new HorizontalLayout();

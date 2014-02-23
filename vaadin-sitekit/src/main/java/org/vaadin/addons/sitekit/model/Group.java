@@ -176,7 +176,7 @@ public final class Group implements Serializable {
 
     @Override
     public String toString() {
-        return name;
+        return description;
     }
 
     @Override

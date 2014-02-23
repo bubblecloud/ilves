@@ -58,7 +58,7 @@ public class CustomerDao {
             customer.getMemberGroup().setModified(new Date());
             customer.getMemberGroup().setName("customer_members_" +
                     customer.toString().toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_"));
-            customer.getMemberGroup().setDescription("Members of " + customer.toString().toLowerCase());
+            customer.getMemberGroup().setDescription("Members / " + customer.toString());
 
             if (customer.getAdminGroup() == null) {
                 final Group adminGroup = new Group();
@@ -69,7 +69,7 @@ public class CustomerDao {
             customer.getAdminGroup().setModified(new Date());
             customer.getAdminGroup().setName("customer_admins_" +
                     customer.toString().toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_"));
-            customer.getAdminGroup().setDescription("Administrators of " + customer.toString().toLowerCase());
+            customer.getAdminGroup().setDescription("Admins / " + customer.toString());
 
             entityManager.persist(customer);
             transaction.commit();

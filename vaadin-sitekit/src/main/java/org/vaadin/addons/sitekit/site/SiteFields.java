@@ -31,6 +31,7 @@ import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.grid.field.GroupField;
 import org.vaadin.addons.sitekit.grid.field.TimestampField;
+import org.vaadin.addons.sitekit.grid.field.UserField;
 import org.vaadin.addons.sitekit.grid.formatter.TimestampConverter;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Customer;
@@ -138,9 +139,9 @@ public final class SiteFields {
         SiteFields.add(Customer.class, new FieldDescriptor("emailAddress", "Email Address", TextField.class, null, 150, null, String.class, "", false, true, true),
                 new EmailValidator("Email address is not valid."));
         SiteFields.add(Customer.class, new FieldDescriptor("memberGroup", "Members", GroupField.class, null, 100, null, Group.class,
-                null, false, true, false));
+                null, true, true, false));
         SiteFields.add(Customer.class, new FieldDescriptor("adminGroup", "Admins", GroupField.class, null, 100, null, Group.class,
-                null, false, true, false));
+                null, true, true, false));
         SiteFields.add(Customer.class, new FieldDescriptor("company", "Is Company", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
         SiteFields.add(Customer.class, new FieldDescriptor("companyName", "Company Name", TextField.class, null, -1, null, String.class, "", false, true, false));
         SiteFields.add(Customer.class, new FieldDescriptor("companyCode", "Company Code", TextField.class, null, 100, null, String.class, "", false, true, false));
@@ -185,6 +186,8 @@ public final class SiteFields {
                 true, true, true));
 
         SiteFields.add(GroupMember.class, new FieldDescriptor("group", "Group", GroupField.class, null, 100, null, Group.class,
+                null, false, true, true));
+        SiteFields.add(GroupMember.class, new FieldDescriptor("user", "User", UserField.class, null, 100, null, User.class,
                 null, false, true, true));
         SiteFields.add(GroupMember.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
                 true, true));

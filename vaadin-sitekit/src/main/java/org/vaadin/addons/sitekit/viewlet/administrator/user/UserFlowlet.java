@@ -203,24 +203,10 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
                 final GroupMember userElement = new GroupMember();
                 userElement.setUser(user);
                 userElement.setCreated(new Date());
-                final GroupMemberFlowlet groupMemberFlowlet = getViewSheet().forward(GroupMemberFlowlet.class);
-                groupMemberFlowlet.edit(userElement, true);
+                final UserGroupMemberFlowlet userGroupMemberFlowlet = getViewSheet().forward(UserGroupMemberFlowlet.class);
+                userGroupMemberFlowlet.edit(userElement, true);
             }
         });
-
-        /*final Button editButton = getSite().getButton("edit");
-        childListButtonLayout.addComponent(editButton);
-        editButton.addClickListener(new ClickListener() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void buttonClick(final ClickEvent event) {
-                final GroupMember userElement = childContainer.getEntity(childContainer.indexOfId(
-                        childGrid.getSelectedItemId()));
-                final GroupMemberFlowlet view = getViewSheet().forward(GroupMemberFlowlet.class);
-                view.edit(userElement, false);
-            }
-        });*/
 
         final Button removeButton = getSite().getButton("remove");
         childListButtonLayout.addComponent(removeButton);
@@ -245,7 +231,8 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
     public void edit(final User entity, final boolean newEntity) {
         this.user = entity;
         editor.setItem(new BeanItem<User>(entity), newEntity);
-        childContainer.getQueryView().getQueryDefinition().addDefaultFilter(new Compare.Equal("user", entity));
+        childContainer.getQueryView().getQueryDefinition().removeDefaultFilters();
+        childContainer.getQueryView().getQueryDefinition().addDefaultFilter(new Compare.Equal("user", user));
         childGrid.refresh();
     }
 
@@ -267,12 +254,9 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
 
     @Override
     public void enter() {
-        //user = entityManager.merge(user);
         if (user.getUserId() != null) {
             entityManager.refresh(user);
         }
-        //entityManager.detach(user);
-        //editor.setItem(new BeanItem<User>(user), false);
         childContainer.getQueryView().getQueryDefinition().removeDefaultFilters();
         childContainer.getQueryView().getQueryDefinition().addDefaultFilter(new Compare.Equal("user", user));
         childGrid.refresh();

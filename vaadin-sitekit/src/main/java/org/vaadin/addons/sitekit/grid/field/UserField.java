@@ -15,10 +15,11 @@
  */
 package org.vaadin.addons.sitekit.grid.field;
 
+import com.vaadin.ui.Select;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
+import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
-import com.vaadin.ui.Select;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -32,14 +33,14 @@ import javax.persistence.criteria.Root;
  *
  * @author Tommi S.E. Laukkanen
  */
-public class GroupField extends Select {
+public class UserField extends Select {
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor which populates the select with existing customers.
      */
-    public GroupField() {
+    public UserField() {
         super();
     }
 
@@ -51,15 +52,16 @@ public class GroupField extends Select {
         final Company company = ((AbstractSiteUI) getUI().getUI()).getSite().getSiteContext().getObject(
                 Company.class);
         final CriteriaBuilder queryBuilder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<Group> criteriaQuery = queryBuilder.createQuery(Group.class);
-        final Root<Group> root = criteriaQuery.from(Group.class);
+        final CriteriaQuery<User> criteriaQuery = queryBuilder.createQuery(User.class);
+        final Root<User> root = criteriaQuery.from(User.class);
         final Expression<Comparable> owner = root.get("owner");
         criteriaQuery.where(queryBuilder.equal(owner, company));
-        criteriaQuery.orderBy(queryBuilder.asc(root.get("description")));
-        
-        final TypedQuery<Group> companyQuery = entityManager.createQuery(criteriaQuery);
-        for (final Group group : companyQuery.getResultList()) {
-            addItem(group);
+        criteriaQuery.orderBy(queryBuilder.asc(root.get("owner")),
+                queryBuilder.asc(root.get("lastName")),
+                queryBuilder.asc(root.get("firstName")));
+        final TypedQuery<User> companyQuery = entityManager.createQuery(criteriaQuery);
+        for (final User user : companyQuery.getResultList()) {
+            addItem(user);
         }
     }
 

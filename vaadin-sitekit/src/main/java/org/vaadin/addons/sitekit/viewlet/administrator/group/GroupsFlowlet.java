@@ -77,7 +77,7 @@ public final class GroupsFlowlet extends AbstractFlowlet {
         final List<FilterDescriptor> filterDefinitions = new ArrayList<FilterDescriptor>();
 
         final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
-        container = new EntityContainer<Group>(entityManager, true, true, false, Group.class, 1000,
+        container = new EntityContainer<Group>(entityManager, true, false, false, Group.class, 1000,
                 new String[] {"name"},
                 new boolean[] {true}, "groupId");
 

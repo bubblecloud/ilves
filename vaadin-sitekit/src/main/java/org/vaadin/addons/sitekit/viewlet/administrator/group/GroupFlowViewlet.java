@@ -36,6 +36,8 @@ public final class GroupFlowViewlet extends AbstractFlowViewlet {
         addFlowlet(groupsView);
         final Flowlet groupView = new GroupFlowlet();
         addFlowlet(groupView);
+        final Flowlet groupUserMemberFlowletView = new GroupUserMemberFlowlet();
+        addFlowlet(groupUserMemberFlowletView);
         setRootFlowlet(groupsView);
     }
 
