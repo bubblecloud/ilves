@@ -103,3 +103,13 @@ text-align: left;
 .image-button:active {
     background-image: url('button/img/image-button-pressed.png');
 }
+
+.horizontal-navigation-logout {
+    float: right;
+    margin-right: 10px;
+}
+
+.horizontal-navigation-login {
+    float: right;
+    margin-right: 10px;
+}

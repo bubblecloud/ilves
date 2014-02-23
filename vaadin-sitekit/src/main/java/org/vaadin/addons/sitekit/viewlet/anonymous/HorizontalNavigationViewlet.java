@@ -85,6 +85,7 @@ public final class HorizontalNavigationViewlet extends AbstractViewlet {
             final HorizontalLayout itemLayout = new HorizontalLayout();
             itemLayout.setSpacing(true);
             itemLayout.setMargin(false);
+            itemLayout.setStyleName("horizontal-navigation-" + pageName);
             navigationLayout.addComponent(itemLayout);
 
             final int indentCount = indentLastIndex + 1;
@@ -120,6 +121,7 @@ public final class HorizontalNavigationViewlet extends AbstractViewlet {
 
         if (getSite().getSecurityProvider().getUser() != null) {
             final HorizontalLayout itemLayout = new HorizontalLayout();
+            itemLayout.setStyleName("horizontal-navigation-logout");
             itemLayout.setSpacing(true);
             itemLayout.setMargin(false);
             navigationLayout.addComponent(itemLayout);
