@@ -46,7 +46,7 @@ public class DefaultContentProvider implements ContentProvider {
         final ViewDescriptor master = new ViewDescriptor("master", "Master", DefaultView.class);
         master.setViewerRoles("superuser");
         master.setViewletClass("logo", ImageViewlet.class, "logo.png");
-        master.setViewletClass("navigation", HorizontalNavigationViewlet.class);
+        master.setViewletClass("navigation", MenuNavigationViewlet.class);
         master.setViewletClass("footer", CompanyFooterViewlet.class);
         viewDescriptors.add(master);
 
