@@ -49,40 +49,13 @@ public final class MenuNavigationViewlet extends AbstractViewlet {
         final MenuBar menuBar = new MenuBar();
         menuBar.setStyleName("menu-bar-navigation");
         menuBar.setSizeFull();
-        menuBar.setHeight(32, Unit.PIXELS);
+        //menuBar.setHeight(32, Unit.PIXELS);
         setCompositionRoot(menuBar);
 
         final NavigationVersion navigationVersion = getSite().getCurrentNavigationVersion();
 
-        for (final String element : navigationVersion.getRootPages()) {
-            final int indentLastIndex = element.lastIndexOf('+');
-            final String pageName = indentLastIndex == -1 ? element : element.substring(indentLastIndex + 1);
-
-            final ViewVersion pageVersion = getSite().getCurrentViewVersion(pageName);
-            if (pageVersion == null) {
-                throw new SiteException("Unknown page: " + pageName);
-            }
-            if (pageVersion.getViewerRoles().length > 0) {
-                boolean roleMatch = false;
-                for (final String role : pageVersion.getViewerRoles()) {
-                    if (getSite().getSecurityProvider().getRoles().contains(role)) {
-                        roleMatch = true;
-                        break;
-                    }
-                }
-                if (!roleMatch) {
-                    continue;
-                }
-            }
-
-            final String localizedPageName = getSite().localize("page-link-" + pageName);
-            final Resource iconResource = getSite().getIcon("page-icon-" + pageName);
-            menuBar.addItem(localizedPageName, iconResource, new MenuBar.Command() {
-                @Override
-                public void menuSelected(MenuBar.MenuItem selectedItem) {
-                    UI.getCurrent().getNavigator().navigateTo(pageName);
-                }
-            }).setStyleName("navigation-" + pageName);
+        for (final String pageName : navigationVersion.getRootPages()) {
+            processRootPage(navigationVersion, menuBar, pageName);
         }
 
         if (getSite().getSecurityProvider().getUser() != null) {
@@ -97,6 +70,81 @@ public final class MenuNavigationViewlet extends AbstractViewlet {
                     getSession().close();
                 }
             }).setStyleName("navigation-logout");
+        }
+    }
+
+    private void processRootPage(final NavigationVersion navigationVersion,
+                                 final MenuBar menuBar, final String pageName) {
+        final ViewVersion pageVersion = getSite().getCurrentViewVersion(pageName);
+        if (pageVersion == null) {
+            throw new SiteException("Unknown page: " + pageName);
+        }
+        if (pageVersion.getViewerRoles().length > 0) {
+            boolean roleMatch = false;
+            for (final String role : pageVersion.getViewerRoles()) {
+                if (getSite().getSecurityProvider().getRoles().contains(role)) {
+                    roleMatch = true;
+                    break;
+                }
+            }
+            if (!roleMatch) {
+                return;
+            }
+        }
+
+        final String localizedPageName = getSite().localize("page-link-" + pageName);
+        final Resource iconResource = getSite().getIcon("page-icon-" + pageName);
+        final MenuBar.MenuItem menuItem = menuBar.addItem(localizedPageName, iconResource,
+                navigationVersion.hasChildPages(pageName) ? null : new MenuBar.Command() {
+            @Override
+            public void menuSelected(MenuBar.MenuItem selectedItem) {
+                UI.getCurrent().getNavigator().navigateTo(pageName);
+            }
+        });
+        menuItem.setStyleName("navigation-" + pageName);
+
+        if (navigationVersion.hasChildPages(pageName)) {
+            for (final String childPage : navigationVersion.getChildPages(pageName)) {
+                processChildPage(navigationVersion, menuItem, childPage);
+            }
+        }
+    }
+
+    private void processChildPage(final NavigationVersion navigationVersion,
+                                 final MenuBar.MenuItem parentItem, final String pageName) {
+        final ViewVersion pageVersion = getSite().getCurrentViewVersion(pageName);
+        if (pageVersion == null) {
+            throw new SiteException("Unknown page: " + pageName);
+        }
+        if (pageVersion.getViewerRoles().length > 0) {
+            boolean roleMatch = false;
+            for (final String role : pageVersion.getViewerRoles()) {
+                if (getSite().getSecurityProvider().getRoles().contains(role)) {
+                    roleMatch = true;
+                    break;
+                }
+            }
+            if (!roleMatch) {
+                return;
+            }
+        }
+
+        final String localizedPageName = getSite().localize("page-link-" + pageName);
+        final Resource iconResource = getSite().getIcon("page-icon-" + pageName);
+        final MenuBar.MenuItem menuItem = parentItem.addItem(localizedPageName, iconResource,
+                navigationVersion.hasChildPages(pageName) ? null : new MenuBar.Command() {
+            @Override
+            public void menuSelected(MenuBar.MenuItem selectedItem) {
+                UI.getCurrent().getNavigator().navigateTo(pageName);
+            }
+        });
+        menuItem.setStyleName("navigation-" + pageName);
+        menuItem.setEnabled(true);
+
+        if (navigationVersion.hasChildPages(pageName)) {
+            for (final String childPage : navigationVersion.getChildPages(pageName)) {
+                processChildPage(navigationVersion, menuItem, childPage);
+            }
         }
     }
 

@@ -16,12 +16,10 @@
 package org.vaadin.addons.sitekit.site;
 
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.vaadin.addons.sitekit.util.NavigationTreeParser;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The navigation version.
@@ -49,7 +47,11 @@ public final class NavigationVersion {
         super();
         this.version = version;
         this.defaultPageName = defaultPageName;
-        this.navigationMap = NavigationTreeParser.parse(tree);
+        if (tree != null && tree.length() > 0) {
+            this.navigationMap = NavigationTreeParser.parse(tree);
+        } else {
+            this.navigationMap = new HashMap<String, List<String>>();
+        }
         this.enabled = enabled;
     }
 

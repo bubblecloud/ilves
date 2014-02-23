@@ -7,7 +7,7 @@ div#shield-logo{float:left;width:40px;height: 40px}
 div#shield-logo-margin{margin-top:4px}
 div#shield-navigation{background:#F5F5F5;margin: 6px 0px 6px 6px;border:0px;border-radius:10px;}
 div#shield-navigation{float:right;width:952px;height:40px;}
-div#shield-navigation-margin{margin: 11px}
+div#shield-navigation-margin{margin: 8px}
 div#shield-container{width:1000px;margin:0 auto}
 div#shield-content-wrapper{margin: 12px 0px 12px 0px;}
 div#shield-content{padding: 6px;}
@@ -117,16 +117,23 @@ text-align: left;
 .menu-bar-navigation {
     color: #333333;
     text-shadow: 0 1px 0 #fff;
-    background: transparent;
+    background: #F5F5F5;
 }
 
 .menu-bar-navigation .v-menubar-menuitem {
-    padding: 0px 20px 0px 0px;
+/*    padding: 0px 20px 0px 0px;*/
 }
 
 .menu-bar-navigation .v-menubar-menuitem:hover {
     color: #999999;
 }
+.menu-bar-navigation .v-menubar-menuitem-selected, .v-menubar-submenu .v-menubar-menuitem-selected {
+    color: #999999;
+    text-shadow: 0 1px 0 #fff;
+    background: #F5F5F5;
+}
+
+page-link-configuration
 
 .menu-bar-navigation .v-menubar-menuitem-navigation-login {
     float: right;

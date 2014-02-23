@@ -50,6 +50,10 @@ public class DefaultContentProvider implements ContentProvider {
         master.setViewletClass("footer", CompanyFooterViewlet.class);
         viewDescriptors.add(master);
 
+        final ViewDescriptor configuration = new ViewDescriptor("configuration", "Configuration", DefaultView.class);
+        configuration.setViewerRoles("user", "administrator");
+        viewDescriptors.add(configuration);
+
         final ViewDescriptor users = new ViewDescriptor("users", "Users", DefaultView.class);
         users.setViewerRoles("administrator");
         users.setViewletClass("content", UserFlowViewlet.class);
@@ -99,8 +103,17 @@ public class DefaultContentProvider implements ContentProvider {
         reset.setViewletClass("content", PasswordResetViewlet.class);
         viewDescriptors.add(reset);
 
+        final NavigationVersion navigationVersion = new NavigationVersion(0, "login", null, true);
+        navigationVersion.addRootPage("login");
+        navigationVersion.addRootPage("configuration");
+        navigationVersion.addChildPage("configuration", "account");
+        navigationVersion.addChildPage("configuration", "customers");
+        navigationVersion.addChildPage("configuration", "users");
+        navigationVersion.addChildPage("configuration", "groups");
+        navigationVersion.addChildPage("configuration", "companies");
+
         final NavigationDescriptor navigationDescriptor = new NavigationDescriptor("navigation", null, null,
-                new NavigationVersion(0, "login", "login;customers;users;groups;companies;account", true));
+                navigationVersion);
 
         siteDescriptor = new  SiteDescriptor("Test site.", "test site", "This is a test site.",
                 navigationDescriptor, viewDescriptors);
