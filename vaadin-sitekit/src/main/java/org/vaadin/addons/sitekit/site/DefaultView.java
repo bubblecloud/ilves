@@ -47,6 +47,9 @@ public final class DefaultView extends AbstractCustomView {
         final AbstractComponent navigationComponent = getComponent("navigation");
         addComponent(navigationComponent, "navigation");
 
+        final AbstractComponent profileComponent = getComponent("profile");
+        addComponent(profileComponent, "profile");
+
         final AbstractComponent contentComponent = getComponent("content");
         addComponent(contentComponent, "content");
 

@@ -23,6 +23,7 @@ import org.vaadin.addons.sitekit.viewlet.administrator.user.UserFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.*;
 import org.vaadin.addons.sitekit.viewlet.anonymous.login.LoginFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.user.AccountFlowViewlet;
+import org.vaadin.addons.sitekit.viewlet.user.GravatarViewlet;
 import org.vaadin.addons.sitekit.viewlet.user.OpenIdLinkViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.login.OpenIdLoginViewlet;
 
@@ -47,6 +48,7 @@ public class DefaultContentProvider implements ContentProvider {
         master.setViewerRoles("superuser");
         master.setViewletClass("logo", ImageViewlet.class, "logo.png");
         master.setViewletClass("navigation", MenuNavigationViewlet.class);
+        master.setViewletClass("profile", GravatarViewlet.class);
         master.setViewletClass("footer", CompanyFooterViewlet.class);
         viewDescriptors.add(master);
 

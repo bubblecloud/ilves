@@ -176,11 +176,6 @@
             <artifactId>openid4java</artifactId>
             <version>0.9.8</version>
         </dependency>
-        <dependency>
-            <groupId>com.timgroup</groupId>
-            <artifactId>jgravatar</artifactId>
-            <version>1.0</version>
-        </dependency>
 
     </dependencies>
 
