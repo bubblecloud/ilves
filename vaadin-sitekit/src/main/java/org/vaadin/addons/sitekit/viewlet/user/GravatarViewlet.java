@@ -15,15 +15,8 @@
  */
 package org.vaadin.addons.sitekit.viewlet.user;
 
-import com.timgroup.jgravatar.Gravatar;
-import com.timgroup.jgravatar.GravatarDefaultImage;
-import com.timgroup.jgravatar.GravatarRating;
-import com.vaadin.event.MouseEvents;
 import com.vaadin.server.ExternalResource;
-import com.vaadin.server.Page;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Link;
 import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.codec.digest.DigestUtils;
