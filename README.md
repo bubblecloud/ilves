@@ -3,15 +3,15 @@ vaadin-sitekit
 
 Site Kit simplifies web site creation by providing functionality for registration, virtual hosting and business functionality.
 
-Demo
+Wiki
 ----
 
-https://54.246.89.141/groom
+https://github.com/tlaukkan/vaadin-sitekit/wiki
 
-Demo and example site credentials are:
+Screenshots
+-----------
 
-User email: "admin@admin.org"
-User password: "password"
+https://vaadin.com/directory#addon/site-kit
 
 Features
 --------
