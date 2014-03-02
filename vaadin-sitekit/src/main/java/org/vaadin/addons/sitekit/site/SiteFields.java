@@ -33,13 +33,7 @@ import org.vaadin.addons.sitekit.grid.field.GroupField;
 import org.vaadin.addons.sitekit.grid.field.TimestampField;
 import org.vaadin.addons.sitekit.grid.field.UserField;
 import org.vaadin.addons.sitekit.grid.formatter.TimestampConverter;
-import org.vaadin.addons.sitekit.model.Company;
-import org.vaadin.addons.sitekit.model.Customer;
-import org.vaadin.addons.sitekit.model.Feedback;
-import org.vaadin.addons.sitekit.model.Group;
-import org.vaadin.addons.sitekit.model.GroupMember;
-import org.vaadin.addons.sitekit.model.PostalAddress;
-import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.model.*;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.ui.CheckBox;
@@ -191,6 +185,18 @@ public final class SiteFields {
                 null, false, true, true));
         SiteFields.add(GroupMember.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
                 true, true));
+
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("address", "LDAP Address", TextField.class, null, 100, null, String.class, "", false, true, true));
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("port", "LDAP Port", TextField.class, new StringToIntegerConverter(), 50, null, Integer.class, null,
+                false, true, true));
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("requiredRemoteGroup", "Required Remote Group", TextField.class, null, 100, null, String.class, "", false, true, true));
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("subNetWhiteList", "Sub Net White List", TextField.class, null, 200, null, String.class, "", false, true, true));
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("remoteLocalGroupMapping", "Remote-Local Group Mapping", TextField.class, null, 200, null, String.class, "", false, true, true));
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("enabled", "Enabled", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
+                true, true));
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("modified", "Modified", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null,
+                true, true, true));
 
     }
 }

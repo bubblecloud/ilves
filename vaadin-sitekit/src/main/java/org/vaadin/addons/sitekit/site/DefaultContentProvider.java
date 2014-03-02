@@ -17,6 +17,7 @@ package org.vaadin.addons.sitekit.site;
 
 import org.vaadin.addons.sitekit.viewlet.administrator.company.CompanyFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowViewlet;
+import org.vaadin.addons.sitekit.viewlet.administrator.directory.UserDirectoryFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.user.UserFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.*;
@@ -70,6 +71,11 @@ public class DefaultContentProvider implements ContentProvider {
         customers.setViewletClass("content", CustomerFlowViewlet.class);
         viewDescriptors.add(customers);
 
+        final ViewDescriptor directories = new ViewDescriptor("directories", "Directories", DefaultView.class);
+        directories.setViewerRoles("administrator");
+        directories.setViewletClass("content", UserDirectoryFlowViewlet.class);
+        viewDescriptors.add(directories);
+
         final ViewDescriptor companies = new ViewDescriptor("companies", "Companies", DefaultView.class);
         companies.setViewerRoles("administrator");
         companies.setViewletClass("content", CompanyFlowViewlet.class);
@@ -111,6 +117,7 @@ public class DefaultContentProvider implements ContentProvider {
         navigationVersion.addChildPage("configuration", "customers");
         navigationVersion.addChildPage("configuration", "users");
         navigationVersion.addChildPage("configuration", "groups");
+        navigationVersion.addChildPage("configuration", "directories");
         navigationVersion.addChildPage("configuration", "companies");
 
         final NavigationDescriptor navigationDescriptor = new NavigationDescriptor("navigation", null, null,

@@ -6,6 +6,7 @@
 		<class>org.vaadin.addons.sitekit.model.Customer</class>
 		<class>org.vaadin.addons.sitekit.model.PostalAddress</class>
 		<class>org.vaadin.addons.sitekit.model.User</class>
+        <class>org.vaadin.addons.sitekit.model.UserDirectory</class>
         <class>org.vaadin.addons.sitekit.model.EmailPasswordReset</class>
 		<class>org.vaadin.addons.sitekit.model.Group</class>
 		<class>org.vaadin.addons.sitekit.model.GroupMember</class>

@@ -51,5 +51,42 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet author="tlaukkan" id="af6eb8c0-a1d2-11e3-a5e2-0800200c9a66">
+        <createTable tableName="userdirectory">
+            <column name="userdirectoryid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="BOOL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="port" type="INT4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="remotelocalgroupmapping" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="requiredremotegroup" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subnetwhitelist" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_companyid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="userdirectoryid" constraintName="userdirectory_pkey" tableName="userdirectory"/>
+        <addForeignKeyConstraint baseColumnNames="owner_companyid" baseTableName="userdirectory" constraintName="fk_userdirectory_owner_companyid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="companyid" referencedTableName="company" />
+        <addUniqueConstraint columnNames="owner_companyid, address, port" constraintName="unq_userdirectory_0" deferrable="false" disabled="false" initiallyDeferred="false" tableName="userdirectory"/>
+    </changeSet>
 </databaseChangeLog>
 
