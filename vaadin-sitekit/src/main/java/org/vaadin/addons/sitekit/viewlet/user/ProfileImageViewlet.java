@@ -26,23 +26,23 @@ import org.vaadin.addons.sitekit.site.AbstractViewlet;
 import java.net.URL;
 
 /**
- * Viewlet renders user gravatar profile picture.
+ * Viewlet renders user Gravatar picture or login image link.
  *
  * @author Tommi S.E. Laukkanen
  */
-public final class GravatarViewlet extends AbstractViewlet {
+public final class ProfileImageViewlet extends AbstractViewlet {
 
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
     /** The logger. */
-    private static final Logger LOGGER = Logger.getLogger(GravatarViewlet.class);
+    private static final Logger LOGGER = Logger.getLogger(ProfileImageViewlet.class);
     /** The gravatar URL. */
     private final static String GRAVATAR_URL = "http://www.gravatar.com/avatar/";
 
     /**
      * Default constructor which sets up widget content.
      */
-    public GravatarViewlet() {
+    public ProfileImageViewlet() {
     }
 
     @Override
