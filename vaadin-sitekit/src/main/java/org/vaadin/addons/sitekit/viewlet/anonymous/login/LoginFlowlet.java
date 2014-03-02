@@ -159,9 +159,11 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
     public void onLogin(final LoginEvent event) {
         if (event.getLoginParameter("username") == null) {
             Notification.show(getSite().localize("message-login-failed"), Notification.TYPE_WARNING_MESSAGE);
+            return;
         }
         if (event.getLoginParameter("password") == null) {
             Notification.show(getSite().localize("message-login-failed"), Notification.TYPE_WARNING_MESSAGE);
+            return;
         }
 
         final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
