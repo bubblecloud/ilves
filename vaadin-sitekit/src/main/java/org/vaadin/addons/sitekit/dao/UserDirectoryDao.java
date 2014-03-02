@@ -111,4 +111,17 @@ public class UserDirectoryDao {
         }
     }
 
+    /**
+     * Gets list of user directories configured for company.
+     *
+     * @param entityManager the entity manager.
+     * @param owner the owning company
+     * @return list of user directories
+     */
+    public static final List<UserDirectory> getUserDirectories(final EntityManager entityManager, final Company owner) {
+        final TypedQuery<UserDirectory> query = entityManager.createQuery("select e from UserDirectory as e where e.owner=:owner",
+                UserDirectory.class);
+        query.setParameter("owner", owner);
+        return query.getResultList();
+    }
 }
