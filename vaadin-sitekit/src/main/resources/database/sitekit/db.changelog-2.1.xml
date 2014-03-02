@@ -88,5 +88,24 @@
         <addForeignKeyConstraint baseColumnNames="owner_companyid" baseTableName="userdirectory" constraintName="fk_userdirectory_owner_companyid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="companyid" referencedTableName="company" />
         <addUniqueConstraint columnNames="owner_companyid, address, port" constraintName="unq_userdirectory_0" deferrable="false" disabled="false" initiallyDeferred="false" tableName="userdirectory"/>
     </changeSet>
+    <changeSet author="tlaukkan" id="50819660-a1fb-11e3-a5e2-0800200c9a66">
+        <addColumn tableName="userdirectory">
+            <column name="logindn" type="VARCHAR(255)" defaultValue="?">
+                <constraints nullable="false"/>
+            </column>
+            <column name="loginpassword" type="VARCHAR(255)" defaultValue="?">
+                <constraints nullable="false"/>
+            </column>
+            <column name="useremailattribute" type="VARCHAR(255)" defaultValue="?">
+                <constraints nullable="false"/>
+            </column>
+            <column name="usersearchbasedn" type="VARCHAR(255)" defaultValue="?">
+                <constraints nullable="false"/>
+            </column>
+            <column name="groupsearchbasedn" type="VARCHAR(255)" defaultValue="?">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
 

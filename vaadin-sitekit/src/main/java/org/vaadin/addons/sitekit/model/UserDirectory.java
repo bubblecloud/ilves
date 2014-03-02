@@ -49,16 +49,34 @@ public final class UserDirectory implements Serializable {
     private int port;
 
     /**
-     * Allowed subnets to login from.
-     *
-     * Format: XXX.XXX.XXX.XXX/YYY, XXX.XXX.XXX.XXX/YYY
+     * LDAP login DN.
      */
     @Column(nullable = false)
-    private String subNetWhiteList;
+    private String loginDn = "uid=admin,ou=system";
 
-    /** Required remote group for login. */
+    /**
+     * LDAP login password.
+     */
     @Column(nullable = false)
-    private String requiredRemoteGroup;
+    private String loginPassword = "password";
+
+    /**
+     * LDAP user email attribute.
+     */
+    @Column(nullable = false)
+    private String userEmailAttribute = "sn";
+
+    /**
+     * LDAP user search base DN.
+     */
+    @Column(nullable = false)
+    private String userSearchBaseDn = "ou=users,ou=system";
+
+    /**
+     * LDAP group search base DN.
+     */
+    @Column(nullable = false)
+    private String groupSearchBaseDn = "ou=groups,ou=system";
 
     /**
      * Mapping from remote LDAP groups to local user groups.
@@ -67,6 +85,17 @@ public final class UserDirectory implements Serializable {
      */
     @Column(nullable = false)
     private String remoteLocalGroupMapping;
+
+    /** Required remote group for login. */
+    @Column(nullable = false)
+    private String requiredRemoteGroup;
+    /**
+     * Allowed subnets to login from.
+     *
+     * Format: XXX.XXX.XXX.XXX/YYY, XXX.XXX.XXX.XXX/YYY
+     */
+    @Column(nullable = false)
+    private String subNetWhiteList;
 
     /** Enabled. */
     @Column(nullable = false)
@@ -87,40 +116,6 @@ public final class UserDirectory implements Serializable {
      */
     public UserDirectory() {
         super();
-    }
-
-    /**
-     * Constructor for setting field values.
-     *
-     * @param owner the owning company
-     * @param address the LDAP address
-     * @param port the LDAP port
-     * @param subnetWhitelist required
-     * @param requiredRemoteGroup required remote LDAP group
-     * @param remoteLocalGroupMapping mapping from remote LDAP groups to local user groups
-     * @param enabled whether user directory is enabled
-     * @param created the created time
-     * @param modified the modified time
-     */
-    public UserDirectory(final Company owner,
-                         final String address,
-                         final int port,
-                         final String subnetWhitelist,
-                         final String requiredRemoteGroup,
-                         final String remoteLocalGroupMapping,
-                         final boolean enabled,
-                         final Date created,
-                         final Date modified) {
-        this.userDirectoryId = userDirectoryId;
-        this.owner = owner;
-        this.address = address;
-        this.port = port;
-        this.subNetWhiteList = subnetWhitelist;
-        this.requiredRemoteGroup = requiredRemoteGroup;
-        this.remoteLocalGroupMapping = remoteLocalGroupMapping;
-        this.enabled = enabled;
-        this.created = created;
-        this.modified = modified;
     }
 
     /**
@@ -177,6 +172,76 @@ public final class UserDirectory implements Serializable {
      */
     public void setPort(final int port) {
         this.port = port;
+    }
+
+    /**
+     * @return the LDAP login DN
+     */
+    public String getLoginDn() {
+        return loginDn;
+    }
+
+    /**
+     * @param loginDn the LDAP login DN to set
+     */
+    public void setLoginDn(final String loginDn) {
+        this.loginDn = loginDn;
+    }
+
+    /**
+     * @return the LDAP login password
+     */
+    public String getLoginPassword() {
+        return loginPassword;
+    }
+
+    /**
+     * @param loginPassword the LDAP login password to set
+     */
+    public void setLoginPassword(final String loginPassword) {
+        this.loginPassword = loginPassword;
+    }
+
+    /**
+     * @return the LDAP user email attribute
+     */
+    public String getUserEmailAttribute() {
+        return userEmailAttribute;
+    }
+
+    /**
+     * @param userEmailAttribute the LDAP user email attribute to set
+     */
+    public void setUserEmailAttribute(final String userEmailAttribute) {
+        this.userEmailAttribute = userEmailAttribute;
+    }
+
+    /**
+     * @return the LDAP user search base DN
+     */
+    public String getUserSearchBaseDn() {
+        return userSearchBaseDn;
+    }
+
+    /**
+     * @param userSearchBaseDn the LDAP user search base DN to set
+     */
+    public void setUserSearchBaseDn(final String userSearchBaseDn) {
+        this.userSearchBaseDn = userSearchBaseDn;
+    }
+
+    /**
+     * @return the LDAP group search base DN
+     */
+    public String getGroupSearchBaseDn() {
+        return groupSearchBaseDn;
+    }
+
+    /**
+     * @param groupSearchBaseDn the LDAP group search base DN to set
+     */
+    public void setGroupSearchBaseDn(final String groupSearchBaseDn) {
+        this.groupSearchBaseDn = groupSearchBaseDn;
     }
 
     /**

@@ -229,11 +229,11 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
 
         boolean passwordMatch = false;
         try {
-            final String ldapLoginDn = "uid=admin,ou=system";
-            final String ldapLoginPassword = "password";
-            final String userEmailAttribute = "sn";
-            final String userSearchBaseDn = "ou=users,ou=system";
-            final String groupSearchBaseDn = "ou=groups,ou=system";
+            final String ldapLoginDn = userDirectory.getLoginDn();
+            final String ldapLoginPassword = userDirectory.getLoginPassword();
+            final String userEmailAttribute = userDirectory.getUserEmailAttribute();
+            final String userSearchBaseDn = userDirectory.getUserSearchBaseDn();
+            final String groupSearchBaseDn = userDirectory.getGroupSearchBaseDn();
 
             final String userFilter = "(" + userEmailAttribute + "=" + user.getEmailAddress() + ")";
 
@@ -252,7 +252,16 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
                 userCursor.close();
                 connection.unBind();
                 connection.bind(userEntry.getDn(), password);
-                passwordMatch = true;
+
+                if (!isInRemoteGroup(connection, groupSearchBaseDn,
+                        userEntry, userDirectory.getRequiredRemoteGroup())) {
+                    LOGGER.warn("User not in required remote group '" + userDirectory.getRequiredRemoteGroup()
+                            + "', LDAP address: " + userDirectory.getAddress() + ":" + userDirectory.getPort()
+                            + ") email: " + user.getEmailAddress()
+                            + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
+                    Notification.show(getSite().localize("message-login-failed"), Notification.TYPE_WARNING_MESSAGE);
+                    return true;
+                }
 
                 final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
                 final Map<String, Group> localGroups = new HashMap<String, Group>();
@@ -268,12 +277,11 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
                     final String remoteGroupName = parts[0].trim();
                     final String localGroupName = parts[1].trim();
 
-                    final String groupFilter = "(&(uniqueMember="+ userEntry.getDn() +")(cn=" + remoteGroupName + "))";
-                    final EntryCursor groupCursor = connection.search(groupSearchBaseDn, groupFilter, SearchScope.ONELEVEL );
-                    final boolean remoteGroupMember = groupCursor.next();
+                    final boolean remoteGroupMember = isInRemoteGroup(connection, groupSearchBaseDn,
+                            userEntry, remoteGroupName);
+
                     final boolean localGroupMember = localGroups.containsKey(localGroupName);
                     final Group localGroup = UserDao.getGroup(entityManager, company, localGroupName);
-                    groupCursor.close();
                     if (localGroup == null) {
                         LOGGER.warn("No local group '" + localGroupName
                                 + "'. Skipping group membership synchronization.");
@@ -293,6 +301,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
 
                 }
 
+                passwordMatch = true;
                 connection.unBind();
             }
         } catch (final LdapException exception) {
@@ -324,6 +333,14 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
             Notification.show(getSite().localize("message-login-failed"), Notification.TYPE_WARNING_MESSAGE);
         }
         return true;
+    }
+
+    private boolean isInRemoteGroup(LdapConnection connection, String groupSearchBaseDn, Entry userEntry, String remoteGroupName) throws Exception {
+        final String groupFilter = "(&(uniqueMember="+ userEntry.getDn() +")(cn=" + remoteGroupName + "))";
+        final EntryCursor groupCursor = connection.search(groupSearchBaseDn, groupFilter, SearchScope.ONELEVEL );
+        final boolean remoteGroupMember = groupCursor.next();
+        groupCursor.close();
+        return remoteGroupMember;
     }
 
 

@@ -189,9 +189,16 @@ public final class SiteFields {
         SiteFields.add(UserDirectory.class, new FieldDescriptor("address", "LDAP Address", TextField.class, null, 100, null, String.class, "", false, true, true));
         SiteFields.add(UserDirectory.class, new FieldDescriptor("port", "LDAP Port", TextField.class, new StringToIntegerConverter(), 50, null, Integer.class, null,
                 false, true, true));
+
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("loginDn", "LDAP Login DN", TextField.class, null, 100, null, String.class, "", false, true, true));
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("loginPassword", "LDAP Login Password", PasswordField.class, null, 100, null, String.class, "", false, false, true));
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("userEmailAttribute", "LDAP User Email Attribute", TextField.class, null, 100, null, String.class, "", false, true, true));
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("userSearchBaseDn", "LDAP User search Base DN", TextField.class, null, 100, null, String.class, "", false, true, true));
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("groupSearchBaseDn", "LDAP Group search Base DN", TextField.class, null, 100, null, String.class, "", false, true, true));
+
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("remoteLocalGroupMapping", "Remote-Local Group Mapping", TextField.class, null, 200, null, String.class, "", false, true, true));
         SiteFields.add(UserDirectory.class, new FieldDescriptor("requiredRemoteGroup", "Required Remote Group", TextField.class, null, 100, null, String.class, "", false, true, true));
         SiteFields.add(UserDirectory.class, new FieldDescriptor("subNetWhiteList", "Sub Net White List", TextField.class, null, 200, null, String.class, "", false, true, true));
-        SiteFields.add(UserDirectory.class, new FieldDescriptor("remoteLocalGroupMapping", "Remote-Local Group Mapping", TextField.class, null, 200, null, String.class, "", false, true, true));
         SiteFields.add(UserDirectory.class, new FieldDescriptor("enabled", "Enabled", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
         SiteFields.add(UserDirectory.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
                 true, true));

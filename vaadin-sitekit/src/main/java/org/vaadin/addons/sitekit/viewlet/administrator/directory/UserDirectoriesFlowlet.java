@@ -65,7 +65,15 @@ public final class UserDirectoriesFlowlet extends AbstractFlowlet {
 
     @Override
     public void initialize() {
-        final List<FieldDescriptor> fieldDefinitions = SiteFields.getFieldDescriptors(UserDirectory.class);
+        final List<FieldDescriptor> fieldDefinitions = new ArrayList<FieldDescriptor>(
+                SiteFields.getFieldDescriptors(UserDirectory.class));
+
+        for (final FieldDescriptor fieldDescriptor : fieldDefinitions) {
+            if (fieldDescriptor.getId().equals("loginPassword")) {
+                fieldDefinitions.remove(fieldDescriptor);
+                break;
+            }
+        }
 
         final List<FilterDescriptor> filterDefinitions = new ArrayList<FilterDescriptor>();
 
@@ -95,6 +103,11 @@ public final class UserDirectoriesFlowlet extends AbstractFlowlet {
         entityGrid.setFilters(filterDefinitions);
         //entityGrid.setFixedWhereCriteria("e.owner.companyId=:companyId");
 
+        table.setColumnCollapsed("loginDn", true);
+        table.setColumnCollapsed("userEmailAttribute", true);
+        table.setColumnCollapsed("userSearchBaseDn", true);
+        table.setColumnCollapsed("groupSearchBaseDn", true);
+        table.setColumnCollapsed("remoteLocalGroupMapping", true);
         table.setColumnCollapsed("created", true);
         table.setColumnCollapsed("modified", true);
         table.setColumnCollapsed("company", true);
