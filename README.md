@@ -64,8 +64,4 @@ Requirements
 Usage
 -----
 
-1. Create maven project with Vaadin archetype.
-2. Add Site Kit maven dependency to your project.
-2. Create database with owner "site" and password "password"
-3. Copy the example main class to you project.
-4. Run the example and login with demo credentials.
+See: https://github.com/tlaukkan/vaadin-sitekit/wiki/5-Minute-Tutorial
