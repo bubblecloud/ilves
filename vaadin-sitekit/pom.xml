@@ -179,9 +179,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.directory.shared</groupId>
-            <artifactId>apache-ldap-api</artifactId>
-            <version>1.0.0-M13</version>
+            <groupId>org.apache.directory.api</groupId>
+            <artifactId>api-all</artifactId>
+            <version>1.0.0-M20</version>
         </dependency>
     </dependencies>
 

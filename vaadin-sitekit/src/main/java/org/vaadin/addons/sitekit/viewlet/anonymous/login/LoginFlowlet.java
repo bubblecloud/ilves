@@ -32,12 +32,12 @@ import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
+import org.apache.directory.api.ldap.model.cursor.EntryCursor;
+import org.apache.directory.api.ldap.model.entry.Entry;
+import org.apache.directory.api.ldap.model.exception.LdapException;
+import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
-import org.apache.directory.shared.ldap.model.cursor.EntryCursor;
-import org.apache.directory.shared.ldap.model.entry.Entry;
-import org.apache.directory.shared.ldap.model.exception.LdapException;
-import org.apache.directory.shared.ldap.model.message.SearchScope;
 import org.vaadin.addons.sitekit.dao.UserDirectoryDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.model.UserDirectory;
@@ -157,6 +157,13 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
 
     @Override
     public void onLogin(final LoginEvent event) {
+        if (event.getLoginParameter("username") == null) {
+            Notification.show(getSite().localize("message-login-failed"), Notification.TYPE_WARNING_MESSAGE);
+        }
+        if (event.getLoginParameter("password") == null) {
+            Notification.show(getSite().localize("message-login-failed"), Notification.TYPE_WARNING_MESSAGE);
+        }
+
         final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
                 .getHttpServletRequest();
         final String userEmailAddress = event.getLoginParameter("username");
