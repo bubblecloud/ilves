@@ -21,8 +21,13 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.vaadin.addons.sitekit.model.Company;
+import org.vaadin.addons.sitekit.util.StringUtil;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 /**
@@ -90,7 +95,7 @@ public abstract class AbstractSiteUI extends UI {
      */
     public void redirectTo(final String siteUrl,
                            final String viewName, final String notification, final Notification.Type notificationType) {
-        getUI().getPage().setLocation(siteUrl + "#!" + viewName);
+        getUI().getPage().setLocation(siteUrl + "#!" + viewName.replaceAll(" ", "%20"));
         getSession().setAttribute("redirectNotification", notification);
         getSession().setAttribute("redirectNotificationType", notificationType);
     }

@@ -154,12 +154,21 @@ public final class NavigationVersion {
     }
 
     /**
-     * Adds root page as last to the root page list.
+     * Adds root page at igven index.
      * @param index the index in the root page list where the new root page should be inserted at
      * @param rootPage the root page name
      */
     public void addRootPage(int index, final String rootPage) {
         addChildPage(NavigationTreeParser.ROOTS, index, rootPage);
+    }
+
+    /**
+     * Adds root page after given root page.
+     * @param previousPage the page after which this page should be added
+     * @param rootPage the root page name
+     */
+    public void addRootPage(final String previousPage, final String rootPage) {
+        addChildPage(NavigationTreeParser.ROOTS, previousPage, rootPage);
     }
 
     /**
@@ -185,6 +194,19 @@ public final class NavigationVersion {
             navigationMap.put(parentPage, new ArrayList<String>());
         }
         navigationMap.get(parentPage).add(index, childPage);
+    }
+
+    /**
+     * Adds child page at given index in the child page list.
+     * @param parentPage the parent page name
+     * @param previousPage the page after which to add the pae
+     * @param childPage the child page name
+     */
+    public void addChildPage(final String parentPage, final String previousPage, final String childPage) {
+        if (!navigationMap.containsKey(parentPage)) {
+            navigationMap.put(parentPage, new ArrayList<String>());
+        }
+        navigationMap.get(parentPage).add(navigationMap.get(parentPage).indexOf(previousPage) + 1, childPage);
     }
 
     /**

@@ -67,6 +67,7 @@ public class ContentModule implements SiteModule {
         fieldSetDescriptor.getFieldDescriptor("parentPage").setCollapsed(true);
         fieldSetDescriptor.getFieldDescriptor("afterPage").setRequired(false);
         fieldSetDescriptor.getFieldDescriptor("afterPage").setCollapsed(true);
+        fieldSetDescriptor.getFieldDescriptor("markupType").setRequired(true);
         fieldSetDescriptor.getFieldDescriptor("markupType").setFieldClass(MarkupTypeField.class);
         fieldSetDescriptor.getFieldDescriptor("markupType").setConverter(null);
         fieldSetDescriptor.getFieldDescriptor("markup").setFieldClass(MarkupField.class);
@@ -88,17 +89,29 @@ public class ContentModule implements SiteModule {
         final NavigationVersion navigationVersion = dynamicSiteDescriptor.getNavigation().getProductionVersion();
 
         for (final Content content : contents) {
+            final String page = content.getPage();
+            if (page == null) {
+                continue;
+            }
             final String parentPage = content.getParentPage();
             final String afterPage = content.getAfterPage();
-            final String page = content.getPage();
             final String title = content.getTitle();
             final MarkupType markupType = content.getMarkupType();
             final String markup = content.getMarkup();
 
             if (parentPage == null) {
-                navigationVersion.addRootPage(0, page);
+                if (afterPage == null) {
+                    navigationVersion.addRootPage(0, page);
+                    navigationVersion.setDefaultPageName(page);
+                } else {
+                    navigationVersion.addRootPage(afterPage, page);
+                }
             } else {
-                navigationVersion.addChildPage(parentPage, page);
+                if (afterPage == null) {
+                    navigationVersion.addChildPage(parentPage, page);
+                } else {
+                    navigationVersion.addChildPage(parentPage, afterPage, page);
+                }
             }
 
             // Describe content view.

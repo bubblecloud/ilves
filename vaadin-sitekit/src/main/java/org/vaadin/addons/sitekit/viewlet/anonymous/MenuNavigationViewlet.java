@@ -132,8 +132,11 @@ public final class MenuNavigationViewlet extends AbstractViewlet {
             }
         }
 
-        final String localizedPageName = getSite().localize("page-link-" + pageName);
-        final Resource iconResource = getSite().getIcon("page-icon-" + pageName);
+        final String localizedPageName = pageVersion.isDynamic() ? pageName :
+                getSite().localize("page-link-" + pageName);
+        final Resource iconResource = pageVersion.isDynamic() ? getSite().getIcon("page-icon-content") :
+                getSite().getIcon("page-icon-" + pageName);
+
         final MenuBar.MenuItem menuItem = parentItem.addItem(localizedPageName, iconResource,
                 navigationVersion.hasChildPages(pageName) ? null : new MenuBar.Command() {
             @Override
