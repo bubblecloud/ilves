@@ -25,7 +25,7 @@ public final class FieldSetDescriptorRegister {
     /**
      * The field set descriptors.
      */
-    private static HashMap<String, FieldSetDescriptor> fieldSetDescriptors = new HashMap<String, FieldSetDescriptor>();
+    private static HashMap<Object, FieldSetDescriptor> fieldSetDescriptors = new HashMap<Object, FieldSetDescriptor>();
 
     /**
      * Private default constructor to disable construction of utility class.
@@ -38,7 +38,7 @@ public final class FieldSetDescriptorRegister {
      * @param id the id
      * @param fieldSetDescriptor the field set descriptor
      */
-    public static synchronized void registerFieldSetDescriptor(final String id,
+    public static synchronized void registerFieldSetDescriptor(final Object id,
                                                                 final FieldSetDescriptor fieldSetDescriptor) {
         fieldSetDescriptors.put(id, fieldSetDescriptor);
     }
@@ -48,7 +48,7 @@ public final class FieldSetDescriptorRegister {
      * @param id the field set descriptor ID
      * @return the field set descriptor
      */
-    public static synchronized FieldSetDescriptor getFieldSetDescriptor(final String id) {
+    public static synchronized FieldSetDescriptor getFieldSetDescriptor(final Object id) {
         if (fieldSetDescriptors.containsKey(id)) {
             return fieldSetDescriptors.get(id);
         } else {

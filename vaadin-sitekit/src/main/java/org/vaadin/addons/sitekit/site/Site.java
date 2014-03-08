@@ -71,6 +71,15 @@ public final class Site implements ViewProvider, ViewChangeListener {
     }
 
     /**
+     * Method for accessing current site object.
+     *
+     * @return the current site
+     */
+    public static Site getCurrent() {
+        return ((AbstractSiteUI) UI.getCurrent()).getSite();
+    }
+
+    /**
      * Initialize the site.
      */
     public void initialize() {

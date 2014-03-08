@@ -22,6 +22,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.model.Feedback;
+import org.vaadin.addons.sitekit.module.SiteModuleManager;
+import org.vaadin.addons.sitekit.module.content.ContentModule;
 import org.vaadin.addons.sitekit.site.*;
 import org.vaadin.addons.sitekit.util.PersistenceUtil;
 
@@ -65,6 +67,9 @@ public class ExampleSiteMain {
         DefaultSiteUI.setContentProvider(new DefaultContentProvider());
         // Configure localization provider.
         DefaultSiteUI.setLocalizationProvider(new LocalizationProviderBundleImpl(LOCALIZATION_BUNDLE));
+
+        // Initialize content module.
+        SiteModuleManager.initializeModule(ContentModule.class);
 
         // Add feedback view and set it default.
         // -----------------------------------

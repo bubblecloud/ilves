@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+    <changeSet author="tlaukkan" id="f3069c10-a6cd-11e3-a5e2-0800200c9a66">
+        <createTable tableName="content">
+            <column name="contentid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="afterpage" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="markup" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="markuptype" type="INT4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="page" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="parentpage" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_companyid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="contentid" constraintName="content_pkey" tableName="content"/>
+        <addForeignKeyConstraint baseColumnNames="owner_companyid" baseTableName="content" constraintName="fk_content_owner_companyid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="companyid" referencedTableName="company"/>
+
+    </changeSet>
+</databaseChangeLog>
+

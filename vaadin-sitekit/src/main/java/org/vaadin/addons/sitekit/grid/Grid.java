@@ -158,10 +158,9 @@ public class Grid extends CustomComponent {
         for (final FieldDescriptor fieldDefinition : fieldDefinitions) {
             if (fieldDefinition.getWidth() != -1) {
                 table.setColumnWidth(fieldDefinition.getId(), fieldDefinition.getWidth());
-                //table.setColumnExpandRatio(fieldDefinition.getId(), 0);
-            } else {
-                //table.setColumnWidth(fieldDefinition.getId(), fieldDefinition.getWidth());
-                //table.setColumnExpandRatio(fieldDefinition.getId(), 1);
+            }
+            if (fieldDefinition.isCollapsed()) {
+                table.setColumnCollapsed(fieldDefinition.getId(), true);
             }
             if (table instanceof FormattingTable && fieldDefinition.getConverter() != null) {
                 try {

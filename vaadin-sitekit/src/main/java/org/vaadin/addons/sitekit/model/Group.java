@@ -181,7 +181,7 @@ public final class Group implements Serializable {
 
     @Override
     public int hashCode() {
-        return groupId.hashCode();
+        return groupId != null ? groupId.hashCode() : 0;
     }
 
     @Override

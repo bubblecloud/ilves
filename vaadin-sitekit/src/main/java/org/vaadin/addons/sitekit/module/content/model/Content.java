@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.model.wiki;
+package org.vaadin.addons.sitekit.module.content.model;
 
 import org.vaadin.addons.sitekit.model.Company;
 
@@ -42,13 +42,21 @@ public final class Content implements Serializable {
     @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH }, optional = false)
     private Company owner;
 
-    /** Name. */
+    /** Page. */
     @Column(nullable = false)
-    private String name;
+    private String page;
+
+    /** Parent page under which this page is to be added. If null then page will be added to root level. */
+    @Column(nullable = false)
+    private String parentPage;
+
+    /** Page after which this page is to be added. If null then page will be added last. */
+    @Column(nullable = false)
+    private String afterPage;
 
     /** Description. */
     @Column(nullable = false)
-    private String description;
+    private String title;
 
     /** Markup. */
     @Column(nullable = false)
@@ -104,31 +112,59 @@ public final class Content implements Serializable {
     }
 
     /**
-     * @return the name
+     * @return the page
      */
-    public String getName() {
-        return name;
+    public String getPage() {
+        return page;
     }
 
     /**
-     * @param name the name to set
+     * @param page the page to set
      */
-    public void setName(final String name) {
-        this.name = name;
+    public void setPage(final String page) {
+        this.page = page;
     }
 
     /**
-     * @return the description
+     * @return the parent page
      */
-    public String getDescription() {
-        return description;
+    public String getParentPage() {
+        return parentPage;
     }
 
     /**
-     * @param description the description to set
+     * @param parentPage the parent page to set
      */
-    public void setDescription(final String description) {
-        this.description = description;
+    public void setParentPage(final String parentPage) {
+        this.parentPage = parentPage;
+    }
+
+    /**
+     * @return the page after which this page is to be added. If null then page will be added last.
+     */
+    public String getAfterPage() {
+        return afterPage;
+    }
+
+    /**
+     * @param afterPage the page after which this page is to be added. If null then page will be added last.
+     */
+    public void setAfterPage(final String afterPage) {
+        this.afterPage = afterPage;
+    }
+
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * @param title the title to set
+     */
+    public void setTitle(final String title) {
+        this.title = title;
     }
 
     /**
@@ -189,7 +225,7 @@ public final class Content implements Serializable {
 
     @Override
     public String toString() {
-        return description;
+        return title;
     }
 
     @Override

@@ -53,6 +53,8 @@ public final class FieldDescriptor {
     private boolean sortable;
     /** Reflects whether field is required. */
     private boolean required;
+    /** Reflects whether field is collapsed. */
+    private boolean collapsed = false;
     /** The value alignment. */
     private HorizontalAlignment valueAlignment = HorizontalAlignment.LEFT;
     /** Validators. */
@@ -165,6 +167,13 @@ public final class FieldDescriptor {
     }
 
     /**
+     * @return the collapsed
+     */
+    public boolean isCollapsed() {
+        return collapsed;
+    }
+
+    /**
      * Adds validator to field descriptor.
      * @param validator the validator to add.
      * @return self.
@@ -227,7 +236,7 @@ public final class FieldDescriptor {
     /**
      * @param converter the converter
      */
-    public void setFormatterClass(final Converter<?,?> converter) {
+    public void setConverter(final Converter<?, ?> converter) {
         this.converter = converter;
     }
 
@@ -250,6 +259,13 @@ public final class FieldDescriptor {
      */
     public void setRequired(final boolean required) {
         this.required = required;
+    }
+
+    /**
+     * @param collapsed the collapsed
+     */
+    public void setCollapsed(final boolean collapsed) {
+        this.collapsed = collapsed;
     }
 
     /**

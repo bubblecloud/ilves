@@ -41,7 +41,7 @@ import org.vaadin.addons.sitekit.dao.UserDirectoryDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.model.UserDirectory;
 import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
-import org.vaadin.addons.sitekit.util.CIDRUtils;
+import org.vaadin.addons.sitekit.util.CidrUtil;
 import org.vaadin.addons.sitekit.util.OpenIdUtil;
 import org.vaadin.addons.sitekit.util.StringUtil;
 import org.apache.log4j.Logger;
@@ -197,7 +197,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
                 }
                 final String[] subnets = userDirectory.getSubNetWhiteList().split(",");
                 for (final String subnet : subnets) {
-                    final CIDRUtils cidrUtils = new CIDRUtils(subnet);
+                    final CidrUtil cidrUtils = new CidrUtil(subnet);
                     if (cidrUtils.isInRange(remoteIpAddress)) {
                         directoryLoginAttempted = attemptDirectoryLogin(event, request, entityManager, company, user, userDirectory);
                         break;

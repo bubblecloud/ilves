@@ -198,9 +198,6 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
 
     @Override
     public final void enter(final String parameters) {
-        /*for (final Flowlet view : flows.values()) {
-            view.enter();
-        }*/
         viewPath.getLast().enter();
     }
 

@@ -1,4 +1,4 @@
-package org.vaadin.addons.sitekit.model.wiki;
+package org.vaadin.addons.sitekit.module.content.model;
 
 /**
  * Markup Type
