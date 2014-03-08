@@ -124,7 +124,7 @@ public final class CustomersFlowlet extends AbstractFlowlet {
                 customer.setInvoicingAddress(new PostalAddress());
                 customer.setDeliveryAddress(new PostalAddress());
                 customer.setOwner((Company) getSite().getSiteContext().getObject(Company.class));
-                final CustomerFlowlet customerView = getViewSheet().forward(CustomerFlowlet.class);
+                final CustomerFlowlet customerView = getFlow().forward(CustomerFlowlet.class);
                 customerView.edit(customer, true);
             }
         });
@@ -140,7 +140,7 @@ public final class CustomersFlowlet extends AbstractFlowlet {
             @Override
             public void buttonClick(final ClickEvent event) {
                 final Customer entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
-                final CustomerFlowlet customerView = getViewSheet().forward(CustomerFlowlet.class);
+                final CustomerFlowlet customerView = getFlow().forward(CustomerFlowlet.class);
                 customerView.edit(entity, false);
             }
         });

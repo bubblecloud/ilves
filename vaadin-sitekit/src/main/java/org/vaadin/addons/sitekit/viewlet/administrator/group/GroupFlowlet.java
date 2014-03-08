@@ -30,7 +30,6 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
-import org.vaadin.addons.sitekit.viewlet.administrator.user.UserGroupMemberFlowlet;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -186,7 +185,7 @@ public final class GroupFlowlet extends AbstractFlowlet implements ValidatingEdi
                 final GroupMember groupMember = new GroupMember();
                 groupMember.setGroup(entity);
                 groupMember.setCreated(new Date());
-                final GroupUserMemberFlowlet userGroupMemberFlowlet = getViewSheet().forward(GroupUserMemberFlowlet.class);
+                final GroupUserMemberFlowlet userGroupMemberFlowlet = getFlow().forward(GroupUserMemberFlowlet.class);
                 userGroupMemberFlowlet.edit(groupMember, true);
             }
         });

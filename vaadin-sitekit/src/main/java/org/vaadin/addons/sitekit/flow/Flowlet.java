@@ -29,16 +29,21 @@ public interface Flowlet {
     String getFlowletKey();
 
     /**
+     * @return the flow
+     */
+    Flow getFlow();
+
+    /**
      * Sets the Flow.
      * @param viewSheet the flow sheet.
      */
-    void setFlowSheet(final Flow viewSheet);
+    void setFlow(final Flow viewSheet);
 
     /**
      * True if flowlet content is dirty.
      * @return true if flow content is modified.
      */
-    boolean isDirty(); //
+    boolean isDirty();
 
     /**
      * Flowlet entered.

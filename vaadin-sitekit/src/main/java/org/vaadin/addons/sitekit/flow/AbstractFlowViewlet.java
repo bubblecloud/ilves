@@ -138,7 +138,7 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
 
     @Override
     public final void addFlowlet(final Flowlet flowlet) {
-        flowlet.setFlowSheet(this);
+        flowlet.setFlow(this);
         views.put(flowlet.getClass(), flowlet);
         final Tab tab = tabSheet.addTab((Component) flowlet);
         tabs.put(flowlet.getClass(), tab);

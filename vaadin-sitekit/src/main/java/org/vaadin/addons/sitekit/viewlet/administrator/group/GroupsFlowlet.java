@@ -116,7 +116,7 @@ public final class GroupsFlowlet extends AbstractFlowlet {
                 group.setCreated(new Date());
                 group.setModified(group.getCreated());
                 group.setOwner((Company) getSite().getSiteContext().getObject(Company.class));
-                final GroupFlowlet groupView = getViewSheet().forward(GroupFlowlet.class);
+                final GroupFlowlet groupView = getFlow().forward(GroupFlowlet.class);
                 groupView.edit(group, true);
             }
         });
@@ -130,7 +130,7 @@ public final class GroupsFlowlet extends AbstractFlowlet {
             @Override
             public void buttonClick(final ClickEvent event) {
                 final Group entity = container.getEntity(grid.getSelectedItemId());
-                final GroupFlowlet groupView = getViewSheet().forward(GroupFlowlet.class);
+                final GroupFlowlet groupView = getFlow().forward(GroupFlowlet.class);
                 groupView.edit(entity, false);
             }
         });

@@ -25,13 +25,11 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import org.apache.log4j.Logger;
-import org.vaadin.addons.sitekit.dao.CustomerDao;
 import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
-import org.vaadin.addons.sitekit.grid.validator.PasswordVerificationValidator;
 import org.vaadin.addons.sitekit.model.*;
 import org.vaadin.addons.sitekit.site.SiteException;
 import org.vaadin.addons.sitekit.util.EmailUtil;
@@ -185,7 +183,7 @@ public final class ForgotPasswordFlowlet extends AbstractFlowlet {
                     LOGGER.info("Password reset email sent to " + user.getEmailAddress()
                             + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
 
-                    getViewSheet().back();
+                    getFlow().back();
                 } catch (final Exception e) {
                     LOGGER.error("Error preparing password reset.", e);
                     Notification.show(getSite().localize("message-password-reset-prepare-error"),

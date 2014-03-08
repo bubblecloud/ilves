@@ -203,7 +203,7 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
                 final GroupMember userElement = new GroupMember();
                 userElement.setUser(user);
                 userElement.setCreated(new Date());
-                final UserGroupMemberFlowlet userGroupMemberFlowlet = getViewSheet().forward(UserGroupMemberFlowlet.class);
+                final UserGroupMemberFlowlet userGroupMemberFlowlet = getFlow().forward(UserGroupMemberFlowlet.class);
                 userGroupMemberFlowlet.edit(userElement, true);
             }
         });

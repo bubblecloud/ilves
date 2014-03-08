@@ -130,7 +130,7 @@ public final class CompaniesFlowlet extends AbstractFlowlet {
                 company.setModified(company.getCreated());
                 company.setInvoicingAddress(new PostalAddress());
                 company.setDeliveryAddress(new PostalAddress());
-                final CompanyFlowlet companyView = getViewSheet().forward(CompanyFlowlet.class);
+                final CompanyFlowlet companyView = getFlow().forward(CompanyFlowlet.class);
                 companyView.edit(company, true);
             }
         });
@@ -146,7 +146,7 @@ public final class CompaniesFlowlet extends AbstractFlowlet {
             @Override
             public void buttonClick(final ClickEvent event) {
                 final Company entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
-                final CompanyFlowlet companyView = getViewSheet().forward(CompanyFlowlet.class);
+                final CompanyFlowlet companyView = getFlow().forward(CompanyFlowlet.class);
                 companyView.edit(entity, false);
             }
         });

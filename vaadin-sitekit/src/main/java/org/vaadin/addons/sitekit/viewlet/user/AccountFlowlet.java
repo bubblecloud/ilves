@@ -39,7 +39,6 @@ import org.vaadin.addons.sitekit.util.OpenIdUtil;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowlet;
 import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupFlowlet;
-import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupsFlowlet;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -151,9 +150,9 @@ public final class AccountFlowlet extends AbstractFlowlet {
             public void buttonClick(final ClickEvent event) {
                 final User entity = ((SecurityProviderSessionImpl)
                         getSite().getSecurityProvider()).getUserFromSession();
-                final UserAccountFlowlet customerView = getViewSheet().getFlowlet(UserAccountFlowlet.class);
+                final UserAccountFlowlet customerView = getFlow().getFlowlet(UserAccountFlowlet.class);
                 customerView.edit(entity, false);
-                getViewSheet().forward(UserAccountFlowlet.class);
+                getFlow().forward(UserAccountFlowlet.class);
             }
         });
 
@@ -190,7 +189,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
             @Override
             public void buttonClick(final ClickEvent event) {
                 final Customer entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
-                final CustomerFlowlet customerView = getViewSheet().forward(CustomerFlowlet.class);
+                final CustomerFlowlet customerView = getFlow().forward(CustomerFlowlet.class);
                 customerView.edit(entity, false);
             }
         });
@@ -206,7 +205,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
             @Override
             public void buttonClick(final ClickEvent event) {
                 final Customer entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
-                final GroupFlowlet view = getViewSheet().forward(GroupFlowlet.class);
+                final GroupFlowlet view = getFlow().forward(GroupFlowlet.class);
                 view.edit(entity.getMemberGroup(), false);
             }
         });
@@ -222,7 +221,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
             @Override
             public void buttonClick(final ClickEvent event) {
                 final Customer entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
-                final GroupFlowlet view = getViewSheet().forward(GroupFlowlet.class);
+                final GroupFlowlet view = getFlow().forward(GroupFlowlet.class);
                 view.edit(entity.getAdminGroup(), false);
             }
         });

@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,7 +119,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
         registerButton.addListener(new ClickListener() {
             @Override
             public void buttonClick(final ClickEvent event) {
-                getViewSheet().forward(RegisterFlowlet.class);
+                getFlow().forward(RegisterFlowlet.class);
             }
         });
         layout.addComponent(registerButton);
@@ -130,7 +129,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
             forgotPasswordButton.addListener(new ClickListener() {
                 @Override
                 public void buttonClick(final ClickEvent event) {
-                    getViewSheet().forward(ForgotPasswordFlowlet.class);
+                    getFlow().forward(ForgotPasswordFlowlet.class);
                 }
             });
             layout.addComponent(forgotPasswordButton);

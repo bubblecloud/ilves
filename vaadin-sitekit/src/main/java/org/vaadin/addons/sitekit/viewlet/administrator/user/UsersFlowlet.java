@@ -15,7 +15,6 @@
  */
 package org.vaadin.addons.sitekit.viewlet.administrator.user;
 
-import com.vaadin.data.util.BeanItem;
 import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
@@ -36,12 +35,8 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import org.vaadin.addons.lazyquerycontainer.EntityContainer;
-import org.vaadin.addons.sitekit.util.StringUtil;
 
 import javax.persistence.EntityManager;
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -124,9 +119,9 @@ public final class UsersFlowlet extends AbstractFlowlet {
                 user.setModified(user.getCreated());
                 user.setOwner((Company) getSite().getSiteContext().getObject(Company.class));
 
-                final UserFlowlet userView = getViewSheet().getFlowlet(UserFlowlet.class);
+                final UserFlowlet userView = getFlow().getFlowlet(UserFlowlet.class);
                 userView.edit(user, true);
-                getViewSheet().forward(UserFlowlet.class);
+                getFlow().forward(UserFlowlet.class);
             }
         });
 
@@ -139,9 +134,9 @@ public final class UsersFlowlet extends AbstractFlowlet {
             @Override
             public void buttonClick(final ClickEvent event) {
                 final User entity = container.getEntity(grid.getSelectedItemId());
-                final UserFlowlet userView = getViewSheet().getFlowlet(UserFlowlet.class);
+                final UserFlowlet userView = getFlow().getFlowlet(UserFlowlet.class);
                 userView.edit(entity, false);
-                getViewSheet().forward(UserFlowlet.class);
+                getFlow().forward(UserFlowlet.class);
             }
         });
 

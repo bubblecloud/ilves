@@ -26,7 +26,6 @@ import org.vaadin.addons.sitekit.grid.FilterDescriptor;
 import org.vaadin.addons.sitekit.grid.Grid;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.UserDirectory;
-import org.vaadin.addons.sitekit.model.PostalAddress;
 import org.vaadin.addons.sitekit.site.SiteFields;
 
 import javax.persistence.EntityManager;
@@ -128,7 +127,7 @@ public final class UserDirectoriesFlowlet extends AbstractFlowlet {
                 userDirectory.setCreated(new Date());
                 userDirectory.setModified(userDirectory.getCreated());
                 userDirectory.setOwner((Company) getSite().getSiteContext().getObject(Company.class));
-                final UserDirectoryFlowlet userDirectoryView = getViewSheet().forward(UserDirectoryFlowlet.class);
+                final UserDirectoryFlowlet userDirectoryView = getFlow().forward(UserDirectoryFlowlet.class);
                 userDirectoryView.edit(userDirectory, true);
             }
         });
@@ -144,7 +143,7 @@ public final class UserDirectoriesFlowlet extends AbstractFlowlet {
             @Override
             public void buttonClick(final ClickEvent event) {
                 final UserDirectory entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
-                final UserDirectoryFlowlet userDirectoryView = getViewSheet().forward(UserDirectoryFlowlet.class);
+                final UserDirectoryFlowlet userDirectoryView = getFlow().forward(UserDirectoryFlowlet.class);
                 userDirectoryView.edit(entity, false);
             }
         });

@@ -37,7 +37,7 @@ public abstract class AbstractFlowlet extends CustomComponent implements Flowlet
     private static final long serialVersionUID = 1L;
 
     /** The flow sheet. */
-    private Flow viewSheet;
+    private Flow flow;
 
     /** The root layout. */
     private GridLayout rootLayout;
@@ -59,16 +59,14 @@ public abstract class AbstractFlowlet extends CustomComponent implements Flowlet
         return ((AbstractSiteUI) UI.getCurrent()).getSite();
     }
 
-    /**
-     * @return the viewSheet
-     */
-    protected final Flow getViewSheet() {
-        return viewSheet;
+    @Override
+    public final Flow getFlow() {
+        return flow;
     }
 
     @Override
-    public final void setFlowSheet(final Flow viewSheet) {
-        this.viewSheet = viewSheet;
+    public final void setFlow(final Flow flow) {
+        this.flow = flow;
     }
 
     @Override

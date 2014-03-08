@@ -211,7 +211,7 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                     Notification.show(getSite().localize("message-registration-success"),
                             Notification.Type.HUMANIZED_MESSAGE);
 
-                    getViewSheet().back();
+                    getFlow().back();
                 } catch (final Exception e) {
                     LOGGER.error("Error adding user. (IP: " + request.getRemoteHost()
                             + ":" + request.getRemotePort() + ")", e);
