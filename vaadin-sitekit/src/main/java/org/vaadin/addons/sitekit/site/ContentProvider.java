@@ -24,4 +24,9 @@ public interface ContentProvider {
      * @return the SiteDescriptor
      */
     SiteDescriptor getSiteDescriptor();
+    /**
+     * Gets the SiteDescriptor containing dynamic content.
+     * @return the SiteDescriptor
+     */
+    SiteDescriptor getDynamicSiteDescriptor();
 }

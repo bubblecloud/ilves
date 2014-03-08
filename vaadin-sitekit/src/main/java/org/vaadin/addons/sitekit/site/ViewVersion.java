@@ -39,6 +39,8 @@ public final class ViewVersion {
     private String[] viewerRoles;
     /** The view viewlet descriptors. */
     private List<ViewletDescriptor> viewletDescriptors;
+    /** Whether this is dynamic content. */
+    private boolean dynamic = false;
 
     /**
      * Constructor for populating view version with proper values.
@@ -195,5 +197,17 @@ public final class ViewVersion {
         this.viewletDescriptors = viewletDescriptors;
     }
 
+    /**
+     * @return true if is dynamic content
+     */
+    public boolean isDynamic() {
+        return dynamic;
+    }
 
+    /**
+     * @param dynamic true if is dynamic content
+     */
+    public void setDynamic(final boolean dynamic) {
+        this.dynamic = dynamic;
+    }
 }

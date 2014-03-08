@@ -15,12 +15,19 @@
  */
 package org.vaadin.addons.sitekit.module.content.dao;
 
+import com.vaadin.ui.ComboBox;
 import org.apache.log4j.Logger;
+import org.vaadin.addons.sitekit.model.Company;
+import org.vaadin.addons.sitekit.model.Group;
+import org.vaadin.addons.sitekit.model.GroupMember;
+import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.module.content.model.Content;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Content data access object.
@@ -58,4 +65,17 @@ public class ContentDao {
         }
     }
 
+    /**
+     * Gets list of contents.
+     * @param entityManager the entity manager.
+     * @param owner the owning company
+     * @return list of contents
+     */
+    public static final List<Content> getContens(final EntityManager entityManager, final Company owner) {
+        final TypedQuery<Content> query = entityManager.createQuery(
+                "select e from Content as e where e.owner=:owner order by e.parentPage, e.afterPage, e.page",
+                Content.class);
+        query.setParameter("owner", owner);
+        return query.getResultList();
+    }
 }

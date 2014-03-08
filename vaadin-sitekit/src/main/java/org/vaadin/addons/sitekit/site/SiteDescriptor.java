@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,6 +52,13 @@ public final class SiteDescriptor {
         this.navigation = navigation;
         this.viewDescriptors = viewDescriptors;
     }
+
+    /**
+     * Default constructor for cloning.
+     */
+    public SiteDescriptor() {
+    }
+
     /**
      * @return the title
      */
@@ -111,5 +119,16 @@ public final class SiteDescriptor {
     public void setViewDescriptors(final List<ViewDescriptor> viewDescriptors) {
         this.viewDescriptors = viewDescriptors;
     }
-
+    /**
+     * @return clone
+     */
+    public SiteDescriptor clone() {
+        final SiteDescriptor clone = new SiteDescriptor();
+        clone.title = title;
+        clone.keywords = keywords;
+        clone.description = description;
+        clone.navigation = navigation.clone();
+        clone.viewDescriptors = new ArrayList<ViewDescriptor>(viewDescriptors);
+        return clone;
+    }
 }

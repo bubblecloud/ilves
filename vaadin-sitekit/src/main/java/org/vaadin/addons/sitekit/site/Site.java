@@ -42,6 +42,8 @@ public final class Site implements ViewProvider, ViewChangeListener {
     private final SiteMode siteMode;
     /** The portal view windows. */
     private final Map<String, Window> windows = new HashMap<String, Window>();
+    /** The content provider. */
+    private final ContentProvider contentProvider;
     /** The localization provider. */
     private final LocalizationProvider localizationProvider;
     /** The security provider. */
@@ -64,6 +66,7 @@ public final class Site implements ViewProvider, ViewChangeListener {
             final SecurityProvider securityProvider, final SiteContext siteContext) {
         super();
         this.siteDescriptor = contentProvider.getSiteDescriptor();
+        this.contentProvider = contentProvider;
         this.siteMode = siteMode;
         this.localizationProvider = localizationProvider;
         this.securityProvider = securityProvider;
@@ -166,13 +169,13 @@ public final class Site implements ViewProvider, ViewChangeListener {
      */
     public NavigationVersion getCurrentNavigationVersion() {
         if (siteMode == SiteMode.DEVELOPMENT) {
-            return siteDescriptor.getNavigation().getDevelopmentVersion();
+            return contentProvider.getDynamicSiteDescriptor().getNavigation().getDevelopmentVersion();
         }
         if (siteMode == SiteMode.TEST) {
-            return siteDescriptor.getNavigation().getTestVersion();
+            return contentProvider.getDynamicSiteDescriptor().getNavigation().getTestVersion();
         }
         if (siteMode == SiteMode.PRODUCTION) {
-            return siteDescriptor.getNavigation().getProductionVersion();
+            return contentProvider.getDynamicSiteDescriptor().getNavigation().getProductionVersion();
         }
         throw new SiteException("Unable to deduce navigation version due to invalid portal mode: " + siteMode);
     }
@@ -183,7 +186,7 @@ public final class Site implements ViewProvider, ViewChangeListener {
      * @return The current view version.
      */
     public ViewVersion getCurrentViewVersion(final String viewName) {
-        for (final ViewDescriptor view : siteDescriptor.getViewDescriptors()) {
+        for (final ViewDescriptor view : contentProvider.getDynamicSiteDescriptor().getViewDescriptors()) {
             if (viewName.equals(view.getName())) {
                 ViewVersion viewVersion = null;
                 if (siteMode == SiteMode.DEVELOPMENT) {
@@ -255,7 +258,7 @@ public final class Site implements ViewProvider, ViewChangeListener {
     @Override
     public View getView(final String viewName) {
         if (!views.containsKey(viewName)) {
-            for (final ViewDescriptor viewDescriptor : getSiteDescriptor().getViewDescriptors()) {
+            for (final ViewDescriptor viewDescriptor : contentProvider.getDynamicSiteDescriptor().getViewDescriptors()) {
                 if (viewDescriptor.getName().equals(viewName)) {
                     constructView(viewDescriptor);
                 }

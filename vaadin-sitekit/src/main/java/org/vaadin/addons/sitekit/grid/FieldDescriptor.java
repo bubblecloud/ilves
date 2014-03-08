@@ -188,7 +188,7 @@ public final class FieldDescriptor {
      * @return list of validators.
      */
     public List<Validator> getValidators() {
-        return Collections.unmodifiableList(validators);
+        return validators;
     }
 
     /**

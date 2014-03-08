@@ -15,6 +15,8 @@
  */
 package org.vaadin.addons.sitekit.module;
 
+import org.vaadin.addons.sitekit.site.SiteDescriptor;
+
 /**
  * Interface for site extension modules.
  *
@@ -25,4 +27,10 @@ public interface SiteModule {
      * Initializes extension module.
      */
     void initialize();
+
+    /**
+     * Injects dynamic content to the site descriptor for the period of one page load.
+     * @param dynamicSiteDescriptor the dynamic site descriptor
+     */
+    void injectDynamicContent(final SiteDescriptor dynamicSiteDescriptor);
 }

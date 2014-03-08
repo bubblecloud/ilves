@@ -56,6 +56,12 @@ public final class NavigationVersion {
     }
 
     /**
+     * Default constructor for cloning.
+     */
+    public NavigationVersion() {
+    }
+
+    /**
      * @return the version
      */
     public int getVersion() {
@@ -179,5 +185,20 @@ public final class NavigationVersion {
             navigationMap.put(parentPage, new ArrayList<String>());
         }
         navigationMap.get(parentPage).add(index, childPage);
+    }
+
+    /**
+     * @return clone
+     */
+    public NavigationVersion clone() {
+        final NavigationVersion clone = new NavigationVersion();
+        clone.version = version;
+        clone.defaultPageName = defaultPageName;
+        clone.navigationMap = new HashMap<String, List<String>>();
+        for (final String key : navigationMap.keySet()) {
+            clone.navigationMap.put(key, new ArrayList<String>(navigationMap.get(key)));
+        }
+        clone.enabled = enabled;
+        return clone;
     }
 }

@@ -35,7 +35,9 @@
         </createTable>
         <addPrimaryKey columnNames="contentid" constraintName="content_pkey" tableName="content"/>
         <addForeignKeyConstraint baseColumnNames="owner_companyid" baseTableName="content" constraintName="fk_content_owner_companyid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="companyid" referencedTableName="company"/>
-
+    </changeSet>
+    <changeSet author="tlaukkan" id="5c6f0410-a6f3-11e3-a5e2-0800200c9a66">
+        <modifyDataType columnName="markup" newDataType="text" tableName="content"/>
     </changeSet>
 </databaseChangeLog>
 

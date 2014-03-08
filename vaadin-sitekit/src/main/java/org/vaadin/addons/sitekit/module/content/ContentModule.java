@@ -17,12 +17,19 @@ package org.vaadin.addons.sitekit.module.content;
 
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
+import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.module.SiteModule;
+import org.vaadin.addons.sitekit.module.content.dao.ContentDao;
 import org.vaadin.addons.sitekit.module.content.model.Content;
+import org.vaadin.addons.sitekit.module.content.model.MarkupType;
 import org.vaadin.addons.sitekit.module.content.view.ContentFlow;
+import org.vaadin.addons.sitekit.module.content.view.MarkdownViewlet;
 import org.vaadin.addons.sitekit.module.content.view.MarkupField;
 import org.vaadin.addons.sitekit.module.content.view.MarkupTypeField;
 import org.vaadin.addons.sitekit.site.*;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 /**
  * Content module adds support for Wiki content management.
@@ -64,10 +71,42 @@ public class ContentModule implements SiteModule {
         fieldSetDescriptor.getFieldDescriptor("markupType").setConverter(null);
         fieldSetDescriptor.getFieldDescriptor("markup").setFieldClass(MarkupField.class);
         fieldSetDescriptor.getFieldDescriptor("markup").setWidth(800);
+        fieldSetDescriptor.getFieldDescriptor("markup").getValidators().clear();
         fieldSetDescriptor.getFieldDescriptor("markup").setCollapsed(true);
         fieldSetDescriptor.getFieldDescriptor("title").setWidth(-1);
 
         FieldSetDescriptorRegister.registerFieldSetDescriptor(Content.class, fieldSetDescriptor);
+
+    }
+
+    @Override
+    public void injectDynamicContent(final SiteDescriptor dynamicSiteDescriptor) {
+        final Company company = Site.getCurrent().getSiteContext().getObject(Company.class);
+        final EntityManager entityManager = Site.getCurrent().getSiteContext().getObject(EntityManager.class);
+        final List<Content> contents = ContentDao.getContens(entityManager, company);
+
+        final NavigationVersion navigationVersion = dynamicSiteDescriptor.getNavigation().getProductionVersion();
+
+        for (final Content content : contents) {
+            final String parentPage = content.getParentPage();
+            final String afterPage = content.getAfterPage();
+            final String page = content.getPage();
+            final String title = content.getTitle();
+            final MarkupType markupType = content.getMarkupType();
+            final String markup = content.getMarkup();
+
+            if (parentPage == null) {
+                navigationVersion.addRootPage(0, page);
+            } else {
+                navigationVersion.addChildPage(parentPage, page);
+            }
+
+            // Describe content view.
+            final ViewDescriptor viewDescriptor = new ViewDescriptor(page, title, DefaultView.class);
+            viewDescriptor.getProductionVersion().setDynamic(true);
+            viewDescriptor.setViewletClass("content", MarkdownViewlet.class, markup);
+            dynamicSiteDescriptor.getViewDescriptors().add(viewDescriptor);
+        }
 
     }
 }

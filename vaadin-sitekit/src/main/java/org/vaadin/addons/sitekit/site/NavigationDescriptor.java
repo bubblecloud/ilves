@@ -45,6 +45,12 @@ public final class NavigationDescriptor {
     }
 
     /**
+     * Default constructor for cloning.
+     */
+    public NavigationDescriptor() {
+    }
+
+    /**
      * @return the name
      */
     public String getName() {
@@ -86,5 +92,21 @@ public final class NavigationDescriptor {
     public void setProductionVersion(final NavigationVersion productionVersion) {
         this.productionVersion = productionVersion;
     }
-
+    /**
+     * @return clone
+     */
+    public NavigationDescriptor clone() {
+        final NavigationDescriptor clone = new NavigationDescriptor();
+        clone.name = name;
+        if (developmentVersion != null) {
+            clone.developmentVersion = developmentVersion.clone();
+        }
+        if (testVersion != null) {
+            clone.testVersion = testVersion.clone();
+        }
+        if (productionVersion != null) {
+            clone.productionVersion = productionVersion.clone();
+        }
+        return clone;
+    }
 }

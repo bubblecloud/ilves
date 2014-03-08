@@ -17,6 +17,7 @@ package org.vaadin.addons.sitekit.module;
 
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.module.content.ContentModule;
+import org.vaadin.addons.sitekit.site.SiteDescriptor;
 import org.vaadin.addons.sitekit.site.SiteException;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class SiteModuleManager {
     /**
      * Set of initialized site modules.
      */
-    private static Set<Class<? extends SiteModule>> initializedSiteModules = new HashSet<Class<? extends SiteModule>>();
+    private static List<Class<? extends SiteModule>> initializedSiteModules = new ArrayList<Class<? extends SiteModule>>();
 
     /**
      * Register builtin modules.
@@ -90,4 +91,18 @@ public class SiteModuleManager {
     public static synchronized boolean isModuleInitialized(final Class<? extends SiteModule> siteModuleClass) {
         return initializedSiteModules.contains(siteModuleClass);
     }
+
+    /**
+     * Injects dynamic content to dynamic site descriptor.
+     * @param dynamicSiteDescriptor the dynamic site descriptor
+     */
+    public static synchronized void injectDynamicContent(final SiteDescriptor dynamicSiteDescriptor) {
+        for (final SiteModule siteModule : availableSiteModules) {
+            if (isModuleInitialized(siteModule.getClass())) {
+                siteModule.injectDynamicContent(dynamicSiteDescriptor);
+            }
+        }
+    }
+
+
 }

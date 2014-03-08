@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import org.vaadin.addons.sitekit.module.SiteModuleManager;
 import org.vaadin.addons.sitekit.viewlet.administrator.company.CompanyFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.directory.UserDirectoryFlowViewlet;
@@ -130,6 +131,13 @@ public class DefaultContentProvider implements ContentProvider {
     @Override
     public SiteDescriptor getSiteDescriptor() {
         return siteDescriptor;
+    }
+
+    @Override
+    public SiteDescriptor getDynamicSiteDescriptor() {
+        final SiteDescriptor dynamicSiteDescriptor = siteDescriptor.clone();
+        SiteModuleManager.injectDynamicContent(dynamicSiteDescriptor);
+        return dynamicSiteDescriptor;
     }
 
 }
