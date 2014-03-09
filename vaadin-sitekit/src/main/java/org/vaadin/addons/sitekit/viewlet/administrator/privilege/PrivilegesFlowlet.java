@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.module.content.view;
+package org.vaadin.addons.sitekit.viewlet.administrator.privilege;
 
 import com.vaadin.data.Property;
 import com.vaadin.shared.ui.MarginInfo;
@@ -24,7 +24,7 @@ import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
-import org.vaadin.addons.sitekit.module.content.dao.ContentDao;
+import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.Site;
 
 import javax.persistence.EntityManager;
@@ -44,10 +44,14 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
     private Button saveButton;
     /** The discard button. */
     private Button discardButton;
-    private GridLayout matrix;
-    private CheckBox[] checkBoxes;
     private VerticalLayout matrixLayout;
+
     private Label titleLabel;
+
+    private GridLayout groupMatrix;
+    private CheckBox[] groupCheckBoxes;
+    private GridLayout userMatrix;
+    private CheckBox[] userCheckBoxes;
 
     @Override
     public String getFlowletKey() {
@@ -68,7 +72,7 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
         titleLayout.addComponent(titleLabel);
 
         matrixLayout = new VerticalLayout();
-        matrixLayout.setSpacing(false);
+        matrixLayout.setSpacing(true);
         matrixLayout.setMargin(false);
 
         final HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -81,7 +85,8 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final Button.ClickEvent event) {
-                saveMatrix();
+                saveGroupMatrix();
+                saveUserMatrix();
             }
         });
         discardButton = getSite().getButton("discard");
@@ -92,7 +97,8 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final Button.ClickEvent event) {
-                refreshMatrix();
+                refreshGroupMatrix();
+                refreshUserMatrix();
             }
         });
 
@@ -116,7 +122,7 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
     }
 
     /**
-     * Sets the data ID and privilege keys to show in the privilege matrix.
+     * Sets the data ID and privilege keys to show in the privilege groupMatrix.
      * @param dataLabel the data label
      * @param dataId the data ID
      * @param privilegeKey the privilege key
@@ -127,25 +133,26 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
         this.privilegeKeys = privilegeKey;
 
         titleLabel.setValue("<h1>" + dataLabel + " " + getSite().localize("view-privileges") + "</h1>");
-        refreshMatrix();
+        refreshGroupMatrix();
+        refreshUserMatrix();
     }
 
-    private void refreshMatrix() {
+    private void refreshGroupMatrix() {
         final EntityManager entityManager = Site.getCurrent().getSiteContext().getObject(EntityManager.class);
         final Company company = Site.getCurrent().getSiteContext().getObject(Company.class);
 
-        if (matrix != null) {
-            matrixLayout.removeComponent(matrix);
+        if (groupMatrix != null) {
+            matrixLayout.removeComponent(groupMatrix);
         }
         final List<Group> groups = UserDao.getGroups(entityManager, company);
 
-        checkBoxes = new CheckBox[privilegeKeys.length * groups.size()];
-        matrix = new GridLayout(privilegeKeys.length + 1, groups.size() + 1);
-        matrixLayout.addComponent(matrix);
-        for (int i = 0; i < checkBoxes.length; i++) {
-            checkBoxes[i] = new CheckBox();
-            checkBoxes[i].setImmediate(true);
-            checkBoxes[i].addValueChangeListener(new Property.ValueChangeListener() {
+        groupCheckBoxes = new CheckBox[privilegeKeys.length * groups.size()];
+        groupMatrix = new GridLayout(privilegeKeys.length + 1, groups.size() + 1);
+        matrixLayout.addComponent(groupMatrix);
+        for (int i = 0; i < groupCheckBoxes.length; i++) {
+            groupCheckBoxes[i] = new CheckBox();
+            groupCheckBoxes[i].setImmediate(true);
+            groupCheckBoxes[i].addValueChangeListener(new Property.ValueChangeListener() {
                 @Override
                 public void valueChange(Property.ValueChangeEvent event) {
                     dirty = true;
@@ -155,26 +162,26 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
             });
         }
 
-        matrix.addComponent(new Label("<b>" + getSite().localize("label-group") + "</b>", ContentMode.HTML), 0, 0);
+        groupMatrix.addComponent(new Label("<b>" + getSite().localize("label-group") + "</b>", ContentMode.HTML), 0, 0);
 
         for (int j = 0; j < groups.size(); j++) {
             final Label label = new Label(groups.get(j).getDescription());
             label.setWidth(200, Unit.PIXELS);
-            matrix.addComponent(label, 0, j + 1);
+            groupMatrix.addComponent(label, 0, j + 1);
         }
 
         for (int i = 0; i < privilegeKeys.length; i++) {
             final Label label = new Label("<b>" + getSite().localize("privilege-" + privilegeKeys[i])
                     + "</b>", ContentMode.HTML);
             label.setWidth(50, Unit.PIXELS);
-            matrix.addComponent(label, i + 1, 0);
+            groupMatrix.addComponent(label, i + 1, 0);
         }
 
         for (int i = 0; i < privilegeKeys.length; i++) {
             for (int j = 0; j < groups.size(); j++) {
                 final int checkBoxIndex = i + j * privilegeKeys.length;
-                matrix.addComponent(checkBoxes[checkBoxIndex], i + 1, j + 1);
-                checkBoxes[checkBoxIndex].setValue(
+                groupMatrix.addComponent(groupCheckBoxes[checkBoxIndex], i + 1, j + 1);
+                groupCheckBoxes[checkBoxIndex].setValue(
                         UserDao.hasGroupPrivilege(entityManager, groups.get(j), privilegeKeys[i], dataId));
             }
         }
@@ -183,7 +190,7 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
         discardButton.setEnabled(false);
     }
 
-    private void saveMatrix() {
+    private void saveGroupMatrix() {
         final EntityManager entityManager = Site.getCurrent().getSiteContext().getObject(EntityManager.class);
         final Company company = Site.getCurrent().getSiteContext().getObject(Company.class);
 
@@ -192,7 +199,7 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
         for (int i = 0; i < privilegeKeys.length; i++) {
             for (int j = 0; j < groups.size(); j++) {
                 final int checkBoxIndex = i + j * privilegeKeys.length;
-                final boolean privileged = checkBoxes[checkBoxIndex].getValue();
+                final boolean privileged = groupCheckBoxes[checkBoxIndex].getValue();
                 final boolean privilegedInDatabase =
                         UserDao.hasGroupPrivilege(entityManager, groups.get(j), privilegeKeys[i], dataId);
                 if (privileged && !privilegedInDatabase) {
@@ -203,7 +210,83 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
             }
         }
 
-        refreshMatrix();
+        refreshGroupMatrix();
+    }
+
+    private void refreshUserMatrix() {
+        final EntityManager entityManager = Site.getCurrent().getSiteContext().getObject(EntityManager.class);
+        final Company company = Site.getCurrent().getSiteContext().getObject(Company.class);
+
+        if (userMatrix != null) {
+            matrixLayout.removeComponent(userMatrix);
+        }
+        final List<User> users = UserDao.getUsers(entityManager, company);
+
+        userCheckBoxes = new CheckBox[privilegeKeys.length * users.size()];
+        userMatrix = new GridLayout(privilegeKeys.length + 1, users.size() + 1);
+        matrixLayout.addComponent(userMatrix);
+        for (int i = 0; i < userCheckBoxes.length; i++) {
+            userCheckBoxes[i] = new CheckBox();
+            userCheckBoxes[i].setImmediate(true);
+            userCheckBoxes[i].addValueChangeListener(new Property.ValueChangeListener() {
+                @Override
+                public void valueChange(Property.ValueChangeEvent event) {
+                    dirty = true;
+                    saveButton.setEnabled(true);
+                    discardButton.setEnabled(true);
+                }
+            });
+        }
+
+        userMatrix.addComponent(new Label("<b>" + getSite().localize("label-user") + "</b>", ContentMode.HTML), 0, 0);
+
+        for (int j = 0; j < users.size(); j++) {
+            final Label label = new Label(users.get(j).getLastName() + " " + users.get(j).getFirstName());
+            label.setWidth(200, Unit.PIXELS);
+            userMatrix.addComponent(label, 0, j + 1);
+        }
+
+        for (int i = 0; i < privilegeKeys.length; i++) {
+            final Label label = new Label("<b>" + getSite().localize("privilege-" + privilegeKeys[i])
+                    + "</b>", ContentMode.HTML);
+            label.setWidth(50, Unit.PIXELS);
+            userMatrix.addComponent(label, i + 1, 0);
+        }
+
+        for (int i = 0; i < privilegeKeys.length; i++) {
+            for (int j = 0; j < users.size(); j++) {
+                final int checkBoxIndex = i + j * privilegeKeys.length;
+                userMatrix.addComponent(userCheckBoxes[checkBoxIndex], i + 1, j + 1);
+                userCheckBoxes[checkBoxIndex].setValue(
+                        UserDao.hasUserPrivilege(entityManager, users.get(j), privilegeKeys[i], dataId));
+            }
+        }
+        dirty = false;
+        saveButton.setEnabled(false);
+        discardButton.setEnabled(false);
+    }
+
+    private void saveUserMatrix() {
+        final EntityManager entityManager = Site.getCurrent().getSiteContext().getObject(EntityManager.class);
+        final Company company = Site.getCurrent().getSiteContext().getObject(Company.class);
+
+        final List<User> users = UserDao.getUsers(entityManager, company);
+
+        for (int i = 0; i < privilegeKeys.length; i++) {
+            for (int j = 0; j < users.size(); j++) {
+                final int checkBoxIndex = i + j * privilegeKeys.length;
+                final boolean privileged = userCheckBoxes[checkBoxIndex].getValue();
+                final boolean privilegedInDatabase =
+                        UserDao.hasUserPrivilege(entityManager, users.get(j), privilegeKeys[i], dataId);
+                if (privileged && !privilegedInDatabase) {
+                    UserDao.addUserPrivilege(entityManager, users.get(j), privilegeKeys[i], dataId);
+                } else if (!privileged && privilegedInDatabase) {
+                    UserDao.removeUserPrivilege(entityManager, users.get(j), privilegeKeys[i], dataId);
+                }
+            }
+        }
+
+        refreshUserMatrix();
     }
 
     @Override

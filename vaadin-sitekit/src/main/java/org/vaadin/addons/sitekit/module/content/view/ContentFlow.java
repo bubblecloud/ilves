@@ -17,6 +17,7 @@ package org.vaadin.addons.sitekit.module.content.view;
 
 import org.vaadin.addons.sitekit.flow.AbstractFlowViewlet;
 import org.vaadin.addons.sitekit.flow.Flowlet;
+import org.vaadin.addons.sitekit.viewlet.administrator.privilege.PrivilegesFlowlet;
 
 /**
  * @author Tommi S.E. Laukkanen
