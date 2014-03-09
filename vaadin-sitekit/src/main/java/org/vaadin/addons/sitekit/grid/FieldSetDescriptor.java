@@ -86,8 +86,7 @@ public final class FieldSetDescriptor {
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
                         required = true;
-                        validators.add(
-                                new StringLengthValidator("Invalid length.", 0, 255, true));
+                        validators.add(new StringLengthValidator("Invalid length.", 0, 255, true));
                     } else if (valueType.equals(Integer.class)) {
                         fieldClass = TextField.class;
                         converter = null;

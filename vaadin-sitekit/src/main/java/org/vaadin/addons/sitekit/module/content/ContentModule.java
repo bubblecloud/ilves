@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.module.content;
 
+import org.apache.commons.lang.StringUtils;
 import org.vaadin.addons.sitekit.cache.PrivilegeCache;
 import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
@@ -30,8 +31,7 @@ import org.vaadin.addons.sitekit.module.content.model.MarkupType;
 import org.vaadin.addons.sitekit.site.*;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Content module adds support for Wiki content management.
@@ -97,10 +97,40 @@ public class ContentModule implements SiteModule {
 
 
         final List<Content> contents = ContentDao.getContens(entityManager, company);
+        final LinkedList<Content> queue = new LinkedList<Content>();
+        final Map<String, List<Content>> dependencies = new HashMap<String, List<Content>>();
+        for (final Content content : contents) {
+            final String dependency;
+            if (!StringUtils.isEmpty(content.getAfterPage())) {
+                dependency = content.getAfterPage();
+            } else if (!StringUtils.isEmpty(content.getParentPage())) {
+                dependency = content.getParentPage();
+            } else {
+                dependency = null;
+            }
+            if (dependency != null) {
+                if (!dependencies.containsKey(dependency)) {
+                    dependencies.put(dependency, new ArrayList<Content>());
+                }
+                dependencies.get(dependency).add(content);
+            } else {
+                queue.add(content);
+            }
+        }
+
+        final List<Content> ordered = new ArrayList<Content>();
+        while (queue.size() > 0) {
+            final Content content = queue.removeFirst();
+            ordered.add(content);
+            if (dependencies.containsKey(content.getPage())) {
+                queue.addAll(dependencies.get(content.getPage()));
+            }
+        }
+
 
         final NavigationVersion navigationVersion = dynamicSiteDescriptor.getNavigation().getProductionVersion();
 
-        for (final Content content : contents) {
+        for (final Content content : ordered) {
             boolean viewPrivilege = PrivilegeCache.hasPrivilege(company, user, "view", content.getContentId());
             if (!viewPrivilege) {
                 for (final Group group : groups) {
@@ -135,15 +165,15 @@ public class ContentModule implements SiteModule {
             final MarkupType markupType = content.getMarkupType();
             final String markup = content.getMarkup();
 
-            if (parentPage == null) {
-                if (afterPage == null) {
+            if (StringUtils.isEmpty(parentPage)) {
+                if (StringUtils.isEmpty(afterPage)) {
                     navigationVersion.addRootPage(0, page);
                     navigationVersion.setDefaultPageName(page);
                 } else {
                     navigationVersion.addRootPage(afterPage, page);
                 }
             } else {
-                if (afterPage == null) {
+                if (StringUtils.isEmpty(afterPage)) {
                     navigationVersion.addChildPage(parentPage, page);
                 } else {
                     navigationVersion.addChildPage(parentPage, afterPage, page);

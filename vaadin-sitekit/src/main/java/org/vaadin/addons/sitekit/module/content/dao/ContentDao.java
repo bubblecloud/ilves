@@ -73,7 +73,7 @@ public class ContentDao {
      */
     public static final List<Content> getContens(final EntityManager entityManager, final Company owner) {
         final TypedQuery<Content> query = entityManager.createQuery(
-                "select e from Content as e where e.owner=:owner order by e.parentPage NULLS FIRST, e.afterPage NULLS FIRST, e.page",
+                "select e from Content as e where e.owner=:owner order by e.page",
                 Content.class);
         query.setParameter("owner", owner);
         return query.getResultList();
