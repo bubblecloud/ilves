@@ -15,7 +15,6 @@
  */
 package org.vaadin.addons.sitekit.site;
 
-import org.vaadin.addons.sitekit.module.SiteModuleManager;
 import org.vaadin.addons.sitekit.viewlet.administrator.company.CompanyFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.directory.UserDirectoryFlowViewlet;

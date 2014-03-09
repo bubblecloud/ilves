@@ -29,7 +29,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * InvoiceElement.
+ * Privilege.
  *
  * @author Tommi S.E. Laukkanen
  */

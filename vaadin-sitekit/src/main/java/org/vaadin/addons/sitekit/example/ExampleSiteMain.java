@@ -22,7 +22,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.model.Feedback;
-import org.vaadin.addons.sitekit.module.SiteModuleManager;
+import org.vaadin.addons.sitekit.site.SiteModuleManager;
 import org.vaadin.addons.sitekit.module.content.ContentModule;
 import org.vaadin.addons.sitekit.site.*;
 import org.vaadin.addons.sitekit.util.PersistenceUtil;

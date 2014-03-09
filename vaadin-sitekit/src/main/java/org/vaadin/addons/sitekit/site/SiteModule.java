@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.module;
+package org.vaadin.addons.sitekit.site;
 
 import org.vaadin.addons.sitekit.site.SiteDescriptor;
 

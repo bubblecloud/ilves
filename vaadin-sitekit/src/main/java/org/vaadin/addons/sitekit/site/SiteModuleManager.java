@@ -13,17 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.module;
+package org.vaadin.addons.sitekit.site;
 
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.module.content.ContentModule;
-import org.vaadin.addons.sitekit.site.SiteDescriptor;
-import org.vaadin.addons.sitekit.site.SiteException;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Static class for managing modules.
