@@ -21,6 +21,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
@@ -97,9 +98,14 @@ public final class ContentFlowlet extends AbstractFlowlet implements ValidatingE
 
             @Override
             public void buttonClick(final ClickEvent event) {
-                contentEditor.commit();
-                ContentDao.saveContent(entityManager, entity);
-                editPrivilegesButton.setEnabled(true);
+                if (isValid()) {
+                    contentEditor.commit();
+                    ContentDao.saveContent(entityManager, entity);
+                    editPrivilegesButton.setEnabled(true);
+                } else {
+                    Notification.show(getSite().localize("message-invalid-form-content"),
+                            Notification.Type.HUMANIZED_MESSAGE);
+                }
             }
         });
 
@@ -140,17 +146,6 @@ public final class ContentFlowlet extends AbstractFlowlet implements ValidatingE
 
     @Override
     public void editorStateChanged(final ValidatingEditor source) {
-        if (isDirty()) {
-            if (isValid()) {
-                saveButton.setEnabled(true);
-            } else {
-                saveButton.setEnabled(false);
-            }
-            discardButton.setEnabled(true);
-        } else {
-            saveButton.setEnabled(false);
-            discardButton.setEnabled(false);
-        }
     }
 
     @Override

@@ -201,4 +201,19 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
         viewPath.getLast().enter();
     }
 
+    /**
+     * Gets top layout.
+     * @return the top layout.
+     */
+    public HorizontalLayout getTopLayout() {
+        return topLayout;
+    }
+
+    /**
+     * Gets bottom layout.
+     * @return the bottom layout.
+     */
+    public HorizontalLayout getBottomLayout() {
+        return bottomLayout;
+    }
 }

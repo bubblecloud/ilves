@@ -21,14 +21,11 @@ import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.module.content.view.*;
 import org.vaadin.addons.sitekit.site.SiteModule;
 import org.vaadin.addons.sitekit.module.content.dao.ContentDao;
 import org.vaadin.addons.sitekit.module.content.model.Content;
 import org.vaadin.addons.sitekit.module.content.model.MarkupType;
-import org.vaadin.addons.sitekit.module.content.view.ContentFlow;
-import org.vaadin.addons.sitekit.module.content.view.MarkdownViewlet;
-import org.vaadin.addons.sitekit.module.content.view.MarkupField;
-import org.vaadin.addons.sitekit.module.content.view.MarkupTypeField;
 import org.vaadin.addons.sitekit.site.*;
 
 import javax.persistence.EntityManager;
@@ -46,7 +43,7 @@ public class ContentModule implements SiteModule {
         final SiteDescriptor siteDescriptor = DefaultSiteUI.getContentProvider().getSiteDescriptor();
 
         final NavigationVersion navigationVersion = siteDescriptor.getNavigation().getProductionVersion();
-        navigationVersion.addChildPage("configuration", 0, "content");
+        navigationVersion.addChildPage("configuration", "account", "content");
 
         // Describe content view.
         final ViewDescriptor viewDescriptor = new ViewDescriptor("content", "Content", DefaultView.class);
@@ -96,7 +93,6 @@ public class ContentModule implements SiteModule {
 
         for (final Content content : contents) {
             boolean viewPrivilege = UserDao.hasUserPrivilege(entityManager, user, "view", content.getContentId());
-
             if (!viewPrivilege) {
                 for (final Group group : groups) {
                     if (UserDao.hasGroupPrivilege(entityManager, group, "view", content.getContentId())) {
@@ -108,6 +104,16 @@ public class ContentModule implements SiteModule {
 
             if (!viewPrivilege) {
                 continue;
+            }
+
+            boolean editPrivilege = UserDao.hasUserPrivilege(entityManager, user, "edit", content.getContentId());
+            if (!editPrivilege) {
+                for (final Group group : groups) {
+                    if (UserDao.hasGroupPrivilege(entityManager, group, "edit", content.getContentId())) {
+                        editPrivilege = true;
+                        break;
+                    }
+                }
             }
 
             final String page = content.getPage();
@@ -138,7 +144,11 @@ public class ContentModule implements SiteModule {
             // Describe content view.
             final ViewDescriptor viewDescriptor = new ViewDescriptor(page, title, DefaultView.class);
             viewDescriptor.getProductionVersion().setDynamic(true);
-            viewDescriptor.setViewletClass("content", MarkdownViewlet.class, markup);
+            if (editPrivilege) {
+                viewDescriptor.setViewletClass("content", MarkdownFlow.class, content);
+            } else {
+                viewDescriptor.setViewletClass("content", MarkdownViewlet.class, markup);
+            }
             dynamicSiteDescriptor.getViewDescriptors().add(viewDescriptor);
         }
 

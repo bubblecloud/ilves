@@ -23,10 +23,12 @@ import com.vaadin.navigator.ViewProvider;
 import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 import org.apache.log4j.Logger;
 import com.vaadin.navigator.View;
+import org.vaadin.addons.sitekit.model.Company;
 
 /**
  * Vaadin portal implementation.
@@ -263,6 +265,20 @@ public final class Site implements ViewProvider, ViewChangeListener {
                     constructView(viewDescriptor);
                 }
             }
+        }
+        if (!views.containsKey(viewName)) {
+            final Company company = getSiteContext().getObject(Company.class);
+            ((AbstractSiteUI) UI.getCurrent()).redirectTo(
+                    company.getUrl(), getCurrentNavigationVersion().getDefaultPageName(),
+                    localize("message-access-denied"), Notification.Type.WARNING_MESSAGE);
+
+            for (final ViewDescriptor viewDescriptor : contentProvider.getDynamicSiteDescriptor().getViewDescriptors()) {
+                if (viewDescriptor.getName().equals(getCurrentNavigationVersion().getDefaultPageName())) {
+                    constructView(viewDescriptor);
+                }
+            }
+
+            return views.get(getCurrentNavigationVersion().getDefaultPageName());
         }
         return views.get(viewName);
     }

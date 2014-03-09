@@ -59,12 +59,6 @@ public abstract class AbstractSiteUI extends UI {
         navigator.addViewChangeListener(site);
         navigator.addProvider(site);
         site.initialize();
-
-        // Show redirect notification
-        if (getSession().getAttribute("redirectNotification") != null) {
-            Notification.show((String) getSession().getAttribute("redirectNotification"),
-                    (Notification.Type) getSession().getAttribute("redirectNotificationType"));
-        }
     }
 
     /**
@@ -95,8 +89,8 @@ public abstract class AbstractSiteUI extends UI {
      */
     public void redirectTo(final String siteUrl,
                            final String viewName, final String notification, final Notification.Type notificationType) {
-        getUI().getPage().setLocation(siteUrl + "#!" + viewName.replaceAll(" ", "%20"));
         getSession().setAttribute("redirectNotification", notification);
         getSession().setAttribute("redirectNotificationType", notificationType);
+        getUI().getPage().setLocation(siteUrl + "#!" + viewName.replaceAll(" ", "%20"));
     }
 }
