@@ -15,9 +15,12 @@
  */
 package org.vaadin.addons.sitekit.module.content;
 
+import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.model.Company;
+import org.vaadin.addons.sitekit.model.Group;
+import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.SiteModule;
 import org.vaadin.addons.sitekit.module.content.dao.ContentDao;
 import org.vaadin.addons.sitekit.module.content.model.Content;
@@ -84,11 +87,29 @@ public class ContentModule implements SiteModule {
     public void injectDynamicContent(final SiteDescriptor dynamicSiteDescriptor) {
         final Company company = Site.getCurrent().getSiteContext().getObject(Company.class);
         final EntityManager entityManager = Site.getCurrent().getSiteContext().getObject(EntityManager.class);
+        final User user = ((SecurityProviderSessionImpl) Site.getCurrent().getSecurityProvider()).getUserFromSession();
+        final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
+
         final List<Content> contents = ContentDao.getContens(entityManager, company);
 
         final NavigationVersion navigationVersion = dynamicSiteDescriptor.getNavigation().getProductionVersion();
 
         for (final Content content : contents) {
+            boolean viewPrivilege = UserDao.hasUserPrivilege(entityManager, user, "view", content.getContentId());
+
+            if (!viewPrivilege) {
+                for (final Group group : groups) {
+                    if (UserDao.hasGroupPrivilege(entityManager, group, "view", content.getContentId())) {
+                        viewPrivilege = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!viewPrivilege) {
+                continue;
+            }
+
             final String page = content.getPage();
             if (page == null) {
                 continue;
