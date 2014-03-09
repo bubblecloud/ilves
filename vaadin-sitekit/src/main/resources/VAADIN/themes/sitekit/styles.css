@@ -129,6 +129,8 @@ text-align: left;
 
 .menu-bar-navigation .v-menubar-menuitem:hover {
     color: #999999;
+    cursor: pointer;
+    cursor: hand;
 }
 .menu-bar-navigation .v-menubar-menuitem-selected, .v-menubar-submenu .v-menubar-menuitem-selected {
     color: #999999;

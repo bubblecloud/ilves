@@ -141,7 +141,8 @@ public final class ContentFlowlet extends AbstractFlowlet implements ValidatingE
     public void edit(final Content entity, final boolean newEntity) {
         this.entity = entity;
         contentEditor.setItem(new BeanItem<Content>(entity), newEntity);
-        editPrivilegesButton.setEnabled(!newEntity);
+        editPrivilegesButton.setEnabled(!newEntity
+                && getSite().getSecurityProvider().getRoles().contains("administrator"));
     }
 
     @Override
