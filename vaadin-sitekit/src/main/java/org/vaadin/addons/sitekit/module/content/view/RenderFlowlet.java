@@ -24,7 +24,6 @@ import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.module.content.model.Content;
 import org.vaadin.addons.sitekit.site.Site;
 import org.vaadin.addons.sitekit.site.SiteException;
-import org.vaadin.addons.sitekit.viewlet.administrator.privilege.PrivilegesFlowlet;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
@@ -39,18 +38,31 @@ public final class RenderFlowlet extends AbstractFlowlet {
 
     private Content content;
 
-    private final Button editButton;
+    private final Button topEditButton;
+
+    private final Button bottomEditButton;
 
     public RenderFlowlet(final Content content) {
         this.content = content;
-        editButton = getSite().getButton("edit");
-        editButton.addClickListener(new Button.ClickListener() {
+        topEditButton = getSite().getButton("edit");
+        topEditButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 final ContentFlowlet contentFlowlet = getFlow().getFlowlet(ContentFlowlet.class);
                 contentFlowlet.edit(content, false);
-                ((AbstractFlowViewlet) getFlow()).getTopLayout().removeComponent(editButton);
-                ((AbstractFlowViewlet) getFlow()).getTopLayout().setSizeUndefined();
+                ((AbstractFlowViewlet) getFlow()).getTopRightLayout().removeComponent(topEditButton);
+                ((AbstractFlowViewlet) getFlow()).getBottomRightLayout().removeComponent(bottomEditButton);
+                getFlow().forward(ContentFlowlet.class);
+            }
+        });
+        bottomEditButton = getSite().getButton("edit");
+        bottomEditButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                final ContentFlowlet contentFlowlet = getFlow().getFlowlet(ContentFlowlet.class);
+                contentFlowlet.edit(content, false);
+                ((AbstractFlowViewlet) getFlow()).getTopRightLayout().removeComponent(topEditButton);
+                ((AbstractFlowViewlet) getFlow()).getBottomRightLayout().removeComponent(bottomEditButton);
                 getFlow().forward(ContentFlowlet.class);
             }
         });
@@ -76,15 +88,14 @@ public final class RenderFlowlet extends AbstractFlowlet {
             throw new SiteException("Error processing markdown.", e);
         }
 
-        ((AbstractFlowViewlet) getFlow()).getTopLayout().removeComponent(editButton);
-        ((AbstractFlowViewlet) getFlow()).getTopLayout().setWidth(100, Unit.PERCENTAGE);
-        ((AbstractFlowViewlet) getFlow()).getTopLayout().addComponent(editButton);
-        ((AbstractFlowViewlet) getFlow()).getBottomLayout().setVisible(false);
-        ((AbstractFlowViewlet) getFlow()).getTopLayout().setComponentAlignment(editButton, Alignment.MIDDLE_RIGHT);
-        ((AbstractFlowViewlet) getFlow()).getTopLayout().setExpandRatio(editButton, 1);
+        ((AbstractFlowViewlet) getFlow()).getTopRightLayout().removeComponent(topEditButton);
+        ((AbstractFlowViewlet) getFlow()).getBottomRightLayout().removeComponent(bottomEditButton);
+        ((AbstractFlowViewlet) getFlow()).getTopRightLayout().addComponent(topEditButton);
+        ((AbstractFlowViewlet) getFlow()).getBottomRightLayout().addComponent(bottomEditButton);
+
 
         final VerticalLayout layout = new VerticalLayout();
-        //layout.addComponent(editButton);
+        //layout.addComponent(topEditButton);
         layout.addComponent(new Label(html, ContentMode.HTML));
         layout.setSpacing(true);
         layout.setMargin(true);

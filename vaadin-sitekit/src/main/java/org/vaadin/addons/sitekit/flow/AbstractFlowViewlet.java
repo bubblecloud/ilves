@@ -63,6 +63,11 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
     private HorizontalLayout bottomLayout;
     /** The bottom layout. */
     private HorizontalLayout topLayout;
+    /** The top layout. */
+    private HorizontalLayout bottomRightLayout;
+    /** The bottom layout. */
+    private HorizontalLayout topRightLayout;
+
 
     @Override
     public final void attach() {
@@ -82,11 +87,19 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
         topBackButton.setEnabled(false);
         topBackButton.addListener(this);
         topLayout.addComponent(topBackButton);
+        topLayout.setExpandRatio(topBackButton, 0.0f);
 
         topPathLabel = new Label("", Label.CONTENT_XHTML);
 
         topLayout.addComponent(topPathLabel);
         topLayout.setComponentAlignment(topPathLabel, Alignment.MIDDLE_LEFT);
+        topLayout.setExpandRatio(topPathLabel, 1f);
+
+        topRightLayout = new HorizontalLayout();
+        topLayout.addComponent(topRightLayout);
+        topLayout.setComponentAlignment(topRightLayout, Alignment.MIDDLE_RIGHT);
+        topLayout.setExpandRatio(topRightLayout, 0.0f);
+        topLayout.setWidth(100, Unit.PERCENTAGE);
 
         bottomLayout = new HorizontalLayout();
         layout.addComponent(bottomLayout, 0, 2);
@@ -95,11 +108,20 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
         bottomBackButton.setEnabled(false);
         bottomBackButton.addListener(this);
         bottomLayout.addComponent(bottomBackButton);
+        bottomLayout.setExpandRatio(bottomBackButton, 0f);
 
         bottomPathLabel = new Label("", Label.CONTENT_XHTML);
 
         bottomLayout.addComponent(bottomPathLabel);
+        bottomLayout.setExpandRatio(bottomPathLabel, 1f);
         bottomLayout.setComponentAlignment(bottomPathLabel, Alignment.MIDDLE_LEFT);
+
+        bottomRightLayout = new HorizontalLayout();
+        bottomLayout.addComponent(bottomRightLayout);
+        bottomLayout.setComponentAlignment(bottomRightLayout, Alignment.MIDDLE_RIGHT);
+        bottomLayout.setExpandRatio(bottomRightLayout, 0f);
+        bottomLayout.setWidth(100, Unit.PERCENTAGE);
+
 
         tabSheet = new TabSheet();
         tabSheet.setStyleName("flow-sheet");
@@ -205,15 +227,15 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
      * Gets top layout.
      * @return the top layout.
      */
-    public HorizontalLayout getTopLayout() {
-        return topLayout;
+    public HorizontalLayout getTopRightLayout() {
+        return topRightLayout;
     }
 
     /**
      * Gets bottom layout.
      * @return the bottom layout.
      */
-    public HorizontalLayout getBottomLayout() {
-        return bottomLayout;
+    public HorizontalLayout getBottomRightLayout() {
+        return bottomRightLayout;
     }
 }
