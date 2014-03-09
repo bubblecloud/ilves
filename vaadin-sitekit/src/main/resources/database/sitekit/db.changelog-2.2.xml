@@ -39,5 +39,15 @@
     <changeSet author="tlaukkan" id="5c6f0410-a6f3-11e3-a5e2-0800200c9a66">
         <modifyDataType columnName="markup" newDataType="text" tableName="content"/>
     </changeSet>
+    <changeSet author="tlaukkan" id="6aa48730-a770-11e3-a5e2-0800200c9a66">
+        <insert tableName="group_">
+            <column name="groupid" value="73458b00-a770-11e3-a5e2-0800200c9a66"/>
+            <column name="owner_companyid" value="3248528E-4D90-41F7-968F-AF255AD16901"/>
+            <column name="name" value="anonymous"/>
+            <column name="description" value="Anonymous"/>
+            <column name="created" value="2000-01-01T00:00:00"/>
+            <column name="modified" value="2000-01-01T00:00:00"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
 

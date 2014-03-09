@@ -29,6 +29,7 @@ import org.vaadin.addons.sitekit.module.content.model.MarkupType;
 import org.vaadin.addons.sitekit.site.*;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -85,7 +86,14 @@ public class ContentModule implements SiteModule {
         final Company company = Site.getCurrent().getSiteContext().getObject(Company.class);
         final EntityManager entityManager = Site.getCurrent().getSiteContext().getObject(EntityManager.class);
         final User user = ((SecurityProviderSessionImpl) Site.getCurrent().getSecurityProvider()).getUserFromSession();
-        final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
+        final List<Group> groups;
+        if (user == null) {
+            groups = new ArrayList<Group>();
+            groups.add(UserDao.getGroup(entityManager, company, "anonymous"));
+        } else {
+            groups = UserDao.getUserGroups(entityManager, company, user);
+        }
+
 
         final List<Content> contents = ContentDao.getContens(entityManager, company);
 
