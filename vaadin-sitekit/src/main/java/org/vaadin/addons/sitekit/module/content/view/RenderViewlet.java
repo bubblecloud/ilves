@@ -30,7 +30,7 @@ import java.io.IOException;
  * Viewlet which renders image from Theme.
  * @author Tommi S.E. Laukkanen
  */
-public final class MarkdownViewlet extends AbstractViewlet {
+public final class RenderViewlet extends AbstractViewlet {
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
 

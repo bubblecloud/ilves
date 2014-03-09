@@ -33,7 +33,7 @@ import java.io.IOException;
  * Viewlet which renders image from Theme.
  * @author Tommi S.E. Laukkanen
  */
-public final class MarkdownFlowlet extends AbstractFlowlet {
+public final class RenderFlowlet extends AbstractFlowlet {
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
 
@@ -41,7 +41,7 @@ public final class MarkdownFlowlet extends AbstractFlowlet {
 
     private final Button editButton;
 
-    public MarkdownFlowlet(final Content content) {
+    public RenderFlowlet(final Content content) {
         this.content = content;
         editButton = getSite().getButton("edit");
         editButton.addClickListener(new Button.ClickListener() {
@@ -50,6 +50,7 @@ public final class MarkdownFlowlet extends AbstractFlowlet {
                 final ContentFlowlet contentFlowlet = getFlow().getFlowlet(ContentFlowlet.class);
                 contentFlowlet.edit(content, false);
                 ((AbstractFlowViewlet) getFlow()).getTopLayout().removeComponent(editButton);
+                ((AbstractFlowViewlet) getFlow()).getTopLayout().setSizeUndefined();
                 getFlow().forward(ContentFlowlet.class);
             }
         });
@@ -57,7 +58,7 @@ public final class MarkdownFlowlet extends AbstractFlowlet {
 
     @Override
     public String getFlowletKey() {
-        return "markdown";
+        return "render";
     }
 
     @Override
@@ -78,6 +79,7 @@ public final class MarkdownFlowlet extends AbstractFlowlet {
         ((AbstractFlowViewlet) getFlow()).getTopLayout().removeComponent(editButton);
         ((AbstractFlowViewlet) getFlow()).getTopLayout().setWidth(100, Unit.PERCENTAGE);
         ((AbstractFlowViewlet) getFlow()).getTopLayout().addComponent(editButton);
+        ((AbstractFlowViewlet) getFlow()).getBottomLayout().setVisible(false);
         ((AbstractFlowViewlet) getFlow()).getTopLayout().setComponentAlignment(editButton, Alignment.MIDDLE_RIGHT);
         ((AbstractFlowViewlet) getFlow()).getTopLayout().setExpandRatio(editButton, 1);
 

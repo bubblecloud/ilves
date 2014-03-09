@@ -153,9 +153,9 @@ public class ContentModule implements SiteModule {
             final ViewDescriptor viewDescriptor = new ViewDescriptor(page, title, DefaultView.class);
             viewDescriptor.getProductionVersion().setDynamic(true);
             if (editPrivilege) {
-                viewDescriptor.setViewletClass("content", MarkdownFlow.class, content);
+                viewDescriptor.setViewletClass("content", RenderFlow.class, content);
             } else {
-                viewDescriptor.setViewletClass("content", MarkdownViewlet.class, markup);
+                viewDescriptor.setViewletClass("content", RenderViewlet.class, markup);
             }
             dynamicSiteDescriptor.getViewDescriptors().add(viewDescriptor);
         }

@@ -23,7 +23,7 @@ import org.vaadin.addons.sitekit.viewlet.administrator.privilege.PrivilegesFlowl
 /**
  * @author Tommi S.E. Laukkanen
  */
-public final class MarkdownFlow extends AbstractFlowViewlet {
+public final class RenderFlow extends AbstractFlowViewlet {
 
     /**
      * Serial version UID.
@@ -32,7 +32,7 @@ public final class MarkdownFlow extends AbstractFlowViewlet {
 
     @Override
     protected void addFlowlets() {
-        final Flowlet markdownFlowlet = new MarkdownFlowlet((Content) getViewletDescriptor().getConfiguration());
+        final Flowlet markdownFlowlet = new RenderFlowlet((Content) getViewletDescriptor().getConfiguration());
         addFlowlet(markdownFlowlet);
         final Flowlet contentFlowlet = new ContentFlowlet();
         addFlowlet(contentFlowlet);
