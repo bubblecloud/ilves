@@ -22,19 +22,16 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
-import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.module.content.dao.ContentDao;
 import org.vaadin.addons.sitekit.module.content.model.Content;
-import org.vaadin.addons.sitekit.site.SiteFields;
 
 import javax.persistence.EntityManager;
-import java.util.List;
 
 /**
- * Content edit flow.
+ * Content edit flowlet.
  * @author Tommi S.E. Laukkanen
  */
 public final class ContentFlowlet extends AbstractFlowlet implements ValidatingEditorStateListener {
@@ -53,6 +50,7 @@ public final class ContentFlowlet extends AbstractFlowlet implements ValidatingE
     private Button saveButton;
     /** The discard button. */
     private Button discardButton;
+    private Button editPrivilegesButton;
 
     @Override
     public String getFlowletKey() {
@@ -100,6 +98,7 @@ public final class ContentFlowlet extends AbstractFlowlet implements ValidatingE
             public void buttonClick(final ClickEvent event) {
                 contentEditor.commit();
                 ContentDao.saveContent(entityManager, entity);
+                editPrivilegesButton.setEnabled(true);
             }
         });
 
@@ -115,6 +114,16 @@ public final class ContentFlowlet extends AbstractFlowlet implements ValidatingE
             }
         });
 
+        editPrivilegesButton = getSite().getButton("edit-privileges");
+        buttonLayout.addComponent(editPrivilegesButton);
+        editPrivilegesButton.addClickListener(new ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                final PrivilegesFlowlet privilegesFlowlet = getFlow().getFlowlet(PrivilegesFlowlet.class);
+                privilegesFlowlet.edit(entity.getPage(), entity.getContentId(), "view", "edit");
+                getFlow().forward(PrivilegesFlowlet.class);
+            }
+        });
     }
 
     /**
@@ -125,6 +134,7 @@ public final class ContentFlowlet extends AbstractFlowlet implements ValidatingE
     public void edit(final Content entity, final boolean newEntity) {
         this.entity = entity;
         contentEditor.setItem(new BeanItem<Content>(entity), newEntity);
+        editPrivilegesButton.setEnabled(!newEntity);
     }
 
     @Override

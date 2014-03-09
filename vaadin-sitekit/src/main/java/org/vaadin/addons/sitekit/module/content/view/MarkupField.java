@@ -32,7 +32,7 @@ public class MarkupField extends TextArea {
     public MarkupField() {
         super();
         setNullRepresentation("");
-        setRows(30);
+        setRows(20);
     }
 
     @Override

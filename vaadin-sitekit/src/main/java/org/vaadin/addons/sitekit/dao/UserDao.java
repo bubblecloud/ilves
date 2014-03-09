@@ -213,6 +213,18 @@ public class UserDao {
     }
 
     /**
+     * Gets list of groups.
+     * @param entityManager the entity manager.
+     * @param owner the owning company
+     * @return list of groups
+     */
+    public static final List<Group> getGroups(final EntityManager entityManager, final Company owner) {
+        final TypedQuery<Group> query = entityManager.createQuery("select e from Group as e order by e.name",
+                Group.class);
+        return  query.getResultList();
+    }
+
+    /**
      * Gets list of groups for given user.
      * @param entityManager the entity manager.
      * @param owner the owning company

@@ -34,6 +34,8 @@ public final class ContentFlow extends AbstractFlowViewlet {
         addFlowlet(contentsFlowlet);
         final Flowlet contentFlowlet = new ContentFlowlet();
         addFlowlet(contentFlowlet);
+        final Flowlet contentPrivilegesFlowlet = new PrivilegesFlowlet();
+        addFlowlet(contentPrivilegesFlowlet);
         setRootFlowlet(contentsFlowlet);
     }
 
