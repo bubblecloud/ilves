@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.viewlet.administrator.privilege;
+package org.vaadin.addons.sitekit.viewlet.user.privilege;
 
 import com.vaadin.data.Property;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
+import org.vaadin.addons.sitekit.cache.PrivilegeCache;
 import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.model.Company;
@@ -87,6 +88,7 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
             public void buttonClick(final Button.ClickEvent event) {
                 saveGroupMatrix();
                 saveUserMatrix();
+                PrivilegeCache.flush((Company) Site.getCurrent().getSiteContext().getObject(Company.class));
             }
         });
         discardButton = getSite().getButton("discard");

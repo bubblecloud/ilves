@@ -28,7 +28,7 @@ import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.module.content.dao.ContentDao;
 import org.vaadin.addons.sitekit.module.content.model.Content;
-import org.vaadin.addons.sitekit.viewlet.administrator.privilege.PrivilegesFlowlet;
+import org.vaadin.addons.sitekit.viewlet.user.privilege.PrivilegesFlowlet;
 
 import javax.persistence.EntityManager;
 

@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.module.content;
 
+import org.vaadin.addons.sitekit.cache.PrivilegeCache;
 import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
@@ -100,10 +101,10 @@ public class ContentModule implements SiteModule {
         final NavigationVersion navigationVersion = dynamicSiteDescriptor.getNavigation().getProductionVersion();
 
         for (final Content content : contents) {
-            boolean viewPrivilege = UserDao.hasUserPrivilege(entityManager, user, "view", content.getContentId());
+            boolean viewPrivilege = PrivilegeCache.hasPrivilege(company, user, "view", content.getContentId());
             if (!viewPrivilege) {
                 for (final Group group : groups) {
-                    if (UserDao.hasGroupPrivilege(entityManager, group, "view", content.getContentId())) {
+                    if (PrivilegeCache.hasPrivilege(company, group, "view", content.getContentId())) {
                         viewPrivilege = true;
                         break;
                     }
