@@ -104,13 +104,16 @@ public class OpenIdUtil {
     /**
      * Gets verification result based on session and request parameters. This should be called when
      * processing the OpenId return request.
+     * @param siteUrl the site URL
+     * @param returnViewName the return view name
      *
      * @return the verification result
      * @throws DiscoveryException if discovery exception occurs.
      * @throws MessageException if message exception occurs.
      * @throws ConsumerException if consume exception occurs.
      */
-    public static VerificationResult getVerificationResult() throws MessageException, DiscoveryException,
+    public static VerificationResult getVerificationResult(final String siteUrl
+            , final String returnViewName) throws MessageException, DiscoveryException,
             AssociationException {
         final ConsumerManager consumerManager = UI.getCurrent().getSession().getAttribute(ConsumerManager.class);
         final DiscoveryInformation discovered = UI.getCurrent().getSession().getAttribute(
@@ -121,7 +124,7 @@ public class OpenIdUtil {
         final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
                 .getHttpServletRequest();
 
-        final StringBuffer urlBuilder = request.getRequestURL();
+        final StringBuffer urlBuilder = new StringBuffer(siteUrl + returnViewName);
         final String queryString = request.getQueryString();
         if (queryString != null) {
             urlBuilder.append('?');

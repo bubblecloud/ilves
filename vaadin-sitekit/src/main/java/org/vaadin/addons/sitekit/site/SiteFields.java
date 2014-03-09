@@ -120,7 +120,7 @@ public final class SiteFields {
                 false, true, true), new EmailValidator("Email address is not valid."));
         SiteFields.add(Company.class, new FieldDescriptor("emailPasswordReset", "Email Password Reset", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
         SiteFields.add(Company.class, new FieldDescriptor("maxFailedLoginCount", "Max Failed Logins", TextField.class, new StringToIntegerConverter(), 50, null, Integer.class, null,
-                false, true, false).addValidator(new IntegerRangeValidator("Invalid value", 1, 10)));
+                false, true, false).addValidator(new IntegerRangeValidator("Invalid value", 0, 10)));
         SiteFields.add(Company.class, new FieldDescriptor("openIdLogin", "Open ID Login", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
         SiteFields.add(Company.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
                 true, true));
@@ -173,7 +173,7 @@ public final class SiteFields {
         SiteFields.add(User.class, new FieldDescriptor("lockedOut", "Locked Out", CheckBox.class, null, 100, null, Boolean.class, false, true, true, true));
         SiteFields.add(User.class, new FieldDescriptor("failedLoginCount", "Failed Logins", TextField.class, new StringToIntegerConverter(), 50, null, Integer.class, null,
                 true, true, true));
-        SiteFields.add(User.class, new FieldDescriptor("openIdIdentifier", "Open ID Identifier", TextField.class, null, -1, null, String.class, "", false, true, false), new EmailValidator("Email address is not valid."));
+        SiteFields.add(User.class, new FieldDescriptor("openIdIdentifier", "Open ID Identifier", TextField.class, null, -1, null, String.class, "", false, true, false));
         SiteFields.add(User.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
                 true, true));
         SiteFields.add(User.class, new FieldDescriptor("modified", "Modified", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null,

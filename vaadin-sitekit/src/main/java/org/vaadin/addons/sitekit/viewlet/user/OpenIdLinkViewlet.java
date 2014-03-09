@@ -60,7 +60,7 @@ public final class OpenIdLinkViewlet extends AbstractViewlet {
         final Company company = getSite().getSiteContext().getObject(Company.class);
 
         try {
-            final VerificationResult verification = OpenIdUtil.getVerificationResult();
+            final VerificationResult verification = OpenIdUtil.getVerificationResult(company.getUrl(), "openidlink");
             final Identifier identifier = verification.getVerifiedId();
             if (identifier != null) {
                 final String userEmailAddress = getSite().getSecurityProvider().getUser();

@@ -65,7 +65,7 @@ public final class OpenIdLoginViewlet extends AbstractViewlet {
                 .getHttpServletRequest();
 
         try {
-            final VerificationResult verification = OpenIdUtil.getVerificationResult();
+            final VerificationResult verification = OpenIdUtil.getVerificationResult(company.getUrl(), "openidlogin");
             final Identifier identifier = verification.getVerifiedId();
 
             if (identifier == null) {
