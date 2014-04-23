@@ -104,7 +104,7 @@ public final class DefaultSiteUI extends AbstractSiteUI {
     public static void setLocalizationProvider(final LocalizationProvider localizationProvider) {
         DefaultSiteUI.localizationProvider = localizationProvider;
         // Configure fields.
-        SiteFields.initialize(DefaultSiteUI.getLocalizationProvider());
+        SiteFields.initialize();
     }
 
     /**
