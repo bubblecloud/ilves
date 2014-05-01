@@ -14,7 +14,7 @@
             <column name="markup" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="markuptype" type="INT4">
+            <column name="markuptype" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
             <column name="modified" type="TIMESTAMP WITH TIME ZONE">
@@ -45,8 +45,8 @@
             <column name="owner_companyid" value="3248528E-4D90-41F7-968F-AF255AD16901"/>
             <column name="name" value="anonymous"/>
             <column name="description" value="Anonymous"/>
-            <column name="created" value="2000-01-01T00:00:00"/>
-            <column name="modified" value="2000-01-01T00:00:00"/>
+            <column name="created" value="2000-01-01 00:00:00"/>
+            <column name="modified" value="2000-01-01 00:00:00"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

@@ -25,6 +25,12 @@ public class SiteException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     /**
+     * Default constructor.
+     */
+    public SiteException() {
+    }
+
+    /**
      * @param message The portal exception message.
      * @param cause The throwable causing this portal exception.
      */

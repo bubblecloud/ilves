@@ -56,7 +56,7 @@
             <column name="created" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="company" type="BOOL">
+            <column name="company" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
             <column name="emailaddress" type="VARCHAR(255)">
@@ -184,7 +184,7 @@
             <column name="passwordhash" type="VARCHAR(256)">
                 <constraints nullable="false"/>
             </column>
-            <column name="emailaddressvalidated" type="BOOL">
+            <column name="emailaddressvalidated" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -209,7 +209,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="organizationname" type="VARCHAR(255)"/>
-            <column name="organizationsize" type="INT4"/>
+            <column name="organizationsize" type="INTEGER"/>
             <column name="title" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -343,8 +343,8 @@
             <column name="host" value="*"/>
             <column name="url" value="http://127.0.0.1:8081/"/>
             <column name="termsandconditions" value="Test terms."/>
-            <column name="created" value="2000-01-01T00:00:00"/>
-            <column name="modified" value="2000-01-01T00:00:00"/>
+            <column name="created" value="2000-01-01 00:00:00"/>
+            <column name="modified" value="2000-01-01 00:00:00"/>
             <column name="invoicingaddress_postaladdressid" value="4EA7E643-3C80-49B2-8D1C-AAFA7E66A28C"/>
             <column name="deliveryaddress_postaladdressid" value="CFE997C0-3FAF-4F6C-BBED-DB09689936B6"/>
         </insert>
@@ -353,34 +353,34 @@
             <column name="owner_companyid" value="3248528E-4D90-41F7-968F-AF255AD16901"/>
             <column name="name" value="administrator"/>
             <column name="description" value="Administrators"/>
-            <column name="created" value="2000-01-01T00:00:00"/>
-            <column name="modified" value="2000-01-01T00:00:00"/>
+            <column name="created" value="2000-01-01 00:00:00"/>
+            <column name="modified" value="2000-01-01 00:00:00"/>
         </insert>
         <insert tableName="group_">
             <column name="groupid" value="3DE5D850-B015-44C1-904C-86DC2B0276A4"/>
             <column name="owner_companyid" value="3248528E-4D90-41F7-968F-AF255AD16901"/>
             <column name="name" value="user"/>
             <column name="description" value="User"/>
-            <column name="created" value="2000-01-01T00:00:00"/>
-            <column name="modified" value="2000-01-01T00:00:00"/>
+            <column name="created" value="2000-01-01 00:00:00"/>
+            <column name="modified" value="2000-01-01 00:00:00"/>
         </insert>
         <insert tableName="user_">
             <column name="userid" value="A591FCB8-772E-4157-B64B-4371A6C7CAE0"/>
             <column name="owner_companyid" value="3248528E-4D90-41F7-968F-AF255AD16901"/>
             <column name="emailaddress" value="admin@admin.org"/>
-            <column name="emailaddressvalidated" value="0"/>
+            <column name="emailaddressvalidated" value="false"/>
             <column name="firstname" value="Default"/>
             <column name="lastname" value="Administrator"/>
             <column name="phonenumber" value="+123 12 123123"/>
             <column name="passwordhash" value="c8213c753f70e6ef82a3bbece671c183cc9aa70d944f2d8abbbc50ab7432f2b4"/>
-            <column name="created" value="2000-01-01T00:00:00"/>
-            <column name="modified" value="2000-01-01T00:00:00"/>
+            <column name="created" value="2000-01-01 00:00:00"/>
+            <column name="modified" value="2000-01-01 00:00:00"/>
         </insert>
         <insert tableName="groupmember">
             <column name="groupmemberid" value="50413BBB-DB86-402E-9E98-C7E73F219827"/>
             <column name="group_groupid" value="1DE5D850-B015-44C1-904C-86DC2B0276A3"/>
             <column name="user_userid" value="A591FCB8-772E-4157-B64B-4371A6C7CAE0"/>
-            <column name="created" value="2000-01-01T00:00:00"/>
+            <column name="created" value="2000-01-01 00:00:00"/>
         </insert>
     </changeSet>
 </databaseChangeLog>
