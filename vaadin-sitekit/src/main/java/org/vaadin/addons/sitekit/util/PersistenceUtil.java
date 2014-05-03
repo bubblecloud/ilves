@@ -102,4 +102,20 @@ public final class PersistenceUtil {
             return entityManagerFactories.get(entityManagerFactoryKey);
         }
     }
+
+    /**
+     * Allows removing entity manager factory in case of database failure.
+     *
+     * @param persistenceUnit the persistence unit
+     * @param propertiesCategory the properties category
+     */
+    public static void removeEntityManagerFactory(final String persistenceUnit,
+                                                               final String propertiesCategory) {
+        final String entityManagerFactoryKey = persistenceUnit + "-" + propertiesCategory;
+        synchronized (entityManagerFactories) {
+            if (entityManagerFactories.containsKey(entityManagerFactoryKey)) {
+                entityManagerFactories.remove(entityManagerFactoryKey);
+            }
+        }
+    }
 }
