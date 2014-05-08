@@ -65,15 +65,18 @@ public final class PropertiesUtil {
      */
     public static String getProperty(final String categoryKey, final String propertyKey) {
 
+        final String baseCategoryKey;
         final String extendedCategoryKey;
         if (categoryRedirection.containsKey(categoryKey)) {
+            baseCategoryKey = categoryRedirection.get(categoryKey);
             extendedCategoryKey = categoryRedirection.get(categoryKey) + "-ext";
         } else {
+            baseCategoryKey = categoryKey;
             extendedCategoryKey = categoryKey + "-ext";
         }
 
-        if (!PROPERTIES_MAP.containsKey(categoryKey)) {
-            PROPERTIES_MAP.put(categoryKey, getProperties(categoryKey));
+        if (!PROPERTIES_MAP.containsKey(baseCategoryKey)) {
+            PROPERTIES_MAP.put(baseCategoryKey, getProperties(baseCategoryKey));
         }
 
         if (!EXTENDED_PROPERTIES_MAP.containsKey(extendedCategoryKey)) {
@@ -87,14 +90,14 @@ public final class PropertiesUtil {
             }
         }
 
-        if (PROPERTIES_MAP.get(categoryKey) != null) {
-            final String valueString = (String) PROPERTIES_MAP.get(categoryKey).get(propertyKey);
+        if (PROPERTIES_MAP.get(baseCategoryKey) != null) {
+            final String valueString = (String) PROPERTIES_MAP.get(baseCategoryKey).get(propertyKey);
             if (valueString != null) {
                 return valueString;
             }
         }
 
-        throw new RuntimeException("Property not found: " + categoryKey + " / " + propertyKey);
+        throw new RuntimeException("Property not found: " + baseCategoryKey + " / " + propertyKey);
     }
 
     /**
