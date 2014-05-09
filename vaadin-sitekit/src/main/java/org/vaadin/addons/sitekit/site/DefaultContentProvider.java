@@ -110,7 +110,8 @@ public class DefaultContentProvider implements ContentProvider {
         reset.setViewletClass("content", PasswordResetViewlet.class);
         viewDescriptors.add(reset);
 
-        final NavigationVersion navigationVersion = new NavigationVersion(0, "login", null, true);
+        final NavigationVersion navigationVersion = new NavigationVersion(0, "users", null, true);
+
         navigationVersion.addRootPage("login");
         navigationVersion.addRootPage("configuration");
         navigationVersion.addChildPage("configuration", "account");
