@@ -35,6 +35,8 @@ public final class PropertiesUtil {
     private static final Map<String, Properties> PROPERTIES_MAP = new HashMap<String, Properties>();
     /** The loaded extension properties. */
     private static final Map<String, Properties> EXTENDED_PROPERTIES_MAP = new HashMap<String, Properties>();
+    /** Map of property overrides */
+    private static final Map<String, Properties> OVERRIDE_PROPERTIES_MAP = new HashMap<String, Properties>();
     /** The category redirection map. */
     private static Map<String, String> categoryRedirection = new HashMap<String, String>();
 
@@ -58,12 +60,25 @@ public final class PropertiesUtil {
     }
 
     /**
+     * Sets explicit override value for a property.
+     * @param category the category
+     * @param propertyKey the property key
+     * @param propertyValue the property value
+     */
+    public static synchronized void setProperty(final String category, final String propertyKey, final String propertyValue) {
+        if (!OVERRIDE_PROPERTIES_MAP.containsKey(category)) {
+            OVERRIDE_PROPERTIES_MAP.put(category, new Properties());
+        }
+        OVERRIDE_PROPERTIES_MAP.get(category).put(propertyKey, propertyValue);
+    }
+
+    /**
      * Gets property value String or null if no value is defined.
      * @param categoryKey Category defines the property file prefix.
      * @param propertyKey Property key defines the key in property file.
      * @return property value String or null.
      */
-    public static String getProperty(final String categoryKey, final String propertyKey) {
+    public static synchronized String getProperty(final String categoryKey, final String propertyKey) {
 
         final String baseCategoryKey;
         final String extendedCategoryKey;
@@ -81,6 +96,13 @@ public final class PropertiesUtil {
 
         if (!EXTENDED_PROPERTIES_MAP.containsKey(extendedCategoryKey)) {
             EXTENDED_PROPERTIES_MAP.put(extendedCategoryKey, getProperties(extendedCategoryKey));
+        }
+
+        if (OVERRIDE_PROPERTIES_MAP.containsKey(baseCategoryKey)) {
+            final String valueString = (String) OVERRIDE_PROPERTIES_MAP.get(baseCategoryKey).get(propertyKey);
+            if (valueString != null) {
+                return valueString;
+            }
         }
 
         if (EXTENDED_PROPERTIES_MAP.get(extendedCategoryKey) != null) {
@@ -105,7 +127,7 @@ public final class PropertiesUtil {
      * @param categoryKey The category key.
      * @return Properties or null.
      */
-    private static Properties getProperties(final String categoryKey) {
+    private static synchronized Properties getProperties(final String categoryKey) {
         final String propertiesFileName = categoryKey + ".properties";
         final Properties properties = new Properties();
         InputStream inputStream = PropertiesUtil.class.getClassLoader().getResourceAsStream(propertiesFileName);
