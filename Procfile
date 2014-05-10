@@ -1,1 +1,1 @@
-web: java -jar vaadin-sitekit-tutorial/target/vaadin-sitekit-tutorial.jar
+web: java -jar vaadin-sitekit-example-postgresql/target/vaadin-sitekit-example-postgresql.jar

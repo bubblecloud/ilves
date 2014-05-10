@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.example;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.eclipse.jetty.server.Server;
@@ -26,8 +27,10 @@ import org.vaadin.addons.sitekit.site.SiteModuleManager;
 import org.vaadin.addons.sitekit.module.content.ContentModule;
 import org.vaadin.addons.sitekit.site.*;
 import org.vaadin.addons.sitekit.util.PersistenceUtil;
+import org.vaadin.addons.sitekit.util.PropertiesUtil;
 
 import java.net.BindException;
+import java.net.URI;
 
 /**
  * Example site main class.
@@ -53,6 +56,31 @@ public class ExampleSiteMain {
         // Configure logging.
         // ------------------
         DOMConfigurator.configure("./log4j.xml");
+
+        // Configuration loading with HEROKU support.
+        final String environmentDatabaseString = System.getenv("DATABASE_URL");
+        if (StringUtils.isNotEmpty(environmentDatabaseString)) {
+            final URI dbUri = new URI(environmentDatabaseString);
+
+            final String dbUser = dbUri.getUserInfo().split(":")[0];
+            final String dbPassword = dbUri.getUserInfo().split(":")[1];
+            final String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+
+            PropertiesUtil.setProperty(PROPERTIES_CATEGORY, "javax.persistence.jdbc.url", dbUrl);
+            PropertiesUtil.setProperty(PROPERTIES_CATEGORY, "javax.persistence.jdbc.user", dbUser);
+            PropertiesUtil.setProperty(PROPERTIES_CATEGORY, "javax.persistence.jdbc.password", dbPassword);
+            LOGGER.info("Environment variable defined database URL: " + environmentDatabaseString);
+        }
+
+        final String environmentPortString = System.getenv().get("PORT");
+        final int port;
+        if (StringUtils.isNotEmpty(environmentPortString)) {
+            port = Integer.parseInt(environmentPortString);
+            LOGGER.info("Environment variable defined HTTP port: " + port);
+        } else {
+            port = Integer.parseInt(PropertiesUtil.getProperty("site", "http-port"));
+            LOGGER.info("Configuration defined HTTP port: " + port);
+        }
 
         // Configure Java Persistence API.
         // -------------------------------
@@ -105,7 +133,6 @@ public class ExampleSiteMain {
             webappUrl = DefaultSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm();
         }
 
-        final int port = 8081;
         final Server server = new Server(port);
 
         final WebAppContext context = new WebAppContext();
