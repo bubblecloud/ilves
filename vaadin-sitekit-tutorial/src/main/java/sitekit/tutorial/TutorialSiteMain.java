@@ -65,9 +65,9 @@ public class TutorialSiteMain {
             final String dbPassword = dbUri.getUserInfo().split(":")[1];
             final String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
 
-            PropertiesUtil.setProperty("noona-web", "javax.persistence.jdbc.url", dbUrl);
-            PropertiesUtil.setProperty("noona-web", "javax.persistence.jdbc.user", dbUser);
-            PropertiesUtil.setProperty("noona-web", "javax.persistence.jdbc.password", dbPassword);
+            PropertiesUtil.setProperty(PROPERTIES_CATEGORY, "javax.persistence.jdbc.url", dbUrl);
+            PropertiesUtil.setProperty(PROPERTIES_CATEGORY, "javax.persistence.jdbc.user", dbUser);
+            PropertiesUtil.setProperty(PROPERTIES_CATEGORY, "javax.persistence.jdbc.password", dbPassword);
             LOGGER.info("Environment variable defined database URL: " + environmentDatabaseString);
         }
 
