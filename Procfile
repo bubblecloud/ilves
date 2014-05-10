@@ -1,0 +1,1 @@
+web: java -jar vaadin-sitekit-tutorial/target/vaadin-sitekit-tutorial.jar

@@ -9,3 +9,4 @@ release.properties
 *.releaseBackup
 .directory
 *.log
+atlassian-ide-plugin.xml

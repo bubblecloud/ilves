@@ -68,6 +68,7 @@
         <module>vaadin-sitekit</module>
         <module>vaadin-sitekit-example-postgresql</module>
         <module>vaadin-sitekit-example-mysql</module>
+        <module>vaadin-sitekit-tutorial</module>
     </modules>
 
 </project>
