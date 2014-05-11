@@ -13,6 +13,7 @@
 		<class>org.vaadin.addons.sitekit.model.Privilege</class>
         <class>org.vaadin.addons.sitekit.model.Feedback</class>
         <class>org.vaadin.addons.sitekit.model.SchemaVersion</class>
+        <class>org.vaadin.addons.sitekit.model.AuditLogEntry</class>
         <class>org.vaadin.addons.sitekit.module.content.model.Content</class>
 		<properties>
 			<property name="eclipselink.session.customizer" value="org.vaadin.addons.sitekit.model.UuidSequence"/>

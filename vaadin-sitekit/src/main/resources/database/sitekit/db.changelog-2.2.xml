@@ -49,5 +49,48 @@
             <column name="modified" value="2000-01-01 00:00:00"/>
         </insert>
     </changeSet>
+    <changeSet author="tlaukkan" id="00630460-d8bb-11e3-9c1a-0800200c9a66">
+        <createTable catalogName="site" tableName="auditlogentry">
+            <column name="auditlogentryid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="componentaddress" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="componenttype" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="useraddress" type="VARCHAR(60)"/>
+            <column name="userid" type="VARCHAR(36)"/>
+            <column name="username" type="VARCHAR(40)"/>
+
+            <column name="datatype" type="VARCHAR(20)"/>
+            <column name="dataid" type="VARCHAR(36)"/>
+            <column name="dataoldversionid" type="VARCHAR(36)"/>
+            <column name="datanewversionid" type="VARCHAR(36)"/>
+            <column name="datalabel" type="VARCHAR(40)"/>
+
+            <column name="created" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey catalogName="site" columnNames="auditlogentryid" constraintName="auditlogentry_pkey" tableName="auditlogentry"/>
+        <createIndex catalogName="site" indexName="unq_auditlogentry_0" tableName="auditlogentry" unique="false">
+            <column name="created"/>
+            <column name="event"/>
+        </createIndex>
+        <createIndex catalogName="site" indexName="unq_auditlogentry_1" tableName="auditlogentry" unique="false">
+            <column name="created"/>
+            <column name="username"/>
+        </createIndex>
+        <createIndex catalogName="site" indexName="unq_auditlogentry_2" tableName="auditlogentry" unique="false">
+            <column name="created"/>
+            <column name="datalabel"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>
 
