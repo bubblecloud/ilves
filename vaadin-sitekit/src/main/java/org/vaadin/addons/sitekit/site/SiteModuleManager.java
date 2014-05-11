@@ -16,6 +16,7 @@
 package org.vaadin.addons.sitekit.site;
 
 import org.apache.log4j.Logger;
+import org.vaadin.addons.sitekit.module.audit.AuditModule;
 import org.vaadin.addons.sitekit.module.content.ContentModule;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class SiteModuleManager {
      */
     static {
         SiteModuleManager.registerModule(ContentModule.class);
+        SiteModuleManager.registerModule(AuditModule.class);
     }
 
     /**

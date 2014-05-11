@@ -4,7 +4,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.vaadin.addons.sitekit.model.AuditLogEntry;
+import org.vaadin.addons.sitekit.module.audit.AuditService;
+import org.vaadin.addons.sitekit.module.audit.model.AuditLogEntry;
 import org.vaadin.addons.sitekit.util.TestUtil;
 
 import javax.persistence.EntityManager;
@@ -12,7 +13,7 @@ import javax.persistence.EntityManager;
 /**
  * Created by tlaukkan on 5/4/14.
  */
-public class AuditLogServiceTest {
+public class AuditServiceTest {
     private EntityManager entityManager;
 
     @Before
@@ -44,7 +45,7 @@ public class AuditLogServiceTest {
 
         final String event = "test-event";
 
-        final AuditLogEntry auditLogEntryRecorded = AuditLogService.log(entityManager,
+        final AuditLogEntry auditLogEntryRecorded = AuditService.log(entityManager,
                 event,
                 componentAddress, componentType,
                 userAddress, userId, userName,
@@ -52,7 +53,7 @@ public class AuditLogServiceTest {
 
         entityManager.clear();
 
-        final AuditLogEntry auditLogEntryLoaded = AuditLogService.get(entityManager, auditLogEntryRecorded.getAuditLogEntryId());
+        final AuditLogEntry auditLogEntryLoaded = AuditService.get(entityManager, auditLogEntryRecorded.getAuditLogEntryId());
 
         Assert.assertEquals(auditLogEntryRecorded.getAuditLogEntryId(), auditLogEntryLoaded.getAuditLogEntryId());
         Assert.assertEquals(componentAddress, auditLogEntryLoaded.getComponentAddress());
@@ -74,7 +75,7 @@ public class AuditLogServiceTest {
 
         final String event = "test-event";
 
-        final AuditLogEntry auditLogEntryRecorded = AuditLogService.log(entityManager,
+        final AuditLogEntry auditLogEntryRecorded = AuditService.log(entityManager,
                 event,
                 componentAddress, componentType,
                 null, null, null,
@@ -82,7 +83,7 @@ public class AuditLogServiceTest {
 
         entityManager.clear();
 
-        final AuditLogEntry auditLogEntryLoaded = AuditLogService.get(entityManager, auditLogEntryRecorded.getAuditLogEntryId());
+        final AuditLogEntry auditLogEntryLoaded = AuditService.get(entityManager, auditLogEntryRecorded.getAuditLogEntryId());
 
         Assert.assertEquals(auditLogEntryRecorded.getAuditLogEntryId(), auditLogEntryLoaded.getAuditLogEntryId());
         Assert.assertEquals(componentAddress, auditLogEntryLoaded.getComponentAddress());
@@ -118,7 +119,7 @@ public class AuditLogServiceTest {
 
         final String event = "test-event" + paddingBuilder;
 
-        final AuditLogEntry auditLogEntryRecorded = AuditLogService.log(entityManager,
+        final AuditLogEntry auditLogEntryRecorded = AuditService.log(entityManager,
                 event,
                 componentAddress, componentType,
                 userAddress, userId, userName,
@@ -126,7 +127,7 @@ public class AuditLogServiceTest {
 
         entityManager.clear();
 
-        final AuditLogEntry auditLogEntryLoaded = AuditLogService.get(entityManager, auditLogEntryRecorded.getAuditLogEntryId());
+        final AuditLogEntry auditLogEntryLoaded = AuditService.get(entityManager, auditLogEntryRecorded.getAuditLogEntryId());
 
         Assert.assertEquals(auditLogEntryRecorded.getAuditLogEntryId(), auditLogEntryLoaded.getAuditLogEntryId());
         Assert.assertEquals(auditLogEntryRecorded.getComponentAddress(), auditLogEntryLoaded.getComponentAddress());

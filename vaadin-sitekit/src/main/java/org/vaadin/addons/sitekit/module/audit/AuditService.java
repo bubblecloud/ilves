@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.service;
+package org.vaadin.addons.sitekit.module.audit;
 
 import org.apache.log4j.Logger;
-import org.vaadin.addons.sitekit.model.AuditLogEntry;
+import org.vaadin.addons.sitekit.module.audit.model.AuditLogEntry;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
@@ -26,9 +26,9 @@ import java.util.Date;
  *
  * @author Tommi S.E. Laukkanen
  */
-public class AuditLogService {
+public class AuditService {
     /** The logger. */
-    private static final Logger LOGGER = Logger.getLogger(AuditLogService.class);
+    private static final Logger LOGGER = Logger.getLogger(AuditService.class);
 
     /**
      * Logs audit log entry.

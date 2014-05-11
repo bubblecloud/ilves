@@ -1,6 +1,7 @@
-package org.vaadin.addons.sitekit.model;
+package org.vaadin.addons.sitekit.module.audit.model;
 
 import org.apache.commons.lang.StringUtils;
+import org.vaadin.addons.sitekit.model.Group;
 
 import javax.persistence.*;
 import java.io.Serializable;
