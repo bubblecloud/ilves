@@ -27,6 +27,7 @@ import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.module.audit.AuditService;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
 import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
@@ -98,6 +99,7 @@ public final class OpenIdLoginViewlet extends AbstractViewlet {
 
             LOGGER.info("User login: " + user.getEmailAddress()
                     + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
+            AuditService.log(entityManager, request.getRemoteAddr(), request.getRemotePort(), user, "openid password login");
 
             final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
 

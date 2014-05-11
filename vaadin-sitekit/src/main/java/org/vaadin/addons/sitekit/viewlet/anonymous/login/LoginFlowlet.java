@@ -40,6 +40,7 @@ import org.apache.directory.ldap.client.api.LdapNetworkConnection;
 import org.vaadin.addons.sitekit.dao.UserDirectoryDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.model.UserDirectory;
+import org.vaadin.addons.sitekit.module.audit.AuditService;
 import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
 import org.vaadin.addons.sitekit.util.CidrUtil;
 import org.vaadin.addons.sitekit.util.OpenIdUtil;
@@ -320,7 +321,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
         if (passwordMatch) {
             LOGGER.info("User login: " + user.getEmailAddress()
                     + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
-
+            AuditService.log(entityManager, request.getRemoteAddr(), request.getRemotePort(), user, "directory password login");
             final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
 
             user.setFailedLoginCount(0);
@@ -331,6 +332,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
         } else {
             LOGGER.warn("User login, password mismatch: " + user.getEmailAddress()
                     + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
+            AuditService.log(entityManager, request.getRemoteAddr(), request.getRemotePort(), user, "directory password login failed");
             user.setFailedLoginCount(user.getFailedLoginCount() + 1);
             if (user.getFailedLoginCount() > company.getMaxFailedLoginCount()) {
                 user.setLockedOut(true);
@@ -365,6 +367,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
         if (passwordMatch) {
             LOGGER.info("User login: " + user.getEmailAddress()
                     + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
+            AuditService.log(entityManager, request.getRemoteAddr(), request.getRemotePort(), user, "password login");
 
             final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
 
@@ -376,6 +379,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
         } else {
             LOGGER.warn("User login, password mismatch: " + user.getEmailAddress()
                     + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
+            AuditService.log(entityManager, request.getRemoteAddr(), request.getRemotePort(), user, "password login failed");
             user.setFailedLoginCount(user.getFailedLoginCount() + 1);
             if (user.getFailedLoginCount() > company.getMaxFailedLoginCount()) {
                 user.setLockedOut(true);

@@ -16,9 +16,13 @@
 package org.vaadin.addons.sitekit.module.audit;
 
 import org.apache.log4j.Logger;
+import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.module.audit.model.AuditLogEntry;
+import org.vaadin.addons.sitekit.util.PropertiesUtil;
 
 import javax.persistence.EntityManager;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Date;
 
 /**
@@ -29,6 +33,44 @@ import java.util.Date;
 public class AuditService {
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(AuditService.class);
+
+    private static String componentAddress;
+
+    private static synchronized  String getComponentAddress() {
+        if (componentAddress == null) {
+            try {
+                componentAddress = InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                componentAddress = e.getMessage();
+            }
+            componentAddress += ":" + PropertiesUtil.getProperty("site", "http-port");
+        }
+        return componentAddress;
+    }
+
+    public static void log(EntityManager entityManager,
+                           String remoteIpAddress,
+                           int remotePort,
+                           User user,
+                           String event) {
+        log(entityManager,remoteIpAddress,remotePort,user,event,
+        null,null,null,null,null);
+    }
+    public static void log(EntityManager entityManager,
+                                    String remoteIpAddress,
+                                    int remotePort,
+                                    User user,
+                                    String event,
+                                    String dataType,
+                                    String dataId,
+                                    String dataOldVersionId,
+                                    String dataNewVersionId,
+                                    String dataLabel) {
+        log(entityManager, event, getComponentAddress(), "web",
+                remoteIpAddress + ":" + remotePort,
+                user.getUserId(), user.getEmailAddress(),
+                dataType, dataId, dataOldVersionId, dataNewVersionId, dataLabel);
+    }
 
     /**
      * Logs audit log entry.
