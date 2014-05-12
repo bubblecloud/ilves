@@ -22,8 +22,10 @@ public class ProcessingContext {
     private final Map<Object, Object> objectMap = new HashMap<Object, Object>();
     /** The entity manager. */
     private final EntityManager entityManager;
+    /** The server name from HTTP request. */
+    private final String serverName;
     /** The local component IP address. */
-    private static String componentIpAddress;
+    private final String localIpAddress;
     /** The local component port. */
     private final Integer componentPort;
     /** The local component type. */
@@ -52,6 +54,8 @@ public class ProcessingContext {
      * @param roles the user roles
      */
     public ProcessingContext(final EntityManager entityManager,
+                             final String serverName,
+                             final String localIpAddress,
                              final Integer componentPort,
                              final String componentType,
                              final String remoteIpAddress,
@@ -60,6 +64,8 @@ public class ProcessingContext {
                              final String userName,
                              final List<String> roles) {
         this.entityManager = entityManager;
+        this.serverName = serverName;
+        this.localIpAddress = localIpAddress;
         this.componentPort = componentPort;
         this.componentType = componentType;
         this.remoteIpAddress = remoteIpAddress;
@@ -84,6 +90,8 @@ public class ProcessingContext {
         this.entityManager = entityManager;
         this.componentPort = Integer.parseInt(PropertiesUtil.getProperty("site", "http-port"));
         this.componentType = "web";
+        this.localIpAddress = request.getLocalAddr();
+        this.serverName = request.getServerName();
         this.remoteIpAddress = request.getRemoteAddr();
         this.remotePort = request.getRemotePort();
         this.userId = user.getUserId();
@@ -102,6 +110,8 @@ public class ProcessingContext {
         this.entityManager = entityManager;
         this.componentPort = Integer.parseInt(PropertiesUtil.getProperty("site", "http"));
         this.componentType = "web";
+        this.localIpAddress = request.getLocalAddr();
+        this.serverName = request.getServerName();
         this.remoteIpAddress = request.getRemoteAddr();
         this.remotePort = request.getRemotePort();
         this.userId = null;
@@ -136,16 +146,8 @@ public class ProcessingContext {
         return entityManager;
     }
 
-    public synchronized String getComponentIpAddress() {
-        if (componentIpAddress == null) {
-            try {
-                componentIpAddress = InetAddress.getLocalHost().getHostAddress();
-            } catch (UnknownHostException e) {
-                componentIpAddress = e.getMessage();
-            }
-            componentIpAddress += ":" + PropertiesUtil.getProperty("site", "http-port");
-        }
-        return componentIpAddress;
+    public String getLocalIpAddress() {
+        return localIpAddress;
     }
 
     public Integer getComponentPort() {

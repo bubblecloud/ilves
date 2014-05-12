@@ -16,14 +16,10 @@
 package org.vaadin.addons.sitekit.module.audit;
 
 import org.apache.log4j.Logger;
-import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.module.audit.model.AuditLogEntry;
 import org.vaadin.addons.sitekit.site.ProcessingContext;
-import org.vaadin.addons.sitekit.util.PropertiesUtil;
 
 import javax.persistence.EntityManager;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Date;
 
 /**
@@ -44,7 +40,7 @@ public class AuditService {
                            final String event) {
         log(processingContext.getEntityManager(),
                 event,
-                processingContext.getComponentIpAddress() + ":" +
+                processingContext.getLocalIpAddress() + ":" +
                         processingContext.getComponentPort(),
                 processingContext.getComponentType(),
                 processingContext.getRemoteIpAddress() + ":" +
@@ -73,7 +69,7 @@ public class AuditService {
                            final String dataLabel) {
         log(processingContext.getEntityManager(),
                 event,
-                processingContext.getComponentIpAddress() + ":" +
+                processingContext.getLocalIpAddress() + ":" +
                         processingContext.getComponentPort(),
                 processingContext.getComponentType(),
                 processingContext.getRemoteIpAddress() + ":" +
@@ -106,7 +102,7 @@ public class AuditService {
                            final String dataLabel) {
         log(processingContext.getEntityManager(),
                 event,
-                processingContext.getComponentIpAddress() + ":" +
+                processingContext.getLocalIpAddress() + ":" +
                 processingContext.getComponentPort(),
                 processingContext.getComponentType(),
                 processingContext.getRemoteIpAddress() + ":" +
