@@ -23,30 +23,35 @@ public class ProcessingContext {
     /** The entity manager. */
     private final EntityManager entityManager;
     /** The server name from HTTP request. */
-    private final String serverName;
+    protected final String serverName;
     /** The local component IP address. */
-    private final String localIpAddress;
+    protected final String localIpAddress;
     /** The local component port. */
-    private final Integer componentPort;
+    protected final Integer componentPort;
     /** The local component type. */
-    private final String componentType;
+    protected final String componentType;
+    /** The remote host. */
+    protected final String remoteHost;
     /** The remote peer IP address. */
-    private final String remoteIpAddress;
+    protected final String remoteIpAddress;
     /** The remote peer port. */
-    private final Integer remotePort;
+    protected final Integer remotePort;
     /** The user ID. */
-    private final String userId;
+    protected final String userId;
     /** The user name. */
-    private final String userName;
+    protected final String userName;
     /** The user roles. */
-    private final List<String> roles;
+    protected final List<String> roles;
 
     /**
      * Constructor for defining parameters for processing context.
      *
      * @param entityManager the entity manager
+     * @param serverName the server name
+     * @param localIpAddress the local IP address
      * @param componentPort the local component port
      * @param componentType the local component type
+     * @param remoteHost the remote host
      * @param remoteIpAddress the remote peer IP address
      * @param remotePort the remote peer port
      * @param userId the user ID
@@ -58,6 +63,7 @@ public class ProcessingContext {
                              final String localIpAddress,
                              final Integer componentPort,
                              final String componentType,
+                             final String remoteHost,
                              final String remoteIpAddress,
                              final Integer remotePort,
                              final String userId,
@@ -68,6 +74,7 @@ public class ProcessingContext {
         this.localIpAddress = localIpAddress;
         this.componentPort = componentPort;
         this.componentType = componentType;
+        this.remoteHost = remoteHost;
         this.remoteIpAddress = remoteIpAddress;
         this.remotePort = remotePort;
         this.userId = userId;
@@ -90,8 +97,9 @@ public class ProcessingContext {
         this.entityManager = entityManager;
         this.componentPort = Integer.parseInt(PropertiesUtil.getProperty("site", "http-port"));
         this.componentType = "web";
-        this.localIpAddress = request.getLocalAddr();
         this.serverName = request.getServerName();
+        this.localIpAddress = request.getLocalAddr();
+        this.remoteHost = request.getRemoteHost();
         this.remoteIpAddress = request.getRemoteAddr();
         this.remotePort = request.getRemotePort();
         this.userId = user.getUserId();
@@ -110,8 +118,9 @@ public class ProcessingContext {
         this.entityManager = entityManager;
         this.componentPort = Integer.parseInt(PropertiesUtil.getProperty("site", "http"));
         this.componentType = "web";
-        this.localIpAddress = request.getLocalAddr();
         this.serverName = request.getServerName();
+        this.localIpAddress = request.getLocalAddr();
+        this.remoteHost = request.getRemoteHost();
         this.remoteIpAddress = request.getRemoteAddr();
         this.remotePort = request.getRemotePort();
         this.userId = null;
@@ -172,6 +181,14 @@ public class ProcessingContext {
 
     public String getUserName() {
         return userName;
+    }
+
+    public String getServerName() {
+        return serverName;
+    }
+
+    public String getRemoteHost() {
+        return remoteHost;
     }
 
     public List<String> getRoles() {
