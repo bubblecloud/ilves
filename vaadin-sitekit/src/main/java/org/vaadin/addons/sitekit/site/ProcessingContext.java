@@ -26,7 +26,7 @@ public class ProcessingContext {
     /** The local component port. */
     protected final Integer componentPort;
     /** The local component type. */
-    protected final String componentType;
+    protected String componentType;
     /** The remote host. */
     protected final String remoteHost;
     /** The remote peer IP address. */
@@ -99,8 +99,8 @@ public class ProcessingContext {
         this.remoteHost = request.getRemoteHost();
         this.remoteIpAddress = request.getRemoteAddr();
         this.remotePort = request.getRemotePort();
-        this.userId = user.getUserId();
-        this.userName = user.getEmailAddress();
+        this.userId = user != null ? user.getUserId() : null;
+        this.userName = user != null ? user.getEmailAddress() : null;
         this.roles = roles;
     }
 
