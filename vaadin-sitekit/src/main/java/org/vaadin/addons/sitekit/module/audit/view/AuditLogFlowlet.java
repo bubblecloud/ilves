@@ -15,23 +15,25 @@
  */
 package org.vaadin.addons.sitekit.module.audit.view;
 
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Table;
+import org.joda.time.DateTime;
+import org.joda.time.ReadableDuration;
 import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.grid.FilterDescriptor;
 import org.vaadin.addons.sitekit.grid.Grid;
+import org.vaadin.addons.sitekit.grid.field.DatePartField;
+import org.vaadin.addons.sitekit.grid.field.TimestampField;
 import org.vaadin.addons.sitekit.module.audit.model.AuditLogEntry;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -72,6 +74,10 @@ public final class AuditLogFlowlet extends AbstractFlowlet {
 
         // Get descriptors and set container properties.
         final List<FilterDescriptor> filterDescriptors = new ArrayList<FilterDescriptor>();
+        filterDescriptors.add(new FilterDescriptor("startTime", "created", "filter-start-time", new TimestampField(),
+        130, ">=", Date.class, new DateTime().withTimeAtStartOfDay().toDate()));
+        filterDescriptors.add(new FilterDescriptor("endTime", "created", "filter-end-time", new TimestampField(),
+                130, "<=", Date.class, new DateTime().withTimeAtStartOfDay().plusDays(1).toDate()));
         final List<FieldDescriptor> fieldDescriptors = FieldSetDescriptorRegister.getFieldSetDescriptor(
                 AuditLogEntry.class).getFieldDescriptors();
         ContainerUtil.addContainerProperties(entityContainer, fieldDescriptors);

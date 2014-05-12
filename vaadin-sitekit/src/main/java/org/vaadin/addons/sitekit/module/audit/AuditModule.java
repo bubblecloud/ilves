@@ -56,6 +56,7 @@ public class AuditModule implements SiteModule {
         fieldSetDescriptor.getFieldDescriptor("dataId").setCollapsed(true);
         fieldSetDescriptor.getFieldDescriptor("dataNewVersionId").setCollapsed(true);
         fieldSetDescriptor.getFieldDescriptor("dataOldVersionId").setCollapsed(true);
+        fieldSetDescriptor.getFieldDescriptor("dataLabel").setWidth(-1);
 
         FieldSetDescriptorRegister.registerFieldSetDescriptor(AuditLogEntry.class, fieldSetDescriptor);
 
