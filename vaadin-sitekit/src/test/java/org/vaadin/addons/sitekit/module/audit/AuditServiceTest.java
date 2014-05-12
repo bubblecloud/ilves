@@ -1,4 +1,4 @@
-package org.vaadin.addons.sitekit.service;
+package org.vaadin.addons.sitekit.module.audit;
 
 import org.junit.After;
 import org.junit.Assert;

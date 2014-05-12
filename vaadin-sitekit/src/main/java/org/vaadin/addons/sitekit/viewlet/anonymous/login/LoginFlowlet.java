@@ -41,6 +41,7 @@ import org.vaadin.addons.sitekit.dao.UserDirectoryDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.model.UserDirectory;
 import org.vaadin.addons.sitekit.module.audit.AuditService;
+import org.vaadin.addons.sitekit.site.ProcessingContext;
 import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
 import org.vaadin.addons.sitekit.util.CidrUtil;
 import org.vaadin.addons.sitekit.util.OpenIdUtil;
@@ -224,6 +225,9 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
                                       final EntityManager entityManager, final Company company,
                                       final User user, final UserDirectory userDirectory)
             throws IOException, NoSuchAlgorithmException, Exception {
+        final ProcessingContext processingContext = new ProcessingContext(entityManager, request, user,
+                getSite().getSecurityProvider().getRoles());
+
         LOGGER.info("Attempting LDAP login: address: " + userDirectory.getAddress() + ":" + userDirectory.getPort()
                 + ") email: " + user.getEmailAddress()
                 + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
@@ -321,7 +325,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
         if (passwordMatch) {
             LOGGER.info("User login: " + user.getEmailAddress()
                     + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
-            AuditService.log(entityManager, request.getRemoteAddr(), request.getRemotePort(), user, "directory password login");
+            AuditService.log(processingContext, "directory password login");
             final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
 
             user.setFailedLoginCount(0);
@@ -332,7 +336,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
         } else {
             LOGGER.warn("User login, password mismatch: " + user.getEmailAddress()
                     + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
-            AuditService.log(entityManager, request.getRemoteAddr(), request.getRemotePort(), user, "directory password login failed");
+            AuditService.log(processingContext, "directory password login failed");
             user.setFailedLoginCount(user.getFailedLoginCount() + 1);
             if (user.getFailedLoginCount() > company.getMaxFailedLoginCount()) {
                 user.setLockedOut(true);
@@ -357,6 +361,9 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
     private void attemptLocalLogin(final LoginEvent event, final HttpServletRequest request,
                                    final EntityManager entityManager, final Company company,
                                    final User user) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        final ProcessingContext processingContext = new ProcessingContext(entityManager, request, user,
+                getSite().getSecurityProvider().getRoles());
+
         final byte[] passwordAndSaltBytes = (user.getEmailAddress()
                 + ":" + ((String) event.getLoginParameter("password")))
                 .getBytes("UTF-8");
@@ -367,7 +374,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
         if (passwordMatch) {
             LOGGER.info("User login: " + user.getEmailAddress()
                     + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
-            AuditService.log(entityManager, request.getRemoteAddr(), request.getRemotePort(), user, "password login");
+            AuditService.log(processingContext, "password login");
 
             final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
 
@@ -379,7 +386,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
         } else {
             LOGGER.warn("User login, password mismatch: " + user.getEmailAddress()
                     + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
-            AuditService.log(entityManager, request.getRemoteAddr(), request.getRemotePort(), user, "password login failed");
+            AuditService.log(processingContext, "password login failed");
             user.setFailedLoginCount(user.getFailedLoginCount() + 1);
             if (user.getFailedLoginCount() > company.getMaxFailedLoginCount()) {
                 user.setLockedOut(true);

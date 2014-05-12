@@ -30,6 +30,7 @@ import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.module.audit.AuditService;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
+import org.vaadin.addons.sitekit.site.ProcessingContext;
 import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
 import org.vaadin.addons.sitekit.util.OpenIdUtil;
 import org.vaadin.addons.sitekit.util.StringUtil;
@@ -60,6 +61,7 @@ public final class OpenIdLoginViewlet extends AbstractViewlet {
      */
     @Override
     public void enter(final String parameterString) {
+
         final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
         final Company company = getSite().getSiteContext().getObject(Company.class);
         final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
@@ -72,8 +74,9 @@ public final class OpenIdLoginViewlet extends AbstractViewlet {
             if (identifier == null) {
                 ((AbstractSiteUI) UI.getCurrent()).redirectTo(company.getUrl(), "login",
                         getSite().localize("message-login-failed")
-                         + ":" + verification.getStatusMsg(),
-                        Notification.Type.ERROR_MESSAGE);
+                                + ":" + verification.getStatusMsg(),
+                        Notification.Type.ERROR_MESSAGE
+                );
             }
 
             final User user = UserDao.getUserByOpenIdIdentifier(entityManager, company, identifier.getIdentifier());
@@ -97,9 +100,12 @@ public final class OpenIdLoginViewlet extends AbstractViewlet {
                 return;
             }
 
+            final ProcessingContext processingContext = new ProcessingContext(entityManager, request, user,
+                    getSite().getSecurityProvider().getRoles());
+
             LOGGER.info("User login: " + user.getEmailAddress()
                     + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
-            AuditService.log(entityManager, request.getRemoteAddr(), request.getRemotePort(), user, "openid password login");
+            AuditService.log(processingContext, "openid password login");
 
             final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
 

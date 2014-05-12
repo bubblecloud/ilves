@@ -18,6 +18,7 @@ package org.vaadin.addons.sitekit.module.audit;
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.module.audit.model.AuditLogEntry;
+import org.vaadin.addons.sitekit.site.ProcessingContext;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
 
 import javax.persistence.EntityManager;
@@ -34,42 +35,89 @@ public class AuditService {
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(AuditService.class);
 
-    private static String componentAddress;
-
-    private static synchronized  String getComponentAddress() {
-        if (componentAddress == null) {
-            try {
-                componentAddress = InetAddress.getLocalHost().getHostAddress();
-            } catch (UnknownHostException e) {
-                componentAddress = e.getMessage();
-            }
-            componentAddress += ":" + PropertiesUtil.getProperty("site", "http-port");
-        }
-        return componentAddress;
+    /**
+     * Log audit event.
+     * @param processingContext the processing context
+     * @param event the event
+     */
+    public static void log(final ProcessingContext processingContext,
+                           final String event) {
+        log(processingContext.getEntityManager(),
+                event,
+                processingContext.getComponentIpAddress() + ":" +
+                        processingContext.getComponentPort(),
+                processingContext.getComponentType(),
+                processingContext.getRemoteIpAddress() + ":" +
+                        processingContext.getRemotePort(),
+                processingContext.getUserId(),
+                processingContext.getUserName(),
+                null,
+                null,
+                null,
+                null,
+                null);
     }
 
-    public static void log(EntityManager entityManager,
-                           String remoteIpAddress,
-                           int remotePort,
-                           User user,
-                           String event) {
-        log(entityManager,remoteIpAddress,remotePort,user,event,
-        null,null,null,null,null);
+    /**
+     * Log audit event related to data
+     * @param processingContext the processing context
+     * @param event the event
+     * @param dataType the data type
+     * @param dataId the data ID
+     * @param dataLabel the data label
+     */
+    public static void log(final ProcessingContext processingContext,
+                           final String event,
+                           final String dataType,
+                           final String dataId,
+                           final String dataLabel) {
+        log(processingContext.getEntityManager(),
+                event,
+                processingContext.getComponentIpAddress() + ":" +
+                        processingContext.getComponentPort(),
+                processingContext.getComponentType(),
+                processingContext.getRemoteIpAddress() + ":" +
+                        processingContext.getRemotePort(),
+                processingContext.getUserId(),
+                processingContext.getUserName(),
+                dataType,
+                dataId,
+                null,
+                null,
+                dataLabel);
     }
-    public static void log(EntityManager entityManager,
-                                    String remoteIpAddress,
-                                    int remotePort,
-                                    User user,
-                                    String event,
-                                    String dataType,
-                                    String dataId,
-                                    String dataOldVersionId,
-                                    String dataNewVersionId,
-                                    String dataLabel) {
-        log(entityManager, event, getComponentAddress(), "web",
-                remoteIpAddress + ":" + remotePort,
-                user.getUserId(), user.getEmailAddress(),
-                dataType, dataId, dataOldVersionId, dataNewVersionId, dataLabel);
+
+    /**
+     * Log audit event related to versioned data.
+     * @param processingContext the processing context
+     * @param event the event
+     * @param dataType the data type
+     * @param dataId the data ID
+     * @param dataOldVersionId the old data version ID
+     * @param dataNewVersionId the new data version ID
+     * @param dataLabel the data label
+     */
+    public static void log(final ProcessingContext processingContext,
+                           final String event,
+                           final String dataType,
+                           final String dataId,
+                           final String dataOldVersionId,
+                           final String dataNewVersionId,
+                           final String dataLabel) {
+        log(processingContext.getEntityManager(),
+                event,
+                processingContext.getComponentIpAddress() + ":" +
+                processingContext.getComponentPort(),
+                processingContext.getComponentType(),
+                processingContext.getRemoteIpAddress() + ":" +
+                processingContext.getRemotePort(),
+                processingContext.getUserId(),
+                processingContext.getUserName(),
+                dataType,
+                dataId,
+                dataOldVersionId,
+                dataNewVersionId,
+                dataLabel);
     }
 
     /**
@@ -89,7 +137,7 @@ public class AuditService {
      * @param dataLabel the data label
      * @return the audit log entry
      */
-    public static AuditLogEntry log(EntityManager entityManager,
+    protected static AuditLogEntry log(EntityManager entityManager,
                                     String event,
                                     String componentAddress,
                                     String componentType,
@@ -137,7 +185,7 @@ public class AuditService {
      * @param auditLogEntryId the audit log entry ID
      * @return the audit log entry or null if audit log entry does not exist.
      */
-    public static AuditLogEntry get(EntityManager entityManager, String auditLogEntryId) {
+    protected static AuditLogEntry get(EntityManager entityManager, String auditLogEntryId) {
         return entityManager.getReference(AuditLogEntry.class, auditLogEntryId);
     }
 }
