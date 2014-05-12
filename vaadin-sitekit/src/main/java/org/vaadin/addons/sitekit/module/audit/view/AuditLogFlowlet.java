@@ -70,7 +70,7 @@ public final class AuditLogFlowlet extends AbstractFlowlet {
         // Get entity manager from site context and prepare container.
         final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
         entityContainer = new EntityContainer<AuditLogEntry>(entityManager, true, false, false, AuditLogEntry.class, 1000,
-                new String[] { "auditLogEntryId" }, new boolean[] { false }, "auditLogEntryId");
+                new String[] { "created" }, new boolean[] { false }, "auditLogEntryId");
 
         // Get descriptors and set container properties.
         final List<FilterDescriptor> filterDescriptors = new ArrayList<FilterDescriptor>();

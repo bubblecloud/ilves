@@ -93,7 +93,7 @@ public class ProcessingContext {
                              final List<String> roles) {
         this.entityManager = entityManager;
         this.componentPort = Integer.parseInt(PropertiesUtil.getProperty("site", "http-port"));
-        this.componentType = "web";
+        this.componentType = PropertiesUtil.getProperty("site", "site-type");
         this.serverName = request.getServerName();
         this.localIpAddress = request.getLocalAddr();
         this.remoteHost = request.getRemoteHost();
@@ -114,7 +114,7 @@ public class ProcessingContext {
                              final HttpServletRequest request) {
         this.entityManager = entityManager;
         this.componentPort = Integer.parseInt(PropertiesUtil.getProperty("site", "http"));
-        this.componentType = "web";
+        this.componentType = PropertiesUtil.getProperty("site", "site-type");
         this.serverName = request.getServerName();
         this.localIpAddress = request.getLocalAddr();
         this.remoteHost = request.getRemoteHost();
