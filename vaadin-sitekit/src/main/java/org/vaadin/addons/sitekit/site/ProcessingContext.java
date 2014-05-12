@@ -7,10 +7,7 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Processing context to be passed to processing layer. Processing context
@@ -37,9 +34,9 @@ public class ProcessingContext {
     /** The remote peer port. */
     protected final Integer remotePort;
     /** The user ID. */
-    protected final String userId;
+    protected String userId;
     /** The user name. */
-    protected final String userName;
+    protected String userName;
     /** The user roles. */
     protected final List<String> roles;
 
@@ -125,7 +122,7 @@ public class ProcessingContext {
         this.remotePort = request.getRemotePort();
         this.userId = null;
         this.userName = null;
-        this.roles = Collections.emptyList();
+        this.roles = new ArrayList<String>();
     }
 
     /**
