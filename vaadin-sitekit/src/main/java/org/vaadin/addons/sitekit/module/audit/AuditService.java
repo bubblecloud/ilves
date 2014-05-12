@@ -41,10 +41,10 @@ public class AuditService {
         log(processingContext.getEntityManager(),
                 event,
                 processingContext.getLocalIpAddress() + ":" +
-                        processingContext.getComponentPort(),
+                        processingContext.getComponentPort() + "(" + processingContext.getServerName() + ")",
                 processingContext.getComponentType(),
                 processingContext.getRemoteIpAddress() + ":" +
-                        processingContext.getRemotePort(),
+                        processingContext.getRemotePort() + "(" + processingContext.getRemoteHost() + ")",
                 processingContext.getUserId(),
                 processingContext.getUserName(),
                 null,
@@ -70,10 +70,10 @@ public class AuditService {
         log(processingContext.getEntityManager(),
                 event,
                 processingContext.getLocalIpAddress() + ":" +
-                        processingContext.getComponentPort(),
+                        processingContext.getComponentPort() + "(" + processingContext.getServerName() + ")",
                 processingContext.getComponentType(),
                 processingContext.getRemoteIpAddress() + ":" +
-                        processingContext.getRemotePort(),
+                        processingContext.getRemotePort() + "(" + processingContext.getRemoteHost() + ")",
                 processingContext.getUserId(),
                 processingContext.getUserName(),
                 dataType,
@@ -103,10 +103,10 @@ public class AuditService {
         log(processingContext.getEntityManager(),
                 event,
                 processingContext.getLocalIpAddress() + ":" +
-                processingContext.getComponentPort(),
+                processingContext.getComponentPort() + "(" + processingContext.getServerName() + ")",
                 processingContext.getComponentType(),
                 processingContext.getRemoteIpAddress() + ":" +
-                processingContext.getRemotePort(),
+                processingContext.getRemotePort() + "(" + processingContext.getRemoteHost() + ")",
                 processingContext.getUserId(),
                 processingContext.getUserName(),
                 dataType,

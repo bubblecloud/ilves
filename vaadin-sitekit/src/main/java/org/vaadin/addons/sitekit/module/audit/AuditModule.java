@@ -17,6 +17,7 @@ package org.vaadin.addons.sitekit.module.audit;
 
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
+import org.vaadin.addons.sitekit.grid.formatter.TimestampConverter;
 import org.vaadin.addons.sitekit.module.audit.model.AuditLogEntry;
 import org.vaadin.addons.sitekit.module.audit.view.AuditFlow;
 import org.vaadin.addons.sitekit.site.*;
@@ -45,8 +46,16 @@ public class AuditModule implements SiteModule {
         final FieldSetDescriptor fieldSetDescriptor = new FieldSetDescriptor(AuditLogEntry.class);
 
         fieldSetDescriptor.setVisibleFieldIds(new String[]{
-                "created", "event", "userAddress", "userName", "dataLabel", "systemType", "systemAddress"
+                "created", "componentAddress", "componentType", "userAddress", "userId", "userName", "event",
+                "dataId", "dataLabel", "dataNewVersionId", "dataOldVersionId"
         });
+        fieldSetDescriptor.getFieldDescriptor("created").setConverter(new TimestampConverter());
+        fieldSetDescriptor.getFieldDescriptor("componentAddress").setCollapsed(true);
+        fieldSetDescriptor.getFieldDescriptor("userAddress").setCollapsed(true);
+        fieldSetDescriptor.getFieldDescriptor("userId").setCollapsed(true);
+        fieldSetDescriptor.getFieldDescriptor("dataId").setCollapsed(true);
+        fieldSetDescriptor.getFieldDescriptor("dataNewVersionId").setCollapsed(true);
+        fieldSetDescriptor.getFieldDescriptor("dataOldVersionId").setCollapsed(true);
 
         FieldSetDescriptorRegister.registerFieldSetDescriptor(AuditLogEntry.class, fieldSetDescriptor);
 

@@ -162,13 +162,8 @@ public class Grid extends CustomComponent {
             if (fieldDefinition.isCollapsed()) {
                 table.setColumnCollapsed(fieldDefinition.getId(), true);
             }
-            if (table instanceof FormattingTable && fieldDefinition.getConverter() != null) {
-                try {
-                    ((FormattingTable) table).setConverter(fieldDefinition.getId(), (Converter<String, ?>) fieldDefinition.getConverter());
-                } catch (final Throwable t) {
-                    throw new RuntimeException("Error instantiating value formatter for field: "
-                            + fieldDefinition.getId(), t);
-                }
+            if (fieldDefinition.getConverter() != null) {
+                table.setConverter(fieldDefinition.getId(), (Converter<String, ?>) fieldDefinition.getConverter());
             }
             if (fieldDefinition.getValueAlignment() == HorizontalAlignment.CENTER) {
                 table.setColumnAlignment(fieldDefinition.getId(), Table.ALIGN_CENTER);
