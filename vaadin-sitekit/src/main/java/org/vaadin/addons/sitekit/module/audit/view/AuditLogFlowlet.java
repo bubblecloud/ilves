@@ -74,9 +74,11 @@ public final class AuditLogFlowlet extends AbstractFlowlet {
 
         // Get descriptors and set container properties.
         final List<FilterDescriptor> filterDescriptors = new ArrayList<FilterDescriptor>();
-        filterDescriptors.add(new FilterDescriptor("startTime", "created", "filter-start-time", new TimestampField(),
+        filterDescriptors.add(new FilterDescriptor("startTime", "created", getSite().localize("filter-start-time"),
+                new TimestampField(),
         130, ">=", Date.class, new DateTime().withTimeAtStartOfDay().toDate()));
-        filterDescriptors.add(new FilterDescriptor("endTime", "created", "filter-end-time", new TimestampField(),
+        filterDescriptors.add(new FilterDescriptor("endTime", "created", getSite().localize("filter-end-time"),
+                new TimestampField(),
                 130, "<=", Date.class, new DateTime().withTimeAtStartOfDay().plusDays(1).toDate()));
         final List<FieldDescriptor> fieldDescriptors = FieldSetDescriptorRegister.getFieldSetDescriptor(
                 AuditLogEntry.class).getFieldDescriptors();

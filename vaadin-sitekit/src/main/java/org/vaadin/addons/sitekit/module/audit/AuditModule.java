@@ -34,7 +34,7 @@ public class AuditModule implements SiteModule {
         final SiteDescriptor siteDescriptor = DefaultSiteUI.getContentProvider().getSiteDescriptor();
 
         final NavigationVersion navigationVersion = siteDescriptor.getNavigation().getProductionVersion();
-        navigationVersion.addChildPage("configuration", "account", "audit");
+        navigationVersion.addChildPage("configuration", "companies", "audit");
 
         // Describe content view.
         final ViewDescriptor viewDescriptor = new ViewDescriptor("audit", "Audit", DefaultView.class);
