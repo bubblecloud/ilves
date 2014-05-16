@@ -91,6 +91,10 @@
             <column name="created"/>
             <column name="datalabel"/>
         </createIndex>
+
+    </changeSet>
+    <changeSet author="tlaukkan" id="5b3b5450-dcd0-11e3-9c1a-0800200c9a66">
+        <dropIndex indexName="unq_privilege_0" tableName="privilege" />
     </changeSet>
 </databaseChangeLog>
 
