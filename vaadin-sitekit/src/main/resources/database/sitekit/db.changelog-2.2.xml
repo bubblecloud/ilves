@@ -96,5 +96,12 @@
     <changeSet author="tlaukkan" id="5b3b5450-dcd0-11e3-9c1a-0800200c9a66">
         <dropIndex indexName="unq_privilege_0" tableName="privilege" />
     </changeSet>
+
+    <changeSet author="tlaukkan" id="08e398c0-e34c-11e3-8b68-0800200c9a66">
+        <update tableName="company">
+            <column name="maxfailedlogincount" value="5"/>
+            <where>companycode = '0000000-0'</where>
+        </update>
+    </changeSet>
 </databaseChangeLog>
 

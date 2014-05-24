@@ -148,7 +148,48 @@ public final class AuditLogEntry implements Serializable {
 
     @Override
     public String toString() {
-        return userName + " " + event + " " + dataLabel;
+        final StringBuilder builder = new StringBuilder();
+        builder.append("Audit >>> ");
+        if (userName != null) {
+            builder.append(userName);
+        }
+        if (event != null) {
+            if (builder.length() > 0) {
+                builder.append(' ');
+            }
+            builder.append(event);
+        }
+
+        if (dataLabel != null) {
+            if (builder.length() > 0) {
+                builder.append(' ');
+            }
+            builder.append(dataLabel);
+            builder.append('.');
+        }
+
+        if (dataId != null) {
+            if (builder.length() > 0) {
+                builder.append(' ');
+            }
+            builder.append("ID: '");
+            builder.append(dataId);
+            builder.append("' Type: '");
+            builder.append(dataType);
+            builder.append("'");
+        }
+
+        if (dataOldVersionId != null || dataNewVersionId != null) {
+            if (builder.length() > 0) {
+                builder.append(' ');
+            }
+            builder.append(" Versions: '");
+            builder.append(dataOldVersionId);
+            builder.append("' -> '");
+            builder.append(dataNewVersionId);
+            builder.append("'");
+        }
+        return builder.toString();
     }
 
     @Override
