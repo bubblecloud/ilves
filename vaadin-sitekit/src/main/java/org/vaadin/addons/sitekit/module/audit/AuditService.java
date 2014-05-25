@@ -38,7 +38,7 @@ public class AuditService {
      */
     public static void log(final ProcessingContext processingContext,
                            final String event) {
-        log(processingContext.getEntityManager(),
+        log(processingContext.getAuditEntityManager(),
                 event,
                 processingContext.getLocalIpAddress() + ":" +
                         processingContext.getComponentPort() + " (" + processingContext.getServerName() + ")",
@@ -67,7 +67,7 @@ public class AuditService {
                            final String dataType,
                            final String dataId,
                            final String dataLabel) {
-        log(processingContext.getEntityManager(),
+        log(processingContext.getAuditEntityManager(),
                 event,
                 processingContext.getLocalIpAddress() + ":" +
                         processingContext.getComponentPort() + " (" + processingContext.getServerName() + ")",
@@ -100,7 +100,7 @@ public class AuditService {
                            final String dataOldVersionId,
                            final String dataNewVersionId,
                            final String dataLabel) {
-        log(processingContext.getEntityManager(),
+        log(processingContext.getAuditEntityManager(),
                 event,
                 processingContext.getLocalIpAddress() + ":" +
                 processingContext.getComponentPort() + " (" + processingContext.getServerName() + ")",

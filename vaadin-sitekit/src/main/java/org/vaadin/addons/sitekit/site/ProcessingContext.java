@@ -19,6 +19,8 @@ public class ProcessingContext {
     private final Map<Object, Object> objectMap = new HashMap<Object, Object>();
     /** The entity manager. */
     private final EntityManager entityManager;
+    /** The audit entity manager. */
+    private final EntityManager auditEntityManager;
     /** The server name from HTTP request. */
     protected final String serverName;
     /** The local component IP address. */
@@ -44,6 +46,7 @@ public class ProcessingContext {
      * Constructor for defining parameters for processing context.
      *
      * @param entityManager the entity manager
+     * @param auditEntityManager the audit entity manager
      * @param serverName the server name
      * @param localIpAddress the local IP address
      * @param componentPort the local component port
@@ -56,6 +59,7 @@ public class ProcessingContext {
      * @param roles the user roles
      */
     public ProcessingContext(final EntityManager entityManager,
+                             final EntityManager auditEntityManager,
                              final String serverName,
                              final String localIpAddress,
                              final Integer componentPort,
@@ -67,6 +71,7 @@ public class ProcessingContext {
                              final String userName,
                              final List<String> roles) {
         this.entityManager = entityManager;
+        this.auditEntityManager = auditEntityManager;
         this.serverName = serverName;
         this.localIpAddress = localIpAddress;
         this.componentPort = componentPort;
@@ -83,15 +88,18 @@ public class ProcessingContext {
      * Authenticated HTTP servlet request.
      *
      * @param entityManager the entity manager
+     * @param auditEntityManager the audit entity manager
      * @param request the request
      * @param user the user
      * @param roles the user roles
      */
     public ProcessingContext(final EntityManager entityManager,
+                             final EntityManager auditEntityManager,
                              final HttpServletRequest request,
                              final User user,
                              final List<String> roles) {
         this.entityManager = entityManager;
+        this.auditEntityManager = auditEntityManager;
         this.componentPort = Integer.parseInt(PropertiesUtil.getProperty("site", "http-port"));
         this.componentType = PropertiesUtil.getProperty("site", "site-type");
         this.serverName = request.getServerName();
@@ -108,11 +116,14 @@ public class ProcessingContext {
      * Anonymous or system to system HTTP request.
      *
      * @param entityManager the entity manager
+     * @param auditEntityManager the audit entity manager
      * @param request the HTTP servlet request
      */
     public ProcessingContext(final EntityManager entityManager,
+                             final EntityManager auditEntityManager,
                              final HttpServletRequest request) {
         this.entityManager = entityManager;
+        this.auditEntityManager = auditEntityManager;
         this.componentPort = Integer.parseInt(PropertiesUtil.getProperty("site", "http"));
         this.componentType = PropertiesUtil.getProperty("site", "site-type");
         this.serverName = request.getServerName();
@@ -150,6 +161,10 @@ public class ProcessingContext {
 
     public EntityManager getEntityManager() {
         return entityManager;
+    }
+
+    public EntityManager getAuditEntityManager() {
+        return auditEntityManager;
     }
 
     public String getLocalIpAddress() {

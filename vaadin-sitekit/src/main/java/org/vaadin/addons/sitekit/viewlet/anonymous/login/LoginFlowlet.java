@@ -225,7 +225,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
                                       final EntityManager entityManager, final Company company,
                                       final User user, final UserDirectory userDirectory)
             throws IOException, NoSuchAlgorithmException, Exception {
-        final ProcessingContext processingContext = new ProcessingContext(entityManager, request, user,
+        final ProcessingContext processingContext = new ProcessingContext(entityManager, entityManager, request, user,
                 getSite().getSecurityProvider().getRoles());
 
         LOGGER.info("Attempting LDAP login: address: " + userDirectory.getAddress() + ":" + userDirectory.getPort()
@@ -361,7 +361,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
     private void attemptLocalLogin(final LoginEvent event, final HttpServletRequest request,
                                    final EntityManager entityManager, final Company company,
                                    final User user) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        final ProcessingContext processingContext = new ProcessingContext(entityManager, request, user,
+        final ProcessingContext processingContext = new ProcessingContext(entityManager, entityManager, request, user,
                 getSite().getSecurityProvider().getRoles());
 
         final byte[] passwordAndSaltBytes = (user.getEmailAddress()

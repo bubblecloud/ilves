@@ -100,7 +100,8 @@ public final class OpenIdLoginViewlet extends AbstractViewlet {
                 return;
             }
 
-            final ProcessingContext processingContext = new ProcessingContext(entityManager, request, user,
+            final ProcessingContext processingContext = new ProcessingContext(entityManager, entityManager,
+                    request, user,
                     getSite().getSecurityProvider().getRoles());
 
             LOGGER.info("User login: " + user.getEmailAddress()
