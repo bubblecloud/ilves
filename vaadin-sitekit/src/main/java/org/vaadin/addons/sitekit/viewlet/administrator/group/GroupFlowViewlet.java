@@ -19,7 +19,7 @@ import org.vaadin.addons.sitekit.flow.AbstractFlowViewlet;
 import org.vaadin.addons.sitekit.flow.Flowlet;
 
 /**
- * Group management Flow.
+ * Group api Flow.
  *
  * @author Tommi S.E. Laukkanen
  */

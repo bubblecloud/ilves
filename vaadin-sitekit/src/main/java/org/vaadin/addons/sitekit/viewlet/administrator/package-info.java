@@ -1,5 +1,5 @@
 /**
- * This package contains Site Kit management Viewlets.
+ * This package contains Site Kit api Viewlets.
  *
  * @author Tommi S.E. Laukkanen
  */

@@ -55,6 +55,7 @@ public final class DefaultSiteUI extends AbstractSiteUI {
         // Construct entity manager for this site context.
         final EntityManager entityManager = entityManagerFactory.createEntityManager();
         siteContext.putObject(EntityManager.class, entityManager);
+        siteContext.putObject(EntityManagerFactory.class, entityManagerFactory);
 
         // Choose company for this site context.
         final VaadinServletRequest servletRequest = (VaadinServletRequest) VaadinService.getCurrentRequest();

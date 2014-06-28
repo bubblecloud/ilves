@@ -19,7 +19,7 @@ import org.vaadin.addons.sitekit.flow.AbstractFlowViewlet;
 import org.vaadin.addons.sitekit.flow.Flowlet;
 
 /**
- * User management Flow.
+ * User api Flow.
  *
  * @author Tommi S.E. Laukkanen
  */

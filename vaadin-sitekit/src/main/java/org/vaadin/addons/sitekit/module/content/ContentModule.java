@@ -34,7 +34,7 @@ import javax.persistence.EntityManager;
 import java.util.*;
 
 /**
- * Content module adds support for Wiki content management.
+ * Content module adds support for Wiki content api.
  *
  * @author Tommi S.E. Laukkanen
  */
