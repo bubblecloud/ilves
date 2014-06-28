@@ -82,7 +82,10 @@ public final class ViewletDescriptor {
     public void setDescription(final String description) {
         this.description = description;
     }
+
     /**
+     * Gets viewlet configuration.
+     * @param <T> the configuration class
      * @return the configuration
      */
     public <T> T getConfiguration() {

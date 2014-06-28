@@ -47,7 +47,7 @@ public final class FilterDescriptor {
      * @param label Label of the filter.
      * @param field Filter field component.
      * @param width Width of the filter field.
-     * @param criteriaOperator Criteria operator for example: =,<,> etc. This is contract between container and grid.
+     * @param criteriaOperator Criteria operator for example: = etc. This is contract between container and grid.
      * @param valueType Type of the filter value.
      * @param defaultValue Default value for the filter or null.
      */

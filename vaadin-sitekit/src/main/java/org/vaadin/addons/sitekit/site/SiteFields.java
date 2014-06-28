@@ -95,7 +95,6 @@ public final class SiteFields {
 
     /**
      * Initialize field descriptors if not done yet.
-     * @param localizationProvider the localization provider
      */
     public static synchronized void initialize() {
         if (initialized) {

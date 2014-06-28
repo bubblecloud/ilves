@@ -110,7 +110,7 @@ public class OpenIdUtil {
      * @return the verification result
      * @throws DiscoveryException if discovery exception occurs.
      * @throws MessageException if message exception occurs.
-     * @throws ConsumerException if consume exception occurs.
+     * @throws AssociationException if association exception occurs.
      */
     public static VerificationResult getVerificationResult(final String siteUrl
             , final String returnViewName) throws MessageException, DiscoveryException,

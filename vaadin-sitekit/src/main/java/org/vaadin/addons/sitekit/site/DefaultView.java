@@ -29,6 +29,7 @@ public final class DefaultView extends AbstractCustomView {
 
     /**
      * The default portal window.
+     * @throws java.io.IOException if template stream can not be read.
      */
     public DefaultView() throws IOException {
         super(DefaultView.class.getResourceAsStream("/VAADIN/themes/sitekit/layouts/default.html"));

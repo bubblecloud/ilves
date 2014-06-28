@@ -48,7 +48,10 @@ public final class ViewDescriptor {
     }
 
     /**
-     * @param name The view name.
+     * Constructor for setting view parameters with only production view.
+     * @param name the view name
+     * @param title the view title
+     * @param viewClass the view class
      */
     public ViewDescriptor(String name, String title, Class<? extends View> viewClass) {
         this.name = name;

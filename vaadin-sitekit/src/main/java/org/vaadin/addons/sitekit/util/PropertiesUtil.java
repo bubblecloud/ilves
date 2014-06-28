@@ -24,8 +24,8 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Properties loading utility which supports <category>-ext.properties for
- * extending properties defined in <category>.properties.
+ * Properties loading utility which supports [category]-ext.properties for
+ * extending properties defined in [category].properties.
  *
  * @author Tommi S.E. Laukkanen
  */

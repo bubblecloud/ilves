@@ -46,7 +46,6 @@ public class EmailUtil {
      * @param from from email address
      * @param subject the email subject
      * @param body the email body
-     * @return
      */
     public static void send(final String smtpHost,
                             final String to, final String from, final String subject, final String body) {

@@ -48,6 +48,8 @@ public abstract class AbstractCustomView extends CustomLayout implements View, S
 
     /**
      * Default constructor.
+     * @param templateStream the template stream
+     * @throws IOException If template stream can not be read.
      */
     public AbstractCustomView(final InputStream templateStream) throws IOException {
         super(templateStream);
