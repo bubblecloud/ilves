@@ -60,26 +60,27 @@ public class PasswordLoginUtil {
      * @param userPassword the user password
      * @return null on success and error localization key on failure.
      */
-    public static String login(final String remoteHost,
+    public static String login(final String emailAddress,
+                               final String remoteHost,
                                final String remoteIpAddress,
                                final int remotePort,
                                final EntityManager entityManager,
                                final Company company,
                                final User user,
                                final String userPassword) {
+        if (user == null) {
+            LOGGER.warn("User login failed due to not registered email address: " + emailAddress
+                    + " (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")");
+            return "message-login-failed";
+        }
+
+        if (user.isLockedOut()) {
+            LOGGER.warn("User login failed due to user being locked out: " + user.getEmailAddress()
+                    + " (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")");
+            return "message-login-failed";
+        }
+
         try {
-            if (user == null) {
-                LOGGER.warn("User login failed due to not registered email address: " + user.getEmailAddress()
-                        + " (IP: " + remoteHost + ":" + remotePort + ")");
-                return "message-login-failed";
-            }
-
-            if (user.isLockedOut()) {
-                LOGGER.warn("User login failed due to user being locked out: " + user.getEmailAddress()
-                        + " (IP: " + remoteHost + ":" + remotePort + ")");
-                return "message-login-failed";
-            }
-
             final List<UserDirectory> userDirectories = UserDirectoryDao.getUserDirectories(entityManager, company);
             for (final UserDirectory userDirectory : userDirectories) {
                 if (!userDirectory.isEnabled()) {
@@ -98,7 +99,7 @@ public class PasswordLoginUtil {
             return attemptLocalLogin(remoteHost, remoteIpAddress, remotePort, entityManager, company, user, userPassword);
         } catch (final Exception e) {
             LOGGER.error("Error logging in user: " + user.getEmailAddress()
-                    + " (IP: " + remoteHost + ":" + remotePort + ")", e);
+                    + " (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")", e);
             return "message-login-error";
         }
 
@@ -130,7 +131,7 @@ public class PasswordLoginUtil {
             throws Exception {
         LOGGER.info("Attempting LDAP login: address: " + userDirectory.getAddress() + ":" + userDirectory.getPort()
                 + ") email: " + user.getEmailAddress()
-                + " (IP: " + remoteHost + ":" + remotePort + ")");
+                + " (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")");
 
         final LdapConnection connection = new LdapNetworkConnection(userDirectory.getAddress(),
                 userDirectory.getPort());
@@ -152,7 +153,7 @@ public class PasswordLoginUtil {
                 LOGGER.warn("User not found from LDAP address: "
                         + userDirectory.getAddress() + ":" + userDirectory.getPort()
                         + ") email: " + user.getEmailAddress()
-                        + " (IP: " + remoteHost + ":" + remotePort + ")");
+                        + " (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")");
                 userCursor.close();
                 connection.unBind();
                 return "message-directory-user-not-found";
@@ -167,7 +168,7 @@ public class PasswordLoginUtil {
                     LOGGER.warn("User not in required remote group '" + userDirectory.getRequiredRemoteGroup()
                             + "', LDAP address: " + userDirectory.getAddress() + ":" + userDirectory.getPort()
                             + ") email: " + user.getEmailAddress()
-                            + " (IP: " + remoteHost + ":" + remotePort + ")");
+                            + " (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")");
                     return "message-login-failed";
                 }
 
@@ -199,12 +200,12 @@ public class PasswordLoginUtil {
                         UserDao.addGroupMember(entityManager, localGroup, user);
                         LOGGER.info("Added user '" + user.getEmailAddress()
                                 + "' to group '" + localGroupName
-                                + "' (IP: " + remoteHost + ":" + remotePort + ")");
+                                + "' (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")");
                     } else if (!remoteGroupMember && localGroupMember) {
                         UserDao.removeGroupMember(entityManager, localGroup, user);
                         LOGGER.info("Removed user '" + user.getEmailAddress()
                                 + "' from group '" + localGroupName
-                                + "' (IP: " + remoteHost + ":" + remotePort + ")");
+                                + "' (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")");
                     }
 
                 }
@@ -214,14 +215,12 @@ public class PasswordLoginUtil {
             }
         } catch (final LdapException exception) {
             LOGGER.error("LDAP error: " + user.getEmailAddress()
-                    + " (IP: " + remoteHost + ":" + remotePort + ")", exception);
+                    + " (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")", exception);
         }
 
         if (passwordMatch) {
             LOGGER.info("User login: " + user.getEmailAddress()
-                    + " (IP: " + remoteHost + ":" + remotePort + ")");
-
-            final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
+                    + " (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")");
 
             user.setFailedLoginCount(0);
             UserDao.updateUser(entityManager, user);
@@ -229,12 +228,12 @@ public class PasswordLoginUtil {
             return null;
         } else {
             LOGGER.warn("User login, password mismatch: " + user.getEmailAddress()
-                    + " (IP: " + remoteHost + ":" + remotePort + ")");
+                    + " (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")");
             user.setFailedLoginCount(user.getFailedLoginCount() + 1);
             if (user.getFailedLoginCount() > company.getMaxFailedLoginCount()) {
                 user.setLockedOut(true);
                 LOGGER.warn("User locked out due to too many failed login attempts: " + user.getEmailAddress()
-                        + " (IP: " + remoteHost + ":" + remotePort + ")");
+                        + " (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")");
             }
             UserDao.updateUser(entityManager, user);
             return "message-login-failed";
@@ -284,35 +283,47 @@ public class PasswordLoginUtil {
                                    final String userPassword)
             throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
-        final byte[] passwordAndSaltBytes = (user.getEmailAddress() + ":" + userPassword).getBytes("UTF-8");
-        final MessageDigest md = MessageDigest.getInstance("SHA-256");
-        final String passwordAndSaltDigest = StringUtil.toHexString(md.digest(passwordAndSaltBytes));
+        boolean passwordMatch = checkPasswordMatchWithUserIdAsSalt(user, userPassword);
 
-        final boolean passwordMatch = passwordAndSaltDigest.equals(user.getPasswordHash());
+        if (!passwordMatch) {
+            passwordMatch = checkPasswordMatchWithEmailAsSalt(user, userPassword);
+        }
+
         if (passwordMatch) {
             LOGGER.info("User login: " + user.getEmailAddress()
-                    + " (IP: " + remoteHost + ":" + remotePort + ")");
-
-            final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
-
+                    + " (Remote address: " + remoteHost + ":" + remotePort + ")");
             user.setFailedLoginCount(0);
             UserDao.updateUser(entityManager, user);
 
             return null;
         } else {
             LOGGER.warn("User login, password mismatch: " + user.getEmailAddress()
-                    + " (IP: " + remoteHost + ":" + remotePort + ")");
+                    + " (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")");
             user.setFailedLoginCount(user.getFailedLoginCount() + 1);
 
             if (user.getFailedLoginCount() > company.getMaxFailedLoginCount()) {
                 user.setLockedOut(true);
                 LOGGER.warn("User locked out due to too many failed login attempts: " + user.getEmailAddress()
-                        + " (IP: " + remoteHost + ":" + remotePort + ")");
+                        + " (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")");
             }
 
             UserDao.updateUser(entityManager, user);
 
             return "message-login-failed";
         }
+    }
+
+    private static boolean checkPasswordMatchWithUserIdAsSalt(User user, String userPassword) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        final byte[] passwordAndSaltBytes = (user.getUserId() + ":" + userPassword).getBytes("UTF-8");
+        final MessageDigest md = MessageDigest.getInstance("SHA-256");
+        final String passwordAndSaltDigest = StringUtil.toHexString(md.digest(passwordAndSaltBytes));
+        return passwordAndSaltDigest.equals(user.getPasswordHash());
+    }
+
+    private static boolean checkPasswordMatchWithEmailAsSalt(User user, String userPassword) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        final byte[] passwordAndSaltBytes = (user.getEmailAddress() + ":" + userPassword).getBytes("UTF-8");
+        final MessageDigest md = MessageDigest.getInstance("SHA-256");
+        final String passwordAndSaltDigest = StringUtil.toHexString(md.digest(passwordAndSaltBytes));
+        return passwordAndSaltDigest.equals(user.getPasswordHash());
     }
 }

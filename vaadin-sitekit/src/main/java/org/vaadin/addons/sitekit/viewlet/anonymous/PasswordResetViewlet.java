@@ -104,7 +104,7 @@ public class PasswordResetViewlet extends AbstractViewlet {
 
                         if (emailPasswordReset.getPinHash().equals(pinAndSaltHash)) {
                             final String password = generatePassword();
-                            final byte[] passwordAndSaltBytes = (user.getEmailAddress() + ":" + password)
+                            final byte[] passwordAndSaltBytes = (user.getUserId() + ":" + password)
                                     .getBytes("UTF-8");
                             final MessageDigest md = MessageDigest.getInstance("SHA-256");
                             final byte[] passwordAndSaltDigest = md.digest(passwordAndSaltBytes);

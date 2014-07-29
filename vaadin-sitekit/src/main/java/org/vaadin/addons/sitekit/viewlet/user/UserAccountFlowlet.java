@@ -113,7 +113,7 @@ public final class UserAccountFlowlet extends AbstractFlowlet implements Validat
                     if (user.getPasswordHash() != null) {
                         final int hashSize = 64;
                         if (user.getPasswordHash().length() != hashSize) {
-                            final byte[] passwordAndSaltBytes = (user.getEmailAddress()
+                            final byte[] passwordAndSaltBytes = (user.getUserId()
                                     + ":" + user.getPasswordHash())
                                     .getBytes(Charset.forName("UTF-8"));
                             try {
