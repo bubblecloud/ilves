@@ -26,6 +26,7 @@ import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.model.GroupMember;
 import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
+import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
 import org.vaadin.addons.sitekit.util.StringUtil;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.filter.Compare;
@@ -142,17 +143,11 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
                 editor.commit();
                 entityManager.getTransaction().begin();
                 try {
-
                     if (user.getPasswordHash() != null) {
                         final int hashSize = 64;
                         if (user.getPasswordHash().length() != hashSize) {
-                            final byte[] passwordAndSaltBytes = (user.getUserId()
-                                    + ":" + user.getPasswordHash())
-                                    .getBytes(Charset.forName("UTF-8"));
                             try {
-                                final MessageDigest md = MessageDigest.getInstance("SHA-256");
-                                final byte[] passwordAndSaltDigest = md.digest(passwordAndSaltBytes);
-                                user.setPasswordHash(StringUtil.toHexString(passwordAndSaltDigest));
+                                PasswordLoginUtil.setUserPasswordHash(user.getOwner(), user, user.getPasswordHash());
                             } catch (NoSuchAlgorithmException e) {
                                 e.printStackTrace();
                             }

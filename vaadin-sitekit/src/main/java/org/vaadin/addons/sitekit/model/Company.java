@@ -101,6 +101,10 @@ public final class Company implements Serializable {
     @Column(nullable = false)
     private boolean openIdLogin;
 
+    /** Password validity period in days. 0 corresponds to password never expiring. */
+    @Column(nullable = true)
+    private int passwordValidityPeriodDays;
+
     /** Created time of the task. */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
@@ -120,6 +124,8 @@ public final class Company implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, optional = false)
     @JoinFetch(value = JoinFetchType.OUTER)
     private PostalAddress deliveryAddress;
+
+
 
     /**
      * The default constructor for JPA.
@@ -420,6 +426,22 @@ public final class Company implements Serializable {
      */
     public void setMaxFailedLoginCount(final Integer maxFailedLoginCount) {
         this.maxFailedLoginCount = maxFailedLoginCount;
+    }
+
+    /**
+     * Gets the password validity period in days. 0 corresponds to password never expiring.
+     * @return the password validity period in days
+     */
+    public int getPasswordValidityPeriodDays() {
+        return passwordValidityPeriodDays;
+    }
+
+    /**
+     * Sets the password validity period in days. 0 corresponds to password never expiring.
+     * @param passwordValidityPeriodDays the password validity period in days.
+     */
+    public void setPasswordValidityPeriodDays(final int passwordValidityPeriodDays) {
+        this.passwordValidityPeriodDays = passwordValidityPeriodDays;
     }
 
     /**

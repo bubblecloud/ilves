@@ -19,11 +19,14 @@ import org.vaadin.addons.sitekit.model.EmailPasswordReset;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
 import org.vaadin.addons.sitekit.site.SiteException;
+import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
 import org.vaadin.addons.sitekit.util.StringUtil;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -104,12 +107,7 @@ public class PasswordResetViewlet extends AbstractViewlet {
 
                         if (emailPasswordReset.getPinHash().equals(pinAndSaltHash)) {
                             final String password = generatePassword();
-                            final byte[] passwordAndSaltBytes = (user.getUserId() + ":" + password)
-                                    .getBytes("UTF-8");
-                            final MessageDigest md = MessageDigest.getInstance("SHA-256");
-                            final byte[] passwordAndSaltDigest = md.digest(passwordAndSaltBytes);
-                            final String passwordHash = StringUtil.toHexString(passwordAndSaltDigest);
-                            user.setPasswordHash(passwordHash);
+                            PasswordLoginUtil.setUserPasswordHash(user.getOwner(), user, password);
                             passwordProperty.setValue(password);
                             submitButton.setEnabled(false);
                             fieldDescriptors.get(0).setReadOnly(true);

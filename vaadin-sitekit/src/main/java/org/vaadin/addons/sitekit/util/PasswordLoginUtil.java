@@ -22,6 +22,7 @@ import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.dao.UserDirectoryDao;
 import org.vaadin.addons.sitekit.model.Company;
@@ -47,6 +48,28 @@ public class PasswordLoginUtil {
     private static final long serialVersionUID = 1L;
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(PasswordLoginUtil.class);
+
+    /**
+     * Calculates and sets user password hash. Updates password expiration date.
+     *
+     * @param user the user
+     * @param password the password
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException
+     */
+    public static void setUserPasswordHash(final Company company, final User user, final String password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        final byte[] passwordAndSaltBytes = (user.getUserId() + ":" + password)
+                .getBytes("UTF-8");
+        final MessageDigest md = MessageDigest.getInstance("SHA-256");
+        final byte[] passwordAndSaltDigest = md.digest(passwordAndSaltBytes);
+        user.setPasswordHash(StringUtil.toHexString(passwordAndSaltDigest));
+
+        if (company.getPasswordValidityPeriodDays() != 0) {
+            user.setPasswordExpirationDate(new DateTime().plusDays(company.getPasswordValidityPeriodDays()).toDate());
+        } else {
+            user.setPasswordExpirationDate(null);
+        }
+    }
 
     /**
      * Attempt password login through local password or LDAP directory.
@@ -282,6 +305,13 @@ public class PasswordLoginUtil {
                                    final User user,
                                    final String userPassword)
             throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
+        if (user.getPasswordExpirationDate() != null
+                && System.currentTimeMillis() > user.getPasswordExpirationDate().getTime()) {
+            LOGGER.warn("User login, password expired: " + user.getEmailAddress()
+                    + " (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")");
+            return "message-password-expired";
+        }
 
         boolean passwordMatch = checkPasswordMatchWithUserIdAsSalt(user, userPassword);
 

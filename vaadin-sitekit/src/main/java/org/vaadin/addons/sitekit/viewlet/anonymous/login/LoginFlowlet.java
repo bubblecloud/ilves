@@ -37,6 +37,8 @@ import org.apache.directory.api.ldap.model.exception.LdapException;
 import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.vaadin.addons.sitekit.dao.UserDirectoryDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.model.UserDirectory;
@@ -188,6 +190,15 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
             // Login success
             ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).setUser(user, groups);
             UI.getCurrent().getNavigator().navigateTo(getSite().getCurrentNavigationVersion().getDefaultPageName());
+            if (user.getPasswordExpirationDate() != null
+                    && new DateTime().plusDays(14).toDate().getTime() > user.getPasswordExpirationDate().getTime() ) {
+                final DateTime expirationDate = new DateTime(user.getPasswordExpirationDate());
+                final DateTime currentDate = new DateTime();
+                final long daysUntilExpiration = new Duration(currentDate.toDate().getTime(),
+                        expirationDate.toDate().getTime()).getStandardDays();
+                Notification.show(getSite().localize("message-password-expires-in-days") + ": "
+                        + daysUntilExpiration, Notification.Type.WARNING_MESSAGE);
+            }
         } else {
             // Login failure
             Notification.show(getSite().localize("message-login-failed"), Notification.Type.WARNING_MESSAGE);

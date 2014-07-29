@@ -103,5 +103,18 @@
             <where>companycode = '0000000-0'</where>
         </update>
     </changeSet>
+
+    <changeSet author="tlaukkan" id="24a7cfc0-171f-11e4-8c21-0800200c9a66">
+        <addColumn tableName="company">
+            <column name="passwordvalidityperioddays" type="INTEGER" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="user_">
+            <column name="passwordexpirationdate" type="DATE">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
 

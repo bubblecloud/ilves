@@ -86,6 +86,11 @@ public final class User implements Serializable {
     @Column(nullable = true)
     private String openIdIdentifier;
 
+    /** Date of password expiration. Null corresponds to password never expiring. */
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = true)
+    private Date passwordExpirationDate;
+
     /** Created time of the task. */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
@@ -304,6 +309,22 @@ public final class User implements Serializable {
      */
     public void setOpenIdIdentifier(final String openIdIdentifier) {
         this.openIdIdentifier = openIdIdentifier;
+    }
+
+    /**
+     * Gets the date of password expiration. Null corresponds to password never expiring.
+     * @return the password expiration date.
+     */
+    public Date getPasswordExpirationDate() {
+        return passwordExpirationDate;
+    }
+
+    /**
+     * Sets the date of password expiration. Null corresponds to password never expiring.
+     * @param passwordExpirationDate the password expiration date
+     */
+    public void setPasswordExpirationDate(final Date passwordExpirationDate) {
+        this.passwordExpirationDate = passwordExpirationDate;
     }
 
     @Override
