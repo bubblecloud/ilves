@@ -201,7 +201,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
             }
         } else {
             // Login failure
-            Notification.show(getSite().localize("message-login-failed"), Notification.Type.WARNING_MESSAGE);
+            Notification.show(getSite().localize(errorKey), Notification.Type.WARNING_MESSAGE);
         }
 
     }
