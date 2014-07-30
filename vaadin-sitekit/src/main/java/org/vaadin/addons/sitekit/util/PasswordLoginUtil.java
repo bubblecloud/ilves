@@ -37,6 +37,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Password login utility.
@@ -58,6 +59,9 @@ public class PasswordLoginUtil {
      * @throws NoSuchAlgorithmException
      */
     public static void setUserPasswordHash(final Company company, final User user, final String password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        if (user.getUserId() == null) {
+            user.setUserId(UUID.randomUUID().toString());
+        }
         final byte[] passwordAndSaltBytes = (user.getUserId() + ":" + password)
                 .getBytes("UTF-8");
         final MessageDigest md = MessageDigest.getInstance("SHA-256");
