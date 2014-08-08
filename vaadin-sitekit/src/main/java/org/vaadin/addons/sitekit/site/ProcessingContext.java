@@ -1,5 +1,6 @@
 package org.vaadin.addons.sitekit.site;
 
+import org.apache.commons.lang.StringUtils;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
 
@@ -30,11 +31,11 @@ public class ProcessingContext {
     /** The local component type. */
     protected String componentType;
     /** The remote host. */
-    protected final String remoteHost;
+    protected String remoteHost;
     /** The remote peer IP address. */
-    protected final String remoteIpAddress;
+    protected String remoteIpAddress;
     /** The remote peer port. */
-    protected final Integer remotePort;
+    protected Integer remotePort;
     /** The user ID. */
     protected String userId;
     /** The user name. */
@@ -104,9 +105,7 @@ public class ProcessingContext {
         this.componentType = PropertiesUtil.getProperty("site", "site-type");
         this.serverName = request.getServerName();
         this.localIpAddress = request.getLocalAddr();
-        this.remoteHost = request.getRemoteHost();
-        this.remoteIpAddress = request.getRemoteAddr();
-        this.remotePort = request.getRemotePort();
+        setRemoteDetails(request);
         this.userId = user != null ? user.getUserId() : null;
         this.userName = user != null ? user.getEmailAddress() : null;
         this.roles = roles;
@@ -128,13 +127,29 @@ public class ProcessingContext {
         this.componentType = PropertiesUtil.getProperty("site", "site-type");
         this.serverName = request.getServerName();
         this.localIpAddress = request.getLocalAddr();
-        this.remoteHost = request.getRemoteHost();
-        this.remoteIpAddress = request.getRemoteAddr();
-        this.remotePort = request.getRemotePort();
+        setRemoteDetails(request);
         this.userId = null;
         this.userName = null;
         this.roles = new ArrayList<String>();
     }
+
+
+    public void setRemoteDetails(final HttpServletRequest request) {
+        remoteHost = request.getRemoteHost();
+
+        if (!StringUtils.isEmpty(request.getHeader("X-Forwarded-For"))) {
+            remoteIpAddress = request.getHeader("X-Forwarded-For");
+        } else {
+            remoteIpAddress = request.getRemoteAddr();
+        }
+
+        if (!StringUtils.isEmpty(request.getHeader("X-Forwarded-Remote-Port"))) {
+            remotePort = Integer.parseInt(request.getHeader("X-Forwarded-Remote-Port"));
+        } else {
+            remotePort = request.getRemotePort();
+        }
+    }
+
 
     /**
      * Gets extension object.
