@@ -143,8 +143,8 @@ public class ProcessingContext {
             remoteIpAddress = request.getRemoteAddr();
         }
 
-        if (!StringUtils.isEmpty(request.getHeader("X-Forwarded-Remote-Port"))) {
-            remotePort = Integer.parseInt(request.getHeader("X-Forwarded-Remote-Port"));
+        if (!StringUtils.isEmpty(request.getHeader("X-Forwarded-Port"))) {
+            remotePort = Integer.parseInt(request.getHeader("X-Forwarded-Port"));
         } else {
             remotePort = request.getRemotePort();
         }
