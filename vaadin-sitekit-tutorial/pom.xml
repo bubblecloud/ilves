@@ -5,14 +5,14 @@
     <parent>
         <groupId>org.vaadin.addons.sitekit</groupId>
         <artifactId>vaadin-sitekit-root</artifactId>
-        <version>2.3.11-SNAPSHOT</version>
+        <version>2.3.11</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>org.vaadin.addons.sitekit</groupId>
     <artifactId>vaadin-sitekit-tutorial</artifactId>
     <packaging>jar</packaging>
-    <version>2.3.11-SNAPSHOT</version>
+    <version>2.3.11</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -116,7 +116,7 @@
         <dependency>
             <groupId>org.vaadin.addons.sitekit</groupId>
             <artifactId>vaadin-sitekit</artifactId>
-            <version>2.3.11-SNAPSHOT</version>
+            <version>2.3.11</version>
         </dependency>
         <dependency>
             <groupId>postgresql</groupId>
