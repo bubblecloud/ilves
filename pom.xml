@@ -65,6 +65,7 @@
     </build>
 
     <modules>
+        <module>sitekit-core</module>
         <module>vaadin-sitekit</module>
         <module>vaadin-sitekit-example-postgresql</module>
         <module>vaadin-sitekit-example-mysql</module>

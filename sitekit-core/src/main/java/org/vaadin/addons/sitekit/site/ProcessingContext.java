@@ -6,8 +6,6 @@ import org.vaadin.addons.sitekit.util.PropertiesUtil;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.*;
 
 /**

@@ -20,19 +20,14 @@ import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
-import liquibase.resource.FileSystemResourceAccessor;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
-import org.vaadin.addons.sitekit.model.SchemaVersion;
 import org.vaadin.addons.sitekit.site.SiteException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

@@ -1,28 +1,14 @@
-package org.vaadin.addons.sitekit.model.test;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+package org.vaadin.addons.sitekit.model;
 
 import junit.framework.Assert;
-
-import org.apache.log4j.BasicConfigurator;
-import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.vaadin.addons.sitekit.dao.UserDao;
-import org.vaadin.addons.sitekit.model.Company;
-import org.vaadin.addons.sitekit.model.Group;
-import org.vaadin.addons.sitekit.model.PostalAddress;
-import org.vaadin.addons.sitekit.model.User;
-import org.vaadin.addons.sitekit.util.PropertiesUtil;
 import org.vaadin.addons.sitekit.util.TestUtil;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 /**
  * @author Tommi Laukkanen

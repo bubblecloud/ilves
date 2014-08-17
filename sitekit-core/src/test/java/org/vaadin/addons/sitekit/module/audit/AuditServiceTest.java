@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.vaadin.addons.sitekit.module.audit.AuditService;
 import org.vaadin.addons.sitekit.module.audit.model.AuditLogEntry;
 import org.vaadin.addons.sitekit.util.TestUtil;
 
