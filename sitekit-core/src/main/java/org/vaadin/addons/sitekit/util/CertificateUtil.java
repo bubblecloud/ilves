@@ -60,34 +60,43 @@ public class CertificateUtil {
     public static final String CERTIFICATE_SIGNATURE_ALGORITHM = "SHA256WithRSAEncryption";
 
     /**
-     * Checks that server certificate exists and if it does not then generates self signed certificate it.
+     * Checks server certificate exists and if it does not then generates self signed certificate it.
+     *
+     * @param certificateCommonName the certificate common name
+     * @param ipAddress the certificate subject alternative name IP address or null
+     * @param certificateAlias the certificate alias
+     * @param certificatePrivateKeyPassword the certificate private key password
+     * @param keyStorePath the key store path
+     * @param keyStorePassword the key store password
      */
     public static void ensureServerCertificateExists(final String certificateCommonName,
-                                                     final String keyEntryAlias,
+                                                     final String ipAddress,
+                                                     final String certificateAlias,
+                                                     final String certificatePrivateKeyPassword,
                                                      final String keyStorePath,
-                                                     final String keyStorePassword,
-                                                     final String keyEntryPassword) {
-        if (!hasCertificate(keyEntryAlias, keyStorePath, keyStorePassword)) {
-            generateSelfSignedCertificate(keyEntryAlias, certificateCommonName,
-                    keyStorePath, keyStorePassword, keyEntryPassword);
+                                                     final String keyStorePassword) {
+        if (!hasCertificate(certificateAlias, keyStorePath, keyStorePassword)) {
+            generateSelfSignedCertificate(certificateAlias, certificateCommonName, ipAddress,
+                    keyStorePath, keyStorePassword, certificatePrivateKeyPassword);
         }
     }
 
     /**
      * Checks whether key store contains given certificate.
-     * @param alias the certificate alias
+     * @param certificateAlias the certificate alias
      * @param keyStorePath the key store path
      * @param keyStorePassword the key store password
      * @return
      */
-    public static boolean hasCertificate(final String alias, final String keyStorePath,
-                                  final String keyStorePassword) {
+    public static boolean hasCertificate(final String certificateAlias,
+                                         final String keyStorePath,
+                                         final String keyStorePassword) {
         try {
             final KeyStore keyStore = loadKeyStore(keyStorePath, keyStorePassword);
-            return keyStore.containsAlias(alias);
+            return keyStore.containsAlias(certificateAlias);
         } catch (final Exception e) {
-            throw new SecurityException("Error checking if certificate exists: " + alias + " in key store: " +
-                    keyStorePath, e);
+            throw new SecurityException("Error checking if certificate exists: " + certificateAlias + " in key store: "
+                    + keyStorePath, e);
         }
     }
 
@@ -95,11 +104,14 @@ public class CertificateUtil {
      * Generates and self signed certificate and saves it to key store.
      * @param alias the certificate alias
      * @param commonName the certificate common name
+     * @param ipAddress the subject alternative name IP address or null
      * @param keyStorePath the key store path
      * @param keyStorePassword the key store password
      * @param keyEntryPassword the key entry password
      */
-    public static void generateSelfSignedCertificate(final String alias, final String commonName,
+    private static void generateSelfSignedCertificate(final String alias,
+                                                     final String commonName,
+                                                     final String ipAddress,
                                                      final String keyStorePath,
                                                      final String keyStorePassword,
                                                      final String keyEntryPassword) {
@@ -107,7 +119,7 @@ public class CertificateUtil {
             final KeyPairGenerator keyGen = KeyPairGenerator.getInstance(CERTIFICATE_ENCRYPTION_ALGORITHM, PROVIDER);
             keyGen.initialize(CERTIFICATE_KEY_SIZE);
             final KeyPair keyPair = keyGen.generateKeyPair();
-            final X509Certificate certificate = buildCertificate(commonName, keyPair);
+            final X509Certificate certificate = buildCertificate(commonName,ipAddress, keyPair);
             LOGGER.info("Generated self signed certificate: " + certificate);
             final KeyStore keyStore = loadKeyStore(keyStorePath, keyStorePassword);
             keyStore.setKeyEntry(alias, (Key) keyPair.getPrivate(), keyEntryPassword.toCharArray(),
@@ -163,11 +175,13 @@ public class CertificateUtil {
     /**
      * Build self signed certificate from key pair.
      * @param commonName the certificate common name
+     * @param ipAddress the subject alternative name IP address or null
      * @param keyPair the key pair.
      * @return the certificate
      * @throws Exception if error occurs in certificate generation process.
      */
-    private static X509Certificate buildCertificate(final String commonName, KeyPair keyPair) throws Exception {
+    private static X509Certificate buildCertificate(final String commonName, final String ipAddress,
+                                                    KeyPair keyPair) throws Exception {
 
         final Date notBefore = new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 24);
         final Date notAfter = DateUtils.addYears(notBefore, 100);
@@ -175,7 +189,6 @@ public class CertificateUtil {
 
         final X500NameBuilder nameBuilder = new X500NameBuilder(BCStyle.INSTANCE);
         nameBuilder.addRDN(BCStyle.CN, commonName);
-//        nameBuilder.addRDN(BCStyle.UnstructuredAddress)
 
         final SubjectPublicKeyInfo subjectPublicKeyInfo = new SubjectPublicKeyInfo(
                 ASN1Sequence.getInstance(keyPair.getPublic().getEncoded()));
@@ -183,9 +196,11 @@ public class CertificateUtil {
         final X509v3CertificateBuilder certGen = new X509v3CertificateBuilder(nameBuilder.build(),
                 serial, notBefore, notAfter, nameBuilder.build(), subjectPublicKeyInfo);
 
-        certGen.addExtension(Extension.subjectAlternativeName,
-                false,  new GeneralNames(
-                        new GeneralName(GeneralName.iPAddress, "127.0.0.1")));
+        if (ipAddress != null) {
+            certGen.addExtension(Extension.subjectAlternativeName,
+                    false, new GeneralNames(
+                            new GeneralName(GeneralName.iPAddress, ipAddress)));
+        }
 
 
         final ContentSigner sigGen = new JcaContentSignerBuilder(CERTIFICATE_SIGNATURE_ALGORITHM)

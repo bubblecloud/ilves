@@ -38,27 +38,38 @@ public class JettyTslTest {
     public void testTsl() throws Exception {
 
         final String keyStorePassword = "changeme";
-        final String keyEntryPassword = "changeme";
+        final String certificatePrivateKeyPassword = "changeme";
         final String trustStorePath = KEY_STORE_PATH;
         final String trustStorePassword = "changeme";
 
         final String clientCertificateAlias = "client";
         final String clientCertificateCommonName = "client-common-name";
         final String serverCertificateAlias = "server";
+        final String serverCertificateSubjectAlternativeNameIpAddress = "127.0.0.1";
         final String serverCertificateCommonName = "server-common-name";
 
-        CertificateUtil.ensureServerCertificateExists(clientCertificateCommonName, clientCertificateAlias,
-                KEY_STORE_PATH, keyStorePassword, keyEntryPassword);
-        CertificateUtil.ensureServerCertificateExists(serverCertificateCommonName, serverCertificateAlias,
-                KEY_STORE_PATH, keyStorePassword, keyEntryPassword);
+        CertificateUtil.ensureServerCertificateExists(
+                clientCertificateCommonName,
+                null,
+                clientCertificateAlias,
+                certificatePrivateKeyPassword,
+                KEY_STORE_PATH, keyStorePassword);
+
+        CertificateUtil.ensureServerCertificateExists(
+                serverCertificateCommonName,
+                serverCertificateSubjectAlternativeNameIpAddress,
+                serverCertificateAlias,
+                certificatePrivateKeyPassword,
+                KEY_STORE_PATH, keyStorePassword);
 
         final Server server = newServer(
                 serverCertificateAlias,
                 KEY_STORE_PATH,
                 keyStorePassword,
-                keyEntryPassword,
+                certificatePrivateKeyPassword,
                 trustStorePath,
                 trustStorePassword);
+
         server.setHandler(new AbstractHandler() {
             @Override
             public void handle(final String target, final Request request,
@@ -86,7 +97,7 @@ public class JettyTslTest {
                 clientCertificateAlias,
                 KEY_STORE_PATH,
                 keyStorePassword,
-                keyEntryPassword,
+                certificatePrivateKeyPassword,
                 trustStorePath,
                 trustStorePassword);
         final int responseCode = writePost(httpsUrlConnection, postContent);
@@ -150,7 +161,7 @@ public class JettyTslTest {
         httpsUrlConnection.setReadTimeout(30000);
 
         final SslContextFactory sslContextFactory = newSslSocketFactory(certificateAlias, keyStorePath, keyStorePassword,
-                keyManagerPassword, trustStorePath, trustStorePassword);
+                keyManagerPassword, trustStorePath, trustStorePassword, false);
         sslContextFactory.start();
         final SSLSocketFactory sslSocketFactory = sslContextFactory.getSslContext().getSocketFactory();
         httpsUrlConnection.setSSLSocketFactory(sslSocketFactory);
@@ -179,7 +190,7 @@ public class JettyTslTest {
         httpsConfiguration.addCustomizer(new SecureRequestCustomizer()); // <-- HERE
 
         final SslContextFactory sslContextFactory = newSslSocketFactory(certificateAlias, keyStorePath, keyStorePassword,
-                keyManagerPassword, trustStorePath, trustStorePassword);
+                keyManagerPassword, trustStorePath, trustStorePassword, true);
 
         final ServerConnector httpConnector = new ServerConnector(server, new HttpConnectionFactory(httpConfiguration));
         httpConnector.setPort(8080);
@@ -197,71 +208,13 @@ public class JettyTslTest {
 
     private SslContextFactory newSslSocketFactory(final String certificateAlias, String keyStorePath, String keyStorePassword,
                                                   String keyManagerPassword, String trustStorePath,
-                                                  String trustStorePassword) throws Exception {
-        /*final KeyStore keyStore = KeyStore.getInstance("BKS");
-        final FileInputStream fis = new FileInputStream(keyStorePath);
-        try {
-            keyStore.load(fis, keyStorePassword.toCharArray());
-        } finally {
-            if (fis != null) { fis.close(); }
-        }
-
-        final KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-        kmf.init(keyStore, keyManagerPassword.toCharArray());
-
-        final KeyManager[] keyManagers = kmf.getKeyManagers();
-        final X509KeyManager keyManager = (X509KeyManager) keyManagers[0];
-        final X509KeyManager keyManagerWrapper = new X509KeyManager() {
-            public String chooseClientAlias(String[] keyType,
-                                            Principal[] issuers, Socket socket) {
-                return keyManager.chooseClientAlias(keyType, issuers, socket);
-            }
-
-            @Override
-            public String[] getClientAliases(String s, Principal[] principals) {
-                return keyManager.getClientAliases(s, principals);
-            }
-
-            @Override
-            public String[] getServerAliases(String s, Principal[] principals) {
-                return keyManager.getServerAliases(s, principals);
-            }
-
-            @Override
-            public String chooseServerAlias(String s, Principal[] principals, Socket socket) {
-                return keyManager.chooseServerAlias(s, principals, socket);
-            }
-
-            @Override
-            public X509Certificate[] getCertificateChain(String s) {
-                return keyManager.getCertificateChain(s);
-            }
-
-            @Override
-            public PrivateKey getPrivateKey(String s) {
-                return keyManager.getPrivateKey(s);
-            }
-        };
-        //keyManagers[0] = keyManagerWrapper;
-        final KeyStore trustStore = KeyStore.getInstance("BKS");
-        final FileInputStream trustStoreFis = new FileInputStream(trustStorePath);
-        try {
-            keyStore.load(trustStoreFis, trustStorePassword.toCharArray());
-        } finally {
-            if (trustStoreFis != null) { trustStoreFis.close(); }
-        }
-
-        final TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
-        trustManagerFactory.init(trustStore);
-        final TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(keyManagers, trustManagers, new SecureRandom());
+                                                  String trustStorePassword,
+                                                  final boolean clientAuthentication) throws Exception {
 
         final SslContextFactory sslContextFactory = new SslContextFactory();
-        sslContextFactory.setSslContext(sslContext);*/
-        //sslContextFactory.setProvider("BC");
-        /*sslContextFactory.setKeyStoreType("BKS");
+        sslContextFactory.setCertAlias(certificateAlias);
+        sslContextFactory.setNeedClientAuth(clientAuthentication);
+        sslContextFactory.setKeyStoreType("BKS");
         sslContextFactory.setKeyStorePath(keyStorePath);
         sslContextFactory.setKeyStorePassword(keyStorePassword);
         sslContextFactory.setKeyManagerPassword(keyManagerPassword);
@@ -275,17 +228,7 @@ public class JettyTslTest {
                 "SSL_RSA_EXPORT_WITH_RC4_40_MD5",
                 "SSL_RSA_EXPORT_WITH_DES40_CBC_SHA",
                 "SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA",
-                "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA");*/
-        final SslContextFactory sslContextFactory = new SslContextFactory();
-        sslContextFactory.setCertAlias(certificateAlias);
-        sslContextFactory.setNeedClientAuth(true);
-        sslContextFactory.setKeyStoreType("BKS");
-        sslContextFactory.setKeyStorePath(keyStorePath);
-        sslContextFactory.setKeyStorePassword(keyStorePassword);
-        sslContextFactory.setKeyManagerPassword(keyManagerPassword);
-        sslContextFactory.setTrustStoreType("BKS");
-        sslContextFactory.setTrustStorePath(trustStorePath);
-        sslContextFactory.setTrustStorePassword(trustStorePassword);
+                "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA");
         return sslContextFactory;
     }
 }
