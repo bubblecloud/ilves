@@ -1,11 +1,13 @@
 package org.vaadin.addons.sitekit.jetty;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.vaadin.addons.sitekit.util.CertificateUtil;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManagerFactory;
@@ -25,11 +27,31 @@ import java.util.Properties;
  */
 public class JettyTslTest {
 
+    public static final String KEY_STORE_PATH = System.getProperty("java.io.tmpdir") + File.separator + "test.jks";
+
+    @After
+    public void after() {
+        new File(KEY_STORE_PATH).deleteOnExit();
+    }
+
     @Ignore
     @Test
     public void testTsl() throws Exception {
 
-        final Server server = newServer();
+        final String keyStorePassword = "changeme";
+        final String keyEntryPassword = "changeme";
+        final String trustStorePath = KEY_STORE_PATH;
+        final String trustStorePassword = "changeme";
+
+        CertificateUtil.ensureServerCertificateExists("localhost", "localhost",
+                KEY_STORE_PATH, keyStorePassword, keyEntryPassword);
+
+        final Server server = newServer(
+                KEY_STORE_PATH,
+                keyStorePassword,
+                keyEntryPassword,
+                trustStorePath,
+                trustStorePassword);
         server.setHandler(new AbstractHandler() {
             @Override
             public void handle(final String target, final Request request,
@@ -47,7 +69,12 @@ public class JettyTslTest {
         final String postUrl = "https://127.0.0.1:8443/test";
         final String postContent = "x=y";
 
-        final HttpsURLConnection httpsUrlConnection = newHttpsUrlConnection(new URL(postUrl));
+        final HttpsURLConnection httpsUrlConnection = newHttpsUrlConnection(new URL(postUrl),
+                KEY_STORE_PATH,
+                keyStorePassword,
+                keyEntryPassword,
+                trustStorePath,
+                trustStorePassword);
         final int responseCode = writePost(httpsUrlConnection, postContent);
 
         final InputStream inputStream;
@@ -85,7 +112,12 @@ public class JettyTslTest {
         return builder.toString();
     }
 
-    private HttpsURLConnection newHttpsUrlConnection(final URL url)
+    private HttpsURLConnection newHttpsUrlConnection(final URL url,
+                                                     final String keyStorePath,
+                                                     final String keyStorePassword,
+                                                     final String keyManagerPassword,
+                                                     final String trustStorePath,
+                                                     final String trustStorePassword)
             throws Exception {
 
         final HttpsURLConnection httpsUrlConnection = (HttpsURLConnection) url.openConnection();
@@ -97,20 +129,20 @@ public class JettyTslTest {
         httpsUrlConnection.setConnectTimeout(30000);
         httpsUrlConnection.setReadTimeout(30000);
 
-        final String keyStorePath = "/path/to/keystore";
-        final String keyStorePassword = "changeme";
-        final String keyManagerPassword = "changeme";
-        final String trustStorePath = "/path/to/truststore";
-        final String trustStorePassword = "changeme";
-
         final SslContextFactory sslContextFactory = newSslSocketFactory(keyStorePath, keyStorePassword,
                 keyManagerPassword, trustStorePath, trustStorePassword);
+        sslContextFactory.start();
         final SSLSocketFactory sslSocketFactory = sslContextFactory.getSslContext().getSocketFactory();
         httpsUrlConnection.setSSLSocketFactory(sslSocketFactory);
         return httpsUrlConnection;
     }
 
-    private Server newServer() {
+    private Server newServer(
+            final String keyStorePath,
+            final String keyStorePassword,
+            final String keyManagerPassword,
+            final String trustStorePath,
+            final String trustStorePassword) {
         final Server server = new Server();
 
         final HttpConfiguration httpConfiguration = new HttpConfiguration();
@@ -124,12 +156,6 @@ public class JettyTslTest {
 
         final HttpConfiguration httpsConfiguration = new HttpConfiguration(httpConfiguration);
         httpsConfiguration.addCustomizer(new SecureRequestCustomizer()); // <-- HERE
-
-        final String keyStorePath = "/path/to/keystore";
-        final String keyStorePassword = "changeme";
-        final String keyManagerPassword = "changeme";
-        final String trustStorePath = "/path/to/truststore";
-        final String trustStorePassword = "changeme";
 
         final SslContextFactory sslContextFactory = newSslSocketFactory(keyStorePath, keyStorePassword,
                 keyManagerPassword, trustStorePath, trustStorePassword);
@@ -153,9 +179,12 @@ public class JettyTslTest {
                                                   String keyManagerPassword, String trustStorePath,
                                                   String trustStorePassword) {
         final SslContextFactory sslContextFactory = new SslContextFactory();
+        //sslContextFactory.setProvider("BC");
+        sslContextFactory.setKeyStoreType("BKS");
         sslContextFactory.setKeyStorePath(keyStorePath);
         sslContextFactory.setKeyStorePassword(keyStorePassword);
         sslContextFactory.setKeyManagerPassword(keyManagerPassword);
+        sslContextFactory.setTrustStoreType("BKS");
         sslContextFactory.setTrustStorePath(trustStorePath);
         sslContextFactory.setTrustStorePassword(trustStorePassword);
         sslContextFactory.setExcludeCipherSuites(
