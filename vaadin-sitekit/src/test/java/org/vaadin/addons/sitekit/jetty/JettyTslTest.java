@@ -27,7 +27,7 @@ public class JettyTslTest {
         final Server server = newServer();
         server.start();
 
-        final String postUrl = "https://127.0.0.1/test";
+        final String postUrl = "https://127.0.0.1:8443/test";
         final String postContent = "x=y";
 
         final HttpsURLConnection httpsUrlConnection = newHttpsUrlConnection(new URL(postUrl));
@@ -73,10 +73,6 @@ public class JettyTslTest {
 
         final HttpsURLConnection httpsUrlConnection = (HttpsURLConnection) url.openConnection();
 
-        final Properties systemProperties = System.getProperties();
-        systemProperties.put("javax.net.ssl.trustStore", "/path/to/truststore");
-        System.setProperties(systemProperties);
-
         httpsUrlConnection.setRequestProperty("Connection", "close");
         httpsUrlConnection.setDoInput(true);
         httpsUrlConnection.setDoOutput(true);
@@ -84,17 +80,15 @@ public class JettyTslTest {
         httpsUrlConnection.setConnectTimeout(30000);
         httpsUrlConnection.setReadTimeout(30000);
 
-        final File privateKeyFile = new File("/path/to/keystore");
-        final String privateKeyPassword = "password";
-        final KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
-        final KeyStore keyStore = KeyStore.getInstance("PKCS12");
-        final InputStream keyInputStream = new FileInputStream(privateKeyFile);
-        keyStore.load(keyInputStream, privateKeyPassword.toCharArray());
-        keyInputStream.close();
-        keyManagerFactory.init(keyStore, privateKeyPassword.toCharArray());
-        final SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(keyManagerFactory.getKeyManagers(), null, new SecureRandom());
-        final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+        final String keyStorePath = "/path/to/keystore";
+        final String keyStorePassword = "changeme";
+        final String keyManagerPassword = "changeme";
+        final String trustStorePath = "/path/to/truststore";
+        final String trustStorePassword = "changeme";
+
+        final SslContextFactory sslContextFactory = newSslSocketFactory(keyStorePath, keyStorePassword,
+                keyManagerPassword, trustStorePath, trustStorePassword);
+        final SSLSocketFactory sslSocketFactory = sslContextFactory.getSslContext().getSocketFactory();
         httpsUrlConnection.setSSLSocketFactory(sslSocketFactory);
         return httpsUrlConnection;
     }
@@ -114,21 +108,14 @@ public class JettyTslTest {
         final HttpConfiguration httpsConfiguration = new HttpConfiguration(httpConfiguration);
         httpsConfiguration.addCustomizer(new SecureRequestCustomizer()); // <-- HERE
 
-        final SslContextFactory sslContextFactory = new SslContextFactory();
-        sslContextFactory.setKeyStorePath("/path/to/keystore");
-        sslContextFactory.setKeyStorePassword("changeme");
-        sslContextFactory.setKeyManagerPassword("changeme");
-        sslContextFactory.setTrustStorePath("/path/to/truststore");
-        sslContextFactory.setTrustStorePassword("changeme");
-        sslContextFactory.setExcludeCipherSuites(
-                "SSL_RSA_WITH_DES_CBC_SHA",
-                "SSL_DHE_RSA_WITH_DES_CBC_SHA",
-                "SSL_DHE_DSS_WITH_DES_CBC_SHA",
-                "SSL_RSA_EXPORT_WITH_RC4_40_MD5",
-                "SSL_RSA_EXPORT_WITH_DES40_CBC_SHA",
-                "SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA",
-                "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA");
+        final String keyStorePath = "/path/to/keystore";
+        final String keyStorePassword = "changeme";
+        final String keyManagerPassword = "changeme";
+        final String trustStorePath = "/path/to/truststore";
+        final String trustStorePassword = "changeme";
 
+        final SslContextFactory sslContextFactory = newSslSocketFactory(keyStorePath, keyStorePassword,
+                keyManagerPassword, trustStorePath, trustStorePassword);
 
         final ServerConnector httpConnector = new ServerConnector(server, new HttpConnectionFactory(httpConfiguration));
         httpConnector.setPort(8080);
@@ -143,5 +130,25 @@ public class JettyTslTest {
         server.addConnector(httpConnector);
         server.addConnector(httpsConnector);
         return server;
+    }
+
+    private SslContextFactory newSslSocketFactory(String keyStorePath, String keyStorePassword,
+                                                  String keyManagerPassword, String trustStorePath,
+                                                  String trustStorePassword) {
+        final SslContextFactory sslContextFactory = new SslContextFactory();
+        sslContextFactory.setKeyStorePath(keyStorePath);
+        sslContextFactory.setKeyStorePassword(keyStorePassword);
+        sslContextFactory.setKeyManagerPassword(keyManagerPassword);
+        sslContextFactory.setTrustStorePath(trustStorePath);
+        sslContextFactory.setTrustStorePassword(trustStorePassword);
+        sslContextFactory.setExcludeCipherSuites(
+                "SSL_RSA_WITH_DES_CBC_SHA",
+                "SSL_DHE_RSA_WITH_DES_CBC_SHA",
+                "SSL_DHE_DSS_WITH_DES_CBC_SHA",
+                "SSL_RSA_EXPORT_WITH_RC4_40_MD5",
+                "SSL_RSA_EXPORT_WITH_DES40_CBC_SHA",
+                "SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA",
+                "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA");
+        return sslContextFactory;
     }
 }
