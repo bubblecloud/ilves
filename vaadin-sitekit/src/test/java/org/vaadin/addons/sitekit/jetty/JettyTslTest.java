@@ -1,14 +1,19 @@
 package org.vaadin.addons.sitekit.jetty;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.junit.Assert;
 import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -25,6 +30,18 @@ public class JettyTslTest {
     public void testTsl() throws Exception {
 
         final Server server = newServer();
+        server.setHandler(new AbstractHandler() {
+            @Override
+            public void handle(final String target, final Request request,
+                               final HttpServletRequest httpServletRequest,
+                               final HttpServletResponse httpServletResponse)
+                    throws IOException, ServletException {
+                httpServletResponse.setContentType("text/plain;charset=utf-8");
+                httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+                request.setHandled(true);
+                httpServletResponse.getWriter().println("z");
+            }
+        });
         server.start();
 
         final String postUrl = "https://127.0.0.1:8443/test";
@@ -42,7 +59,7 @@ public class JettyTslTest {
 
         final String response = readResponse(inputStream);
 
-        System.out.println(response);
+        Assert.assertEquals("z", response);
 
         inputStream.close();
     }
