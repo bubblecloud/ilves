@@ -86,6 +86,10 @@ public final class User implements Serializable {
     @Column(nullable = true)
     private String openIdIdentifier;
 
+    /** TLS client certificate. */
+    @Column(nullable = true)
+    private String certificate;
+
     /** Date of password expiration. Null corresponds to password never expiring. */
     @Temporal(TemporalType.DATE)
     @Column(nullable = true)
@@ -309,6 +313,20 @@ public final class User implements Serializable {
      */
     public void setOpenIdIdentifier(final String openIdIdentifier) {
         this.openIdIdentifier = openIdIdentifier;
+    }
+
+    /**
+     * @return the TLS client certificate identifying this user
+     */
+    public String getCertificate() {
+        return certificate;
+    }
+
+    /**
+     * @param certificate the TLS client certificate identifying this user to set
+     */
+    public void setCertificate(final String certificate) {
+        this.certificate = certificate;
     }
 
     /**

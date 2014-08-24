@@ -212,6 +212,11 @@ public class ValidatingEditor extends CustomComponent implements
                         ((TextField) field).setTextChangeTimeout(200);
                         ((TextField) field).addListener((TextChangeListener) this);
                     }
+                    if (field instanceof TextArea) {
+                        ((TextField) field).setNullRepresentation("");
+                        ((TextField) field).setTextChangeTimeout(200);
+                        ((TextField) field).addListener((TextChangeListener) this);
+                    }
                     if (field instanceof PasswordField) {
                         ((PasswordField) field).setNullRepresentation("");
                         ((PasswordField) field).setTextChangeTimeout(200);

@@ -104,6 +104,7 @@ public final class UsersFlowlet extends AbstractFlowlet {
         table.setColumnCollapsed("modified", true);
         table.setColumnCollapsed("passwordHash", true);
         table.setColumnCollapsed("openIdIdentifier", true);
+        table.setColumnCollapsed("certificate", true);
         gridLayout.addComponent(grid, 0, 1);
 
         final Button addButton = getSite().getButton("add");
