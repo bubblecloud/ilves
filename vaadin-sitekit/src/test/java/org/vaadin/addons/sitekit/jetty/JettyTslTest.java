@@ -229,6 +229,7 @@ public class JettyTslTest {
                 "SSL_RSA_EXPORT_WITH_DES40_CBC_SHA",
                 "SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA",
                 "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA");
+        sslContextFactory.setRenegotiationAllowed(false);
         return sslContextFactory;
     }
 }

@@ -20,7 +20,6 @@ import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.Privilege;
 import org.vaadin.addons.sitekit.model.User;
-import org.vaadin.addons.sitekit.site.Site;
 
 import javax.persistence.EntityManager;
 import java.util.*;
@@ -42,11 +41,10 @@ public class PrivilegeCache {
         userPrivileges.remove(company);
     }
 
-    public static synchronized void load(final Company company, final Group group) {
+    public static synchronized void load(final EntityManager entityManager, final Company company, final Group group) {
         if (!groupPrivileges.get(company).containsKey(group)) {
             groupPrivileges.get(company).put(group, new HashMap<String, Set<String>>());
         }
-        final EntityManager entityManager = Site.getCurrent().getSiteContext().getObject(EntityManager.class);
         final List<Privilege> privileges = UserDao.getGroupPrivileges(entityManager, group);
         for (final Privilege privilege : privileges) {
             if (!groupPrivileges.get(company).get(group).containsKey(privilege.getKey())) {
@@ -56,11 +54,10 @@ public class PrivilegeCache {
         }
     }
 
-    public static synchronized void load(final Company company, final User user) {
+    public static synchronized void load(final EntityManager entityManager, final Company company, final User user) {
         if (!userPrivileges.get(company).containsKey(user)) {
             userPrivileges.get(company).put(user, new HashMap<String, Set<String>>());
         }
-        final EntityManager entityManager = Site.getCurrent().getSiteContext().getObject(EntityManager.class);
         final List<Privilege> privileges = UserDao.getUserPrivileges(entityManager, user);
         for (final Privilege privilege : privileges) {
             if (!userPrivileges.get(company).get(user).containsKey(privilege.getKey())) {
@@ -70,12 +67,13 @@ public class PrivilegeCache {
         }
     }
 
-    public static  synchronized boolean hasPrivilege(final Company company, final Group group, final String key, final String dataId) {
+    public static  synchronized boolean hasPrivilege(final EntityManager entityManager, final Company company,
+                                                     final Group group, final String key, final String dataId) {
         if (!groupPrivileges.containsKey(company) || !userPrivileges.containsKey(company)) {
             groupPrivileges.put(company, new HashMap<Group, Map<String, Set<String>>>());
         }
         if (!groupPrivileges.get(company).containsKey(group)) {
-            load(company, group);
+            load(entityManager, company, group);
             return false;
         }
         if (!groupPrivileges.get(company).get(group).containsKey(key)) {
@@ -84,12 +82,13 @@ public class PrivilegeCache {
         return groupPrivileges.get(company).get(group).get(key).contains(dataId);
     }
 
-    public static  synchronized boolean hasPrivilege(final Company company, final User user, final String key, final String dataId) {
+    public static  synchronized boolean hasPrivilege(final EntityManager entityManager, final Company company,
+                                                     final User user, final String key, final String dataId) {
         if (!userPrivileges.containsKey(company) || !userPrivileges.containsKey(company)) {
             userPrivileges.put(company, new HashMap<User, Map<String, Set<String>>>());
         }
         if (!userPrivileges.get(company).containsKey(user)) {
-            load(company, user);
+            load(entityManager, company, user);
             return false;
         }
         if (!userPrivileges.get(company).get(user).containsKey(key)) {

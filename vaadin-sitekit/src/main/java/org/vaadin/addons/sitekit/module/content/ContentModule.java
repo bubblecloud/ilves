@@ -131,10 +131,11 @@ public class ContentModule implements SiteModule {
         final NavigationVersion navigationVersion = dynamicSiteDescriptor.getNavigation().getProductionVersion();
 
         for (final Content content : ordered) {
-            boolean viewPrivilege = PrivilegeCache.hasPrivilege(company, user, "view", content.getContentId());
+            boolean viewPrivilege = PrivilegeCache.hasPrivilege(entityManager, company,
+                    user, "view", content.getContentId());
             if (!viewPrivilege) {
                 for (final Group group : groups) {
-                    if (PrivilegeCache.hasPrivilege(company, group, "view", content.getContentId())) {
+                    if (PrivilegeCache.hasPrivilege(entityManager, company, group, "view", content.getContentId())) {
                         viewPrivilege = true;
                         break;
                     }
