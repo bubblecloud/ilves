@@ -119,7 +119,7 @@
 
     <changeSet author="tlaukkan" id="b3049860-2b48-11e4-8c21-0800200c9a66">
         <addColumn tableName="user_">
-            <column name="certificate" type="VARCHAR(4096)">
+            <column name="certificate" type="VARBINARY(4096)">
                 <constraints nullable="true"/>
             </column>
         </addColumn>

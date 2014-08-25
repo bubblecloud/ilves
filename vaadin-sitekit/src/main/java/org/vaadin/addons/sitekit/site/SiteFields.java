@@ -34,6 +34,7 @@ import org.vaadin.addons.sitekit.grid.field.DatePartField;
 import org.vaadin.addons.sitekit.grid.field.GroupField;
 import org.vaadin.addons.sitekit.grid.field.TimestampField;
 import org.vaadin.addons.sitekit.grid.field.UserField;
+import org.vaadin.addons.sitekit.grid.formatter.CertificateConverter;
 import org.vaadin.addons.sitekit.grid.formatter.DatePartConverter;
 import org.vaadin.addons.sitekit.grid.formatter.TimestampConverter;
 import org.vaadin.addons.sitekit.model.*;
@@ -176,7 +177,7 @@ public final class SiteFields {
         SiteFields.add(User.class, new FieldDescriptor("failedLoginCount", "Failed Logins", TextField.class, new StringToIntegerConverter(), 50, null, Integer.class, null,
                 true, true, true));
         SiteFields.add(User.class, new FieldDescriptor("openIdIdentifier", "Open ID Identifier", TextField.class, null, -1, null, String.class, "", false, true, false));
-        SiteFields.add(User.class, new FieldDescriptor("certificate", "Certificate (ASCII X.509)", TextArea.class, null, 200, null, String.class, "", false,
+        SiteFields.add(User.class, new FieldDescriptor("certificate", "Certificate (ASCII X.509)", TextArea.class, new CertificateConverter(), 200, null, String.class, "", false,
                 true, false));
         SiteFields.add(User.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
                 true, true));

@@ -42,20 +42,16 @@ public class ClientCertificateCache {
 
         for (final Company company : companies) {
             for (final User user : UserDao.getUsers(entityManager, company)) {
-                final String asciiCertificate = user.getCertificate();
-                if (StringUtils.isEmpty(asciiCertificate)) {
+                if (user.getCertificate() == null) {
                     continue;
                 }
-                 try {
-                     final StringReader stringReader = new StringReader(asciiCertificate);
-                     final PemReader pemReader = new PemReader(stringReader);
-                     final byte[] x509Data = pemReader.readPemObject().getContent();
-                     final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509");
-                     final Certificate certificate = certificateFactory.generateCertificate(
-                             new ByteArrayInputStream(x509Data));
-                 } catch (final Exception e) {
-                     LOGGER.error("Error loading user client certificate: " + user.getUserId(), e);
-                 }
+                    try {
+                        final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509");
+                        final Certificate certificate = certificateFactory.generateCertificate(
+                             new ByteArrayInputStream(user.getCertificate()));
+                    } catch (final Exception e) {
+                        LOGGER.error("Error loading user client certificate: " + user.getUserId(), e);
+                    }
             }
         }
     }
