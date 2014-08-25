@@ -11,6 +11,7 @@ import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.User;
 
 import java.io.ByteArrayInputStream;
+import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -30,8 +31,12 @@ public class ClientCertificateCache {
     /** The entity manager factory used to access the user client certificates. */
     private static EntityManagerFactory entityManagerFactory;
 
-    public static void init(final EntityManagerFactory entityManagerFactory) {
+    private static KeyStore tslTrustStore;
+
+    public static void init(final EntityManagerFactory entityManagerFactory, final KeyStore tslTrustStore) {
         ClientCertificateCache.entityManagerFactory = entityManagerFactory;
+        ClientCertificateCache.tslTrustStore = tslTrustStore;
+        load();
     }
 
     public static void load() {
@@ -39,21 +44,26 @@ public class ClientCertificateCache {
 
         final List<Company> companies = CompanyDao.getCompanies(entityManager);
 
-
         for (final Company company : companies) {
             for (final User user : UserDao.getUsers(entityManager, company)) {
                 if (user.getCertificate() == null) {
                     continue;
                 }
-                    try {
-                        final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509");
-                        final Certificate certificate = certificateFactory.generateCertificate(
-                             new ByteArrayInputStream(user.getCertificate()));
-                    } catch (final Exception e) {
-                        LOGGER.error("Error loading user client certificate: " + user.getUserId(), e);
+                try {
+                    final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509");
+                    final Certificate certificate = certificateFactory.generateCertificate(
+                         new ByteArrayInputStream(user.getCertificate()));
+                    if (!tslTrustStore.containsAlias(user.getUserId())) {
+                        tslTrustStore.setCertificateEntry(user.getUserId(), certificate);
                     }
+                } catch (final Exception e) {
+                    LOGGER.error("Error loading user client certificate: " + user.getUserId(), e);
+                }
             }
         }
     }
 
+    public static KeyStore getTslTrustStore() {
+        return tslTrustStore;
+    }
 }

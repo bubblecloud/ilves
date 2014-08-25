@@ -10,3 +10,4 @@ release.properties
 .directory
 *.log
 atlassian-ide-plugin.xml
+*.jks

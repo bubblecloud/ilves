@@ -18,8 +18,11 @@ package org.vaadin.addons.sitekit.example;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
-import org.eclipse.jetty.server.Server;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.vaadin.addons.sitekit.cache.ClientCertificateCache;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.model.Feedback;
@@ -27,11 +30,15 @@ import org.vaadin.addons.sitekit.module.audit.AuditModule;
 import org.vaadin.addons.sitekit.site.SiteModuleManager;
 import org.vaadin.addons.sitekit.module.content.ContentModule;
 import org.vaadin.addons.sitekit.site.*;
+import org.vaadin.addons.sitekit.util.CertificateUtil;
 import org.vaadin.addons.sitekit.util.PersistenceUtil;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
 
+import javax.swing.*;
 import java.net.BindException;
 import java.net.URI;
+import java.security.KeyStore;
+import java.security.Security;
 
 /**
  * Example site main class.
@@ -54,8 +61,11 @@ public class ExampleSiteMain {
      * @throws Exception if exception occurs in jetty startup.
      */
     public static void main(final String[] args) throws Exception {
+
+        // Configure security provider.
+        Security.addProvider(new BouncyCastleProvider());
+
         // Configure logging.
-        // ------------------
         DOMConfigurator.configure("./log4j.xml");
 
         // Configuration loading with HEROKU support.
@@ -74,14 +84,15 @@ public class ExampleSiteMain {
         }
 
         final String environmentPortString = System.getenv().get("PORT");
-        final int port;
+        final int httpPort;
         if (StringUtils.isNotEmpty(environmentPortString)) {
-            port = Integer.parseInt(environmentPortString);
-            LOGGER.info("Environment variable defined HTTP port: " + port);
+            httpPort = Integer.parseInt(environmentPortString);
+            LOGGER.info("Environment variable defined HTTP port: " + httpPort);
         } else {
-            port = Integer.parseInt(PropertiesUtil.getProperty("site", "http-port"));
-            LOGGER.info("Configuration defined HTTP port: " + port);
+            httpPort = Integer.parseInt(PropertiesUtil.getProperty("site", "http-port"));
+            LOGGER.info("Configuration defined HTTP port: " + httpPort);
         }
+        final int httpsPort = Integer.parseInt(PropertiesUtil.getProperty("site", "https-port"));
 
         // Configure Java Persistence API.
         // -------------------------------
@@ -135,7 +146,34 @@ public class ExampleSiteMain {
             webappUrl = DefaultSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm();
         }
 
-        final Server server = new Server(port);
+        final KeyStore trustStore = KeyStore.getInstance("BKS");
+        trustStore.load(null, null);
+        ClientCertificateCache.init(DefaultSiteUI.getEntityManagerFactory(), trustStore);
+
+        final String keyStorePath = PropertiesUtil.getProperty("site", "key-store-path");
+        final String keyStorePassword = PropertiesUtil.getProperty("site", "key-store-password");
+
+        final String certificateAlias = PropertiesUtil.getProperty("site", "certificate-entry-alias");
+        final String certificatePassword = PropertiesUtil.getProperty("site", "certificate-entry-password");
+
+        final String selfSignedCertificateHostName = PropertiesUtil.getProperty("site", "certificate-self-sign-host-name");
+        final String selfSignedCertificateIpAddress = PropertiesUtil.getProperty("site", "certificate-self-sign-ip-address");
+
+        CertificateUtil.ensureServerCertificateExists(
+                selfSignedCertificateHostName,
+                selfSignedCertificateIpAddress,
+                certificateAlias,
+                certificatePassword,
+                keyStorePath, keyStorePassword);
+
+        final Server server = newServer(
+                httpPort,
+                httpsPort,
+                certificateAlias,
+                keyStorePath,
+                keyStorePassword,
+                certificatePassword,
+                trustStore);
 
         final WebAppContext context = new WebAppContext();
         context.setContextPath("/");
@@ -151,9 +189,104 @@ public class ExampleSiteMain {
         try {
             server.start();
         } catch (final BindException e) {
-            LOGGER.warn("Jetty port (" + port + ") binding failed: " + e.getMessage());
+            LOGGER.warn("Jetty port (" + httpPort + ") binding failed: " + e.getMessage());
             return;
         }
         server.join();
+    }
+
+    /**
+     * Constructs Jetty server.
+     * @param httpPort the HTTP port
+     * @param httpsPort the HTTPS port
+     * @param certificateAlias the certificate alias
+     * @param keyStorePath the key store path
+     * @param keyStorePassword the key store password
+     * @param keyManagerPassword the key manager password
+     * @param trustStore the trust store
+     * @return the Jetty server
+     * @throws Exception if exception occurs in construction
+     */
+    private static Server newServer(
+            final int httpPort,
+            final int httpsPort,
+            final String certificateAlias,
+            final String keyStorePath,
+            final String keyStorePassword,
+            final String keyManagerPassword,
+            final KeyStore trustStore) throws Exception {
+        final Server server = new Server();
+
+        final HttpConfiguration httpConfiguration = new HttpConfiguration();
+        httpConfiguration.setSecureScheme("https");
+        httpConfiguration.setSecurePort(httpsPort);
+        httpConfiguration.setOutputBufferSize(32768);
+        httpConfiguration.setRequestHeaderSize(8192);
+        httpConfiguration.setResponseHeaderSize(8192);
+        httpConfiguration.setSendServerVersion(false);
+        httpConfiguration.setSendDateHeader(false);
+
+        if (httpPort > 0) {
+            final ServerConnector httpConnector = new ServerConnector(server, new HttpConnectionFactory(httpConfiguration));
+            httpConnector.setPort(httpPort);
+            httpConnector.setIdleTimeout(30000);
+
+            server.addConnector(httpConnector);
+        }
+
+        if (httpsPort > 0) {
+            final SslContextFactory sslContextFactory = newSslSocketFactory(certificateAlias, keyStorePath, keyStorePassword,
+                    keyManagerPassword, trustStore, true);
+
+            final HttpConfiguration httpsConfiguration = new HttpConfiguration(httpConfiguration);
+            httpsConfiguration.addCustomizer(new SecureRequestCustomizer()); // <-- HERE
+
+            final ServerConnector httpsConnector = new ServerConnector(server,
+                    new SslConnectionFactory(sslContextFactory, "http/1.1"),
+                    new HttpConnectionFactory(httpsConfiguration));
+            httpsConnector.setPort(8443);
+            httpsConnector.setIdleTimeout(30000);
+
+            server.addConnector(httpsConnector);
+        }
+        return server;
+    }
+
+    /**
+     * Constructs SSL context factory.
+     * @param certificateAlias the certificate alias
+     * @param keyStorePath the key store path
+     * @param keyStorePassword the key store password
+     * @param certificatePassword the certificate password
+     * @param trustStore the trust store
+     * @param clientAuthentication true if client authentication is used
+     * @return the constructed SSL context factory
+     * @throws Exception if exception occurs in construction
+     */
+    private static SslContextFactory newSslSocketFactory(final String certificateAlias,
+                                                         final String keyStorePath,
+                                                         final String keyStorePassword,
+                                                         final String certificatePassword,
+                                                         final KeyStore trustStore,
+                                                         final boolean clientAuthentication) throws Exception {
+
+        final SslContextFactory sslContextFactory = new SslContextFactory();
+        sslContextFactory.setCertAlias(certificateAlias);
+        sslContextFactory.setNeedClientAuth(true);
+        sslContextFactory.setKeyStoreType("BKS");
+        sslContextFactory.setKeyStorePath(keyStorePath);
+        sslContextFactory.setKeyStorePassword(keyStorePassword);
+        sslContextFactory.setKeyManagerPassword(certificatePassword);
+        sslContextFactory.setTrustStore(trustStore);
+        sslContextFactory.setExcludeCipherSuites(
+                "SSL_RSA_WITH_DES_CBC_SHA",
+                "SSL_DHE_RSA_WITH_DES_CBC_SHA",
+                "SSL_DHE_DSS_WITH_DES_CBC_SHA",
+                "SSL_RSA_EXPORT_WITH_RC4_40_MD5",
+                "SSL_RSA_EXPORT_WITH_DES40_CBC_SHA",
+                "SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA",
+                "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA");
+        sslContextFactory.setRenegotiationAllowed(false);
+        return sslContextFactory;
     }
 }
