@@ -40,24 +40,26 @@ public class ClientCertificateCache {
     }
 
     public static void load() {
-        final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        synchronized (entityManagerFactory) {
+            final EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-        final List<Company> companies = CompanyDao.getCompanies(entityManager);
+            final List<Company> companies = CompanyDao.getCompanies(entityManager);
 
-        for (final Company company : companies) {
-            for (final User user : UserDao.getUsers(entityManager, company)) {
-                if (user.getCertificate() == null) {
-                    continue;
-                }
-                try {
-                    final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509");
-                    final Certificate certificate = certificateFactory.generateCertificate(
-                         new ByteArrayInputStream(user.getCertificate()));
-                    if (!tslTrustStore.containsAlias(user.getUserId())) {
-                        tslTrustStore.setCertificateEntry(user.getUserId(), certificate);
+            for (final Company company : companies) {
+                for (final User user : UserDao.getUsers(entityManager, company)) {
+                    if (user.getCertificate() == null) {
+                        continue;
                     }
-                } catch (final Exception e) {
-                    LOGGER.error("Error loading user client certificate: " + user.getUserId(), e);
+                    try {
+                        final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509");
+                        final Certificate certificate = certificateFactory.generateCertificate(
+                                new ByteArrayInputStream(user.getCertificate()));
+                        if (!tslTrustStore.containsAlias(user.getUserId())) {
+                            tslTrustStore.setCertificateEntry(user.getUserId(), certificate);
+                        }
+                    } catch (final Exception e) {
+                        LOGGER.error("Error loading user client certificate: " + user.getUserId(), e);
+                    }
                 }
             }
         }

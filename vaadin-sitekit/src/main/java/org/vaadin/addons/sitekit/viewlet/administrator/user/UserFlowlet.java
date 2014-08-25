@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.viewlet.administrator.user;
 
+import org.vaadin.addons.sitekit.cache.ClientCertificateCache;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.FilterDescriptor;
@@ -159,6 +160,7 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
                     entityManager.persist(user);
                     entityManager.getTransaction().commit();
                     editor.setItem(new BeanItem<User>(user), false);
+                    ClientCertificateCache.load();
                     //entityManager.detach(user);
                 } catch (final Throwable t) {
                     if (entityManager.getTransaction().isActive()) {
