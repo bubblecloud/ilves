@@ -15,6 +15,8 @@
  */
 package org.vaadin.addons.sitekit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,6 +47,7 @@ public final class Customer implements Serializable {
     private String customerId;
 
     /** Owning company. */
+    @JsonIgnore
     @JoinColumn(nullable = false)
     @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH }, optional = false)
     private Company owner;

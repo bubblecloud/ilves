@@ -15,6 +15,8 @@
  */
 package org.vaadin.addons.sitekit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,6 +48,7 @@ public final class User implements Serializable {
     private String userId;
 
     /** Owning company. */
+    @JsonIgnore
     @JoinColumn(nullable = false)
     @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH }, optional = false)
     private Company owner;
@@ -59,6 +62,7 @@ public final class User implements Serializable {
     private boolean emailAddressValidated;
 
     /** Password hash. */
+    @JsonIgnore
     @Column(nullable = false)
     private String passwordHash;
 
