@@ -15,6 +15,8 @@
  */
 package org.vaadin.addons.sitekit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -36,6 +38,7 @@ public final class UserDirectory implements Serializable {
     private String userDirectoryId;
 
     /** Owning company. */
+    @JsonIgnore
     @JoinColumn(nullable = false)
     @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH }, optional = false)
     private Company owner;
@@ -57,6 +60,7 @@ public final class UserDirectory implements Serializable {
     /**
      * LDAP login password.
      */
+    @JsonIgnore
     @Column(nullable = false)
     private String loginPassword = "password";
 
