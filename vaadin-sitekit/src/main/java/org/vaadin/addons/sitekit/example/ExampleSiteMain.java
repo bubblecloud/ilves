@@ -173,7 +173,8 @@ public class ExampleSiteMain {
                 keyStorePath,
                 keyStorePassword,
                 certificatePassword,
-                trustStore);
+                trustStore,
+                false);
 
         final WebAppContext context = new WebAppContext();
         context.setContextPath("/");
@@ -214,7 +215,8 @@ public class ExampleSiteMain {
             final String keyStorePath,
             final String keyStorePassword,
             final String keyManagerPassword,
-            final KeyStore trustStore) throws Exception {
+            final KeyStore trustStore,
+            final boolean clientAuthentication) throws Exception {
         final Server server = new Server();
 
         final HttpConfiguration httpConfiguration = new HttpConfiguration();
@@ -236,7 +238,7 @@ public class ExampleSiteMain {
 
         if (httpsPort > 0) {
             final SslContextFactory sslContextFactory = newSslSocketFactory(certificateAlias, keyStorePath, keyStorePassword,
-                    keyManagerPassword, trustStore, true);
+                    keyManagerPassword, trustStore, clientAuthentication);
 
             final HttpConfiguration httpsConfiguration = new HttpConfiguration(httpConfiguration);
             httpsConfiguration.addCustomizer(new SecureRequestCustomizer()); // <-- HERE
@@ -272,7 +274,8 @@ public class ExampleSiteMain {
 
         final SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setCertAlias(certificateAlias);
-        sslContextFactory.setNeedClientAuth(true);
+        sslContextFactory.setNeedClientAuth(clientAuthentication);
+        sslContextFactory.setWantClientAuth(true);
         sslContextFactory.setKeyStoreType("BKS");
         sslContextFactory.setKeyStorePath(keyStorePath);
         sslContextFactory.setKeyStorePassword(keyStorePassword);
