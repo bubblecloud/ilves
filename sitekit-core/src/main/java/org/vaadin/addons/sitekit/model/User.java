@@ -88,7 +88,7 @@ public final class User implements Serializable {
 
     /** TLS client certificate. */
     @Column(nullable = true)
-    private byte[] certificate;
+    private String certificate;
 
     /** Date of password expiration. Null corresponds to password never expiring. */
     @Temporal(TemporalType.DATE)
@@ -318,14 +318,14 @@ public final class User implements Serializable {
     /**
      * @return the TLS client certificate identifying this user
      */
-    public byte[] getCertificate() {
+    public String getCertificate() {
         return certificate;
     }
 
     /**
      * @param certificate the TLS client certificate identifying this user to set
      */
-    public void setCertificate(final byte[] certificate) {
+    public void setCertificate(final String certificate) {
         this.certificate = certificate;
     }
 

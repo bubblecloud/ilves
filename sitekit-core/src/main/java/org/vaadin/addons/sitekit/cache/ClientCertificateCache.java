@@ -1,5 +1,6 @@
 package org.vaadin.addons.sitekit.cache;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.bouncycastle.openssl.PEMReader;
@@ -19,7 +20,9 @@ import java.security.cert.X509Certificate;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.io.StringReader;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Cache for user TLS client certificates.
@@ -33,6 +36,8 @@ public class ClientCertificateCache {
 
     private static KeyStore tslTrustStore;
 
+    private static Map<Certificate, User> certificateUserMap = new HashMap<Certificate, User>();
+
     public static void init(final EntityManagerFactory entityManagerFactory, final KeyStore tslTrustStore) {
         ClientCertificateCache.entityManagerFactory = entityManagerFactory;
         ClientCertificateCache.tslTrustStore = tslTrustStore;
@@ -41,24 +46,38 @@ public class ClientCertificateCache {
 
     public static void load() {
         synchronized (entityManagerFactory) {
+            LOGGER.info("Loading TSL client certificates.");
             final EntityManager entityManager = entityManagerFactory.createEntityManager();
 
             final List<Company> companies = CompanyDao.getCompanies(entityManager);
 
             for (final Company company : companies) {
                 for (final User user : UserDao.getUsers(entityManager, company)) {
-                    if (user.getCertificate() == null) {
-                        continue;
-                    }
                     try {
+                        if (user.getCertificate() == null) {
+                            if (tslTrustStore.containsAlias(user.getUserId())) {
+                                final Certificate certificate = tslTrustStore.getCertificate(user.getUserId());
+                                tslTrustStore.deleteEntry(user.getUserId());
+                                synchronized (certificateUserMap) {
+                                    certificateUserMap.remove(certificate);
+                                }
+                                LOGGER.info("Removed TSL client certificate for user ID: " + user.getUserId());
+                            }
+                            continue;
+                        }
+
                         final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509");
                         final Certificate certificate = certificateFactory.generateCertificate(
-                                new ByteArrayInputStream(user.getCertificate()));
+                                new ByteArrayInputStream(Base64.decodeBase64(user.getCertificate())));
                         if (!tslTrustStore.containsAlias(user.getUserId())) {
                             tslTrustStore.setCertificateEntry(user.getUserId(), certificate);
+                            synchronized (certificateUserMap) {
+                                certificateUserMap.put(certificate, user);
+                            }
+                            LOGGER.info("Added TSL client certificate for user ID: " + user.getUserId());
                         }
                     } catch (final Exception e) {
-                        LOGGER.error("Error loading user client certificate: " + user.getUserId(), e);
+                        LOGGER.error("Error adding / removing user client certificate: " + user.getUserId(), e);
                     }
                 }
             }
@@ -67,5 +86,11 @@ public class ClientCertificateCache {
 
     public static KeyStore getTslTrustStore() {
         return tslTrustStore;
+    }
+
+    public static User getUserByCertificate(final Certificate clientCertificate) {
+        synchronized (certificateUserMap) {
+            return certificateUserMap.get(clientCertificate);
+        }
     }
 }

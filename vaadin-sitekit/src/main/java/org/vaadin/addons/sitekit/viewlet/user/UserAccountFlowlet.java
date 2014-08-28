@@ -20,6 +20,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import org.apache.log4j.Logger;
+import org.vaadin.addons.sitekit.cache.ClientCertificateCache;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
@@ -128,6 +129,7 @@ public final class UserAccountFlowlet extends AbstractFlowlet implements Validat
                     entityManager.getTransaction().commit();
                     editor.setItem(new BeanItem<User>(user), false);
                     entityManager.detach(user);
+                    ClientCertificateCache.load();
                 } catch (final Throwable t) {
                     if (entityManager.getTransaction().isActive()) {
                         entityManager.getTransaction().rollback();

@@ -1,6 +1,7 @@
 package org.vaadin.addons.sitekit.grid.formatter;
 
 import com.vaadin.data.util.converter.Converter;
+import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemObjectGenerator;
 import org.bouncycastle.util.io.pem.PemReader;
@@ -17,10 +18,10 @@ import java.util.Locale;
 /**
  * Percentage converter.
  */
-public class CertificateConverter implements Converter<String, byte[]> {
+public class CertificateConverter implements Converter<String, String> {
 
     @Override
-    public byte[] convertToModel(String value, Class<? extends byte[]> targetType, Locale locale) throws ConversionException {
+    public String convertToModel(String value, Class<? extends String> targetType, Locale locale) throws ConversionException {
         if (value == null || value.length() == 0) {
             return null;
         } else {
@@ -31,7 +32,7 @@ public class CertificateConverter implements Converter<String, byte[]> {
                 final CertificateFactory certificateFactory = CertificateFactory.getInstance("X509");
                 final Certificate certificate = certificateFactory.generateCertificate(
                         new ByteArrayInputStream(x509Data));
-                return certificate.getEncoded();
+                return Base64.encodeBase64String(certificate.getEncoded());
             } catch (final Exception e) {
                 throw new ConversionException("Error parsing ASCII X509 certificate.", e);
             }
@@ -39,13 +40,13 @@ public class CertificateConverter implements Converter<String, byte[]> {
     }
 
     @Override
-    public String convertToPresentation(byte[] value, Class<? extends String> targetType, Locale locale) throws ConversionException {
+    public String convertToPresentation(String value, Class<? extends String> targetType, Locale locale) throws ConversionException {
         if (value == null) {
             return null;
         } else {
             try {
                 final CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-                final InputStream in = new ByteArrayInputStream(value);
+                final InputStream in = new ByteArrayInputStream(Base64.decodeBase64(value));
                 final Certificate certificate = certFactory.generateCertificate(in);
                 final StringWriter stringWriter = new StringWriter();
                 final PemWriter pemWriter = new PemWriter(stringWriter);
@@ -60,8 +61,8 @@ public class CertificateConverter implements Converter<String, byte[]> {
     }
 
     @Override
-    public Class<byte[]> getModelType() {
-        return byte[].class;
+    public Class<String> getModelType() {
+        return String.class;
     }
 
     @Override

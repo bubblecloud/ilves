@@ -16,16 +16,20 @@
 package org.vaadin.addons.sitekit.site;
 
 import com.vaadin.ui.Notification;
+import org.vaadin.addons.sitekit.cache.ClientCertificateCache;
 import org.vaadin.addons.sitekit.dao.CompanyDao;
+import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.model.Company;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import org.apache.log4j.Logger;
+import org.vaadin.addons.sitekit.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.security.cert.X509Certificate;
 import java.util.Map;
 
 /**
@@ -65,6 +69,16 @@ public final class DefaultSiteUI extends AbstractSiteUI {
             siteContext.putObject(Company.class, CompanyDao.getCompany(entityManager, "*"));
         } else {
             siteContext.putObject(Company.class, company);
+        }
+
+        final X509Certificate[] clientCertificates = (X509Certificate[])
+                servletRequest.getHttpServletRequest().getAttribute("javax.servlet.request.X509Certificate");
+        if (clientCertificates != null && clientCertificates.length == 1
+                && securityProvider.getUserFromSession() == null) {
+            final User user = ClientCertificateCache.getUserByCertificate(clientCertificates[0]);
+            if (user != null) {
+                securityProvider.setUser(user, UserDao.getUserGroups(entityManager, company, user));
+            }
         }
 
         return new Site(SiteMode.PRODUCTION, contentProvider, localizationProvider, securityProvider, siteContext);
