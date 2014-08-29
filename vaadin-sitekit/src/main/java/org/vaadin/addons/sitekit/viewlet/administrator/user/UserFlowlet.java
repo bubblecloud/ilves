@@ -157,7 +157,6 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
                     entityManager.persist(user);
                     entityManager.getTransaction().commit();
                     editor.setItem(new BeanItem<User>(user), false);
-                    UserClientCertificateCache.load();
                     //entityManager.detach(user);
                 } catch (final Throwable t) {
                     if (entityManager.getTransaction().isActive()) {

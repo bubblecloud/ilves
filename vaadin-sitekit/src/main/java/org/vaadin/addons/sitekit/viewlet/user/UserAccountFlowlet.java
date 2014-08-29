@@ -123,7 +123,6 @@ public final class UserAccountFlowlet extends AbstractFlowlet implements Validat
                     entityManager.getTransaction().commit();
                     editor.setItem(new BeanItem<User>(user), false);
                     entityManager.detach(user);
-                    UserClientCertificateCache.load();
                 } catch (final Throwable t) {
                     if (entityManager.getTransaction().isActive()) {
                         entityManager.getTransaction().rollback();

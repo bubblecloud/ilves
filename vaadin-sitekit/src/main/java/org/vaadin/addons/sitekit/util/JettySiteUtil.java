@@ -47,9 +47,7 @@ public class JettySiteUtil {
             final int httpPort,
             final int httpsPort,
             final boolean requireClientAuthentication) throws Exception {
-        final KeyStore trustStore = KeyStore.getInstance("BKS");
-        trustStore.load(null, null);
-        UserClientCertificateCache.init(DefaultSiteUI.getEntityManagerFactory(), trustStore);
+        UserClientCertificateCache.init(DefaultSiteUI.getEntityManagerFactory());
 
         final String keyStorePath = PropertiesUtil.getProperty("site", "key-store-path");
         final String keyStorePassword = PropertiesUtil.getProperty("site", "key-store-password");
