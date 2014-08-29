@@ -25,6 +25,7 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.util.PropertiesUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -72,7 +73,8 @@ public final class DefaultSiteUI extends AbstractSiteUI {
         final X509Certificate[] clientCertificates = (X509Certificate[])
                 servletRequest.getHttpServletRequest().getAttribute("javax.servlet.request.X509Certificate");
         if (clientCertificates != null && clientCertificates.length == 1
-                && securityProvider.getUserFromSession() == null) {
+                && securityProvider.getUserFromSession() == null
+                && "true".equals(PropertiesUtil.getProperty("site", "client-certificate-login"))) {
             final User user = UserClientCertificateCache.getUserByCertificate(clientCertificates[0]);
             if (user != null) {
                 securityProvider.setUser(user, UserDao.getUserGroups(entityManager, company, user));

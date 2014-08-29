@@ -33,7 +33,7 @@ import java.util.Collection;
  *
  * @author Tommi S.E. Laukkanen
  */
-public class JettySiteUtil {
+public class JettyUtil {
 
     /**
      * Constructs Jetty server.
