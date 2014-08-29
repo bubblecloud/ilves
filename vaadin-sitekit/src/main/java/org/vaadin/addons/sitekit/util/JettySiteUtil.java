@@ -3,6 +3,7 @@ package org.vaadin.addons.sitekit.util;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.vaadin.addons.sitekit.cache.ClientCertificateCache;
+import org.vaadin.addons.sitekit.site.DefaultSiteUI;
 
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -21,10 +22,6 @@ public class JettySiteUtil {
      * Constructs Jetty server.
      * @param httpPort the HTTP port
      * @param httpsPort the HTTPS port
-     * @param certificateAlias the certificate alias
-     * @param keyStorePath the key store path
-     * @param keyStorePassword the key store password
-     * @param keyManagerPassword the key manager password
      * @param requireClientAuthentication true if client authentication is required
      * @return the Jetty server
      * @throws Exception if exception occurs in construction
@@ -32,11 +29,29 @@ public class JettySiteUtil {
     public static Server newServer(
             final int httpPort,
             final int httpsPort,
-            final String certificateAlias,
-            final String keyStorePath,
-            final String keyStorePassword,
-            final String keyManagerPassword,
             final boolean requireClientAuthentication) throws Exception {
+        final KeyStore trustStore = KeyStore.getInstance("BKS");
+        trustStore.load(null, null);
+        ClientCertificateCache.init(DefaultSiteUI.getEntityManagerFactory(), trustStore);
+
+        final String keyStorePath = PropertiesUtil.getProperty("site", "key-store-path");
+        final String keyStorePassword = PropertiesUtil.getProperty("site", "key-store-password");
+
+        final String certificateAlias = PropertiesUtil.getProperty("site", "certificate-entry-alias");
+        final String certificatePassword = PropertiesUtil.getProperty("site", "certificate-entry-password");
+
+        final String selfSignedCertificateHostName =
+                PropertiesUtil.getProperty("site", "certificate-self-sign-host-name");
+        final String selfSignedCertificateIpAddress =
+                PropertiesUtil.getProperty("site", "certificate-self-sign-ip-address");
+
+        CertificateUtil.ensureServerCertificateExists(
+                selfSignedCertificateHostName,
+                selfSignedCertificateIpAddress,
+                certificateAlias,
+                certificatePassword,
+                keyStorePath, keyStorePassword);
+
         final Server server = new Server();
 
         final HttpConfiguration httpConfiguration = new HttpConfiguration();
@@ -60,7 +75,7 @@ public class JettySiteUtil {
         if (httpsPort > 0) {
             final JettySiteSslContextFactory sslContextFactory = newSslSocketFactory(certificateAlias,
                     keyStorePath, keyStorePassword,
-                    keyManagerPassword, requireClientAuthentication);
+                    certificatePassword, requireClientAuthentication);
 
             final HttpConfiguration httpsConfiguration = new HttpConfiguration(httpConfiguration);
             httpsConfiguration.addCustomizer(new SecureRequestCustomizer());

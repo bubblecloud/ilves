@@ -145,35 +145,9 @@ public class ExampleSiteMain {
             webappUrl = DefaultSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm();
         }
 
-        final KeyStore trustStore = KeyStore.getInstance("BKS");
-        trustStore.load(null, null);
-        ClientCertificateCache.init(DefaultSiteUI.getEntityManagerFactory(), trustStore);
-
-        final String keyStorePath = PropertiesUtil.getProperty("site", "key-store-path");
-        final String keyStorePassword = PropertiesUtil.getProperty("site", "key-store-password");
-
-        final String certificateAlias = PropertiesUtil.getProperty("site", "certificate-entry-alias");
-        final String certificatePassword = PropertiesUtil.getProperty("site", "certificate-entry-password");
-
-        final String selfSignedCertificateHostName =
-                PropertiesUtil.getProperty("site", "certificate-self-sign-host-name");
-        final String selfSignedCertificateIpAddress =
-                PropertiesUtil.getProperty("site", "certificate-self-sign-ip-address");
-
-        CertificateUtil.ensureServerCertificateExists(
-                selfSignedCertificateHostName,
-                selfSignedCertificateIpAddress,
-                certificateAlias,
-                certificatePassword,
-                keyStorePath, keyStorePassword);
-
         final Server server = JettySiteUtil.newServer(
                 httpPort,
                 httpsPort,
-                certificateAlias,
-                keyStorePath,
-                keyStorePassword,
-                certificatePassword,
                 false);
 
         final WebAppContext context = new WebAppContext();
