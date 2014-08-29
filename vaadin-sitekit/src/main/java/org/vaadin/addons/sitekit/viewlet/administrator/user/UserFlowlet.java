@@ -15,7 +15,7 @@
  */
 package org.vaadin.addons.sitekit.viewlet.administrator.user;
 
-import org.vaadin.addons.sitekit.cache.ClientCertificateCache;
+import org.vaadin.addons.sitekit.cache.UserClientCertificateCache;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.FilterDescriptor;
@@ -28,7 +28,6 @@ import org.vaadin.addons.sitekit.model.GroupMember;
 import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
 import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
-import org.vaadin.addons.sitekit.util.StringUtil;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.ui.Button;
@@ -40,8 +39,6 @@ import com.vaadin.ui.Table;
 import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 
 import javax.persistence.EntityManager;
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -160,7 +157,7 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
                     entityManager.persist(user);
                     entityManager.getTransaction().commit();
                     editor.setItem(new BeanItem<User>(user), false);
-                    ClientCertificateCache.load();
+                    UserClientCertificateCache.load();
                     //entityManager.detach(user);
                 } catch (final Throwable t) {
                     if (entityManager.getTransaction().isActive()) {

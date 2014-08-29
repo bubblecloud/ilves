@@ -1,8 +1,23 @@
+/**
+ * Copyright 2013 Tommi S.E. Laukkanen
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.vaadin.addons.sitekit.util;
 
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
-import org.vaadin.addons.sitekit.cache.ClientCertificateCache;
+import org.vaadin.addons.sitekit.cache.UserClientCertificateCache;
 import org.vaadin.addons.sitekit.site.DefaultSiteUI;
 
 import javax.net.ssl.TrustManager;
@@ -15,6 +30,8 @@ import java.util.Collection;
 
 /**
  * Utility class for creating embedded Jetty sites.
+ *
+ * @author Tommi S.E. Laukkanen
  */
 public class JettySiteUtil {
 
@@ -32,7 +49,7 @@ public class JettySiteUtil {
             final boolean requireClientAuthentication) throws Exception {
         final KeyStore trustStore = KeyStore.getInstance("BKS");
         trustStore.load(null, null);
-        ClientCertificateCache.init(DefaultSiteUI.getEntityManagerFactory(), trustStore);
+        UserClientCertificateCache.init(DefaultSiteUI.getEntityManagerFactory(), trustStore);
 
         final String keyStorePath = PropertiesUtil.getProperty("site", "key-store-path");
         final String keyStorePassword = PropertiesUtil.getProperty("site", "key-store-password");
@@ -148,7 +165,7 @@ public class JettySiteUtil {
                     if (x509Certificates.length != 1) {
                         throw new CertificateException("Certificate paths not supported.");
                     }
-                    if (ClientCertificateCache.getUserByCertificate(x509Certificates[0]) == null) {
+                    if (UserClientCertificateCache.getUserByCertificate(x509Certificates[0]) == null) {
                         throw new CertificateException("Unknown certificate.");
                     }
                 }

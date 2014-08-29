@@ -20,22 +20,16 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import org.apache.log4j.Logger;
-import org.vaadin.addons.sitekit.cache.ClientCertificateCache;
+import org.vaadin.addons.sitekit.cache.UserClientCertificateCache;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
-import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.SiteFields;
-import org.vaadin.addons.sitekit.util.OpenIdUtil;
 import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
-import org.vaadin.addons.sitekit.util.StringUtil;
 
 import javax.persistence.EntityManager;
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Map;
 
 /**
  * User edit Flowlet.
@@ -129,7 +123,7 @@ public final class UserAccountFlowlet extends AbstractFlowlet implements Validat
                     entityManager.getTransaction().commit();
                     editor.setItem(new BeanItem<User>(user), false);
                     entityManager.detach(user);
-                    ClientCertificateCache.load();
+                    UserClientCertificateCache.load();
                 } catch (final Throwable t) {
                     if (entityManager.getTransaction().isActive()) {
                         entityManager.getTransaction().rollback();

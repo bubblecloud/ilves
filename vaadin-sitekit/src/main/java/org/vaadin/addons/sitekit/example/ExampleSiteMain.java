@@ -21,7 +21,6 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.vaadin.addons.sitekit.cache.ClientCertificateCache;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.model.Feedback;
@@ -29,14 +28,12 @@ import org.vaadin.addons.sitekit.module.audit.AuditModule;
 import org.vaadin.addons.sitekit.site.SiteModuleManager;
 import org.vaadin.addons.sitekit.module.content.ContentModule;
 import org.vaadin.addons.sitekit.site.*;
-import org.vaadin.addons.sitekit.util.CertificateUtil;
 import org.vaadin.addons.sitekit.util.JettySiteUtil;
 import org.vaadin.addons.sitekit.util.PersistenceUtil;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
 
 import java.net.BindException;
 import java.net.URI;
-import java.security.KeyStore;
 import java.security.Security;
 
 /**
@@ -145,11 +142,6 @@ public class ExampleSiteMain {
             webappUrl = DefaultSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm();
         }
 
-        final Server server = JettySiteUtil.newServer(
-                httpPort,
-                httpsPort,
-                false);
-
         final WebAppContext context = new WebAppContext();
         context.setContextPath("/");
         context.setDescriptor(webappUrl + "/WEB-INF/web.xml");
@@ -160,7 +152,14 @@ public class ExampleSiteMain {
             context.setInitParameter("useFileMappedBuffer", "false");
             context.setInitParameter("maxCachedFiles", "0");
         }
+
+        final Server server = JettySiteUtil.newServer(
+                httpPort,
+                httpsPort,
+                false);
+
         server.setHandler(context);
+
         try {
             server.start();
         } catch (final BindException e) {
