@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.vaadin.addons.sitekit</groupId>
-    <artifactId>vaadin-sitekit</artifactId>
+    <groupId>org.bubblecloud.ilves</groupId>
+    <artifactId>ilves-vaadin</artifactId>
     <packaging>jar</packaging>
     <version>2.4.9-SNAPSHOT</version>
 
@@ -144,8 +144,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.vaadin.addons.sitekit</groupId>
-            <artifactId>sitekit-core</artifactId>
+            <groupId>org.bubblecloud.ilves</groupId>
+            <artifactId>ilves-common</artifactId>
             <version>2.4.9-SNAPSHOT</version>
         </dependency>
 

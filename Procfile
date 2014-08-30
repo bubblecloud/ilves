@@ -1,1 +1,1 @@
-web: java -jar vaadin-sitekit-example-postgresql/target/vaadin-sitekit-example-postgresql.jar
+web: java -jar ilves-vaadin-example-postgresql/target/ilves-vaadin-example-postgresql.jar

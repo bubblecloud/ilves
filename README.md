@@ -1,7 +1,7 @@
-vaadin-sitekit
-==============
+Ilves
+=====
 
-Site Kit simplifies web site creation by providing functionality for login (OpenID, LDAP and password), registration,
+Ilves simplifies web site creation by providing functionality for login (OpenID, LDAP and password), registration,
 virtual hosting and business web sites.
 
 Wiki
