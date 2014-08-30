@@ -124,5 +124,13 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet author="tlaukkan" id="f795eaf0-3003-11e4-8c21-0800200c9a66">
+        <addColumn tableName="company">
+            <column name="certificatelogin" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
 

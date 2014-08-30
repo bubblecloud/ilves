@@ -39,9 +39,8 @@ import java.security.cert.X509Certificate;
 @SuppressWarnings({ "serial", "unchecked" })
 @Theme("sitekit")
 public final class DefaultSiteUI extends AbstractSiteUI {
-
     /** The logger. */
-    private static final Logger LOG = Logger.getLogger(DefaultSiteUI.class);
+    private static final Logger LOGGER = Logger.getLogger(DefaultSiteUI.class);
     /** The shared entity manager factory. */
     private static EntityManagerFactory entityManagerFactory;
     /** The shared security provider. */
@@ -63,21 +62,24 @@ public final class DefaultSiteUI extends AbstractSiteUI {
         // Choose company for this site context.
         final VaadinServletRequest servletRequest = (VaadinServletRequest) VaadinService.getCurrentRequest();
         final String hostName = servletRequest.getHttpServletRequest().getServerName();
-        final Company company = CompanyDao.getCompany(entityManager, hostName);
+        Company company = CompanyDao.getCompany(entityManager, hostName);
         if (company == null) {
-            siteContext.putObject(Company.class, CompanyDao.getCompany(entityManager, "*"));
-        } else {
-            siteContext.putObject(Company.class, company);
+            company = CompanyDao.getCompany(entityManager, "*");
         }
+        siteContext.putObject(Company.class, company);
 
         final X509Certificate[] clientCertificates = (X509Certificate[])
                 servletRequest.getHttpServletRequest().getAttribute("javax.servlet.request.X509Certificate");
         if (clientCertificates != null && clientCertificates.length == 1
                 && securityProvider.getUserFromSession() == null
-                && "true".equals(PropertiesUtil.getProperty("site", "client-certificate-login"))) {
+                && company != null
+                && company.isCertificateLogin()) {
             final User user = UserClientCertificateCache.getUserByCertificate(clientCertificates[0]);
-            if (user != null) {
+            if (user != null && user.getOwner().equals(company)) {
                 securityProvider.setUser(user, UserDao.getUserGroups(entityManager, company, user));
+                LOGGER.info("User certificate login: " + user.getEmailAddress() + " Remote address: "
+                        + servletRequest.getHttpServletRequest().getRemoteAddr() + ":"
+                        + servletRequest.getHttpServletRequest().getRemotePort() + ")");
             }
         }
 

@@ -23,6 +23,7 @@ import java.util.List;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
 import com.vaadin.ui.UI;
+import org.vaadin.addons.sitekit.module.audit.AuditService;
 
 /**
  * Security provider session implementation. Security provider should also

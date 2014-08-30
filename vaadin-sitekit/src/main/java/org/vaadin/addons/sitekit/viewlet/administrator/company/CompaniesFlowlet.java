@@ -103,6 +103,7 @@ public final class CompaniesFlowlet extends AbstractFlowlet {
         table.setColumnCollapsed("company", true);
         table.setColumnCollapsed("emailPasswordReset", true);
         table.setColumnCollapsed("openIdLogin", true);
+        table.setColumnCollapsed("certificateLogin", true);
         table.setColumnCollapsed("maxFailedLoginCount", true);
         table.setColumnCollapsed("passwordValidityPeriodDays", true);
         table.setColumnCollapsed("salesEmailAddress", true);

@@ -101,6 +101,10 @@ public final class Company implements Serializable {
     @Column(nullable = false)
     private boolean openIdLogin;
 
+    /** Flag for enabling client certificate login. */
+    @Column(nullable = false)
+    private boolean certificateLogin;
+
     /** Password validity period in days. 0 corresponds to password never expiring. */
     @Column(nullable = true)
     private int passwordValidityPeriodDays;
@@ -456,6 +460,20 @@ public final class Company implements Serializable {
      */
     public void setOpenIdLogin(boolean openIdLogin) {
         this.openIdLogin = openIdLogin;
+    }
+
+    /**
+     * @return true if client certificate login is enabled
+     */
+    public boolean isCertificateLogin() {
+        return certificateLogin;
+    }
+
+    /**
+     * @param certificateLogin true if client certificate login is to be enabled
+     */
+    public void setCertificateLogin(final boolean certificateLogin) {
+        this.certificateLogin = certificateLogin;
     }
 
     @Override

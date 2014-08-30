@@ -54,13 +54,13 @@ public class JettyUtil {
         final String keyStorePath = PropertiesUtil.getProperty("site", "key-store-path");
         final String keyStorePassword = PropertiesUtil.getProperty("site", "key-store-password");
 
-        final String certificateAlias = PropertiesUtil.getProperty("site", "certificate-entry-alias");
-        final String certificatePassword = PropertiesUtil.getProperty("site", "certificate-entry-password");
+        final String certificateAlias = PropertiesUtil.getProperty("site", "server-certificate-entry-alias");
+        final String certificatePassword = PropertiesUtil.getProperty("site", "server-certificate-entry-password");
 
         final String selfSignedCertificateHostName =
-                PropertiesUtil.getProperty("site", "certificate-self-sign-host-name");
+                PropertiesUtil.getProperty("site", "server-certificate-self-sign-host-name");
         final String selfSignedCertificateIpAddress =
-                PropertiesUtil.getProperty("site", "certificate-self-sign-ip-address");
+                PropertiesUtil.getProperty("site", "server-certificate-self-sign-ip-address");
 
         CertificateUtil.ensureServerCertificateExists(
                 selfSignedCertificateHostName,

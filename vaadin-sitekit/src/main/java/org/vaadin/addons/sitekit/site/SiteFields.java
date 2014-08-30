@@ -123,6 +123,7 @@ public final class SiteFields {
         SiteFields.add(Company.class, new FieldDescriptor("passwordValidityPeriodDays", "Password Validity Period", TextField.class, new StringToIntegerConverter(), 50, null, Integer.class, null,
                 false, true, true).addValidator(new IntegerRangeValidator("Invalid value", 0, 10)));
         SiteFields.add(Company.class, new FieldDescriptor("openIdLogin", "Open ID Login", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
+        SiteFields.add(Company.class, new FieldDescriptor("certificateLogin", "Certificate Login", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
         SiteFields.add(Company.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
                 true, true));
         SiteFields.add(Company.class, new FieldDescriptor("modified", "Modified", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null,
