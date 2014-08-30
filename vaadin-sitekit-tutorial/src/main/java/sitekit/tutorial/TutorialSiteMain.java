@@ -23,6 +23,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.vaadin.addons.sitekit.example.FeedbackViewlet;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
+import org.vaadin.addons.sitekit.jetty.DefaultJettyConfiguration;
 import org.vaadin.addons.sitekit.model.Feedback;
 import org.vaadin.addons.sitekit.site.*;
 import org.vaadin.addons.sitekit.util.PersistenceUtil;
@@ -32,108 +33,43 @@ import java.net.BindException;
 import java.net.URI;
 
 /**
- * Example site main class.
+ * Tutorial site main class.
  *
  * @author Tommi S.E. Laukkanen
  */
 public class TutorialSiteMain {
-    /** The logger. */
-    private static final Logger LOGGER = Logger.getLogger(TutorialSiteMain.class);
-    /** The properties category used in instantiating default services. */
-    private static final String PROPERTIES_CATEGORY = "site";
     /** The persistence unit to be used. */
     public static final String PERSISTENCE_UNIT = "site";
     /** The localization bundle. */
-    public static final String LOCALIZATION_BUNDLE = "site-localization";
+    public static final String LOCALIZATION_BUNDLE = "custom-localization";
 
     /**
-     * Main method for running DefaultSiteUI.
+     * Main method for tutorial site.
      *
      * @param args the commandline arguments
      * @throws Exception if exception occurs in jetty startup.
      */
     public static void main(final String[] args) throws Exception {
-        // Configure logging.
-        DOMConfigurator.configure("./log4j.xml");
-
-        // Configuration loading with HEROKU support.
-        final String environmentDatabaseString = System.getenv("DATABASE_URL");
-        if (StringUtils.isNotEmpty(environmentDatabaseString)) {
-            final URI dbUri = new URI(environmentDatabaseString);
-
-            final String dbUser = dbUri.getUserInfo().split(":")[0];
-            final String dbPassword = dbUri.getUserInfo().split(":")[1];
-            final String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
-
-            PropertiesUtil.setProperty(PROPERTIES_CATEGORY, "javax.persistence.jdbc.url", dbUrl);
-            PropertiesUtil.setProperty(PROPERTIES_CATEGORY, "javax.persistence.jdbc.user", dbUser);
-            PropertiesUtil.setProperty(PROPERTIES_CATEGORY, "javax.persistence.jdbc.password", dbPassword);
-            LOGGER.info("Environment variable defined database URL: " + environmentDatabaseString);
-        }
-
-        final String environmentPortString = System.getenv().get("PORT");
-        final int port;
-        if (StringUtils.isNotEmpty(environmentPortString)) {
-            port = Integer.parseInt(environmentPortString);
-            LOGGER.info("Environment variable defined HTTP port: " + port);
-        } else {
-            port = Integer.parseInt(PropertiesUtil.getProperty("site", "http-port"));
-            LOGGER.info("Configuration defined HTTP port: " + port);
-        }
-
-        // Configure Java Persistence API.
-        DefaultSiteUI.setEntityManagerFactory(PersistenceUtil.getEntityManagerFactory(PERSISTENCE_UNIT, PROPERTIES_CATEGORY));
-        // Configure security provider.
-        DefaultSiteUI.setSecurityProvider(new SecurityProviderSessionImpl("administrator", "user"));
-        // Configure content provider.
-        DefaultSiteUI.setContentProvider(new DefaultContentProvider());
-        // Configure localization provider.
-        DefaultSiteUI.setLocalizationProvider(new LocalizationProviderBundleImpl(LOCALIZATION_BUNDLE,
-                "custom-localization"));
+        // The default Jetty server configuration.
+        final Server server = DefaultJettyConfiguration.configureServer(PERSISTENCE_UNIT, LOCALIZATION_BUNDLE);
 
         // Get default site descriptor.
         final SiteDescriptor siteDescriptor = DefaultSiteUI.getContentProvider().getSiteDescriptor();
+
         // Describe custom view.
         final ViewDescriptor customDescriptor = new ViewDescriptor("custom", "Custom Title", DefaultView.class);
         customDescriptor.setViewletClass("content", HelloWorldViewlet.class);
         siteDescriptor.getViewDescriptors().add(customDescriptor);
+
         // Add custom view to navigation.
         final NavigationVersion navigationVersion = siteDescriptor.getNavigation().getProductionVersion();
         navigationVersion.setDefaultPageName("custom");
         navigationVersion.addRootPage(0, "custom");
 
-        // Configure Embedded jetty.
-        // -------------------------
-        final boolean developmentEnvironment = TutorialSiteMain.class.getClassLoader()
-                .getResource("webapp/").toExternalForm().startsWith("file:");
+        // Start server.
+        server.start();
 
-        final String webappUrl;
-        if (developmentEnvironment) {
-            webappUrl = DefaultSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm().replace(
-                    "target/classes", "src/main/resources");
-        } else {
-            webappUrl = DefaultSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm();
-        }
-
-        final Server server = new Server(port);
-
-        final WebAppContext context = new WebAppContext();
-        context.setContextPath("/");
-        context.setDescriptor(webappUrl + "/WEB-INF/web.xml");
-        context.setResourceBase(webappUrl);
-        context.setParentLoaderPriority(true);
-        if (developmentEnvironment) {
-            context.setInitParameter("cacheControl","no-cache");
-            context.setInitParameter("useFileMappedBuffer", "false");
-            context.setInitParameter("maxCachedFiles", "0");
-        }
-        server.setHandler(context);
-        try {
-            server.start();
-        } catch (final BindException e) {
-            LOGGER.warn("Jetty port (" + port + ") binding failed: " + e.getMessage());
-            return;
-        }
+        // Join this main thread to the Jetty server thread.
         server.join();
     }
 }

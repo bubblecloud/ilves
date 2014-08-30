@@ -15,50 +15,30 @@
  */
 package org.vaadin.addons.sitekit.viewlet.anonymous.login;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServletRequest;
-
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.Reindeer;
-import org.apache.directory.api.ldap.model.cursor.EntryCursor;
-import org.apache.directory.api.ldap.model.entry.Entry;
-import org.apache.directory.api.ldap.model.exception.LdapException;
-import org.apache.directory.api.ldap.model.message.SearchScope;
-import org.apache.directory.ldap.client.api.LdapConnection;
-import org.apache.directory.ldap.client.api.LdapNetworkConnection;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.vaadin.addons.sitekit.dao.UserDirectoryDao;
-import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
-import org.vaadin.addons.sitekit.model.UserDirectory;
-import org.vaadin.addons.sitekit.module.audit.AuditService;
-import org.vaadin.addons.sitekit.site.ProcessingContext;
-import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
-import org.vaadin.addons.sitekit.util.CidrUtil;
-import org.vaadin.addons.sitekit.util.OpenIdUtil;
-import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
-import org.vaadin.addons.sitekit.util.StringUtil;
-import org.apache.log4j.Logger;
-
-import org.vaadin.addons.sitekit.dao.UserDao;
-import org.vaadin.addons.sitekit.model.Company;
-import org.vaadin.addons.sitekit.model.Group;
-import org.vaadin.addons.sitekit.model.User;
-
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.LoginForm.LoginEvent;
+import com.vaadin.ui.themes.Reindeer;
+import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
+import org.vaadin.addons.sitekit.model.Company;
+import org.vaadin.addons.sitekit.model.Group;
+import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
+import org.vaadin.addons.sitekit.util.OpenIdUtil;
+import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
+
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Login Flowlet.

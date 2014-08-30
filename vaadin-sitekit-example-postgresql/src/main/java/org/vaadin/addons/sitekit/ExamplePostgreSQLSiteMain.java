@@ -15,14 +15,7 @@
  */
 package org.vaadin.addons.sitekit;
 
-import org.eclipse.jetty.server.Server;
 import org.vaadin.addons.sitekit.example.ExampleSiteMain;
-import org.vaadin.addons.sitekit.example.FeedbackViewlet;
-import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
-import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
-import org.vaadin.addons.sitekit.model.Feedback;
-import org.vaadin.addons.sitekit.server.DefaultJettyServer;
-import org.vaadin.addons.sitekit.site.*;
 
 /**
  * Example site main class with PostgreSQL configuration.

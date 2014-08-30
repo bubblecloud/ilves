@@ -19,7 +19,7 @@ import org.eclipse.jetty.server.*;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.model.Feedback;
-import org.vaadin.addons.sitekit.server.DefaultJettyServer;
+import org.vaadin.addons.sitekit.jetty.DefaultJettyConfiguration;
 import org.vaadin.addons.sitekit.site.*;
 
 /**
@@ -31,6 +31,10 @@ import org.vaadin.addons.sitekit.site.*;
  * @author Tommi S.E. Laukkanen
  */
 public class ExampleSiteMain {
+    /** The persistence unit to be used. */
+    public static final String PERSISTENCE_UNIT = "site";
+    /** The localization bundle. */
+    public static final String LOCALIZATION_BUNDLE = "site-localization";
 
     /**
      * Main method for running DefaultSiteUI.
@@ -38,9 +42,8 @@ public class ExampleSiteMain {
      * @throws Exception if exception occurs in jetty startup.
      */
     public static void main(final String[] args) throws Exception {
-        final Server server = DefaultJettyServer.startServer();
-
-        if (server == null) return;
+        // The default Jetty server configuration.
+        final Server server = DefaultJettyConfiguration.configureServer(PERSISTENCE_UNIT, LOCALIZATION_BUNDLE);
 
         // Add feedback view and set it default.
         // -----------------------------------
@@ -63,6 +66,8 @@ public class ExampleSiteMain {
                 "organizationName", "organizationSize"
         });
         FieldSetDescriptorRegister.registerFieldSetDescriptor("feedback", feedbackFieldSetDescriptor);
+
+        server.start();
 
         server.join();
     }

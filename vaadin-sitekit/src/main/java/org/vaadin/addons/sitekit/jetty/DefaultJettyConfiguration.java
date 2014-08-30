@@ -1,4 +1,4 @@
-package org.vaadin.addons.sitekit.server;
+package org.vaadin.addons.sitekit.jetty;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -9,33 +9,32 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.vaadin.addons.sitekit.module.audit.AuditModule;
 import org.vaadin.addons.sitekit.module.content.ContentModule;
 import org.vaadin.addons.sitekit.site.*;
-import org.vaadin.addons.sitekit.util.JettyUtil;
 import org.vaadin.addons.sitekit.util.PersistenceUtil;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
 
-import java.net.BindException;
 import java.net.URI;
 import java.security.Security;
 
 /**
  * Created by tlaukkan on 8/29/2014.
  */
-public class DefaultJettyServer {
+public class DefaultJettyConfiguration {
     /** The logger. */
-    private static final Logger LOGGER = Logger.getLogger(DefaultJettyServer.class);
-    /** The properties category used in instantiating default services. */
-    private static final String PROPERTIES_CATEGORY = "site";
-    /** The persistence unit to be used. */
-    public static final String PERSISTENCE_UNIT = "site";
-    /** The localization bundle. */
-    public static final String LOCALIZATION_BUNDLE = "site-localization";
+    private static final Logger LOGGER = Logger.getLogger(DefaultJettyConfiguration.class);
 
     /**
      * Starts Jetty server with DefaultSiteUI.
-     * @return
-     * @throws Exception
+     *
+     * @param persistenceUnit the persistence unit
+     * @param localizationBundle the localization bundle
+     * @return the server.
+     *
+     * @throws Exception if exception occurs in server construction
      */
-    public static Server startServer() throws Exception {
+    public static Server configureServer(final String persistenceUnit,
+                                         final String localizationBundle) throws Exception {
+        final String propertiesCategory = "site";
+
         // Configure security provider.
         Security.addProvider(new BouncyCastleProvider());
 
@@ -51,9 +50,9 @@ public class DefaultJettyServer {
             final String dbPassword = dbUri.getUserInfo().split(":")[1];
             final String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
 
-            PropertiesUtil.setProperty(PROPERTIES_CATEGORY, "javax.persistence.jdbc.url", dbUrl);
-            PropertiesUtil.setProperty(PROPERTIES_CATEGORY, "javax.persistence.jdbc.user", dbUser);
-            PropertiesUtil.setProperty(PROPERTIES_CATEGORY, "javax.persistence.jdbc.password", dbPassword);
+            PropertiesUtil.setProperty(propertiesCategory, "javax.persistence.jdbc.url", dbUrl);
+            PropertiesUtil.setProperty(propertiesCategory, "javax.persistence.jdbc.user", dbUser);
+            PropertiesUtil.setProperty(propertiesCategory, "javax.persistence.jdbc.password", dbPassword);
             LOGGER.info("Environment variable defined database URL: " + environmentDatabaseString);
         }
 
@@ -71,7 +70,7 @@ public class DefaultJettyServer {
         // Configure Java Persistence API.
         // -------------------------------
         DefaultSiteUI.setEntityManagerFactory(PersistenceUtil.getEntityManagerFactory(
-                PERSISTENCE_UNIT, PROPERTIES_CATEGORY));
+                persistenceUnit, propertiesCategory));
 
         // Configure providers.
         // --------------------
@@ -80,15 +79,19 @@ public class DefaultJettyServer {
         // Configure content provider.
         DefaultSiteUI.setContentProvider(new DefaultContentProvider());
         // Configure localization provider.
-        DefaultSiteUI.setLocalizationProvider(new LocalizationProviderBundleImpl(LOCALIZATION_BUNDLE));
-
+        if ("site-localization".equals(localizationBundle) || localizationBundle == null) {
+            DefaultSiteUI.setLocalizationProvider(new LocalizationProviderBundleImpl("site-localization"));
+        } else {
+            DefaultSiteUI.setLocalizationProvider(new LocalizationProviderBundleImpl("site-localization",
+                    localizationBundle));
+        }
         // Initialize modules
         SiteModuleManager.initializeModule(AuditModule.class);
         SiteModuleManager.initializeModule(ContentModule.class);
 
         // Configure Embedded jetty.
         // -------------------------
-        final boolean developmentEnvironment = DefaultJettyServer.class.getClassLoader()
+        final boolean developmentEnvironment = DefaultJettyConfiguration.class.getClassLoader()
                 .getResource("webapp/").toExternalForm().startsWith("file:");
 
         final String webappUrl;
@@ -119,12 +122,6 @@ public class DefaultJettyServer {
 
         server.setHandler(context);
 
-        try {
-            server.start();
-        } catch (final BindException e) {
-            LOGGER.warn("Jetty port (" + httpPort + ") binding failed: " + e.getMessage());
-            return null;
-        }
         return server;
     }
 

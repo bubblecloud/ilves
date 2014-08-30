@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.util;
+package org.vaadin.addons.sitekit.jetty;
 
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.vaadin.addons.sitekit.cache.UserClientCertificateCache;
 import org.vaadin.addons.sitekit.site.DefaultSiteUI;
+import org.vaadin.addons.sitekit.util.CertificateUtil;
+import org.vaadin.addons.sitekit.util.PropertiesUtil;
 
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
