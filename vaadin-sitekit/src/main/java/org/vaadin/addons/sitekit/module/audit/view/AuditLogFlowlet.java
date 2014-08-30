@@ -110,6 +110,9 @@ public final class AuditLogFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (entityGrid.getSelectedItemId() == null) {
+                    return;
+                }
                 final AuditLogEntry entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
                 final AuditLogEntryFlowlet contentView = getFlow().forward(AuditLogEntryFlowlet.class);
                 contentView.edit(entity, false);
