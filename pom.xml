@@ -7,9 +7,9 @@
     <packaging>pom</packaging>
 
     <scm>
-        <url>https://github.com/tlaukkan/ilves.git</url>
-        <connection>scm:git:git://github.com:tlaukkan/ilves.git</connection>
-        <developerConnection>scm:git:git@github.com:tlaukkan/ilves.git</developerConnection>
+        <url>https://github.com/bubblecloud/ilves.git</url>
+        <connection>scm:git:git://github.com:bubblecloud/ilves.git</connection>
+        <developerConnection>scm:git:git@github.com:bubblecloud/ilves.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
