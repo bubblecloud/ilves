@@ -19,6 +19,7 @@ import java.util.LinkedList;
 
 import org.apache.commons.collections.MapIterator;
 import org.apache.commons.collections.map.LRUMap;
+import org.vaadin.addons.sitekit.model.Group;
 
 /**
  * Simple in memory cache.
@@ -143,6 +144,17 @@ public class InMemoryCache<K, T> {
             synchronized (cacheMap) {
                 cacheMap.remove(key);
             }
+        }
+    }
+
+    /**
+     * Checks whether cache contains given key.
+     * @param key the key
+     * @return true if key is contained in the cache
+     */
+    public boolean containsKey(K key) {
+        synchronized (cacheMap) {
+            return cacheMap.containsKey(key);
         }
     }
 

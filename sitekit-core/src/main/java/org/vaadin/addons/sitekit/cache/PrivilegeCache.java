@@ -30,11 +30,12 @@ import java.util.*;
  */
 public class PrivilegeCache {
     /** The cached group privileges. */
-    private static Map<Company, Map<Group, Map<String, Set<String>>>> groupPrivileges =
-            new HashMap<Company, Map<Group, Map<String, Set<String>>>>();
+    private static Map<Company, InMemoryCache<Group, Map<String, Set<String>>>> groupPrivileges =
+            new HashMap<Company, InMemoryCache<Group, Map<String, Set<String>>>>();
+
     /** The cached user privileges. */
-    private static Map<Company, Map<User, Map<String, Set<String>>>> userPrivileges =
-            new HashMap<Company, Map<User, Map<String, Set<String>>>>();
+    private static Map<Company, InMemoryCache<User, Map<String, Set<String>>>> userPrivileges =
+            new HashMap<Company, InMemoryCache<User, Map<String, Set<String>>>>();
 
     public static synchronized void flush(final Company company) {
         groupPrivileges.remove(company);
@@ -70,7 +71,9 @@ public class PrivilegeCache {
     public static  synchronized boolean hasPrivilege(final EntityManager entityManager, final Company company,
                                                      final Group group, final String key, final String dataId) {
         if (!groupPrivileges.containsKey(company) || !userPrivileges.containsKey(company)) {
-            groupPrivileges.put(company, new HashMap<Group, Map<String, Set<String>>>());
+            groupPrivileges.put(company, new InMemoryCache<Group, Map<String, Set<String>>>(
+                    5 * 60 * 1000, 60 * 1000, 100
+            ));
         }
         if (!groupPrivileges.get(company).containsKey(group)) {
             load(entityManager, company, group);
@@ -85,7 +88,9 @@ public class PrivilegeCache {
     public static  synchronized boolean hasPrivilege(final EntityManager entityManager, final Company company,
                                                      final User user, final String key, final String dataId) {
         if (!userPrivileges.containsKey(company) || !userPrivileges.containsKey(company)) {
-            userPrivileges.put(company, new HashMap<User, Map<String, Set<String>>>());
+            userPrivileges.put(company, new InMemoryCache<User, Map<String, Set<String>>>(
+                    5 * 60 * 1000, 60 * 1000, 1000
+            ));
         }
         if (!userPrivileges.get(company).containsKey(user)) {
             load(entityManager, company, user);

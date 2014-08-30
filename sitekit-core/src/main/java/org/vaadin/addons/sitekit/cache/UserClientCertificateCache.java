@@ -47,16 +47,17 @@ public class UserClientCertificateCache {
     /**
      * The certificate cache.
      */
-    private static InMemoryCache<Certificate, User> certificateCache;
+    private static InMemoryCache<Certificate, User> certificateCache = new InMemoryCache<Certificate, User>(
+            10 * 60 * 1000, 60 * 1000, 1000);
+
     /**
      * The blacklisted certificate cache.
      */
-    private static InMemoryCache<Certificate, Certificate> blacklistCache;
+    private static InMemoryCache<Certificate, Certificate> blacklistCache = new InMemoryCache<Certificate, Certificate>(
+            2 * 60 * 1000, 30 * 1000, 1000);
 
     public static void init(final EntityManagerFactory entityManagerFactory) {
         UserClientCertificateCache.entityManagerFactory = entityManagerFactory;
-        certificateCache = new InMemoryCache<Certificate, User>(10 * 60 * 1000, 60 * 1000, 1000);
-        blacklistCache = new InMemoryCache<Certificate, Certificate>(2 * 60 * 1000, 30 * 1000, 1000);
     }
 
     /**
