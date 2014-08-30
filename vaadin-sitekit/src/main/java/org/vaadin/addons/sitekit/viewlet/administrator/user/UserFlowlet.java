@@ -209,6 +209,9 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (childGrid.getSelectedItemId() == null) {
+                    return;
+                }
                 childContainer.removeItem(childGrid.getSelectedItemId());
                 childContainer.commit();
             }

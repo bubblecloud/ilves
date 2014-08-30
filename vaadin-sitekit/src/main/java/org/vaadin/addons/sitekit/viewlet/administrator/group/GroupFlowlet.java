@@ -198,6 +198,9 @@ public final class GroupFlowlet extends AbstractFlowlet implements ValidatingEdi
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (childGrid.getSelectedItemId() == null) {
+                    return;
+                }
                 childContainer.removeItem(childGrid.getSelectedItemId());
                 childContainer.commit();
             }

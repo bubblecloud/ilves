@@ -20,6 +20,7 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
+import org.apache.log4j.Logger;
 import org.markdown4j.Markdown4jProcessor;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
 import org.vaadin.addons.sitekit.site.SiteException;
@@ -31,6 +32,8 @@ import java.io.IOException;
  * @author Tommi S.E. Laukkanen
  */
 public final class RenderViewlet extends AbstractViewlet {
+    /** The logger. */
+    private static final Logger LOGGER = Logger.getLogger(RenderViewlet.class);
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +42,9 @@ public final class RenderViewlet extends AbstractViewlet {
         super.attach();
         final String html;
         try {
+            final long startTimeMillis = System.currentTimeMillis();
             html = new Markdown4jProcessor().process((String) getViewletDescriptor().getConfiguration());
+            LOGGER.debug("Mark4j processing took: " + (System.currentTimeMillis() -  startTimeMillis) + " ms.");
         } catch (IOException e) {
             throw new SiteException("Error processing markdown.", e);
         }

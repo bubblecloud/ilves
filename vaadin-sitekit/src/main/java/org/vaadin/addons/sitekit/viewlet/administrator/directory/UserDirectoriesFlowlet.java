@@ -142,6 +142,9 @@ public final class UserDirectoriesFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (entityGrid.getSelectedItemId() == null) {
+                    return;
+                }
                 final UserDirectory entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
                 final UserDirectoryFlowlet userDirectoryView = getFlow().forward(UserDirectoryFlowlet.class);
                 userDirectoryView.edit(entity, false);
@@ -158,6 +161,9 @@ public final class UserDirectoriesFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (entityGrid.getSelectedItemId() == null) {
+                    return;
+                }
                 entityContainer.removeItem(entityGrid.getSelectedItemId());
                 entityContainer.commit();
             }

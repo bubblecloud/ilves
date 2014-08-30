@@ -139,6 +139,9 @@ public final class CustomersFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (entityGrid.getSelectedItemId() == null) {
+                    return;
+                }
                 final Customer entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
                 final CustomerFlowlet customerView = getFlow().forward(CustomerFlowlet.class);
                 customerView.edit(entity, false);
@@ -155,6 +158,9 @@ public final class CustomersFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (entityGrid.getSelectedItemId() == null) {
+                    return;
+                }
                 entityContainer.removeItem(entityGrid.getSelectedItemId());
                 entityContainer.commit();
             }

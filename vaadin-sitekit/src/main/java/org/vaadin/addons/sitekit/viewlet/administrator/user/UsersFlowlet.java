@@ -134,6 +134,9 @@ public final class UsersFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (grid.getSelectedItemId() == null) {
+                    return;
+                }
                 final User entity = container.getEntity(grid.getSelectedItemId());
                 final UserFlowlet userView = getFlow().getFlowlet(UserFlowlet.class);
                 userView.edit(entity, false);
@@ -149,6 +152,9 @@ public final class UsersFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (grid.getSelectedItemId() == null) {
+                    return;
+                }
                 final User entity = container.getEntity(grid.getSelectedItemId());
 
                 final List<Group> groups = UserDao.getUserGroups(entityManager,
@@ -177,6 +183,9 @@ public final class UsersFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (grid.getSelectedItemId() == null) {
+                    return;
+                }
                 final User user = container.getEntity(grid.getSelectedItemId());
                 user.setLockedOut(true);
                 UserDao.updateUser(entityManager, entityManager.merge(user));
@@ -193,6 +202,9 @@ public final class UsersFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (grid.getSelectedItemId() == null) {
+                    return;
+                }
                 final User user = container.getEntity(grid.getSelectedItemId());
                 user.setLockedOut(false);
                 user.setFailedLoginCount(0);

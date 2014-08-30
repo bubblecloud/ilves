@@ -129,6 +129,9 @@ public final class GroupsFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (grid.getSelectedItemId() == null) {
+                    return;
+                }
                 final Group entity = container.getEntity(grid.getSelectedItemId());
                 final GroupFlowlet groupView = getFlow().forward(GroupFlowlet.class);
                 groupView.edit(entity, false);
@@ -143,6 +146,9 @@ public final class GroupsFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (grid.getSelectedItemId() == null) {
+                    return;
+                }
                 final Group entity = container.getEntity(grid.getSelectedItemId());
                 final List<User> users = UserDao.getGroupMembers(entityManager,
                         (Company) getSite().getSiteContext().getObject(Company.class), entity);

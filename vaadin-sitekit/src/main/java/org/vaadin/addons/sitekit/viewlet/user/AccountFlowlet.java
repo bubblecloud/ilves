@@ -188,6 +188,9 @@ public final class AccountFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (entityGrid.getSelectedItemId() == null) {
+                    return;
+                }
                 final Customer entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
                 final CustomerFlowlet customerView = getFlow().forward(CustomerFlowlet.class);
                 customerView.edit(entity, false);
@@ -204,6 +207,9 @@ public final class AccountFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (entityGrid.getSelectedItemId() == null) {
+                    return;
+                }
                 final Customer entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
                 final GroupFlowlet view = getFlow().forward(GroupFlowlet.class);
                 view.edit(entity.getMemberGroup(), false);
@@ -220,6 +226,9 @@ public final class AccountFlowlet extends AbstractFlowlet {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                if (entityGrid.getSelectedItemId() == null) {
+                    return;
+                }
                 final Customer entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
                 final GroupFlowlet view = getFlow().forward(GroupFlowlet.class);
                 view.edit(entity.getAdminGroup(), false);
