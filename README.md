@@ -1,8 +1,30 @@
 Ilves
 =====
 
-Ilves simplifies web site creation by providing functionality for login (OpenID, LDAP and password), registration,
-virtual hosting and business web sites.
+Ilves enables lean Java web development.
+
+Ilves accomplishes this by removing separate web servers, slow code/build/deploy cycles and complicated development
+frameworks from the equation.
+
+Ilves provides out of box support for virtual hosting, privilege framework, TSL two way authentication, LDAP,
+OpenID and traditional full featured password authentication. Administration user interfaces are provided.
+
+All aspects of Ilves can be customized including navigation, HTML layouts, css, icons, database schema, localizations,
+ user interfaces and configuration files. See tutorials:
+ 
+https://github.com/tlaukkan/vaadin-sitekit/wiki
+
+Stack
+-----
+
+Ilves is built upon Java 7, Vaadin framework, embedded Jetty, Eclipselink and Liquibase.
+
+Ilves supports the following databases: HSQL, PostgreSQL and MySQL.
+
+Seed Project
+------------
+
+https://github.com/bubblecloud/ilves-seed
 
 Wiki
 ----
@@ -24,7 +46,6 @@ Requirements
 
 1. Java 7
 2. Maven 3
-3. Postgresql or MySQL (JPA, Eclipse Link and Liquibase used but other databases not tested.)
 
 Usage
 -----
