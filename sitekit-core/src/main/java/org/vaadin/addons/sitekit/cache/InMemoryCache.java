@@ -1,64 +1,94 @@
+/**
+ * Copyright 2013 Tommi S.E. Laukkanen
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.vaadin.addons.sitekit.cache;
- 
-import java.util.ArrayList;
+
+import java.util.LinkedList;
+
 import org.apache.commons.collections.MapIterator;
 import org.apache.commons.collections.map.LRUMap;
- 
+
 /**
  * Simple in memory cache.
- * @author Crunchify.com
+ *
  * @author Tommi S.E. Laukkanen
  */
- 
+
 public class InMemoryCache<K, T> {
- 
-    private long timeToLive;
-    private LRUMap cacheMap;
- 
-    protected class CacheObject {
-        public long lastAccessed = System.currentTimeMillis();
-        public T value;
- 
-        protected CacheObject(T value) {
-            this.value = value;
-        }
-    }
- 
-    public InMemoryCache(final long timeToLiveMillis, final long cleanupIntervalMillis, final int maxItems) {
-        this.timeToLive = timeToLiveMillis;
- 
+    /**
+     * The time to live for all cached object in ms.
+     */
+    private final long timeToLiveMillis;
+    /**
+     * The internal map containing cached objects.
+     */
+    private final LRUMap cacheMap;
+
+    /**
+     * Constructor defining time to live, cache evict expired intervals and maximum cached items.
+     *
+     * @param timeToLiveMillis      the time to live in milliseconds
+     * @param evictIntervalMillis the clean up interval in milliseconds
+     * @param maxItems              the maximum number of cached items.
+     */
+    public InMemoryCache(final long timeToLiveMillis, final long evictIntervalMillis, final int maxItems) {
+        this.timeToLiveMillis = timeToLiveMillis;
+
         cacheMap = new LRUMap(maxItems);
- 
-        if (this.timeToLive > 0 && cleanupIntervalMillis > 0) {
- 
-            Thread t = new Thread(new Runnable() {
+
+        if (this.timeToLiveMillis > 0 && evictIntervalMillis > 0) {
+
+            final Thread evictThread = new Thread(new Runnable() {
                 public void run() {
                     while (true) {
                         try {
-                            Thread.sleep(cleanupIntervalMillis);
-                        } catch (InterruptedException ex) {
+                            Thread.sleep(evictIntervalMillis);
+                        } catch (final InterruptedException e) {
                         }
-                        cleanup();
+                        evictExpired();
                     }
                 }
             });
- 
-            t.setDaemon(true);
-            t.start();
+
+            evictThread.setDaemon(true);
+            evictThread.start();
         }
     }
- 
+
+    /**
+     * Puts object in cache.
+     *
+     * @param key   the key
+     * @param value the value
+     */
     public void put(K key, T value) {
         synchronized (cacheMap) {
             cacheMap.put(key, new CacheObject(value));
         }
     }
- 
-    @SuppressWarnings("unchecked")
+
+    /**
+     * Gets object from cache.
+     *
+     * @param key the key
+     * @return the cached object or null.
+     */
     public T get(K key) {
         synchronized (cacheMap) {
             CacheObject c = (CacheObject) cacheMap.get(key);
- 
+
             if (c == null)
                 return null;
             else {
@@ -67,48 +97,77 @@ public class InMemoryCache<K, T> {
             }
         }
     }
- 
+
+    /**
+     * Removes object from cache.
+     *
+     * @param key the key
+     */
     public void remove(K key) {
         synchronized (cacheMap) {
             cacheMap.remove(key);
         }
     }
- 
+
+    /**
+     * Gets cache size.
+     *
+     * @return the size
+     */
     public int size() {
         synchronized (cacheMap) {
             return cacheMap.size();
         }
     }
- 
-    @SuppressWarnings("unchecked")
-    public void cleanup() {
- 
-        long now = System.currentTimeMillis();
-        ArrayList<K> deleteKey = null;
- 
+
+    /**
+     * Evicts expired objects from cache.
+     */
+    public void evictExpired() {
+        final long now = System.currentTimeMillis();
+        final LinkedList<K> expiredKeys = new LinkedList<K>();
+
         synchronized (cacheMap) {
-            MapIterator itr = cacheMap.mapIterator();
- 
-            deleteKey = new ArrayList<K>((cacheMap.size() / 2) + 1);
-            K key = null;
-            CacheObject c = null;
- 
+            final MapIterator itr = cacheMap.mapIterator();
             while (itr.hasNext()) {
-                key = (K) itr.next();
-                c = (CacheObject) itr.getValue();
- 
-                if (c != null && (now > (timeToLive + c.lastAccessed))) {
-                    deleteKey.add(key);
+                final K key = (K) itr.next();
+                final CacheObject cacheObject = (CacheObject) itr.getValue();
+
+                if (cacheObject != null && (now > (timeToLiveMillis + cacheObject.lastAccessed))) {
+                    expiredKeys.add(key);
                 }
             }
         }
- 
-        for (K key : deleteKey) {
+
+        for (K key : expiredKeys) {
             synchronized (cacheMap) {
                 cacheMap.remove(key);
             }
- 
-            Thread.yield();
         }
     }
+
+    /**
+     * The cache object containing lastAccess and value.
+     */
+    private class CacheObject {
+        /**
+         * The last access time.
+         */
+        public long lastAccessed = System.currentTimeMillis();
+        /**
+         * The cached value.
+         */
+        public final T value;
+
+        /**
+         * Constructor which sets the cached value.
+         * @param value the cached value
+         */
+        private CacheObject(final T value) {
+            this.value = value;
+        }
+
+
+    }
+
 }
