@@ -17,7 +17,7 @@ https://github.com/tlaukkan/vaadin-sitekit/wiki
 Stack
 -----
 
-Ilves is built upon Java 7, Vaadin framework, embedded Jetty, Eclipselink and Liquibase.
+Ilves is built upon Java 7, Vaadin framework, Sass, embedded Jetty, Eclipselink and Liquibase.
 
 Ilves supports the following databases: HSQL, PostgreSQL and MySQL.
 

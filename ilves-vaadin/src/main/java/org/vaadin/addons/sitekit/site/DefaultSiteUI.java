@@ -37,7 +37,7 @@ import java.security.cert.X509Certificate;
  * @author Tommi S.E. Laukkanen
  */
 @SuppressWarnings({ "serial", "unchecked" })
-@Theme("sitekit")
+@Theme("ilves")
 public final class DefaultSiteUI extends AbstractSiteUI {
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(DefaultSiteUI.class);
