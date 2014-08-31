@@ -10,9 +10,9 @@ Ilves provides out of box support for virtual hosting, privilege framework, TSL 
 OpenID and traditional full featured password authentication. Administration user interfaces are provided.
 
 All aspects of Ilves can be customized including navigation, HTML layouts, css, icons, database schema, localizations,
- user interfaces and configuration files. See tutorials:
+ user interfaces and configuration files. See tutorials at Wiki:
  
-https://github.com/tlaukkan/vaadin-sitekit/wiki
+https://github.com/bubblecloud/ilves/wiki
 
 Stack
 -----
@@ -34,7 +34,7 @@ https://github.com/bubblecloud/ilves-seed
 Wiki
 ----
 
-https://github.com/tlaukkan/vaadin-sitekit/wiki
+https://github.com/bubblecloud/ilves/wiki
 
 Screenshots
 -----------
@@ -55,4 +55,4 @@ Requirements
 Usage
 -----
 
-See: https://github.com/tlaukkan/vaadin-sitekit/wiki/5-Minute-Tutorial
+See: https://github.com/bubblecloud/ilves/wiki/5-Minute-Tutorial
