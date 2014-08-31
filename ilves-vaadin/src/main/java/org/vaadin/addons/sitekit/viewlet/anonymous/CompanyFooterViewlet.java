@@ -39,6 +39,7 @@ public final class CompanyFooterViewlet extends AbstractViewlet {
      */
     public CompanyFooterViewlet() {
         companyLabel = new Label();
+        companyLabel.setStyleName("company-footer-label");
         companyLabel.setValue("-");
         this.setCompositionRoot(companyLabel);
     }
