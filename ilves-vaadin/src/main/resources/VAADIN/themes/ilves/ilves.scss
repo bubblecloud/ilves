@@ -21,93 +21,81 @@ $footer-color: #F0F3F5;
     background: $application-background-color;
   }
 
-  div#shield-header {
+  div#ilves-header-wrapper {
     background: $header-background-color;
     height: 52px
   }
 
-  div#shield-header-margin {
+  div#ilves-header {
     width: 1000px;
     margin: 0 auto;
     height: 52px
   }
 
-  div#shield-logo {
+  div#ilves-logo-wrapper {
     background: $logo-background-color;
     margin: 6px 0px 6px 0px;
     border: 0px;
     border-radius: 10px;
-  }
-
-  div#shield-logo {
     float: left;
     width: 40px;
     height: 40px
   }
 
-  div#shield-logo-margin {
+  div#ilves-logo {
     margin-top: 4px
   }
 
-  div#shield-profile {
+  div#ilves-profile-wrapper {
     background: $profile-background-color;
     margin: 6px 0px 6px 0px;
     border: 0px;
     border-radius: 10px;
-  }
-
-  div#shield-profile {
     float: right;
     width: 40px;
     height: 40px
   }
 
-  div#shield-profile-margin {
+  div#ilves-profile {
     margin: 4px 4px 4px 4px
   }
 
-  div#shield-navigation {
+  div#ilves-navigation-wrapper {
     background: $navigation-background-color;
     margin: 6px 0px 6px 6px;
     border: 0px;
     border-radius: 10px;
-  }
-
-  div#shield-navigation {
     float: left;
     width: 908px;
     height: 40px;
     font-weight: bold
   }
 
-  div#shield-navigation-margin {
+  div#ilves-navigation {
     margin: 8px
   }
 
-  div#shield-container {
+  div#ilves-container {
     width: 1000px;
     margin: 0 auto
   }
 
-  div#shield-content-wrapper {
+  div#ilves-content-wrapper {
     margin: 12px 0px 12px 0px;
   }
 
-  div#shield-content {
+  div#ilves-content {
     padding: 8px;
   }
 
-  div#shield-content {
+  div#ilves-content {
     background: $content-color;
     border: 0px;
     border-radius: 8px;
   }
 
-  div#shield-footer {
+  div#ilves-footer-wrapper {
     background: $footer-color;
-  }
-
-  div#shield-footer {
     clear: both;
     width: 100%;
     min-height: 20px;
@@ -115,7 +103,7 @@ $footer-color: #F0F3F5;
     border-radius: 10px;
   }
 
-  div#shield-footer-content {
+  div#ilves-footer {
     padding: 8px;
   }
 
