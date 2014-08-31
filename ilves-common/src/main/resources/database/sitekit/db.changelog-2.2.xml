@@ -132,5 +132,47 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet author="tlaukkan" id="5df89e10-311b-11e4-8c21-0800200c9a66">
+        <createTable tableName="asset">
+            <column name="assetid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_companyid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="extension" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="size" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="data" type="BLOB">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="assetid" constraintName="asset_pkey" tableName="asset"/>
+        <addForeignKeyConstraint baseColumnNames="owner_companyid" baseTableName="asset" constraintName="fk_asset_owner_companyid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="companyid" referencedTableName="company"/>
+        <createIndex indexName="unq_asset_0" tableName="asset" unique="true">
+            <column name="owner_companyid"/>
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>
 

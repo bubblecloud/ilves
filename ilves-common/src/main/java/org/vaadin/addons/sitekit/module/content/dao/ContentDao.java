@@ -15,12 +15,8 @@
  */
 package org.vaadin.addons.sitekit.module.content.dao;
 
-import com.vaadin.ui.ComboBox;
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.model.Company;
-import org.vaadin.addons.sitekit.model.Group;
-import org.vaadin.addons.sitekit.model.GroupMember;
-import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.module.content.model.Content;
 
 import javax.persistence.EntityManager;
@@ -38,7 +34,7 @@ import java.util.List;
 public class ContentDao {
 
     /** The logger. */
-    private static final Logger LOG = Logger.getLogger(ContentDao.class);
+    private static final Logger LOGGER = Logger.getLogger(ContentDao.class);
 
     /**
      * Adds new content to database.
@@ -57,7 +53,7 @@ public class ContentDao {
             entityManager.persist(content);
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in add content.", e);
+            LOGGER.error("Error in add content.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }

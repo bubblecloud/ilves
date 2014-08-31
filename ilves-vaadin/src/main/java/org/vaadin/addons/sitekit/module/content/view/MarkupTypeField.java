@@ -16,15 +16,7 @@
 package org.vaadin.addons.sitekit.module.content.view;
 
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Select;
-import org.vaadin.addons.sitekit.model.Customer;
 import org.vaadin.addons.sitekit.module.content.model.MarkupType;
-import org.vaadin.addons.sitekit.site.AbstractSiteUI;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 
 /**
  * @author Tommi S.E. Laukkanen

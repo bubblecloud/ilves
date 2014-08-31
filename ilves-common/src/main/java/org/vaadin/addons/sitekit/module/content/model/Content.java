@@ -27,7 +27,7 @@ import java.util.Date;
  * @author Tommi S.E. Laukkanen
  */
 @Entity
-@Table(name = "content", uniqueConstraints = { @UniqueConstraint(columnNames = { "owner_companyid", "name" }) })
+@Table(name = "content", uniqueConstraints = { @UniqueConstraint(columnNames = { "owner_companyid", "page" }) })
 public final class Content implements Serializable {
     /** Java serialization version UID. */
     private static final long serialVersionUID = 1L;
