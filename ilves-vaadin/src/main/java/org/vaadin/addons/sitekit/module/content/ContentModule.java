@@ -100,12 +100,15 @@ public class ContentModule implements SiteModule {
         assetFields.getFieldDescriptor("modified").setReadOnly(true);
         assetFields.getFieldDescriptor("modified").setCollapsed(true);
 
+        assetFields.getFieldDescriptor("name").setReadOnly(true);
         assetFields.getFieldDescriptor("name").setRequired(true);
+        assetFields.getFieldDescriptor("extension").setReadOnly(true);
         assetFields.getFieldDescriptor("extension").setRequired(true);
+        assetFields.getFieldDescriptor("type").setReadOnly(true);
         assetFields.getFieldDescriptor("type").setRequired(true);
         assetFields.getFieldDescriptor("size").setReadOnly(true);
         assetFields.getFieldDescriptor("size").setRequired(true);
-        assetFields.getFieldDescriptor("size").setDefaultValue(0);
+       // assetFields.getFieldDescriptor("size").setDefaultValue(0);
         assetFields.getFieldDescriptor("size").setConverter(new StringToIntegerConverter());
         assetFields.getFieldDescriptor("description").setRequired(false);
 

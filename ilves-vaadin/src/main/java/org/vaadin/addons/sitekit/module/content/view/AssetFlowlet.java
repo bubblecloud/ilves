@@ -16,27 +16,33 @@
 package org.vaadin.addons.sitekit.module.content.view;
 
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
+import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.module.content.dao.ContentDao;
 import org.vaadin.addons.sitekit.module.content.model.Asset;
+import org.vaadin.addons.sitekit.site.SiteException;
+import org.vaadin.addons.sitekit.util.PropertiesUtil;
 import org.vaadin.addons.sitekit.viewlet.user.privilege.PrivilegesFlowlet;
+import org.yaml.snakeyaml.introspector.PropertyUtils;
 
 import javax.persistence.EntityManager;
+import java.io.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 /**
  * Asset edit flowlet.
  * @author Tommi S.E. Laukkanen
  */
 public final class AssetFlowlet extends AbstractFlowlet implements ValidatingEditorStateListener {
+    /** The logger. */
+    private static final Logger LOGGER = Logger.getLogger(AssetFlowlet.class);
 
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
@@ -53,6 +59,7 @@ public final class AssetFlowlet extends AbstractFlowlet implements ValidatingEdi
     /** The discard button. */
     private Button discardButton;
     private Button editPrivilegesButton;
+    private File temporaryFile;
 
     @Override
     public String getFlowletKey() {
@@ -73,7 +80,7 @@ public final class AssetFlowlet extends AbstractFlowlet implements ValidatingEdi
     public void initialize() {
         entityManager = getSite().getSiteContext().getObject(EntityManager.class);
 
-        final GridLayout gridLayout = new GridLayout(1, 2);
+        final GridLayout gridLayout = new GridLayout(1, 3);
         gridLayout.setSizeFull();
         gridLayout.setMargin(false);
         gridLayout.setSpacing(true);
@@ -84,11 +91,47 @@ public final class AssetFlowlet extends AbstractFlowlet implements ValidatingEdi
                 Asset.class).getFieldDescriptors());
         assetEditor.setCaption("Asset");
         assetEditor.addListener(this);
-        gridLayout.addComponent(assetEditor, 0, 0);
+        gridLayout.addComponent(assetEditor, 0, 1);
+
+        final Upload upload = new Upload(getSite().localize("field-file-upload"), new Upload.Receiver() {
+            @Override
+            public OutputStream receiveUpload(String filename, String mimeType) {
+                try {
+                    temporaryFile = File.createTempFile(entity.getAssetId(), ".upload");
+                    return new FileOutputStream(temporaryFile, false);
+                } catch (IOException e) {
+                    throw new SiteException("Unable to create temporary file for upload.", e);
+                }
+            }
+        });
+        upload.setButtonCaption(getSite().localize("button-start-upload"));
+        upload.addSucceededListener(new Upload.SucceededListener() {
+            @Override
+            public void uploadSucceeded(Upload.SucceededEvent event) {
+                if (event.getLength() == 0) {
+                    return;
+                }
+                if (temporaryFile.length() > Long.parseLong(PropertiesUtil.getProperty("site", "asset-maximum-size"))) {
+                    Notification.show(getSite().localize("message-file-too-large"),
+                            Notification.Type.ERROR_MESSAGE);
+                    return;
+                }
+
+                entity.setName(event.getFilename().substring(0, event.getFilename().lastIndexOf('.')));
+                entity.setExtension(event.getFilename().substring(event.getFilename().lastIndexOf('.') + 1));
+                entity.setType(event.getMIMEType());
+                entity.setSize((int) event.getLength());
+
+                assetEditor.setItem(new BeanItem<Asset>(entity), assetEditor.isNewItem());
+                save();
+            }
+        });
+        gridLayout.addComponent(upload, 0, 0);
+
 
         final HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing(true);
-        gridLayout.addComponent(buttonLayout, 0, 1);
+        gridLayout.addComponent(buttonLayout, 0, 2);
 
         saveButton = getSite().getButton("save");
         buttonLayout.addComponent(saveButton);
@@ -99,9 +142,7 @@ public final class AssetFlowlet extends AbstractFlowlet implements ValidatingEdi
             @Override
             public void buttonClick(final ClickEvent event) {
                 if (isValid()) {
-                    assetEditor.commit();
-                    ContentDao.saveAsset(entityManager, entity);
-                    editPrivilegesButton.setEnabled(true);
+                    save();
                 } else {
                     Notification.show(getSite().localize("message-invalid-form-asset"),
                             Notification.Type.HUMANIZED_MESSAGE);
@@ -118,6 +159,10 @@ public final class AssetFlowlet extends AbstractFlowlet implements ValidatingEdi
             @Override
             public void buttonClick(final ClickEvent event) {
                 assetEditor.discard();
+                if (temporaryFile != null) {
+                    temporaryFile.deleteOnExit();
+                    temporaryFile = null;
+                }
             }
         });
 
@@ -133,6 +178,44 @@ public final class AssetFlowlet extends AbstractFlowlet implements ValidatingEdi
         });
     }
 
+    private void save() {
+        assetEditor.commit();
+        try {
+            ContentDao.saveAsset(entityManager, entity);
+
+            if (temporaryFile != null) {
+                entityManager.getTransaction().begin();
+
+                final Connection connection = entityManager.unwrap(Connection.class);
+                final FileInputStream fileInputStream = new FileInputStream(temporaryFile);
+                final PreparedStatement preparedStatement = connection.prepareStatement(
+                        "UPDATE asset SET data = ? WHERE assetid = ?");
+                preparedStatement.setBinaryStream(1, fileInputStream, (int) temporaryFile.length());
+                preparedStatement.setString(2, entity.getAssetId());
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+                fileInputStream.close();
+                entityManager.getTransaction().commit();
+                Notification.show(getSite().localize("message-file-uploaded"),
+                        Notification.Type.HUMANIZED_MESSAGE);
+            }
+        } catch (final Exception e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            LOGGER.error("Failed to save binary to database.", e);
+            Notification.show(getSite().localize("message-duplicate-file-name"),
+                    Notification.Type.ERROR_MESSAGE);
+        } finally {
+            if (temporaryFile != null) {
+                temporaryFile.deleteOnExit();
+                temporaryFile = null;
+            }
+        }
+
+        editPrivilegesButton.setEnabled(true);
+    }
+
     /**
      * Edit an existing asset.
      * @param entity entity to be edited.
@@ -140,6 +223,11 @@ public final class AssetFlowlet extends AbstractFlowlet implements ValidatingEdi
      */
     public void edit(final Asset entity, final boolean newEntity) {
         this.entity = entity;
+
+        if (temporaryFile != null) {
+            temporaryFile.deleteOnExit();
+            temporaryFile = null;
+        }
         assetEditor.setItem(new BeanItem<Asset>(entity), newEntity);
         editPrivilegesButton.setEnabled(!newEntity
                 && getSite().getSecurityProvider().getRoles().contains("administrator"));
@@ -147,6 +235,17 @@ public final class AssetFlowlet extends AbstractFlowlet implements ValidatingEdi
 
     @Override
     public void editorStateChanged(final ValidatingEditor source) {
+        if (isDirty()) {
+            if (isValid() && entity.getSize() > 0) {
+                saveButton.setEnabled(true);
+            } else {
+                saveButton.setEnabled(false);
+            }
+            discardButton.setEnabled(true);
+        } else {
+            saveButton.setEnabled(false);
+            discardButton.setEnabled(false);
+        }
     }
 
     @Override

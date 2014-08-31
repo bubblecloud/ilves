@@ -36,6 +36,7 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Asset list flow.
@@ -71,7 +72,7 @@ public final class AssetsFlowlet extends AbstractFlowlet {
         // Get entity manager from site context and prepare container.
         final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
         entityContainer = new EntityContainer<Asset>(entityManager, true, false, false, Asset.class, 1000,
-                new String[] { "page" }, new boolean[] { true }, "assetId");
+                new String[] { "name" }, new boolean[] { true }, "assetId");
 
         // Get descriptors and set container properties.
         final List<FilterDescriptor> filterDescriptors = new ArrayList<FilterDescriptor>();
@@ -106,6 +107,7 @@ public final class AssetsFlowlet extends AbstractFlowlet {
             @Override
             public void buttonClick(final ClickEvent event) {
                 final Asset asset = new Asset();
+                asset.setAssetId(UUID.randomUUID().toString());
                 asset.setCreated(new Date());
                 asset.setModified(asset.getCreated());
                 asset.setOwner((Company) getSite().getSiteContext().getObject(Company.class));
