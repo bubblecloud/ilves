@@ -100,4 +100,25 @@ public class ContentDao {
         query.setParameter("owner", owner);
         return query.getResultList();
     }
+
+    /**
+     * Gets list of contents.
+     * @param entityManager the entity manager.
+     * @param owner the owning company
+     * @param name the asset name
+     * @return list of contents
+     */
+    public static final Asset getAsset(final EntityManager entityManager, final Company owner, final String name) {
+        final TypedQuery<Asset> query = entityManager.createQuery(
+                "select e from Asset as e where e.owner=:owner and e.name = :name",
+                Asset.class);
+        query.setParameter("owner", owner);
+        query.setParameter("name", name);
+        final List<Asset> resultList = query.getResultList();
+        if (resultList.size() == 1) {
+            return resultList.get(0);
+        } else {
+            return null;
+        }
+    }
 }

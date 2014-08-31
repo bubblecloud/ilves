@@ -70,14 +70,13 @@ public class PrivilegeCache {
 
     public static  synchronized boolean hasPrivilege(final EntityManager entityManager, final Company company,
                                                      final Group group, final String key, final String dataId) {
-        if (!groupPrivileges.containsKey(company) || !userPrivileges.containsKey(company)) {
+        if (!groupPrivileges.containsKey(company)) {
             groupPrivileges.put(company, new InMemoryCache<Group, Map<String, Set<String>>>(
                     5 * 60 * 1000, 60 * 1000, 100
             ));
         }
         if (!groupPrivileges.get(company).containsKey(group)) {
             load(entityManager, company, group);
-            return false;
         }
         if (!groupPrivileges.get(company).get(group).containsKey(key)) {
             return false;

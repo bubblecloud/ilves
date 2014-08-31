@@ -6,6 +6,16 @@
         <param-name>productionMode</param-name>
         <param-value>false</param-value>
     </context-param>
+
+    <servlet>
+        <servlet-name>Asset Servlet</servlet-name>
+        <servlet-class>org.vaadin.addons.sitekit.module.content.AssetServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Asset Servlet</servlet-name>
+        <url-pattern>/asset/*</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>Vaadin Application Servlet</servlet-name>
         <servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
@@ -19,4 +29,5 @@
         <servlet-name>Vaadin Application Servlet</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+
 </web-app>

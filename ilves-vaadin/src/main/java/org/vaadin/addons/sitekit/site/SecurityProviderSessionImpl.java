@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
 import com.vaadin.ui.UI;
@@ -88,6 +90,7 @@ public final class SecurityProviderSessionImpl implements SecurityProvider {
      */
     private void setUserToSession(final User user) {
         ((AbstractSiteUI) UI.getCurrent()).getSession().setAttribute("user", user);
+        VaadinSession.getCurrent().getSession().setAttribute("user", user);
     }
 
     /**
@@ -104,6 +107,7 @@ public final class SecurityProviderSessionImpl implements SecurityProvider {
      */
     private void setGroupsToSession(final List<Group> groups) {
         ((AbstractSiteUI) UI.getCurrent()).getSession().setAttribute("groups", groups);
+        VaadinSession.getCurrent().getSession().setAttribute("groups", groups);
     }
 
 
@@ -121,6 +125,7 @@ public final class SecurityProviderSessionImpl implements SecurityProvider {
      */
     private void setRolesToSession(final List<String> roles) {
         ((AbstractSiteUI) UI.getCurrent()).getSession().setAttribute("roles", roles);
+        VaadinSession.getCurrent().getSession().setAttribute("roles", roles);
     }
 
 
