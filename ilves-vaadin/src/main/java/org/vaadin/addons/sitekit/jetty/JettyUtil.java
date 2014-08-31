@@ -62,13 +62,6 @@ public class JettyUtil {
         final String selfSignedCertificateIpAddress =
                 PropertiesUtil.getProperty("site", "server-certificate-self-sign-ip-address");
 
-        CertificateUtil.ensureServerCertificateExists(
-                selfSignedCertificateHostName,
-                selfSignedCertificateIpAddress,
-                certificateAlias,
-                certificatePassword,
-                keyStorePath, keyStorePassword);
-
         final Server server = new Server();
 
         final HttpConfiguration httpConfiguration = new HttpConfiguration();
@@ -90,6 +83,13 @@ public class JettyUtil {
         }
 
         if (httpsPort > 0) {
+            CertificateUtil.ensureServerCertificateExists(
+                    selfSignedCertificateHostName,
+                    selfSignedCertificateIpAddress,
+                    certificateAlias,
+                    certificatePassword,
+                    keyStorePath, keyStorePassword);
+
             final JettySiteSslContextFactory sslContextFactory = newSslSocketFactory(certificateAlias,
                     keyStorePath, keyStorePassword,
                     certificatePassword, requireClientAuthentication);
