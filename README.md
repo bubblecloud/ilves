@@ -18,6 +18,7 @@ Stack
 -----
 
 Ilves is built upon:
+
 1. Java 7
 2. Vaadin framework (web UI framework)
 3. Sass (stylesheet language)
