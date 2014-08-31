@@ -5,6 +5,7 @@ import com.vaadin.ui.UI;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
+import org.vaadin.addons.sitekit.cache.InMemoryCache;
 import org.vaadin.addons.sitekit.cache.PrivilegeCache;
 import org.vaadin.addons.sitekit.dao.CompanyDao;
 import org.vaadin.addons.sitekit.dao.UserDao;
@@ -26,11 +27,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.security.cert.Certificate;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Servlet for sharing assets.
@@ -41,14 +42,19 @@ public class AssetServlet extends HttpServlet {
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(AssetServlet.class);
 
+    private static Map<Company, InMemoryCache<String, Asset>> nameAssetCache =
+            new HashMap<Company, InMemoryCache<String, Asset>>();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Allocate entity manager.
+        final EntityManager entityManager = DefaultSiteUI.getEntityManagerFactory().createEntityManager();
 
+        // Find user and groups from session or assume anonymous.
         final User user = (User) req.getSession().getAttribute("user");
         final List<Group> groups =  (List<Group>) req.getSession().getAttribute("groups");
 
-        final EntityManager entityManager = DefaultSiteUI.getEntityManagerFactory().createEntityManager();
-
+        // Find company object either from user object, session or load from database.
         Company company =  null;
         if (user != null) {
             company = user.getOwner();
@@ -64,8 +70,17 @@ public class AssetServlet extends HttpServlet {
             }
         }
 
+        // Find Asset object based on name either from cache or database.
         final String name = req.getRequestURI().substring(req.getRequestURI().lastIndexOf('/') + 1);
-        final Asset asset = ContentDao.getAsset(entityManager, company, name);
+        if (!nameAssetCache.containsKey(company)) {
+            nameAssetCache.put(company, new InMemoryCache<String, Asset>(
+                    10 * 60 * 1000, 60 * 1000, 1000));
+        }
+        Asset asset = nameAssetCache.get(company).get(name);
+        if (asset == null) {
+            asset = ContentDao.getAsset(entityManager, company, name);
+            nameAssetCache.get(company).put(name, asset);
+        }
 
         if (asset == null) {
             resp.setStatus(404);
@@ -77,6 +92,7 @@ public class AssetServlet extends HttpServlet {
             return;
         }
 
+        // Load asset from file cache if exists and not modified before last modified of the asset file.
         final String assetCachePath = PropertiesUtil.getProperty("site", "asset-cache-path");
         final File assetCache = new File(assetCachePath);
         if (!assetCache.exists()) {
@@ -99,8 +115,7 @@ public class AssetServlet extends HttpServlet {
                         "SELECT data FROM asset WHERE assetid = ?");
                 preparedStatement.setString(1, asset.getAssetId());
                 final ResultSet resultSet = preparedStatement.executeQuery();
-                resp.setContentType(asset.getType());
-                resp.setContentLength(asset.getSize());
+
                 if (resultSet.next()) {
                     final InputStream inputStream = resultSet.getBinaryStream(1);
                     final FileOutputStream outputStream = new FileOutputStream(assetCacheFile);
@@ -123,13 +138,22 @@ public class AssetServlet extends HttpServlet {
         }
 
         if (assetCacheFile.exists()) {
+            final int cacheAgeSeconds = 3600;
+            final long expiry = System.currentTimeMillis() + cacheAgeSeconds * 1000;
+            resp.setDateHeader("Expires", expiry);
+            resp.setHeader("Cache-Control", "max-age="+ cacheAgeSeconds);
+            resp.setContentType(asset.getType());
+            resp.setContentLength(asset.getSize());
+
             final FileInputStream inputStream = new FileInputStream(assetCacheFile);
             IOUtils.copy(inputStream, resp.getOutputStream());
             inputStream.close();
+
             resp.setStatus(200);
         } else {
             resp.setStatus(500);
         }
 
     }
+
 }
