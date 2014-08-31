@@ -16,6 +16,7 @@
 package org.vaadin.addons.sitekit.site;
 
 import com.vaadin.ui.AbstractComponent;
+import org.vaadin.addons.sitekit.util.JadeUtil;
 
 import java.io.IOException;
 
@@ -32,7 +33,7 @@ public final class DefaultView extends AbstractCustomView {
      * @throws java.io.IOException if template stream can not be read.
      */
     public DefaultView() throws IOException {
-        super(DefaultView.class.getResourceAsStream("/VAADIN/themes/sitekit/layouts/default.html"));
+        super(JadeUtil.parse("/VAADIN/themes/ilves/layouts/default.jade"));
         setImmediate(true);
     }
 
