@@ -15,6 +15,9 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import com.vaadin.ui.UI;
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +32,8 @@ import java.util.ResourceBundle;
  * @author Tommi S.E. Laukkanen
  */
 public final class LocalizationProviderBundleImpl implements LocalizationProvider {
-
+    /** The logger. */
+    private static final Logger LOGGER = Logger.getLogger(LocalizationProviderBundleImpl.class);
     /** The bundle base names. */
     private final String[] bundleBaseNames;
     /** The loaded resource bundles. */
@@ -61,6 +65,8 @@ public final class LocalizationProviderBundleImpl implements LocalizationProvide
                 return resourceBundle.getString(key);
             }
         }
+
+        //LOGGER.warn("No localization found for: '" + key + "' in locale: " + UI.getCurrent().getLocale());
         return key;
     }
 

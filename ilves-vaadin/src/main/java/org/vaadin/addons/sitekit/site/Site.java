@@ -35,7 +35,6 @@ import org.vaadin.addons.sitekit.model.Company;
  * @author Tommi S.E. Laukkanen
  */
 public final class Site implements ViewProvider, ViewChangeListener {
-
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(Site.class);
     /** The site. */
@@ -135,11 +134,7 @@ public final class Site implements ViewProvider, ViewChangeListener {
      */
     public String localize(final String key) {
         if (localizationProvider != null) {
-            String value = localizationProvider.localize(key, UI.getCurrent().getLocale());
-            if (value == null) {
-                value = UI.getCurrent().getLocale() + "." + key;
-            }
-            return value;
+            return localizationProvider.localize(key, UI.getCurrent().getLocale());
         } else {
             return null;
         }

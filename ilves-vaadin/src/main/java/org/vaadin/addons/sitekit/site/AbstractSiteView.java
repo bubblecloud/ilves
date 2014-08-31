@@ -141,7 +141,7 @@ public abstract class AbstractSiteView extends GridLayout implements View, SiteV
     public final void enter(final ViewChangeListener.ViewChangeEvent event) {
         LOGGER.debug("View enter: " + event.getViewName() + " (" + this.getViewDescriptor().getName()
                 + "." + this.getViewVersion().getVersion() + ") parameters: " + event.getParameters());
-        UI.getCurrent().getPage().setTitle(getViewVersion().getTitle());
+        UI.getCurrent().getPage().setTitle(site.localize(getViewVersion().getTitle()));
 
         if (pageVersion.getViewerRoles().length > 0) {
             boolean roleMatch = false;

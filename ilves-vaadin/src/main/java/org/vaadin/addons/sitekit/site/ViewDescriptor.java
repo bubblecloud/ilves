@@ -53,9 +53,21 @@ public final class ViewDescriptor {
      * @param title the view title
      * @param viewClass the view class
      */
-    public ViewDescriptor(String name, String title, Class<? extends View> viewClass) {
+    public ViewDescriptor(final String name, final String title, final Class<? extends View> viewClass) {
         this.name = name;
         this.productionVersion = new ViewVersion(title, viewClass.getCanonicalName());
+    }
+
+    /**
+     * Constructor for setting view parameters with only production view.
+     * Sets title to be same as name.
+     *
+     * @param name the view name
+     * @param viewClass the view class
+     */
+    public ViewDescriptor(final String name, final Class<? extends View> viewClass) {
+        this.name = name;
+        this.productionVersion = new ViewVersion("page-title-" + name, viewClass.getCanonicalName());
     }
 
     /**

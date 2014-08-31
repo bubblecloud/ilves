@@ -108,6 +108,13 @@ public final class SiteDescriptor {
         this.navigation = navigation;
     }
     /**
+     * Gets production version of navigation.
+     * @return the productionVersion
+     */
+    public NavigationVersion getNavigationVersion() {
+        return getNavigation().getProductionVersion();
+    }
+    /**
      * @return the pages
      */
     public List<ViewDescriptor> getViewDescriptors() {

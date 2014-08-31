@@ -57,12 +57,13 @@ public class TutorialSiteMain {
         final SiteDescriptor siteDescriptor = DefaultSiteUI.getContentProvider().getSiteDescriptor();
 
         // Describe custom view.
-        final ViewDescriptor customDescriptor = new ViewDescriptor("custom", "Custom Title", DefaultView.class);
-        customDescriptor.setViewletClass("content", HelloWorldViewlet.class);
-        siteDescriptor.getViewDescriptors().add(customDescriptor);
+        final ViewDescriptor customViewDescriptor = new ViewDescriptor("custom", CustomView.class);
+        customViewDescriptor.setViewletClass("content", HelloWorldViewlet.class);
+        siteDescriptor.getViewDescriptors().add(customViewDescriptor);
 
         // Add custom view to navigation.
-        final NavigationVersion navigationVersion = siteDescriptor.getNavigation().getProductionVersion();
+        final NavigationVersion navigationVersion = siteDescriptor.getNavigationVersion();
+
         navigationVersion.setDefaultPageName("custom");
         navigationVersion.addRootPage(0, "custom");
 

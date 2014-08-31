@@ -24,7 +24,7 @@ import java.io.IOException;
  * Fixed width implementation of PageWindow.
  * @author Tommi S.E. Laukkanen
  */
-public final class DefaultView extends AbstractCustomView {
+public class DefaultView extends AbstractCustomView {
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
 
@@ -38,11 +38,22 @@ public final class DefaultView extends AbstractCustomView {
     }
 
     /**
+     * Constructor which can be used to create child classes with
+     * different template.
+     *
+     * @param templatePath the template path
+     * @throws java.io.IOException if template stream can not be read.
+     */
+    public DefaultView(final String templatePath) throws IOException {
+        super(JadeUtil.parse(templatePath));
+        setImmediate(true);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     protected void initializeComponents() {
-
         final AbstractComponent logoComponent = getComponent("logo");
         addComponent(logoComponent, "logo");
 
