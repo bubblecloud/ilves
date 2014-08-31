@@ -11,3 +11,4 @@ release.properties
 *.log
 atlassian-ide-plugin.xml
 *.jks
+asset-cache

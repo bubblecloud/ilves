@@ -42,6 +42,8 @@ public class PrivilegeCache {
         userPrivileges.remove(company);
     }
 
+
+
     public static synchronized void load(final EntityManager entityManager, final Company company, final Group group) {
         if (!groupPrivileges.get(company).containsKey(group)) {
             groupPrivileges.get(company).put(group, new HashMap<String, Set<String>>());
@@ -99,5 +101,29 @@ public class PrivilegeCache {
             return false;
         }
         return userPrivileges.get(company).get(user).get(key).contains(dataId);
+    }
+
+    public static  synchronized boolean hasPrivilege(final EntityManager entityManager, final Company company,
+                                                     final User user, final List<Group> groups, final String key,
+                                                     final String dataId) {
+        if (user != null) {
+            if (PrivilegeCache.hasPrivilege(entityManager, company, user, key, dataId)) {
+                return true;
+            } else {
+                for (final Group group : groups) {
+                    if (PrivilegeCache.hasPrivilege(entityManager, company, group, key, dataId)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        } else {
+            final Group group = UserDao.getGroup(entityManager, company, "anonymous");
+            if (PrivilegeCache.hasPrivilege(entityManager, company, group, key, dataId)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }

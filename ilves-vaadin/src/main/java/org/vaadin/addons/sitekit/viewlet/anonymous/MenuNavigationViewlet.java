@@ -67,6 +67,7 @@ public final class MenuNavigationViewlet extends AbstractViewlet {
                 public void menuSelected(MenuBar.MenuItem selectedItem) {
                     final Company company = getSite().getSiteContext().getObject(Company.class);
                     getUI().getPage().setLocation(company.getUrl());
+                    getSession().getSession().invalidate();
                     getSession().close();
                 }
             }).setStyleName("navigation-logout");
