@@ -157,7 +157,7 @@
                 <constraints nullable="true"/>
             </column>
             <column name="data" type="BLOB">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
 
             <column name="created" type="TIMESTAMP WITH TIME ZONE">

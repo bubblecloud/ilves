@@ -105,7 +105,6 @@ public class DefaultContentProvider implements ContentProvider {
         openidlogin.setViewletClass("content", OpenIdLoginViewlet.class);
         viewDescriptors.add(openidlogin);
 
-
         final ViewDescriptor reset = new ViewDescriptor("reset", "Password Reset", DefaultView.class);
         reset.setViewletClass("content", PasswordResetViewlet.class);
         viewDescriptors.add(reset);

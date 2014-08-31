@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.module.content;
 
+import com.vaadin.data.util.converter.StringToIntegerConverter;
 import org.apache.commons.lang.StringUtils;
 import org.vaadin.addons.sitekit.cache.PrivilegeCache;
 import org.vaadin.addons.sitekit.dao.UserDao;
@@ -23,6 +24,7 @@ import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.module.content.model.Asset;
 import org.vaadin.addons.sitekit.module.content.view.*;
 import org.vaadin.addons.sitekit.site.SiteModule;
 import org.vaadin.addons.sitekit.module.content.dao.ContentDao;
@@ -46,39 +48,68 @@ public class ContentModule implements SiteModule {
 
         final NavigationVersion navigationVersion = siteDescriptor.getNavigation().getProductionVersion();
         navigationVersion.addChildPage("configuration", "account", "content");
+        navigationVersion.addChildPage("configuration", "content", "assets");
 
         // Describe content view.
-        final ViewDescriptor viewDescriptor = new ViewDescriptor("content", "Content", DefaultView.class);
-        viewDescriptor.setViewerRoles("administrator");
-        viewDescriptor.setViewletClass("content", ContentFlow.class);
-        siteDescriptor.getViewDescriptors().add(viewDescriptor);
+        final ViewDescriptor contentView = new ViewDescriptor("content", "Content", DefaultView.class);
+        contentView.setViewerRoles("administrator");
+        contentView.setViewletClass("content", ContentFlow.class);
+        siteDescriptor.getViewDescriptors().add(contentView);
+
+        final ViewDescriptor assetsView = new ViewDescriptor("assets", "Assets", DefaultView.class);
+        assetsView.setViewerRoles("administrator");
+        assetsView.setViewletClass("content", AssetFlow.class);
+        siteDescriptor.getViewDescriptors().add(assetsView);
 
         // Describe feedback view fields.
-        final FieldSetDescriptor fieldSetDescriptor = new FieldSetDescriptor(Content.class);
+        final FieldSetDescriptor contentFields = new FieldSetDescriptor(Content.class);
 
-        fieldSetDescriptor.setVisibleFieldIds(new String[]{
+        contentFields.setVisibleFieldIds(new String[]{
                 "page", "title", "parentPage", "afterPage", "markupType", "markup", "created", "modified"
         });
 
-        fieldSetDescriptor.getFieldDescriptor("created").setReadOnly(true);
-        fieldSetDescriptor.getFieldDescriptor("created").setCollapsed(true);
-        fieldSetDescriptor.getFieldDescriptor("modified").setReadOnly(true);
-        fieldSetDescriptor.getFieldDescriptor("modified").setCollapsed(true);
-        fieldSetDescriptor.getFieldDescriptor("page").setRequired(false);
-        fieldSetDescriptor.getFieldDescriptor("parentPage").setRequired(false);
-        fieldSetDescriptor.getFieldDescriptor("parentPage").setCollapsed(true);
-        fieldSetDescriptor.getFieldDescriptor("afterPage").setRequired(false);
-        fieldSetDescriptor.getFieldDescriptor("afterPage").setCollapsed(true);
-        fieldSetDescriptor.getFieldDescriptor("markupType").setRequired(true);
-        fieldSetDescriptor.getFieldDescriptor("markupType").setFieldClass(MarkupTypeField.class);
-        fieldSetDescriptor.getFieldDescriptor("markupType").setConverter(null);
-        fieldSetDescriptor.getFieldDescriptor("markup").setFieldClass(MarkupField.class);
-        fieldSetDescriptor.getFieldDescriptor("markup").setWidth(800);
-        fieldSetDescriptor.getFieldDescriptor("markup").getValidators().clear();
-        fieldSetDescriptor.getFieldDescriptor("markup").setCollapsed(true);
-        fieldSetDescriptor.getFieldDescriptor("title").setWidth(-1);
+        contentFields.getFieldDescriptor("created").setReadOnly(true);
+        contentFields.getFieldDescriptor("created").setCollapsed(true);
+        contentFields.getFieldDescriptor("modified").setReadOnly(true);
+        contentFields.getFieldDescriptor("modified").setCollapsed(true);
+        contentFields.getFieldDescriptor("page").setRequired(false);
+        contentFields.getFieldDescriptor("parentPage").setRequired(false);
+        contentFields.getFieldDescriptor("parentPage").setCollapsed(true);
+        contentFields.getFieldDescriptor("afterPage").setRequired(false);
+        contentFields.getFieldDescriptor("afterPage").setCollapsed(true);
+        contentFields.getFieldDescriptor("markupType").setRequired(true);
+        contentFields.getFieldDescriptor("markupType").setFieldClass(MarkupTypeField.class);
+        contentFields.getFieldDescriptor("markupType").setConverter(null);
+        contentFields.getFieldDescriptor("markup").setFieldClass(MarkupField.class);
+        contentFields.getFieldDescriptor("markup").setWidth(800);
+        contentFields.getFieldDescriptor("markup").getValidators().clear();
+        contentFields.getFieldDescriptor("markup").setCollapsed(true);
+        contentFields.getFieldDescriptor("title").setWidth(-1);
 
-        FieldSetDescriptorRegister.registerFieldSetDescriptor(Content.class, fieldSetDescriptor);
+        FieldSetDescriptorRegister.registerFieldSetDescriptor(Content.class, contentFields);
+
+        // Describe feedback view fields.
+        final FieldSetDescriptor assetFields = new FieldSetDescriptor(Asset.class);
+
+        assetFields.setVisibleFieldIds(new String[]{
+                "name", "size", "extension", "type", "description", "created", "modified"
+        });
+
+        assetFields.getFieldDescriptor("created").setReadOnly(true);
+        assetFields.getFieldDescriptor("created").setCollapsed(true);
+        assetFields.getFieldDescriptor("modified").setReadOnly(true);
+        assetFields.getFieldDescriptor("modified").setCollapsed(true);
+
+        assetFields.getFieldDescriptor("name").setRequired(true);
+        assetFields.getFieldDescriptor("extension").setRequired(true);
+        assetFields.getFieldDescriptor("type").setRequired(true);
+        assetFields.getFieldDescriptor("size").setReadOnly(true);
+        assetFields.getFieldDescriptor("size").setRequired(true);
+        assetFields.getFieldDescriptor("size").setDefaultValue(0);
+        assetFields.getFieldDescriptor("size").setConverter(new StringToIntegerConverter());
+        assetFields.getFieldDescriptor("description").setRequired(false);
+
+        FieldSetDescriptorRegister.registerFieldSetDescriptor(Asset.class, assetFields);
 
     }
 

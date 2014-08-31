@@ -17,6 +17,7 @@ package org.vaadin.addons.sitekit.module.content.dao;
 
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.model.Company;
+import org.vaadin.addons.sitekit.module.content.model.Asset;
 import org.vaadin.addons.sitekit.module.content.model.Content;
 
 import javax.persistence.EntityManager;
@@ -37,7 +38,7 @@ public class ContentDao {
     private static final Logger LOGGER = Logger.getLogger(ContentDao.class);
 
     /**
-     * Adds new content to database.
+     * Saves content to database.
      * @param entityManager the entity manager
      * @param content the content
      */
@@ -51,6 +52,31 @@ public class ContentDao {
             content.setModified(new Date());
 
             entityManager.persist(content);
+            transaction.commit();
+        } catch (final Exception e) {
+            LOGGER.error("Error in add content.", e);
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Saves asset to database.
+     * @param entityManager the entity manager
+     * @param asset the asset
+     */
+    public static void saveAsset(final EntityManager entityManager, final Asset asset) {
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try {
+            if (asset.getAssetId() != null) {
+                asset.setCreated(new Date());
+            }
+            asset.setModified(new Date());
+
+            entityManager.persist(asset);
             transaction.commit();
         } catch (final Exception e) {
             LOGGER.error("Error in add content.", e);

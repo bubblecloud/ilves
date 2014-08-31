@@ -56,7 +56,7 @@ public final class Asset implements Serializable {
 
     /** File size. */
     @Column(nullable = false)
-    private int size;
+    private Integer size = 0;
 
     /** Description. */
     @Column(nullable = false)
@@ -119,11 +119,11 @@ public final class Asset implements Serializable {
         this.type = type;
     }
 
-    public int getSize() {
+    public Integer getSize() {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(Integer size) {
         this.size = size;
     }
 
