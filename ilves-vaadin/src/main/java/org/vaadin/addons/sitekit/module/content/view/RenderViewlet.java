@@ -55,7 +55,8 @@ public final class RenderViewlet extends AbstractViewlet {
         layout.setMargin(true);
 
         final Panel panel = new Panel();
-        panel.setStyleName(Reindeer.PANEL_LIGHT);
+        panel.setStyleName("wiki-panel");
+        //panel.setStyleName(Reindeer.PANEL_LIGHT);
         panel.setContent(layout);
 
         setCompositionRoot(panel);

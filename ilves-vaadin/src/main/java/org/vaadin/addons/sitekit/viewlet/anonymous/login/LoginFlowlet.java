@@ -93,6 +93,8 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
             }
         };
 
+        loginForm.setWidth(200, Unit.PIXELS);
+        loginForm.setHeight(200, Unit.PIXELS);
         loginForm.setLoginButtonCaption(getSite().localize("button-login"));
         loginForm.setUsernameCaption(getSite().localize("input-user-name"));
         loginForm.setPasswordCaption(getSite().localize("input-user-password"));

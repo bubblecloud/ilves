@@ -1,8 +1,8 @@
-@import "../reindeer/reindeer.scss";
+@import "../valo/valo";
 
 $application-background-color: #FFFFFF;
 
-$header-background-color: #9FB9D5;
+$header-background-color: #4b4b4b;
 
 $logo-background-color: #FFFFFF;
 $navigation-background-color: #DDE3EC;
@@ -15,15 +15,15 @@ $footer-color: #F0F3F5;
 
 @mixin ilves {
 
-  @include reindeer;
+  @include valo;
 
   &.v-app {
     background: $application-background-color;
   }
 
   div#ilves-header-wrapper {
-    background: $header-background-color;
-    height: 52px
+    background-image: -webkit-linear-gradient(top, #1b87e3 2%, #166ed5 98%);
+    height: 52px;
   }
 
   div#ilves-header {
@@ -61,18 +61,18 @@ $footer-color: #F0F3F5;
   }
 
   div#ilves-navigation-wrapper {
-    background: $navigation-background-color;
+    //background: $navigation-background-color;
     margin: 6px 0px 6px 6px;
     border: 0px;
-    border-radius: 10px;
+    //border-radius: 10px;
     float: left;
     width: 908px;
     height: 40px;
-    font-weight: bold
+//    font-weight: bold
   }
 
   div#ilves-navigation {
-    margin: 8px
+    margin: 0px
   }
 
   div#ilves-container {
@@ -85,13 +85,10 @@ $footer-color: #F0F3F5;
   }
 
   div#ilves-content {
-    padding: 8px;
-  }
-
-  div#ilves-content {
     background: $content-color;
     border: 0px;
-    border-radius: 8px;
+    border-radius: 6px;
+    padding: 6px;
   }
 
   div#ilves-footer-wrapper {
@@ -112,7 +109,14 @@ $footer-color: #F0F3F5;
   }
 
   h1 {
+    font-size: 2em;
     margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  h2 {
+    font-size: 1.5em;
+    margin-top: 8px;
     margin-bottom: 0px;
   }
 
@@ -122,10 +126,6 @@ $footer-color: #F0F3F5;
 
   .v-tabsheet-deco, .white .v-tabsheet-deco {
     border-top: 0px;
-  }
-
-  .v-panel-light {
-    background: $page-color;
   }
 
   .white .v-panel .v-panel-content {
@@ -147,11 +147,11 @@ $footer-color: #F0F3F5;
   }
 
   .v-button .v-icon {
-    vertical-align: middle;
+    vertical-align: text-top;
     margin-right: 3px;
     border: none;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
   }
 
   .v-caption .v-required-field-indicator {
@@ -164,6 +164,7 @@ $footer-color: #F0F3F5;
     margin-right: 0px;
   }
 
+/*
   .v-button-link:focus .v-button-caption {
     outline: none;
   }
@@ -178,7 +179,7 @@ $footer-color: #F0F3F5;
     text-decoration: none;
     text-align: left;
   }
-
+*/
   .image-button {
     cursor: pointer;
     width: 40px;
@@ -195,6 +196,8 @@ $footer-color: #F0F3F5;
     background-image: url('button/img/image-button-pressed.png');
   }
 
+  /*
+
   .horizontal-navigation-logout {
     float: right;
     margin-right: 10px;
@@ -204,15 +207,10 @@ $footer-color: #F0F3F5;
     float: right;
     margin-right: 10px;
   }
-
   .menu-bar-navigation {
     color: #333333;
     text-shadow: 0 1px 0 #FFFFFF;
     background: $navigation-background-color;
-  }
-
-  .menu-bar-navigation .v-menubar-menuitem {
-    /*    padding: 0px 20px 0px 0px;*/
   }
 
   .menu-bar-navigation .v-menubar-menuitem:hover {
@@ -226,6 +224,26 @@ $footer-color: #F0F3F5;
     background: $navigation-background-color;
   }
 
+  .menu-bar-navigation .v-menubar-menuitem-caption .v-icon {
+    margin-right: 6px;
+    width: 18px;
+    height: 18px;
+    vertical-align: bottom;
+  }*/
+
+  .v-menubar-menu-bar-navigation {
+    height: 40px;
+  }
+
+  .menu-bar-navigation .v-menubar-menuitem-caption {
+    line-height: 40px;
+  }
+  .menu-bar-navigation .v-menubar-menuitem-caption .v-icon {
+    vertical-align: text-bottom;
+    width: 24px;
+    height: 24px;
+  }
+
   .menu-bar-navigation .v-menubar-menuitem-navigation-login {
     float: right;
     margin-right: 10px;
@@ -234,13 +252,6 @@ $footer-color: #F0F3F5;
   .menu-bar-navigation .v-menubar-menuitem-navigation-logout {
     float: right;
     margin-right: 10px;
-  }
-
-  .menu-bar-navigation .v-menubar-menuitem-caption .v-icon {
-    margin-right: 6px;
-    width: 18px;
-    height: 18px;
-    vertical-align: bottom;
   }
 
   div.gravatar a img {
