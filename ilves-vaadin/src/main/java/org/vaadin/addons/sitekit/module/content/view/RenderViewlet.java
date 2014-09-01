@@ -52,14 +52,14 @@ public final class RenderViewlet extends AbstractViewlet {
         final VerticalLayout layout = new VerticalLayout();
         layout.addComponent(new Label(html, ContentMode.HTML));
         layout.setSpacing(true);
-        layout.setMargin(true);
+        layout.setMargin(false);
 
-        final Panel panel = new Panel();
-        panel.setStyleName("wiki-panel");
+        //final Panel panel = new Panel();
+        //panel.setStyleName("wiki-panel");
         //panel.setStyleName(Reindeer.PANEL_LIGHT);
-        panel.setContent(layout);
+        //panel.setContent(layout);
 
-        setCompositionRoot(panel);
+        setCompositionRoot(layout);
     }
 
     /**
