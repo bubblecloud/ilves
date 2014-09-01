@@ -47,7 +47,7 @@ public final class MenuNavigationViewlet extends AbstractViewlet {
 
     public void refresh() {
         final MenuBar menuBar = new MenuBar();
-        menuBar.setStyleName("menu-bar-navigation");
+        menuBar.setStyleName("borderless menu-bar-navigation");
         menuBar.setSizeFull();
         //menuBar.setHeight(32, Unit.PIXELS);
         setCompositionRoot(menuBar);
