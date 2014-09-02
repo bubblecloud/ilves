@@ -53,7 +53,7 @@ public final class RenderViewlet extends AbstractViewlet {
         layout.addComponent(new Label(html, ContentMode.HTML));
         layout.setSpacing(true);
         layout.setMargin(false);
-
+        setStyleName("wiki-content");
         //final Panel panel = new Panel();
         //panel.setStyleName("wiki-panel");
         //panel.setStyleName(Reindeer.PANEL_LIGHT);
