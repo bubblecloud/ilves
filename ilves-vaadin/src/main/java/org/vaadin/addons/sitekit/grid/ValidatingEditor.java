@@ -229,7 +229,11 @@ public class ValidatingEditor extends CustomComponent implements
                     field.setRequired(fieldDefinition.isRequired());
                     ((AbstractField) field).setConverter(fieldDefinition.getConverter());
                     field.setPropertyDataSource(null);
-                    field.setWidth(fieldDefinition.getWidth() + 50, UNITS_PIXELS);
+                    if (fieldDefinition.getWidth() > 0) {
+                        field.setWidth(fieldDefinition.getWidth() + 50,  Unit.PIXELS);
+                    } else {
+                        field.setWidth(200,  Unit.PIXELS);
+                    }
                     field.setReadOnly(isReadOnly() || fieldDefinition.isReadOnly());
                     if (!fieldDefinition.isReadOnly()) {
                         field.setValue(fieldDefinition.getDefaultValue());
