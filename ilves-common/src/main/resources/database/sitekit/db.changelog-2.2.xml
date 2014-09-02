@@ -174,5 +174,11 @@
             <column name="name"/>
         </createIndex>
     </changeSet>
+    <changeSet author="tlaukkan" id="4a742dc0-325e-11e4-8c21-0800200c9a66">
+        <update tableName="company">
+            <column name="url" value="http://127.0.0.1:8080/"/>
+            <where>url = 'http://127.0.0.1:8081/'</where>
+        </update>
+    </changeSet>
 </databaseChangeLog>
 

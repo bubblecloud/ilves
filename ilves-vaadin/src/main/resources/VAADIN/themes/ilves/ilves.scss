@@ -3,6 +3,9 @@ $v-layout-margin-bottom: 20px;
 $v-layout-margin-left: 20px;
 $v-layout-margin-right: 20px;
 
+$v-unit-size: 30px;
+$v-font-size: 14px;
+
 @import "../valo/valo";
 
 $application-background-color: #FFFFFF;
@@ -244,9 +247,11 @@ $footer-color: #DDDDDD;
     line-height: 40px;
   }
   .menu-bar-navigation .v-menubar-menuitem-caption .v-icon {
-    vertical-align: text-bottom;
     width: 24px;
     height: 24px;
+    margin-top: -4px;
+    margin-right: 6px;
+    margin-left: 4px;
   }
 
   .menu-bar-navigation .v-menubar-menuitem-navigation-login {

@@ -74,7 +74,7 @@ public final class CompanyFlowlet extends AbstractFlowlet implements ValidatingE
     public void initialize() {
         entityManager = getSite().getSiteContext().getObject(EntityManager.class);
 
-        final GridLayout gridLayout = new GridLayout(3, 2);
+        final GridLayout gridLayout = new GridLayout(2, 3);
         gridLayout.setSizeFull();
         gridLayout.setMargin(false);
         gridLayout.setSpacing(true);
@@ -84,7 +84,7 @@ public final class CompanyFlowlet extends AbstractFlowlet implements ValidatingE
         companyEditor = new ValidatingEditor(SiteFields.getFieldDescriptors(Company.class));
         companyEditor.setCaption("Site");
         companyEditor.addListener((ValidatingEditorStateListener) this);
-        gridLayout.addComponent(companyEditor, 0, 0);
+        gridLayout.addComponent(companyEditor, 0, 0, 0, 1);
 
         invoicingAddressEditor = new ValidatingEditor(SiteFields.getFieldDescriptors(PostalAddress.class));
         invoicingAddressEditor.setCaption("Invoicing Address");
@@ -94,11 +94,11 @@ public final class CompanyFlowlet extends AbstractFlowlet implements ValidatingE
         deliveryAddressEditor = new ValidatingEditor(SiteFields.getFieldDescriptors(PostalAddress.class));
         deliveryAddressEditor.setCaption("Delivery Address");
         deliveryAddressEditor.addListener((ValidatingEditorStateListener) this);
-        gridLayout.addComponent(deliveryAddressEditor, 2, 0);
+        gridLayout.addComponent(deliveryAddressEditor, 1, 1);
 
         final HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing(true);
-        gridLayout.addComponent(buttonLayout, 0, 1);
+        gridLayout.addComponent(buttonLayout, 0, 2);
 
         saveButton = new Button("Save");
         saveButton.setImmediate(true);

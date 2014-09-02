@@ -103,7 +103,7 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
         editor = new ValidatingEditor(SiteFields.getFieldDescriptors(User.class));
         editor.setCaption("User");
         editor.addListener((ValidatingEditorStateListener) this);
-        editor.setWidth("380px");
+        editor.setWidth("480px");
         layout.addComponent(editor, 0, 1);
 
 
