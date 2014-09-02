@@ -69,12 +69,11 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
 
         final Company company = getSite().getSiteContext().getObject(Company.class);
         if (company.isOpenIdLogin()) {
-            final Panel openIdPanel = new Panel();
-            openIdPanel.setStyleName(Reindeer.PANEL_LIGHT);
-            openIdPanel.setCaption("OpenID Login");
-            layout.addComponent(openIdPanel);
+            final VerticalLayout mainPanel = new VerticalLayout();
+            mainPanel.setCaption("OpenID Login");
+            layout.addComponent(mainPanel);
             final HorizontalLayout openIdLayout = new HorizontalLayout();
-            openIdPanel.setContent(openIdLayout);
+            mainPanel.addComponent(openIdLayout);
             openIdLayout.setMargin(new MarginInfo(false, false, true, false));
             openIdLayout.setSpacing(true);
             final String returnViewName = "openidlogin";

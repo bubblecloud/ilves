@@ -158,12 +158,11 @@ public final class AccountFlowlet extends AbstractFlowlet {
 
         final Company company = getSite().getSiteContext().getObject(Company.class);
         if (company.isOpenIdLogin()) {
-            final Panel openIdPanel = new Panel();
-            openIdPanel.setStyleName(Reindeer.PANEL_LIGHT);
-            openIdPanel.setCaption("Choose OpenID Provider:");
-            gridLayout.addComponent(openIdPanel, 0, 1);
+            final VerticalLayout mainPanel = new VerticalLayout();
+            mainPanel.setCaption("Choose OpenID Provider:");
+            gridLayout.addComponent(mainPanel, 0, 1);
             final HorizontalLayout openIdLayout = new HorizontalLayout();
-            openIdPanel.setContent(openIdLayout);
+            mainPanel.addComponent(openIdLayout);
             openIdLayout.setMargin(new MarginInfo(false, false, true, false));
             openIdLayout.setSpacing(true);
             final String returnViewName = "openidlink";
