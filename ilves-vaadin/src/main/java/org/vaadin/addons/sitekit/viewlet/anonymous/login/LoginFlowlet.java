@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.viewlet.anonymous.login;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.shared.ui.MarginInfo;
@@ -86,7 +87,7 @@ public final class LoginFlowlet extends AbstractFlowlet {
         loginFormLayout.setSpacing(true);
 
         final TextField emailAddressField = new TextField(getSite().localize("input-email-address"));
-        emailAddressField.setId("email");
+        emailAddressField.setId("username");
         emailAddressField.setMaxLength(255);
         emailAddressField.setWidth(400, Unit.PIXELS);
         loginFormLayout.addComponent(emailAddressField);
@@ -99,6 +100,7 @@ public final class LoginFlowlet extends AbstractFlowlet {
 
         final Button loginButton = new Button(getSite().localize("button-login"));
         loginButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        loginButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         loginButton.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {

@@ -128,7 +128,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
         gridLayout.addComponent(titleLayout, 0, 3);
 
         final Table table = new Table();
-        table.setPageLength(10);
+        table.setPageLength(5);
         entityGrid = new Grid(table, entityContainer);
         entityGrid.setFields(fieldDefinitions);
         entityGrid.setFilters(filterDefinitions);
