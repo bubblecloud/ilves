@@ -143,7 +143,9 @@ public class PasswordResetViewlet extends AbstractViewlet {
                             Notification.show(getSite().localize("message-invalid-password-reset-pin"),
                                     Notification.Type.WARNING_MESSAGE);
                             final Company company = getSite().getSiteContext().getObject(Company.class);
-                            getUI().getPage().setLocation(company.getUrl() + "#!reset");
+                            //getUI().getPage().setLocation(company.getUrl() + "#!reset");
+                            UI.getCurrent().getNavigator().navigateTo("reset");
+
                             getSession().close();
                         }
 

@@ -95,4 +95,17 @@ public abstract class AbstractSiteUI extends UI {
         getSession().setAttribute("redirectNotificationType", notificationType);
         getUI().getPage().setLocation(siteUrl + "#!" + viewName.replaceAll(" ", "%20"));
     }
+
+    /**
+     * Redirects user to given view and shows notification.
+     *
+     * @param viewName the view name
+     * @param notification the notification message
+     * @param notificationType the notification type
+     */
+    public void navigateTo(final String viewName, final String notification, final Notification.Type notificationType) {
+        getSession().setAttribute("redirectNotification", notification);
+        getSession().setAttribute("redirectNotificationType", notificationType);
+        UI.getCurrent().getNavigator().navigateTo(viewName.replaceAll(" ", "%20"));
+    }
 }

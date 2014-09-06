@@ -151,11 +151,9 @@ public final class HorizontalNavigationViewlet extends AbstractViewlet {
                 @Override
                 public void buttonClick(final ClickEvent event) {
                     final Company company = getSite().getSiteContext().getObject(Company.class);
-                    getUI().getPage().setLocation(company.getUrl());
-
-                    // Close the VaadinSession
+                    UI.getCurrent().getNavigator().navigateTo(navigationVersion.getDefaultPageName());
+                    getSession().getSession().invalidate();
                     getSession().close();
-
                 }
             });
 

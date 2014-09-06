@@ -242,9 +242,9 @@ public final class Site implements ViewProvider, ViewChangeListener {
 
     @Override
     public String getViewName(final String viewAndParameters) {
-        if (viewAndParameters.length() == 0) {
+        /*if (viewAndParameters.length() == 0) {
             return getCurrentNavigationVersion().getDefaultPageName();
-        }
+        }*/
         if (viewAndParameters.contains("/")) {
             return viewAndParameters.split("/")[0];
         } else {
@@ -253,7 +253,13 @@ public final class Site implements ViewProvider, ViewChangeListener {
     }
 
     @Override
-    public View getView(final String viewName) {
+    public View getView(final String viewName_) {
+        final String viewName;
+        if (viewName_.length() == 0) {
+            viewName = getCurrentNavigationVersion().getDefaultPageName();
+        } else {
+            viewName = viewName_;
+        }
         if (!views.containsKey(viewName)) {
             for (final ViewDescriptor viewDescriptor : contentProvider.getDynamicSiteDescriptor().getViewDescriptors()) {
                 if (viewDescriptor.getName().equals(viewName)) {
@@ -263,8 +269,8 @@ public final class Site implements ViewProvider, ViewChangeListener {
         }
         if (!views.containsKey(viewName)) {
             final Company company = getSiteContext().getObject(Company.class);
-            ((AbstractSiteUI) UI.getCurrent()).redirectTo(
-                    company.getUrl(), getCurrentNavigationVersion().getDefaultPageName(),
+            ((AbstractSiteUI) UI.getCurrent()).navigateTo(
+                    getCurrentNavigationVersion().getDefaultPageName(),
                     localize("message-access-denied"), Notification.Type.WARNING_MESSAGE);
 
             for (final ViewDescriptor viewDescriptor : contentProvider.getDynamicSiteDescriptor().getViewDescriptors()) {

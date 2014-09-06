@@ -30,7 +30,16 @@ $footer-color: #DDDDDD;
   }
 
   div#ilves-header-wrapper {
+    background: #999999;
+    background: -moz-linear-gradient(top, #1b87e3 2%, #166ed5 98%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(2%,#1b87e3), color-stop(98%,#166ed5));
     background-image: -webkit-linear-gradient(top, #1b87e3 2%, #166ed5 98%);
+    background: -o-linear-gradient(top, #1b87e3 2%, #166ed5 98%);
+    background: -ms-linear-gradient(top, #1b87e3 2%, #166ed5 98%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b87e3', endColorstr='#166ed5',GradientType=1 );
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b87e3', endColorstr='#166ed5',GradientType=1 );
+    background: -ms-linear-gradient(top, #1b87e3 2%, #166ed5 98%);
+
     height: 52px;
   }
 
@@ -252,16 +261,6 @@ $footer-color: #DDDDDD;
     margin-top: -4px;
     margin-right: 6px;
     margin-left: 4px;
-  }
-
-  .menu-bar-navigation .v-menubar-menuitem-navigation-login {
-    float: right;
-    margin-right: 10px;
-  }
-
-  .menu-bar-navigation .v-menubar-menuitem-navigation-logout {
-    float: right;
-    margin-right: 10px;
   }
 
   div.gravatar a img {
