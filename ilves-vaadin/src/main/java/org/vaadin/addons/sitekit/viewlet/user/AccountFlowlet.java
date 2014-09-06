@@ -24,7 +24,6 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.themes.Reindeer;
 import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
@@ -36,9 +35,9 @@ import org.vaadin.addons.sitekit.model.Customer;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
+import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.OpenIdUtil;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowlet;
-import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupFlowlet;
 
 import javax.persistence.EntityManager;

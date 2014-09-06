@@ -15,19 +15,6 @@
  */
 package org.vaadin.addons.sitekit.viewlet.administrator.user;
 
-import org.vaadin.addons.sitekit.cache.UserClientCertificateCache;
-import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
-import org.vaadin.addons.sitekit.grid.FieldDescriptor;
-import org.vaadin.addons.sitekit.grid.FilterDescriptor;
-import org.vaadin.addons.sitekit.grid.FormattingTable;
-import org.vaadin.addons.sitekit.grid.Grid;
-import org.vaadin.addons.sitekit.grid.ValidatingEditor;
-import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
-import org.vaadin.addons.sitekit.model.User;
-import org.vaadin.addons.sitekit.model.GroupMember;
-import org.vaadin.addons.sitekit.site.SiteFields;
-import org.vaadin.addons.sitekit.util.ContainerUtil;
-import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.ui.Button;
@@ -37,6 +24,13 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import org.vaadin.addons.lazyquerycontainer.EntityContainer;
+import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
+import org.vaadin.addons.sitekit.grid.*;
+import org.vaadin.addons.sitekit.model.GroupMember;
+import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.site.SiteFields;
+import org.vaadin.addons.sitekit.util.ContainerUtil;
+import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
 
 import javax.persistence.EntityManager;
 import java.security.NoSuchAlgorithmException;

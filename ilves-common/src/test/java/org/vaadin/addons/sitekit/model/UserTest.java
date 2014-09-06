@@ -1,7 +1,7 @@
 package org.vaadin.addons.sitekit.model;
 
-import org.junit.Assert;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.vaadin.addons.sitekit.dao.UserDao;

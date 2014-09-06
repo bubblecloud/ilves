@@ -15,8 +15,8 @@
  */
 package org.vaadin.addons.sitekit.util;
 
-import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.lazyquerycontainer.LazyQueryContainer;
+import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 
 import java.util.List;
 

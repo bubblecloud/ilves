@@ -24,12 +24,11 @@ import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
-import org.vaadin.addons.sitekit.module.content.model.Asset;
-import org.vaadin.addons.sitekit.module.content.view.*;
-import org.vaadin.addons.sitekit.site.SiteModule;
 import org.vaadin.addons.sitekit.module.content.dao.ContentDao;
+import org.vaadin.addons.sitekit.module.content.model.Asset;
 import org.vaadin.addons.sitekit.module.content.model.Content;
 import org.vaadin.addons.sitekit.module.content.model.MarkupType;
+import org.vaadin.addons.sitekit.module.content.view.*;
 import org.vaadin.addons.sitekit.site.*;
 
 import javax.persistence.EntityManager;

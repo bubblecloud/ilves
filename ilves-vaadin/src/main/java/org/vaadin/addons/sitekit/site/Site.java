@@ -15,9 +15,7 @@
  */
 package org.vaadin.addons.sitekit.site;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.navigator.ViewProvider;
 import com.vaadin.server.Resource;
@@ -27,8 +25,10 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 import org.apache.log4j.Logger;
-import com.vaadin.navigator.View;
 import org.vaadin.addons.sitekit.model.Company;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Vaadin portal implementation.

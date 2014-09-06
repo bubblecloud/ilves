@@ -16,9 +16,7 @@
 package org.vaadin.addons.sitekit.grid;
 
 import com.vaadin.data.Validator;
-import com.vaadin.data.util.PropertyFormatter;
 import com.vaadin.data.util.converter.Converter;
-import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Field;

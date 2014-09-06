@@ -15,22 +15,12 @@
  */
 package sitekit.tutorial;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
-import org.vaadin.addons.sitekit.example.FeedbackViewlet;
-import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
-import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.jetty.DefaultJettyConfiguration;
-import org.vaadin.addons.sitekit.model.Feedback;
-import org.vaadin.addons.sitekit.site.*;
-import org.vaadin.addons.sitekit.util.PersistenceUtil;
-import org.vaadin.addons.sitekit.util.PropertiesUtil;
-
-import java.net.BindException;
-import java.net.URI;
+import org.vaadin.addons.sitekit.site.DefaultSiteUI;
+import org.vaadin.addons.sitekit.site.NavigationVersion;
+import org.vaadin.addons.sitekit.site.SiteDescriptor;
+import org.vaadin.addons.sitekit.site.ViewDescriptor;
 
 /**
  * Tutorial site main class.

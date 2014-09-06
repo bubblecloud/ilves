@@ -16,14 +16,12 @@
 package org.vaadin.addons.sitekit.grid;
 
 import com.vaadin.data.Validator;
-import com.vaadin.data.util.PropertyFormatter;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.UI;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 

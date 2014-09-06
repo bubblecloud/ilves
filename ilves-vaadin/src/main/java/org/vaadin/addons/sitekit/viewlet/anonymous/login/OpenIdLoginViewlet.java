@@ -17,7 +17,6 @@ package org.vaadin.addons.sitekit.viewlet.anonymous.login;
 
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
-import com.vaadin.ui.LoginForm;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import org.apache.log4j.Logger;
@@ -33,11 +32,9 @@ import org.vaadin.addons.sitekit.site.AbstractViewlet;
 import org.vaadin.addons.sitekit.site.ProcessingContext;
 import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
 import org.vaadin.addons.sitekit.util.OpenIdUtil;
-import org.vaadin.addons.sitekit.util.StringUtil;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
-import java.security.MessageDigest;
 import java.util.List;
 
 /**

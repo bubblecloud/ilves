@@ -15,8 +15,6 @@
  */
 package org.vaadin.addons.sitekit.viewlet.anonymous.login;
 
-import com.vaadin.data.validator.EmailValidator;
-import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.shared.ui.MarginInfo;

@@ -4,7 +4,6 @@ import de.neuland.jade4j.JadeConfiguration;
 import de.neuland.jade4j.template.JadeTemplate;
 import de.neuland.jade4j.template.TemplateLoader;
 import org.apache.log4j.Logger;
-import org.vaadin.addons.sitekit.site.Site;
 import org.vaadin.addons.sitekit.site.SiteException;
 
 import java.io.*;

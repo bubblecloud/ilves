@@ -15,21 +15,15 @@
  */
 package org.vaadin.addons.sitekit.site;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
+import com.vaadin.data.Validator;
 import com.vaadin.data.util.converter.StringToIntegerConverter;
+import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.data.validator.IntegerRangeValidator;
-import com.vaadin.ui.*;
+import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.TextField;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
-
-import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
-import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.grid.field.DatePartField;
 import org.vaadin.addons.sitekit.grid.field.GroupField;
 import org.vaadin.addons.sitekit.grid.field.TimestampField;
@@ -38,8 +32,8 @@ import org.vaadin.addons.sitekit.grid.formatter.CertificateConverter;
 import org.vaadin.addons.sitekit.grid.formatter.DatePartConverter;
 import org.vaadin.addons.sitekit.grid.formatter.TimestampConverter;
 import org.vaadin.addons.sitekit.model.*;
-import com.vaadin.data.Validator;
-import com.vaadin.data.validator.EmailValidator;
+
+import java.util.*;
 
 /**
  * Default Site Kit field descriptors.

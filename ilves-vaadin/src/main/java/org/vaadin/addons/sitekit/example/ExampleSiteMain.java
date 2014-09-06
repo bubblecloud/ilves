@@ -15,11 +15,11 @@
  */
 package org.vaadin.addons.sitekit.example;
 
-import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.server.Server;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
-import org.vaadin.addons.sitekit.model.Feedback;
 import org.vaadin.addons.sitekit.jetty.DefaultJettyConfiguration;
+import org.vaadin.addons.sitekit.model.Feedback;
 import org.vaadin.addons.sitekit.site.*;
 
 /**

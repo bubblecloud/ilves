@@ -15,12 +15,9 @@
  */
 package org.vaadin.addons.sitekit.viewlet.anonymous;
 
+import com.vaadin.ui.Label;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
-
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
 
 /**
  * Viewlet which renders company information.

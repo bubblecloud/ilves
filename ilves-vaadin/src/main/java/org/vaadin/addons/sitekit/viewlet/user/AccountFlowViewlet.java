@@ -18,7 +18,6 @@ package org.vaadin.addons.sitekit.viewlet.user;
 import org.vaadin.addons.sitekit.flow.AbstractFlowViewlet;
 import org.vaadin.addons.sitekit.flow.Flowlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowlet;
-import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomersFlowlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupFlowlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupUserMemberFlowlet;
 

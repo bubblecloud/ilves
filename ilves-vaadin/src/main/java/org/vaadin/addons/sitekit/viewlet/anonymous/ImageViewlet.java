@@ -15,11 +15,11 @@
  */
 package org.vaadin.addons.sitekit.viewlet.anonymous;
 
-import org.vaadin.addons.sitekit.site.AbstractViewlet;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.VerticalLayout;
+import org.vaadin.addons.sitekit.site.AbstractViewlet;
 
 /**
  * Viewlet which renders image from Theme.

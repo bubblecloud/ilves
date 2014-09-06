@@ -16,7 +16,8 @@
 package org.vaadin.addons.sitekit.dao;
 
 import org.apache.log4j.Logger;
-import org.vaadin.addons.sitekit.model.*;
+import org.vaadin.addons.sitekit.model.Company;
+import org.vaadin.addons.sitekit.model.UserDirectory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;

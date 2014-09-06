@@ -15,8 +15,6 @@
  */
 package org.vaadin.addons.sitekit.site;
 
-import org.vaadin.addons.sitekit.site.SiteDescriptor;
-
 /**
  * Interface for site extension modules.
  *

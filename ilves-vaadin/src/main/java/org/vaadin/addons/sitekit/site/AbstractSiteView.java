@@ -15,17 +15,13 @@
  */
 package org.vaadin.addons.sitekit.site;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.*;
 import org.apache.log4j.Logger;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Abstract base class for site view implementations.

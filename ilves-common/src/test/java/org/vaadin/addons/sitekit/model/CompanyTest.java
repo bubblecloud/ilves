@@ -1,10 +1,6 @@
 package org.vaadin.addons.sitekit.model;
 
-import org.junit.Assert;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import org.vaadin.addons.sitekit.util.TestUtil;
 
 import javax.persistence.EntityManager;

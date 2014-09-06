@@ -15,11 +15,10 @@
  */
 package org.vaadin.addons.sitekit.grid.validator;
 
-import org.vaadin.addons.sitekit.grid.ValidatingEditor;
-import org.vaadin.addons.sitekit.site.Site;
-
 import com.vaadin.data.Property;
 import com.vaadin.data.Validator;
+import org.vaadin.addons.sitekit.grid.ValidatingEditor;
+import org.vaadin.addons.sitekit.site.Site;
 
 /**
  * Password validator.

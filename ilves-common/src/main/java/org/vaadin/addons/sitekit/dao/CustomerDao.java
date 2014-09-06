@@ -15,8 +15,8 @@
  */
 package org.vaadin.addons.sitekit.dao;
 
-import org.vaadin.addons.sitekit.model.Customer;
 import org.apache.log4j.Logger;
+import org.vaadin.addons.sitekit.model.Customer;
 import org.vaadin.addons.sitekit.model.Group;
 
 import javax.persistence.EntityManager;

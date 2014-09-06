@@ -15,11 +15,10 @@
  */
 package org.vaadin.addons.sitekit.cache;
 
-import java.util.LinkedList;
-
 import org.apache.commons.collections.MapIterator;
 import org.apache.commons.collections.map.LRUMap;
-import org.vaadin.addons.sitekit.model.Group;
+
+import java.util.LinkedList;
 
 /**
  * Simple in memory cache.

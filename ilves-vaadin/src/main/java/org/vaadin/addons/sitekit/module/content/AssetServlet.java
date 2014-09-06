@@ -1,25 +1,17 @@
 package org.vaadin.addons.sitekit.module.content;
 
-import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.UI;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.eclipse.jetty.http.HttpStatus;
 import org.vaadin.addons.sitekit.cache.InMemoryCache;
 import org.vaadin.addons.sitekit.cache.PrivilegeCache;
 import org.vaadin.addons.sitekit.dao.CompanyDao;
-import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
-import org.vaadin.addons.sitekit.model.Privilege;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.module.content.dao.ContentDao;
 import org.vaadin.addons.sitekit.module.content.model.Asset;
-import org.vaadin.addons.sitekit.site.AbstractSiteUI;
 import org.vaadin.addons.sitekit.site.DefaultSiteUI;
-import org.vaadin.addons.sitekit.util.PersistenceUtil;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
-import org.vaadin.addons.sitekit.viewlet.user.privilege.PrivilegesFlowlet;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
@@ -27,11 +19,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.security.cert.Certificate;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Servlet for sharing assets.

@@ -1,25 +1,23 @@
 package org.vaadin.addons.sitekit.jetty;
 
-import org.junit.After;
-import org.junit.Assert;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.junit.After;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.vaadin.addons.sitekit.util.CertificateUtil;
 
-import javax.net.ssl.*;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSocketFactory;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.Socket;
 import java.net.URL;
-import java.security.*;
 import java.security.cert.X509Certificate;
-import java.util.Properties;
 
 /**
  * Class for testing Jetty TSL functionality.

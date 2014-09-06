@@ -19,15 +19,14 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.model.User;
 
-import java.security.cert.Certificate;
-import java.security.cert.CertificateEncodingException;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.List;
 

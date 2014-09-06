@@ -19,7 +19,6 @@ import com.vaadin.ui.ComboBox;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
-import com.vaadin.ui.Select;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

@@ -15,16 +15,9 @@
  */
 package org.vaadin.addons.sitekit.site;
 
-import com.vaadin.ui.UI;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * LocalizationProvider implementation which loads localized values from

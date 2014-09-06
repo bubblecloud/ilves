@@ -16,7 +16,10 @@
 package org.vaadin.addons.sitekit.module.content.view;
 
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import org.markdown4j.Markdown4jProcessor;
 import org.vaadin.addons.sitekit.flow.AbstractFlowViewlet;

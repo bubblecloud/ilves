@@ -15,11 +15,9 @@
  */
 package org.vaadin.addons.sitekit.module.content.view;
 
-import com.vaadin.server.ThemeResource;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.*;
-import com.vaadin.ui.themes.Reindeer;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.VerticalLayout;
 import org.apache.log4j.Logger;
 import org.markdown4j.Markdown4jProcessor;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;

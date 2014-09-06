@@ -3,7 +3,6 @@ package org.vaadin.addons.sitekit.grid.formatter;
 import com.vaadin.data.util.converter.Converter;
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.util.io.pem.PemObject;
-import org.bouncycastle.util.io.pem.PemObjectGenerator;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 

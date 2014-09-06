@@ -15,24 +15,16 @@
  */
 package org.vaadin.addons.sitekit.flow;
 
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.*;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.TabSheet.Tab;
+import org.vaadin.addons.sitekit.site.AbstractViewlet;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-
-import com.vaadin.shared.ui.label.ContentMode;
-import org.vaadin.addons.sitekit.site.AbstractViewlet;
-
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.TabSheet.Tab;
 
 /**
  * Viewlet which contains flowlets.

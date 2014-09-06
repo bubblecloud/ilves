@@ -1,9 +1,6 @@
 package org.vaadin.addons.sitekit.grid.field;
 
-import com.vaadin.data.Buffered;
-import com.vaadin.data.Validator;
 import com.vaadin.shared.ui.colorpicker.Color;
-import com.vaadin.ui.AbstractColorPicker;
 import com.vaadin.ui.ColorPicker;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomField;

@@ -16,10 +16,8 @@
 package org.vaadin.addons.sitekit.viewlet.anonymous;
 
 import com.vaadin.server.Resource;
-import com.vaadin.ui.*;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.themes.BaseTheme;
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.UI;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
 import org.vaadin.addons.sitekit.site.NavigationVersion;

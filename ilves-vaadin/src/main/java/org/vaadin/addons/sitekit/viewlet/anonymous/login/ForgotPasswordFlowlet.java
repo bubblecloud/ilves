@@ -30,7 +30,9 @@ import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
-import org.vaadin.addons.sitekit.model.*;
+import org.vaadin.addons.sitekit.model.Company;
+import org.vaadin.addons.sitekit.model.EmailPasswordReset;
+import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.SiteException;
 import org.vaadin.addons.sitekit.util.EmailUtil;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
@@ -169,13 +171,13 @@ public final class ForgotPasswordFlowlet extends AbstractFlowlet {
                             EmailUtil.send(PropertiesUtil.getProperty("site", "smtp-host"),
                                     user.getEmailAddress(), company.getSupportEmailAddress(), "Password Reset Link",
                                     "Password reset has been requested for your user account." +
-                                    "You can perform the reset using the following link: " + url);
+                                            "You can perform the reset using the following link: " + url);
                         }
                     });
                     emailThread.start();
 
                     Notification.show(getSite().localize("message-password-reset-email-sent")
-                            + getSite().localize("message-your-password-reset-pin-is") + pin,
+                                    + getSite().localize("message-your-password-reset-pin-is") + pin,
                             Notification.Type.WARNING_MESSAGE);
 
                     final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())

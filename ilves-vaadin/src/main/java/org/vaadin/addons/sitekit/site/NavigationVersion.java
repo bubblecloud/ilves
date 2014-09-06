@@ -16,7 +16,6 @@
 package org.vaadin.addons.sitekit.site;
 
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.vaadin.addons.sitekit.util.NavigationTreeParser;
 
 import java.util.*;

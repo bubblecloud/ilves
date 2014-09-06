@@ -15,17 +15,15 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.UI;
+import org.vaadin.addons.sitekit.model.Group;
+import org.vaadin.addons.sitekit.model.User;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinSession;
-import org.vaadin.addons.sitekit.model.Group;
-import org.vaadin.addons.sitekit.model.User;
-import com.vaadin.ui.UI;
-import org.vaadin.addons.sitekit.module.audit.AuditService;
 
 /**
  * Security provider session implementation. Security provider should also

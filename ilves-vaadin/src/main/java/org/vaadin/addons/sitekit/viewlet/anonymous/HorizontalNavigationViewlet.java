@@ -15,23 +15,18 @@
  */
 package org.vaadin.addons.sitekit.viewlet.anonymous;
 
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinServletRequest;
-import com.vaadin.server.VaadinSession;
+import com.vaadin.server.Resource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.themes.BaseTheme;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
 import org.vaadin.addons.sitekit.site.NavigationVersion;
 import org.vaadin.addons.sitekit.site.SiteException;
 import org.vaadin.addons.sitekit.site.ViewVersion;
-import com.vaadin.server.Resource;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.themes.BaseTheme;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

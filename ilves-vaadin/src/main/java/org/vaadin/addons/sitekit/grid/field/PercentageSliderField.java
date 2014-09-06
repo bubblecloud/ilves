@@ -1,10 +1,9 @@
 package org.vaadin.addons.sitekit.grid.field;
 
 import com.vaadin.data.Property;
-import com.vaadin.shared.ui.colorpicker.Color;
-import com.vaadin.ui.*;
-import com.vaadin.ui.components.colorpicker.ColorChangeEvent;
-import com.vaadin.ui.components.colorpicker.ColorChangeListener;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.CustomField;
+import com.vaadin.ui.Slider;
 
 /**
  * Color picker form field.

@@ -29,7 +29,6 @@ import org.vaadin.addons.sitekit.module.content.model.Asset;
 import org.vaadin.addons.sitekit.site.SiteException;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
 import org.vaadin.addons.sitekit.viewlet.user.privilege.PrivilegesFlowlet;
-import org.yaml.snakeyaml.introspector.PropertyUtils;
 
 import javax.persistence.EntityManager;
 import java.io.*;

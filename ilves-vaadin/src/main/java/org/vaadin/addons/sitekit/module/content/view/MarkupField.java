@@ -16,7 +16,6 @@
 package org.vaadin.addons.sitekit.module.content.view;
 
 import com.vaadin.ui.TextArea;
-import org.vaadin.addons.sitekit.module.content.model.MarkupType;
 
 /**
  * @author Tommi S.E. Laukkanen

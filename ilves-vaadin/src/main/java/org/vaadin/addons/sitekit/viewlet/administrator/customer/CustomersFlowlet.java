@@ -15,6 +15,11 @@
  */
 package org.vaadin.addons.sitekit.viewlet.administrator.customer;
 
+import com.vaadin.data.util.filter.Compare;
+import com.vaadin.ui.*;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.FilterDescriptor;
@@ -23,15 +28,6 @@ import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Customer;
 import org.vaadin.addons.sitekit.model.PostalAddress;
 import org.vaadin.addons.sitekit.site.SiteFields;
-import com.vaadin.data.util.filter.Compare;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.TextField;
-import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;

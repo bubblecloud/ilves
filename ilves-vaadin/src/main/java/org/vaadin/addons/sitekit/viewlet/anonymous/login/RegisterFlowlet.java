@@ -15,45 +15,38 @@
  */
 package org.vaadin.addons.sitekit.viewlet.anonymous.login;
 
-import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServletRequest;
-
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinServletRequest;
-import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
-import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
-import org.vaadin.addons.sitekit.site.SiteFields;
-import org.vaadin.addons.sitekit.util.EmailUtil;
-import org.vaadin.addons.sitekit.util.PropertiesUtil;
-import org.vaadin.addons.sitekit.util.StringUtil;
-import org.vaadin.addons.sitekit.grid.validator.PasswordValidator;
-import org.vaadin.addons.sitekit.grid.validator.PasswordVerificationValidator;
-import org.apache.log4j.Logger;
-import org.vaadin.addons.lazyquerycontainer.CompositeItem;
-
-import org.vaadin.addons.sitekit.dao.CustomerDao;
-import org.vaadin.addons.sitekit.dao.UserDao;
-import org.vaadin.addons.sitekit.grid.FieldDescriptor;
-import org.vaadin.addons.sitekit.grid.ValidatingEditor;
-import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
-import org.vaadin.addons.sitekit.model.Company;
-import org.vaadin.addons.sitekit.model.Customer;
-import org.vaadin.addons.sitekit.model.Group;
-import org.vaadin.addons.sitekit.model.PostalAddress;
-import org.vaadin.addons.sitekit.model.User;
-
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
+import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinServletRequest;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.themes.ValoTheme;
+import org.apache.log4j.Logger;
+import org.vaadin.addons.lazyquerycontainer.CompositeItem;
+import org.vaadin.addons.sitekit.dao.CustomerDao;
+import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
+import org.vaadin.addons.sitekit.grid.FieldDescriptor;
+import org.vaadin.addons.sitekit.grid.ValidatingEditor;
+import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
+import org.vaadin.addons.sitekit.grid.validator.PasswordValidator;
+import org.vaadin.addons.sitekit.grid.validator.PasswordVerificationValidator;
+import org.vaadin.addons.sitekit.model.*;
+import org.vaadin.addons.sitekit.site.SiteFields;
+import org.vaadin.addons.sitekit.util.EmailUtil;
+import org.vaadin.addons.sitekit.util.PropertiesUtil;
+import org.vaadin.addons.sitekit.util.StringUtil;
+
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Register Flowlet.

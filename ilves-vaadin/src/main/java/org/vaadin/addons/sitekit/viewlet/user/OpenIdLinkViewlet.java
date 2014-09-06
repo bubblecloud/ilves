@@ -15,22 +15,16 @@
  */
 package org.vaadin.addons.sitekit.viewlet.user;
 
-import com.vaadin.ui.*;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
 import org.apache.log4j.Logger;
-import org.openid4java.association.AssociationException;
-import org.openid4java.consumer.ConsumerManager;
 import org.openid4java.consumer.VerificationResult;
-import org.openid4java.discovery.DiscoveryException;
-import org.openid4java.discovery.DiscoveryInformation;
 import org.openid4java.discovery.Identifier;
-import org.openid4java.message.MessageException;
-import org.openid4java.message.ParameterList;
 import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
-import org.vaadin.addons.sitekit.site.DefaultSiteUI;
 import org.vaadin.addons.sitekit.util.OpenIdUtil;
 
 import javax.persistence.EntityManager;

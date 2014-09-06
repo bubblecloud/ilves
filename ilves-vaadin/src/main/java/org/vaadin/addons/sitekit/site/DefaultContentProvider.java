@@ -22,10 +22,10 @@ import org.vaadin.addons.sitekit.viewlet.administrator.group.GroupFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.user.UserFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.*;
 import org.vaadin.addons.sitekit.viewlet.anonymous.login.LoginFlowViewlet;
-import org.vaadin.addons.sitekit.viewlet.user.AccountFlowViewlet;
-import org.vaadin.addons.sitekit.viewlet.user.ProfileImageViewlet;
-import org.vaadin.addons.sitekit.viewlet.user.OpenIdLinkViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.login.OpenIdLoginViewlet;
+import org.vaadin.addons.sitekit.viewlet.user.AccountFlowViewlet;
+import org.vaadin.addons.sitekit.viewlet.user.OpenIdLinkViewlet;
+import org.vaadin.addons.sitekit.viewlet.user.ProfileImageViewlet;
 
 import java.util.ArrayList;
 import java.util.Collections;

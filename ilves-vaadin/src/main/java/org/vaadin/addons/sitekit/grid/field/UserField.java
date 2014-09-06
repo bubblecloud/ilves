@@ -16,9 +16,7 @@
 package org.vaadin.addons.sitekit.grid.field;
 
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Select;
 import org.vaadin.addons.sitekit.model.Company;
-import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
 

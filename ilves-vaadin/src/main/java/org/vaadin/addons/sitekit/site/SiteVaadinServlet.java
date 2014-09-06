@@ -1,17 +1,11 @@
 package org.vaadin.addons.sitekit.site;
 
-import javax.servlet.ServletException;
-
+import com.vaadin.server.*;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Tag;
 
-import com.vaadin.server.BootstrapFragmentResponse;
-import com.vaadin.server.BootstrapListener;
-import com.vaadin.server.BootstrapPageResponse;
-import com.vaadin.server.SessionInitEvent;
-import com.vaadin.server.SessionInitListener;
-import com.vaadin.server.VaadinServlet;
+import javax.servlet.ServletException;
 
 public class SiteVaadinServlet extends VaadinServlet {
     @Override

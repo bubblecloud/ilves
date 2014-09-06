@@ -1,11 +1,12 @@
 package org.vaadin.addons.sitekit.util;
 
 import com.vaadin.event.MouseEvents;
-import com.vaadin.server.Sizeable;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
-import com.vaadin.ui.*;
-import com.vaadin.ui.themes.BaseTheme;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Embedded;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
 import org.apache.log4j.Logger;
 import org.openid4java.association.AssociationException;
 import org.openid4java.consumer.ConsumerException;

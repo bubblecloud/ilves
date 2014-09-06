@@ -15,17 +15,16 @@
  */
 package org.vaadin.addons.sitekit.site;
 
-import org.vaadin.addons.sitekit.cache.UserClientCertificateCache;
-import org.vaadin.addons.sitekit.dao.CompanyDao;
-import org.vaadin.addons.sitekit.dao.UserDao;
-import org.vaadin.addons.sitekit.model.Company;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import org.apache.log4j.Logger;
+import org.vaadin.addons.sitekit.cache.UserClientCertificateCache;
+import org.vaadin.addons.sitekit.dao.CompanyDao;
+import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.User;
-import org.vaadin.addons.sitekit.util.PropertiesUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
