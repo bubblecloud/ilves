@@ -15,14 +15,15 @@
  */
 package org.vaadin.addons.sitekit.viewlet.anonymous.login;
 
+import com.vaadin.data.validator.EmailValidator;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.LoginForm.LoginEvent;
-import com.vaadin.ui.themes.Reindeer;
+import com.vaadin.ui.themes.ValoTheme;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -45,15 +46,12 @@ import java.util.Map;
  *
  * @author Tommi S.E. Laukkanen
  */
-public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.LoginListener {
+public final class LoginFlowlet extends AbstractFlowlet {
     /** Default serial version UID. */
     private static final long serialVersionUID = 1L;
 
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(LoginFlowlet.class);
-
-    /** The login form. */
-    private LoginForm loginForm;;
 
     @Override
     public String getFlowletKey() {
@@ -64,8 +62,12 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
     @Override
     public void initialize() {
 
+        final Panel panel = new Panel();
+
         final VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(true);
         layout.setSpacing(true);
+        panel.setContent(layout);
 
         final Company company = getSite().getSiteContext().getObject(Company.class);
         if (company.isOpenIdLogin()) {
@@ -83,23 +85,33 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
             }
         }
 
-        loginForm = new LoginForm() {
+        final VerticalLayout loginFormLayout = new VerticalLayout();
+        loginFormLayout.setMargin(new MarginInfo(false, false, true, false));
+        loginFormLayout.setSpacing(true);
+
+        final TextField emailAddressField = new TextField(getSite().localize("input-email-address"));
+        emailAddressField.setId("email");
+        emailAddressField.setMaxLength(255);
+        emailAddressField.setWidth(400, Unit.PIXELS);
+        loginFormLayout.addComponent(emailAddressField);
+
+        final PasswordField passwordField = new PasswordField(getSite().localize("input-password"));
+        passwordField.setId("password");
+        passwordField.setMaxLength(160);
+        passwordField.setWidth(400, Unit.PIXELS);
+        loginFormLayout.addComponent(passwordField);
+
+        final Button loginButton = new Button(getSite().localize("button-login"));
+        loginButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        loginButton.addClickListener(new ClickListener() {
             @Override
-            public String getLoginHTML() {
-                return super.getLoginHTML().replace(
-                        "<input class='v-textfield v-widget' style='display:block;'",
-                        "<input class='v-textfield v-widget' style='margin-bottom:10px; display:block;'");
+            public void buttonClick(ClickEvent event) {
+                login(emailAddressField.getValue(), passwordField.getValue());
             }
-        };
+        });
+        loginFormLayout.addComponent(loginButton);
 
-        loginForm.setWidth(200, Unit.PIXELS);
-        loginForm.setHeight(200, Unit.PIXELS);
-        loginForm.setLoginButtonCaption(getSite().localize("button-login"));
-        loginForm.setUsernameCaption(getSite().localize("input-user-name"));
-        loginForm.setPasswordCaption(getSite().localize("input-user-password"));
-        loginForm.addListener(this);
-
-        layout.addComponent(loginForm);
+        layout.addComponent(loginFormLayout);
 
         final Button registerButton = new Button(getSite().localize("button-register") + " >>");
         registerButton.addClickListener(new ClickListener() {
@@ -121,7 +133,7 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
             layout.addComponent(forgotPasswordButton);
         }
 
-        setViewContent(layout);
+        setViewContent(panel);
 
     }
 
@@ -140,32 +152,29 @@ public final class LoginFlowlet extends AbstractFlowlet implements LoginForm.Log
     public void enter() {
     }
 
-    @Override
-    public void onLogin(final LoginEvent event) {
+    public void login(final String emailAddress, final String password) {
 
-        if (event.getLoginParameter("username") == null) {
+        if (emailAddress == null) {
             Notification.show(getSite().localize("message-login-failed"), Notification.Type.WARNING_MESSAGE);
             return;
         }
 
-        if (event.getLoginParameter("password") == null) {
+        if (password == null) {
             Notification.show(getSite().localize("message-login-failed"), Notification.Type.WARNING_MESSAGE);
             return;
         }
 
         final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
                 .getHttpServletRequest();
-        final String userEmailAddress = event.getLoginParameter("username");
-        final String userPassword = ((String) event.getLoginParameter("password"));
 
         final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
         final Company company = getSite().getSiteContext().getObject(Company.class);
-        final User user = UserDao.getUser(entityManager, company, userEmailAddress);
+        final User user = UserDao.getUser(entityManager, company, emailAddress);
         final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
 
-        final String errorKey = PasswordLoginUtil.login(userEmailAddress, request.getRemoteHost(),
+        final String errorKey = PasswordLoginUtil.login(emailAddress, request.getRemoteHost(),
                 request.getRemoteAddr(), request.getRemotePort(),
-                entityManager, company, user, userPassword);
+                entityManager, company, user, password);
 
         if (errorKey == null) {
             // Login success

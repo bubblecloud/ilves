@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.EmailUtil;
@@ -32,7 +34,6 @@ import org.vaadin.addons.sitekit.util.PropertiesUtil;
 import org.vaadin.addons.sitekit.util.StringUtil;
 import org.vaadin.addons.sitekit.grid.validator.PasswordValidator;
 import org.vaadin.addons.sitekit.grid.validator.PasswordVerificationValidator;
-import com.vaadin.ui.Notification;
 import org.apache.log4j.Logger;
 import org.vaadin.addons.lazyquerycontainer.CompositeItem;
 
@@ -51,12 +52,8 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.VerticalLayout;
 
 /**
  * Register Flowlet.
@@ -147,6 +144,7 @@ public final class RegisterFlowlet extends AbstractFlowlet {
         passwordValidator.setEditor(editor);
 
         final Button registerButton = new Button(getSite().localize("button-register"));
+        registerButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
         registerButton.addListener(new ClickListener() {
             /** The default serial version ID. */
             private static final long serialVersionUID = 1L;
@@ -240,10 +238,15 @@ public final class RegisterFlowlet extends AbstractFlowlet {
         panel.addComponent(registerButton);
         panel.setSpacing(true);
 
+        final Panel mainPanel = new Panel();
+
         final HorizontalLayout mainLayout = new HorizontalLayout();
+        mainLayout.setMargin(true);
         mainLayout.addComponent(panel);
 
-        setViewContent(mainLayout);
+        mainPanel.setContent(mainLayout);
+
+        setViewContent(mainPanel);
     }
 
     @Override
