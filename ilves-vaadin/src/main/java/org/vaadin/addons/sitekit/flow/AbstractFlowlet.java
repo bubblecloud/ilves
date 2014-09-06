@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.flow;
 
+import com.vaadin.shared.ui.label.ContentMode;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
 import org.vaadin.addons.sitekit.site.Site;
 
@@ -86,11 +87,11 @@ public abstract class AbstractFlowlet extends CustomComponent implements Flowlet
         titleLayout.setSpacing(true);
 
         final Embedded titleIcon = new Embedded(null, getSite().getIcon("view-icon-" + getFlowletKey()));
-        titleIcon.setWidth(32, UNITS_PIXELS);
-        titleIcon.setHeight(32, UNITS_PIXELS);
+        titleIcon.setWidth(32, Unit.PIXELS);
+        titleIcon.setHeight(32, Unit.PIXELS);
         titleLayout.addComponent(titleIcon);
 
-        final Label titleLabel = new Label("<h1>" + getSite().localize("view-" + getFlowletKey()) + "</h1>", Label.CONTENT_XHTML);
+        final Label titleLabel = new Label("<h1>" + getSite().localize("view-" + getFlowletKey()) + "</h1>", ContentMode.HTML);
         titleLayout.addComponent(titleLabel);
         rootLayout.addComponent(titleLayout, 0, 0);
 

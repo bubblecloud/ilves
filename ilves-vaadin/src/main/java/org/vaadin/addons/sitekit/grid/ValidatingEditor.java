@@ -120,8 +120,8 @@ public class ValidatingEditor extends CustomComponent implements
             fieldIds[i] = fieldDescriptor.getId();
             fieldLabels[i] = new Label(fieldDescriptor.getLabel());
             fieldIcons[i] = new Embedded(null, noneIcon);
-            fieldIcons[i].setWidth(20, UNITS_PIXELS);
-            fieldIcons[i].setHeight(20, UNITS_PIXELS);
+            fieldIcons[i].setWidth(20, Unit.PIXELS);
+            fieldIcons[i].setHeight(20, Unit.PIXELS);
 
             formLayout.addComponent(fieldLabels[i], 0, i);
             formLayout.addComponent(fieldIcons[i], 2, i);
@@ -210,17 +210,17 @@ public class ValidatingEditor extends CustomComponent implements
                     if (field instanceof TextField) {
                         ((TextField) field).setNullRepresentation("");
                         ((TextField) field).setTextChangeTimeout(200);
-                        ((TextField) field).addListener((TextChangeListener) this);
+                        ((TextField) field).addTextChangeListener(this);
                     }
                     if (field instanceof TextArea) {
                         ((TextField) field).setNullRepresentation("");
                         ((TextField) field).setTextChangeTimeout(200);
-                        ((TextField) field).addListener((TextChangeListener) this);
+                        ((TextField) field).addTextChangeListener(this);
                     }
                     if (field instanceof PasswordField) {
                         ((PasswordField) field).setNullRepresentation("");
                         ((PasswordField) field).setTextChangeTimeout(200);
-                        ((PasswordField) field).addListener((TextChangeListener) this);
+                        ((PasswordField) field).addTextChangeListener(this);
                     }
                     ((AbstractField) field).setValidationVisible(false);
                     for (final Validator validator : fieldDefinition.getValidators()) {
@@ -238,7 +238,7 @@ public class ValidatingEditor extends CustomComponent implements
                     if (!fieldDefinition.isReadOnly()) {
                         field.setValue(fieldDefinition.getDefaultValue());
                     }
-                    field.addListener(this);
+                    field.addValueChangeListener(this);
                     ((AbstractComponent) field).setImmediate(true);
                     formLayout.setCursorX(1);
                     formLayout.setCursorY(i);

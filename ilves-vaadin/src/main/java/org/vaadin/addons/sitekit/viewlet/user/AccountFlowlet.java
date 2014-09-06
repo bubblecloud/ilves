@@ -20,6 +20,7 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -109,10 +110,10 @@ public final class AccountFlowlet extends AbstractFlowlet {
         userAccountTitle.setMargin(new MarginInfo(false, false, false, false));
         userAccountTitle.setSpacing(true);
         final Embedded userAccountTitleIcon = new Embedded(null, getSite().getIcon("view-icon-user"));
-        userAccountTitleIcon.setWidth(32, UNITS_PIXELS);
-        userAccountTitleIcon.setHeight(32, UNITS_PIXELS);
+        userAccountTitleIcon.setWidth(32, Unit.PIXELS);
+        userAccountTitleIcon.setHeight(32, Unit.PIXELS);
         userAccountTitle.addComponent(userAccountTitleIcon);
-        final Label userAccountTitleLabel = new Label("<h2>User Account</h2>", Label.CONTENT_XHTML);
+        final Label userAccountTitleLabel = new Label("<h2>User Account</h2>", ContentMode.HTML);
         userAccountTitle.addComponent(userAccountTitleLabel);
         gridLayout.addComponent(userAccountTitle, 0, 0);
 
@@ -120,10 +121,10 @@ public final class AccountFlowlet extends AbstractFlowlet {
         titleLayout.setMargin(new MarginInfo(true, false, false, false));
         titleLayout.setSpacing(true);
         final Embedded titleIcon = new Embedded(null, getSite().getIcon("view-icon-customer"));
-        titleIcon.setWidth(32, UNITS_PIXELS);
-        titleIcon.setHeight(32, UNITS_PIXELS);
+        titleIcon.setWidth(32, Unit.PIXELS);
+        titleIcon.setHeight(32, Unit.PIXELS);
         titleLayout.addComponent(titleIcon);
-        final Label titleLabel = new Label("<h2>Customer Accounts</h2>", Label.CONTENT_XHTML);
+        final Label titleLabel = new Label("<h2>Customer Accounts</h2>",ContentMode.HTML);
         titleLayout.addComponent(titleLabel);
         gridLayout.addComponent(titleLayout, 0, 3);
 
@@ -142,7 +143,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
         final Button editUserButton = new Button("Edit User Account");
         editUserButton.setIcon(getSite().getIcon("button-icon-edit"));
         gridLayout.addComponent(editUserButton, 0, 2);
-        editUserButton.addListener(new ClickListener() {
+        editUserButton.addClickListener(new ClickListener() {
             /** Serial version UID. */
             private static final long serialVersionUID = 1L;
 
@@ -181,7 +182,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
         customerButtonsLayout.addComponent(editCustomerDetailsButton);
         editCustomerDetailsButton.setEnabled(false);
         editCustomerDetailsButton.setIcon(getSite().getIcon("button-icon-edit"));
-        editCustomerDetailsButton.addListener(new ClickListener() {
+        editCustomerDetailsButton.addClickListener(new ClickListener() {
             /** Serial version UID. */
             private static final long serialVersionUID = 1L;
 
@@ -200,7 +201,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
         customerButtonsLayout.addComponent(editCustomerMembersButton);
         editCustomerMembersButton.setEnabled(false);
         editCustomerMembersButton.setIcon(getSite().getIcon("button-icon-edit"));
-        editCustomerMembersButton.addListener(new ClickListener() {
+        editCustomerMembersButton.addClickListener(new ClickListener() {
             /** Serial version UID. */
             private static final long serialVersionUID = 1L;
 
@@ -219,7 +220,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
         customerButtonsLayout.addComponent(editCustomerAdminsButton);
         editCustomerAdminsButton.setEnabled(false);
         editCustomerAdminsButton.setIcon(getSite().getIcon("button-icon-edit"));
-        editCustomerAdminsButton.addListener(new ClickListener() {
+        editCustomerAdminsButton.addClickListener(new ClickListener() {
             /** Serial version UID. */
             private static final long serialVersionUID = 1L;
 

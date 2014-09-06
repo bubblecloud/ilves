@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.grid.field;
 
+import com.vaadin.ui.ComboBox;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
@@ -32,7 +33,7 @@ import javax.persistence.criteria.Root;
  *
  * @author Tommi S.E. Laukkanen
  */
-public class GroupField extends Select {
+public class GroupField extends ComboBox {
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
 

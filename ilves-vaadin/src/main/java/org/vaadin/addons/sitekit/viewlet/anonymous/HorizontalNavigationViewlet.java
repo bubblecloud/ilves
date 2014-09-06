@@ -19,6 +19,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
@@ -94,12 +95,12 @@ public final class HorizontalNavigationViewlet extends AbstractViewlet {
                 indentBuilder.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
             }
 
-            final Label indent = new Label(indentBuilder.toString(), Label.CONTENT_XHTML);
+            final Label indent = new Label(indentBuilder.toString(), ContentMode.HTML);
             itemLayout.addComponent(indent);
             if (iconResource != null) {
                 final Embedded embedded = new Embedded(null, iconResource);
-                embedded.setWidth(20, UNITS_PIXELS);
-                embedded.setHeight(20, UNITS_PIXELS);
+                embedded.setWidth(20, Unit.PIXELS);
+                embedded.setHeight(20, Unit.PIXELS);
                 itemLayout.addComponent(embedded);
             }
 
@@ -133,12 +134,12 @@ public final class HorizontalNavigationViewlet extends AbstractViewlet {
             }
 
             final Resource iconResource = getSite().getIcon("page-icon-logout");
-            final Label indent = new Label(indentBuilder.toString(), Label.CONTENT_XHTML);
+            final Label indent = new Label(indentBuilder.toString(),ContentMode.HTML);
             itemLayout.addComponent(indent);
             if (iconResource != null) {
                 final Embedded embedded = new Embedded(null, iconResource);
-                embedded.setWidth(20, UNITS_PIXELS);
-                embedded.setHeight(20, UNITS_PIXELS);
+                embedded.setWidth(20, Unit.PIXELS);
+                embedded.setHeight(20, Unit.PIXELS);
                 itemLayout.addComponent(embedded);
             }
 

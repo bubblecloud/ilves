@@ -109,10 +109,10 @@ public final class CustomersFlowlet extends AbstractFlowlet {
 
         final Button addButton = new Button("Add");
         addButton.setIcon(getSite().getIcon("button-icon-add"));
-        addButton.setWidth(100, UNITS_PIXELS);
+        addButton.setWidth(100, Unit.PIXELS);
         buttonLayout.addComponent(addButton);
 
-        addButton.addListener(new ClickListener() {
+        addButton.addClickListener(new ClickListener() {
             /** Serial version UID. */
             private static final long serialVersionUID = 1L;
 
@@ -131,9 +131,9 @@ public final class CustomersFlowlet extends AbstractFlowlet {
 
         final Button editButton = new Button("Edit");
         editButton.setIcon(getSite().getIcon("button-icon-edit"));
-        editButton.setWidth(100, UNITS_PIXELS);
+        editButton.setWidth(100, Unit.PIXELS);
         buttonLayout.addComponent(editButton);
-        editButton.addListener(new ClickListener() {
+        editButton.addClickListener(new ClickListener() {
             /** Serial version UID. */
             private static final long serialVersionUID = 1L;
 
@@ -150,9 +150,9 @@ public final class CustomersFlowlet extends AbstractFlowlet {
 
         final Button removeButton = new Button("Remove");
         removeButton.setIcon(getSite().getIcon("button-icon-remove"));
-        removeButton.setWidth(100, UNITS_PIXELS);
+        removeButton.setWidth(100, Unit.PIXELS);
         buttonLayout.addComponent(removeButton);
-        removeButton.addListener(new ClickListener() {
+        removeButton.addClickListener(new ClickListener() {
             /** Serial version UID. */
             private static final long serialVersionUID = 1L;
 

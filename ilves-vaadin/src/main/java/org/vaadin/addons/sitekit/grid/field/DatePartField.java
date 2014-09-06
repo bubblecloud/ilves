@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.grid.field;
 
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.DateField;
 
 /**
@@ -31,7 +32,7 @@ public final class DatePartField extends DateField {
      */
     public DatePartField() {
         super();
-        setResolution(RESOLUTION_DAY);
+        setResolution(Resolution.DAY);
         setDateFormat("dd/MM/yyyy");
     }
 

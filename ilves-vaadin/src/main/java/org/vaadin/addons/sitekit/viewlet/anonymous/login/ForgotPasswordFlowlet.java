@@ -98,7 +98,7 @@ public final class ForgotPasswordFlowlet extends AbstractFlowlet {
         editor = new ValidatingEditor(fieldDescriptors);
 
         final Button resetPasswordButton = new Button(getSite().localize("button-reset-password"));
-        resetPasswordButton.addListener(new ClickListener() {
+        resetPasswordButton.addClickListener(new ClickListener() {
             /** The default serial version ID. */
             private static final long serialVersionUID = 1L;
 
@@ -187,7 +187,7 @@ public final class ForgotPasswordFlowlet extends AbstractFlowlet {
                 } catch (final Exception e) {
                     LOGGER.error("Error preparing password reset.", e);
                     Notification.show(getSite().localize("message-password-reset-prepare-error"),
-                            Notification.TYPE_WARNING_MESSAGE);
+                            Notification.Type.WARNING_MESSAGE);
                 }
                 reset();
             }

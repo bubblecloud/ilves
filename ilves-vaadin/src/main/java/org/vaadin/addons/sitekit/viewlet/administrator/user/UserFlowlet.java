@@ -132,7 +132,7 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
         saveButton = new Button("Save");
         saveButton.setImmediate(true);
         editorButtonLayout.addComponent(saveButton);
-        saveButton.addListener(new ClickListener() {
+        saveButton.addClickListener(new ClickListener() {
             /** Serial version UID. */
             private static final long serialVersionUID = 1L;
 
@@ -170,7 +170,7 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
         discardButton = new Button("Discard");
         discardButton.setImmediate(true);
         editorButtonLayout.addComponent(discardButton);
-        discardButton.addListener(new ClickListener() {
+        discardButton.addClickListener(new ClickListener() {
             /** Serial version UID. */
             private static final long serialVersionUID = 1L;
 

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import com.vaadin.shared.ui.label.ContentMode;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
 
 import com.vaadin.ui.Alignment;
@@ -85,11 +86,11 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
 
         topBackButton = new Button(getSite().localize("button-back"));
         topBackButton.setEnabled(false);
-        topBackButton.addListener(this);
+        topBackButton.addClickListener(this);
         topLayout.addComponent(topBackButton);
         topLayout.setExpandRatio(topBackButton, 0.0f);
 
-        topPathLabel = new Label("", Label.CONTENT_XHTML);
+        topPathLabel = new Label("", ContentMode.HTML);
 
         topLayout.addComponent(topPathLabel);
         topLayout.setComponentAlignment(topPathLabel, Alignment.MIDDLE_LEFT);
@@ -106,11 +107,11 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
 
         bottomBackButton = new Button(getSite().localize("button-back"));
         bottomBackButton.setEnabled(false);
-        bottomBackButton.addListener(this);
+        bottomBackButton.addClickListener(this);
         bottomLayout.addComponent(bottomBackButton);
         bottomLayout.setExpandRatio(bottomBackButton, 0f);
 
-        bottomPathLabel = new Label("", Label.CONTENT_XHTML);
+        bottomPathLabel = new Label("", ContentMode.HTML);
 
         bottomLayout.addComponent(bottomPathLabel);
         bottomLayout.setExpandRatio(bottomPathLabel, 1f);
@@ -208,7 +209,7 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
             tabSheet.setSelectedTab((Component) view);
             return (T) view;
         } else {
-            Notification.show("Please save or discard changes.", Notification.TYPE_WARNING_MESSAGE);
+            Notification.show("Please save or discard changes.", Notification.Type.WARNING_MESSAGE);
             return null;
         }
     }

@@ -166,9 +166,9 @@ public class Grid extends CustomComponent {
                 table.setConverter(fieldDefinition.getId(), (Converter<String, ?>) fieldDefinition.getConverter());
             }
             if (fieldDefinition.getValueAlignment() == HorizontalAlignment.CENTER) {
-                table.setColumnAlignment(fieldDefinition.getId(), Table.ALIGN_CENTER);
+                table.setColumnAlignment(fieldDefinition.getId(), Table.Align.CENTER);
             } else if (fieldDefinition.getValueAlignment() == HorizontalAlignment.RIGHT) {
-                table.setColumnAlignment(fieldDefinition.getId(), Table.ALIGN_RIGHT);
+                table.setColumnAlignment(fieldDefinition.getId(), Table.Align.RIGHT);
             }
         }
         if (getContainer().getContainerPropertyIds().contains(LazyQueryView.PROPERTY_ID_ITEM_STATUS)) {
@@ -190,7 +190,7 @@ public class Grid extends CustomComponent {
                 filterDefinition.getField().setCaption(filterDefinition.getLabel());
                 filterDefinition.getField().setValue(filterDefinition.getDefaultValue());
                 ((AbstractComponent) filterDefinition.getField()).setImmediate(true);
-                filterDefinition.getField().addListener(new Property.ValueChangeListener() {
+                filterDefinition.getField().addValueChangeListener(new Property.ValueChangeListener() {
                     private static final long serialVersionUID = 1L;
 
                     @Override

@@ -145,7 +145,7 @@ public final class RegisterFlowlet extends AbstractFlowlet {
 
         final Button registerButton = new Button(getSite().localize("button-register"));
         registerButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
-        registerButton.addListener(new ClickListener() {
+        registerButton.addClickListener(new ClickListener() {
             /** The default serial version ID. */
             private static final long serialVersionUID = 1L;
 
@@ -214,7 +214,7 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                     LOGGER.error("Error adding user. (IP: " + request.getRemoteHost()
                             + ":" + request.getRemotePort() + ")", e);
                     Notification.show(getSite().localize("message-registration-error"),
-                            Notification.TYPE_WARNING_MESSAGE);
+                            Notification.Type.WARNING_MESSAGE);
                 }
                 reset();
             }

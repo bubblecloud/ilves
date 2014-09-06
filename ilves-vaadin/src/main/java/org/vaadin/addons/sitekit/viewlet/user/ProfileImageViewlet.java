@@ -54,8 +54,8 @@ public final class ProfileImageViewlet extends AbstractViewlet {
             final Link link = new Link(null, new ExternalResource("#!login"));
             link.setStyleName("gravatar");
             link.setIcon(getSite().getIcon("view-icon-login"));
-            link.setWidth(32, UNITS_PIXELS);
-            link.setHeight(32, UNITS_PIXELS);
+            link.setWidth(32, Unit.PIXELS);
+            link.setHeight(32, Unit.PIXELS);
             layout.addComponent(link);
             layout.setComponentAlignment(link, Alignment.MIDDLE_CENTER);
             this.setCompositionRoot(layout);
@@ -73,8 +73,8 @@ public final class ProfileImageViewlet extends AbstractViewlet {
                     new ExternalResource("http://www.gravatar.com/"));
             link.setStyleName("gravatar");
             link.setIcon(new ExternalResource(gravatarUrl));
-            link.setWidth(32, UNITS_PIXELS);
-            link.setHeight(32, UNITS_PIXELS);
+            link.setWidth(32, Unit.PIXELS);
+            link.setHeight(32, Unit.PIXELS);
             layout.addComponent(link);
             layout.setComponentAlignment(link, Alignment.MIDDLE_CENTER);
             this.setCompositionRoot(layout);

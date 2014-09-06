@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.grid.field;
 
+import com.vaadin.ui.ComboBox;
 import org.vaadin.addons.sitekit.model.Customer;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
 import com.vaadin.ui.Select;
@@ -28,7 +29,7 @@ import javax.persistence.criteria.CriteriaQuery;
  * @author Tommi S.E. Laukkanen
  *
  */
-public class CustomerField extends Select {
+public class CustomerField extends ComboBox {
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
 

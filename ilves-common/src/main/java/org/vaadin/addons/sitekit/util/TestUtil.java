@@ -35,7 +35,7 @@ import java.sql.Connection;
 public class TestUtil {
 
     static {
-        LogFactory.getLogger().setLogLevel("severe");
+        LogFactory.getInstance().getLog().setLogLevel("severe");
     }
 
     private static EntityManagerFactory entityManagerFactory;

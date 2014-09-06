@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.grid.field;
 
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.DateField;
 
 /**
@@ -31,7 +32,7 @@ public final class TimestampField extends DateField {
      */
     public TimestampField() {
         super();
-        setResolution(RESOLUTION_MIN);
+        setResolution(Resolution.MINUTE);
         setDateFormat("dd/MM/yyyy HH:mm");
     }
 

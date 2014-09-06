@@ -36,8 +36,8 @@ public final class ImageViewlet extends AbstractViewlet {
         final VerticalLayout layout = new VerticalLayout();
         layout.setMargin(false);
         final Embedded embedded = new Embedded(null, new ThemeResource(logoImageThemeFileName));
-        embedded.setWidth(32, UNITS_PIXELS);
-        embedded.setHeight(32, UNITS_PIXELS);
+        embedded.setWidth(32, Unit.PIXELS);
+        embedded.setHeight(32, Unit.PIXELS);
         layout.addComponent(embedded);
         layout.setComponentAlignment(embedded, Alignment.MIDDLE_CENTER);
         this.setCompositionRoot(layout);
