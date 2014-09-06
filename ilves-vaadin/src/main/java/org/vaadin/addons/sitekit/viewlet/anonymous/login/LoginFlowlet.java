@@ -87,7 +87,7 @@ public final class LoginFlowlet extends AbstractFlowlet {
         loginFormLayout.setSpacing(true);
 
         final TextField emailAddressField = new TextField(getSite().localize("input-email-address"));
-        emailAddressField.setId("username");
+        emailAddressField.setId("name");
         emailAddressField.setMaxLength(255);
         emailAddressField.setWidth(400, Unit.PIXELS);
         loginFormLayout.addComponent(emailAddressField);
