@@ -238,12 +238,12 @@ public final class RegisterFlowlet extends AbstractFlowlet {
         panel.addComponent(registerButton);
         panel.setSpacing(true);
 
-        final Panel mainPanel = new Panel();
-
         final HorizontalLayout mainLayout = new HorizontalLayout();
         mainLayout.setMargin(true);
         mainLayout.addComponent(panel);
 
+        final Panel mainPanel = new Panel();
+        mainPanel.setSizeUndefined();
         mainPanel.setContent(mainLayout);
 
         setViewContent(mainPanel);

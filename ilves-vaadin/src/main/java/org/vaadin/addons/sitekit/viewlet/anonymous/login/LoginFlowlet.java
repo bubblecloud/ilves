@@ -62,12 +62,10 @@ public final class LoginFlowlet extends AbstractFlowlet {
     @Override
     public void initialize() {
 
-        final Panel panel = new Panel();
 
         final VerticalLayout layout = new VerticalLayout();
         layout.setMargin(true);
         layout.setSpacing(true);
-        panel.setContent(layout);
 
         final Company company = getSite().getSiteContext().getObject(Company.class);
         if (company.isOpenIdLogin()) {
@@ -132,6 +130,10 @@ public final class LoginFlowlet extends AbstractFlowlet {
             });
             layout.addComponent(forgotPasswordButton);
         }
+
+        final Panel panel = new Panel();
+        panel.setSizeUndefined();
+        panel.setContent(layout);
 
         setViewContent(panel);
 
