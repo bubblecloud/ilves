@@ -71,7 +71,7 @@ public final class LoginFlowlet extends AbstractFlowlet {
         final Company company = getSite().getSiteContext().getObject(Company.class);
         if (company.isOpenIdLogin()) {
             final VerticalLayout mainPanel = new VerticalLayout();
-            mainPanel.setCaption("OpenID Login");
+            mainPanel.setCaption(getSite().localize("header-open-id-login"));
             layout.addComponent(mainPanel);
             final HorizontalLayout openIdLayout = new HorizontalLayout();
             mainPanel.addComponent(openIdLayout);
@@ -87,6 +87,7 @@ public final class LoginFlowlet extends AbstractFlowlet {
         try {
             final CustomLayout loginFormLayout = new CustomLayout(
                     JadeUtil.parse("/VAADIN/themes/ilves/layouts/login.jade"));
+            loginFormLayout.setCaption(getSite().localize("header-email-and-password-login"));
             layout.addComponent(loginFormLayout);
         } catch (final IOException e) {
             throw new SiteException("Error loading login form.", e);
