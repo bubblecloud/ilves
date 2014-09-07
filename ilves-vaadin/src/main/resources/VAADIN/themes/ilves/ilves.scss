@@ -196,6 +196,10 @@ $footer-color: #DDDDDD;
     margin-right: 0px;
   }
 
+  .v-datefield-button-readonly {
+    visibility: hidden;
+  }
+
 /*
   .v-button-link:focus .v-button-caption {
     outline: none;
