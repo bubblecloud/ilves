@@ -5,14 +5,14 @@
     <parent>
         <groupId>org.bubblecloud.ilves</groupId>
         <artifactId>ilves</artifactId>
-        <version>2.6.8-SNAPSHOT</version>
+        <version>2.6.8</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>org.bubblecloud.ilves</groupId>
     <artifactId>ilves-vaadin-tutorial</artifactId>
     <packaging>jar</packaging>
-    <version>2.6.8-SNAPSHOT</version>
+    <version>2.6.8</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -116,7 +116,7 @@
         <dependency>
             <groupId>org.bubblecloud.ilves</groupId>
             <artifactId>ilves-vaadin</artifactId>
-            <version>2.6.8-SNAPSHOT</version>
+            <version>2.6.8</version>
         </dependency>
         <dependency>
             <groupId>postgresql</groupId>
