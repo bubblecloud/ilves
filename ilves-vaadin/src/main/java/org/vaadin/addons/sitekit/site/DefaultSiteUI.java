@@ -95,7 +95,9 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                                                  VaadinResponse response)
                             throws IOException {
                         if (!StringUtils.isEmpty(request.getParameter("username")) &&
-                                !StringUtils.isEmpty(request.getParameter("password"))) {
+                                !StringUtils.isEmpty(request.getParameter("password")) &&
+                                getSession() != null &&
+                                getSession().getSession().getAttribute("user") == null) {
 
                             final String emailAddress = request.getParameter("username");
                             final String password = request.getParameter("password");
