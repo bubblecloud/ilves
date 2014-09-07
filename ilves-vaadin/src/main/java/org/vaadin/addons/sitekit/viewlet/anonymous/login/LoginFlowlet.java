@@ -92,7 +92,7 @@ public final class LoginFlowlet extends AbstractFlowlet {
             throw new SiteException("Error loading login form.", e);
         }
 
-        final NativeButton registerButton = new NativeButton(getSite().localize("button-register") + " >>");
+        final Button registerButton = new Button(getSite().localize("button-register") + " >>");
         registerButton.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(final ClickEvent event) {

@@ -2,6 +2,7 @@ package org.vaadin.addons.sitekit.site;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.SingleComponentContainer;
 import com.vaadin.ui.UI;
@@ -19,8 +20,14 @@ public class SiteNavigator extends Navigator {
     public void navigateTo(String navigationState) {
         // Show redirect notification
         if (UI.getCurrent().getSession().getAttribute("redirectNotification") != null) {
-            Notification.show((String) UI.getCurrent().getSession().getAttribute("redirectNotification"),
+            /*Notification.show((String) UI.getCurrent().getSession().getAttribute("redirectNotification"),
+                    (Notification.Type) UI.getCurrent().getSession().getAttribute("redirectNotificationType"));*/
+            final Notification notification = new Notification(
+                    (String) UI.getCurrent().getSession().getAttribute("redirectNotification"),
                     (Notification.Type) UI.getCurrent().getSession().getAttribute("redirectNotificationType"));
+            notification.setDelayMsec(3000);
+            notification.setPosition(Position.TOP_RIGHT);
+            notification.show(Page.getCurrent());
             UI.getCurrent().getSession().setAttribute("redirectNotification", null);
             UI.getCurrent().getSession().setAttribute("redirectNotificationType", null);
         }
