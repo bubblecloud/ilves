@@ -16,19 +16,27 @@
 package org.vaadin.addons.sitekit.site;
 
 import com.vaadin.annotations.Theme;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinServletRequest;
+import com.vaadin.server.*;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.vaadin.addons.sitekit.cache.UserClientCertificateCache;
 import org.vaadin.addons.sitekit.dao.CompanyDao;
 import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.model.Company;
+import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.io.IOException;
 import java.security.cert.X509Certificate;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * BareSite UI.
@@ -60,11 +68,7 @@ public final class DefaultSiteUI extends AbstractSiteUI {
 
         // Choose company for this site context.
         final VaadinServletRequest servletRequest = (VaadinServletRequest) VaadinService.getCurrentRequest();
-        final String hostName = servletRequest.getHttpServletRequest().getServerName();
-        Company company = CompanyDao.getCompany(entityManager, hostName);
-        if (company == null) {
-            company = CompanyDao.getCompany(entityManager, "*");
-        }
+        Company company = resolveCompany(entityManager, servletRequest);
         siteContext.putObject(Company.class, company);
 
         final X509Certificate[] clientCertificates = (X509Certificate[])
@@ -82,7 +86,71 @@ public final class DefaultSiteUI extends AbstractSiteUI {
             }
         }
 
+        // Add handler for credentials post.
+        VaadinSession.getCurrent().addRequestHandler(
+                new RequestHandler() {
+                    @Override
+                    public boolean handleRequest(VaadinSession session,
+                                                 VaadinRequest request,
+                                                 VaadinResponse response)
+                            throws IOException {
+                        if (!StringUtils.isEmpty(request.getParameter("username")) &&
+                                !StringUtils.isEmpty(request.getParameter("password"))) {
+
+                            final String emailAddress = request.getParameter("username");
+                            final String password = request.getParameter("password");
+
+                            final EntityManager entityManager = entityManagerFactory.createEntityManager();
+                            final Locale locale = getLocale();
+
+                            final Company company = resolveCompany(entityManager, (VaadinServletRequest) request);
+                            final User user = UserDao.getUser(entityManager, company, emailAddress);
+                            final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
+
+                            final String errorKey = PasswordLoginUtil.login(emailAddress, request.getRemoteHost(),
+                                    request.getRemoteAddr(), request.getRemotePort(),
+                                    entityManager, company, user, password);
+
+                            if (errorKey == null) {
+                                // Login success
+                                DefaultSiteUI.getSecurityProvider().setUser(user, groups);
+                                // Check for imminent password expiration.
+                                if (user.getPasswordExpirationDate() != null
+                                        && new DateTime().plusDays(14).toDate().getTime()
+                                        > user.getPasswordExpirationDate().getTime() ) {
+                                    final DateTime expirationDate = new DateTime(user.getPasswordExpirationDate());
+                                    final DateTime currentDate = new DateTime();
+                                    final long daysUntilExpiration = new Duration(currentDate.toDate().getTime(),
+                                            expirationDate.toDate().getTime()).getStandardDays();
+
+                                    setNotification( DefaultSiteUI.getLocalizationProvider().localize(
+                                            "message-password-expires-in-days", locale)
+                                            + ": " + daysUntilExpiration, Notification.Type.WARNING_MESSAGE);
+                                } else {
+                                    setNotification(DefaultSiteUI.getLocalizationProvider().localize(
+                                            "message-login-success", locale), Notification.Type.HUMANIZED_MESSAGE);
+                                }
+                            } else {
+                                // Login failure
+                                setNotification(DefaultSiteUI.getLocalizationProvider().localize(errorKey, locale),
+                                        Notification.Type.WARNING_MESSAGE);
+                            }
+
+                        }
+                        return false; // No response was written
+                    }
+                });
+
         return new Site(SiteMode.PRODUCTION, contentProvider, localizationProvider, securityProvider, siteContext);
+    }
+
+    private static Company resolveCompany(EntityManager entityManager, VaadinServletRequest servletRequest) {
+        final String hostName = servletRequest.getHttpServletRequest().getServerName();
+        Company company = CompanyDao.getCompany(entityManager, hostName);
+        if (company == null) {
+            company = CompanyDao.getCompany(entityManager, "*");
+        }
+        return company;
     }
 
     /**

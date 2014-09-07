@@ -87,7 +87,7 @@ public final class SecurityProviderSessionImpl implements SecurityProvider {
      * @param user the user
      */
     private void setUserToSession(final User user) {
-        ((AbstractSiteUI) UI.getCurrent()).getSession().setAttribute("user", user);
+        VaadinSession.getCurrent().setAttribute("user", user);
         VaadinSession.getCurrent().getSession().setAttribute("user", user);
     }
 
@@ -104,7 +104,7 @@ public final class SecurityProviderSessionImpl implements SecurityProvider {
      * @param groups the groups
      */
     private void setGroupsToSession(final List<Group> groups) {
-        ((AbstractSiteUI) UI.getCurrent()).getSession().setAttribute("groups", groups);
+        VaadinSession.getCurrent().setAttribute("groups", groups);
         VaadinSession.getCurrent().getSession().setAttribute("groups", groups);
     }
 
@@ -122,7 +122,7 @@ public final class SecurityProviderSessionImpl implements SecurityProvider {
      * @param roles the roles
      */
     private void setRolesToSession(final List<String> roles) {
-        ((AbstractSiteUI) UI.getCurrent()).getSession().setAttribute("roles", roles);
+        VaadinSession.getCurrent().setAttribute("roles", roles);
         VaadinSession.getCurrent().getSession().setAttribute("roles", roles);
     }
 

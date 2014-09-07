@@ -32,11 +32,14 @@ import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
+import org.vaadin.addons.sitekit.site.SiteException;
+import org.vaadin.addons.sitekit.util.JadeUtil;
 import org.vaadin.addons.sitekit.util.OpenIdUtil;
 import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +64,6 @@ public final class LoginFlowlet extends AbstractFlowlet {
     @Override
     public void initialize() {
 
-
         final VerticalLayout layout = new VerticalLayout();
         layout.setMargin(true);
         layout.setSpacing(true);
@@ -82,36 +84,15 @@ public final class LoginFlowlet extends AbstractFlowlet {
             }
         }
 
-        final VerticalLayout loginFormLayout = new VerticalLayout();
-        loginFormLayout.setMargin(new MarginInfo(false, false, true, false));
-        loginFormLayout.setSpacing(true);
+        try {
+            final CustomLayout loginFormLayout = new CustomLayout(
+                    JadeUtil.parse("/VAADIN/themes/ilves/layouts/login.jade"));
+            layout.addComponent(loginFormLayout);
+        } catch (final IOException e) {
+            throw new SiteException("Error loading login form.", e);
+        }
 
-        final TextField emailAddressField = new TextField(getSite().localize("input-email-address"));
-        emailAddressField.setId("username");
-        emailAddressField.setMaxLength(255);
-        emailAddressField.setWidth(400, Unit.PIXELS);
-        loginFormLayout.addComponent(emailAddressField);
-
-        final PasswordField passwordField = new PasswordField(getSite().localize("input-password"));
-        passwordField.setId("password");
-        passwordField.setMaxLength(160);
-        passwordField.setWidth(400, Unit.PIXELS);
-        loginFormLayout.addComponent(passwordField);
-
-        final Button loginButton = new Button(getSite().localize("button-login"));
-        loginButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
-        loginButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        loginButton.addClickListener(new ClickListener() {
-            @Override
-            public void buttonClick(ClickEvent event) {
-                login(emailAddressField.getValue(), passwordField.getValue());
-            }
-        });
-        loginFormLayout.addComponent(loginButton);
-
-        layout.addComponent(loginFormLayout);
-
-        final Button registerButton = new Button(getSite().localize("button-register") + " >>");
+        final NativeButton registerButton = new NativeButton(getSite().localize("button-register") + " >>");
         registerButton.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(final ClickEvent event) {
@@ -152,50 +133,9 @@ public final class LoginFlowlet extends AbstractFlowlet {
 
     @Override
     public void enter() {
-    }
-
-    public void login(final String emailAddress, final String password) {
-
-        if (emailAddress == null) {
-            Notification.show(getSite().localize("message-login-failed"), Notification.Type.WARNING_MESSAGE);
-            return;
-        }
-
-        if (password == null) {
-            Notification.show(getSite().localize("message-login-failed"), Notification.Type.WARNING_MESSAGE);
-            return;
-        }
-
-        final HttpServletRequest request = ((VaadinServletRequest) VaadinService.getCurrentRequest())
-                .getHttpServletRequest();
-
-        final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
-        final Company company = getSite().getSiteContext().getObject(Company.class);
-        final User user = UserDao.getUser(entityManager, company, emailAddress);
-        final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
-
-        final String errorKey = PasswordLoginUtil.login(emailAddress, request.getRemoteHost(),
-                request.getRemoteAddr(), request.getRemotePort(),
-                entityManager, company, user, password);
-
-        if (errorKey == null) {
-            // Login success
-            ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).setUser(user, groups);
+        if (getSite().getSecurityProvider().getUser() != null) {
             UI.getCurrent().getNavigator().navigateTo(getSite().getCurrentNavigationVersion().getDefaultPageName());
-            if (user.getPasswordExpirationDate() != null
-                    && new DateTime().plusDays(14).toDate().getTime() > user.getPasswordExpirationDate().getTime() ) {
-                final DateTime expirationDate = new DateTime(user.getPasswordExpirationDate());
-                final DateTime currentDate = new DateTime();
-                final long daysUntilExpiration = new Duration(currentDate.toDate().getTime(),
-                        expirationDate.toDate().getTime()).getStandardDays();
-                Notification.show(getSite().localize("message-password-expires-in-days") + ": "
-                        + daysUntilExpiration, Notification.Type.WARNING_MESSAGE);
-            }
-        } else {
-            // Login failure
-            Notification.show(getSite().localize(errorKey), Notification.Type.WARNING_MESSAGE);
         }
-
     }
 
 }
