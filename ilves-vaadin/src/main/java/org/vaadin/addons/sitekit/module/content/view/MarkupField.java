@@ -30,7 +30,7 @@ public class MarkupField extends TextArea {
      */
     public MarkupField() {
         super();
-        setImmediate(true);
+        //setImmediate(true);
         setNullRepresentation("");
         setRows(20);
     }

@@ -80,7 +80,7 @@ public class ContentModule implements SiteModule {
         contentFields.getFieldDescriptor("markupType").setFieldClass(MarkupTypeField.class);
         contentFields.getFieldDescriptor("markupType").setConverter(null);
         contentFields.getFieldDescriptor("markup").setFieldClass(MarkupField.class);
-        contentFields.getFieldDescriptor("markup").setWidth(800);
+        contentFields.getFieldDescriptor("markup").setWidth(700);
         contentFields.getFieldDescriptor("markup").getValidators().clear();
         contentFields.getFieldDescriptor("markup").setCollapsed(true);
         contentFields.getFieldDescriptor("title").setWidth(-1);

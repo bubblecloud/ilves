@@ -32,7 +32,6 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 
-import java.awt.TextArea;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -201,9 +200,9 @@ public class ValidatingEditor extends CustomComponent implements
                         ((TextField) field).addTextChangeListener(this);
                     }
                     if (field instanceof TextArea) {
-                        ((TextField) field).setNullRepresentation("");
-                        ((TextField) field).setTextChangeTimeout(200);
-                        ((TextField) field).addTextChangeListener(this);
+                        ((TextArea) field).setNullRepresentation("");
+                        ((TextArea) field).setTextChangeTimeout(200);
+                        ((TextArea) field).addTextChangeListener(this);
                     }
                     if (field instanceof PasswordField) {
                         ((PasswordField) field).setNullRepresentation("");
@@ -220,7 +219,7 @@ public class ValidatingEditor extends CustomComponent implements
                     if (fieldDefinition.getWidth() > 0) {
                         field.setWidth(fieldDefinition.getWidth() + 50,  Unit.PIXELS);
                     } else {
-                        field.setWidth(200,  Unit.PIXELS);
+                        field.setWidth(200, Unit.PIXELS);
                     }
                     field.setReadOnly(isReadOnly() || fieldDefinition.isReadOnly());
                     if (!fieldDefinition.isReadOnly()) {

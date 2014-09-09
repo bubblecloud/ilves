@@ -98,14 +98,9 @@ public final class ContentFlowlet extends AbstractFlowlet implements ValidatingE
 
             @Override
             public void buttonClick(final ClickEvent event) {
-                if (isValid()) {
-                    contentEditor.commit();
-                    ContentDao.saveContent(entityManager, entity);
-                    editPrivilegesButton.setEnabled(true);
-                } else {
-                    Notification.show(getSite().localize("message-invalid-form-content"),
-                            Notification.Type.HUMANIZED_MESSAGE);
-                }
+                contentEditor.commit();
+                ContentDao.saveContent(entityManager, entity);
+                editPrivilegesButton.setEnabled(true);
             }
         });
 
@@ -147,6 +142,17 @@ public final class ContentFlowlet extends AbstractFlowlet implements ValidatingE
 
     @Override
     public void editorStateChanged(final ValidatingEditor source) {
+        if (isDirty()) {
+            if (isValid()) {
+                saveButton.setEnabled(true);
+            } else {
+                saveButton.setEnabled(false);
+            }
+            discardButton.setEnabled(true);
+        } else {
+            saveButton.setEnabled(false);
+            discardButton.setEnabled(false);
+        }
     }
 
     @Override
