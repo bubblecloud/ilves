@@ -1,7 +1,9 @@
 Ilves
 =====
 
-Ilves is a lean Java web development kit.
+Ilves is a lean Java web development kit. Demo is available at:
+
+http://ilves.herokuapp.com/
 
 Features and other details can be found from Ilves Wiki:
 
