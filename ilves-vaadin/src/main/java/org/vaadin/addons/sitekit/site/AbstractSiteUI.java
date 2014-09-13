@@ -38,16 +38,6 @@ public abstract class AbstractSiteUI extends UI {
 
     @Override
     protected final void init(final VaadinRequest request) {
-
-        final VaadinServletRequest servletRequest = (VaadinServletRequest) VaadinService.getCurrentRequest();
-
-        final StringBuffer urlBuilder = servletRequest.getHttpServletRequest().getRequestURL();
-        final String queryString = servletRequest.getHttpServletRequest().getQueryString();
-        if (queryString != null) {
-            urlBuilder.append('?');
-            urlBuilder.append(queryString);
-        }
-
         navigator = new SiteNavigator(this, this);
         site = constructSite(request);
         navigator.addViewChangeListener(site);

@@ -25,9 +25,9 @@ public interface Viewlet {
 
     /**
      * Sets the ViewletDescription.
-     * @param widget The ViewletDescription.
+     * @param viewletDescriptor the viewlet viewlet descriptor
      */
-    void setViewletDescriptor(final ViewletDescriptor widget);
+    void setViewletDescriptor(final ViewletDescriptor viewletDescriptor);
 
     /**
      * SiteView constructSite occurred.

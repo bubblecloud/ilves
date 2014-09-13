@@ -16,12 +16,14 @@
 package org.vaadin.addons.sitekit.viewlet.user;
 
 import com.vaadin.server.ExternalResource;
+import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Link;
 import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
+import org.vaadin.addons.sitekit.util.GravatarUtil;
 
 import java.net.URL;
 
@@ -36,8 +38,6 @@ public final class ProfileImageViewlet extends AbstractViewlet {
     private static final long serialVersionUID = 1L;
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(ProfileImageViewlet.class);
-    /** The gravatar URL. */
-    private final static String GRAVATAR_URL = "http://www.gravatar.com/avatar/";
 
     /**
      * Default constructor which sets up widget content.
@@ -64,17 +64,7 @@ public final class ProfileImageViewlet extends AbstractViewlet {
         try {
             final VerticalLayout layout = new VerticalLayout();
             layout.setMargin(false);
-            if (getSite().getSiteContext().getObject("gravatar-url") == null) {
-                getSite().getSiteContext().putObject("gravatar-url", getGravatarUrl(user));
-            }
-            final URL gravatarUrl = new URL((String) getSite().getSiteContext().getObject("gravatar-url"));
-            //final Embedded embedded = new Embedded(null, new ExternalResource(gravatarUrl));
-            final Link link = new Link(null,
-                    new ExternalResource("http://www.gravatar.com/"));
-            link.setStyleName("gravatar");
-            link.setIcon(new ExternalResource(gravatarUrl));
-            link.setWidth(32, Unit.PIXELS);
-            link.setHeight(32, Unit.PIXELS);
+            final Link link = GravatarUtil.getGravatarImageLink(user);
             layout.addComponent(link);
             layout.setComponentAlignment(link, Alignment.MIDDLE_CENTER);
             this.setCompositionRoot(layout);
@@ -83,7 +73,5 @@ public final class ProfileImageViewlet extends AbstractViewlet {
         }
     }
 
-    private String getGravatarUrl(final String email) {
-        return GRAVATAR_URL + DigestUtils.md5Hex(email.toLowerCase().trim()) + ".jpg?s=32&d=mm&r=g";
-    }
+
 }

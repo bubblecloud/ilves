@@ -16,6 +16,8 @@
 package org.vaadin.addons.sitekit.site;
 
 import com.vaadin.navigator.View;
+import com.vaadin.ui.Component;
+import sun.java2d.loops.CustomComponent;
 
 /**
  * SiteView descriptor class.
@@ -77,6 +79,19 @@ public final class ViewDescriptor {
      * @param componentClass the viewlet component class
      */
     public void setViewletClass(final String slot, final Class<? extends Viewlet> componentClass) {
+        final ViewletDescriptor viewletDescriptor = new ViewletDescriptor(
+                slot, "", "", null,
+                componentClass.getCanonicalName());
+        this.productionVersion.getViewletDescriptors().add(viewletDescriptor);
+    }
+
+    /**
+     * Sets Vaadin component as implementation to given slot.
+     *
+     * @param slot the slot
+     * @param componentClass the Vaadin component class
+     */
+    public void setComponentClass(final String slot, final Class<? extends Component> componentClass) {
         final ViewletDescriptor viewletDescriptor = new ViewletDescriptor(
                 slot, "", "", null,
                 componentClass.getCanonicalName());
