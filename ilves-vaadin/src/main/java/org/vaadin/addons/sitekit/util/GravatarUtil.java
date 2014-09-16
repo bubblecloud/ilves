@@ -33,11 +33,11 @@ public class GravatarUtil {
      * @return the gravatar URL
      */
     public static URL getGravatarUrl(final String email) {
-        if (Site.getCurrent().getSiteContext().getObject("gravatar-url") == null) {
-            Site.getCurrent().getSiteContext().putObject("gravatar-url", constructGravatarUrl(email));
+        if (Site.getCurrent().getSiteContext().getObject("gravatar-url-" + email) == null) {
+            Site.getCurrent().getSiteContext().putObject("gravatar-url-" + email, constructGravatarUrl(email));
         }
         try {
-            return new URL((String) Site.getCurrent().getSiteContext().getObject("gravatar-url"));
+            return new URL((String) Site.getCurrent().getSiteContext().getObject("gravatar-url-" + email));
         } catch (MalformedURLException e) {
             throw new SiteException("Error in gravatar URL format: "
                     + Site.getCurrent().getSiteContext().getObject("gravatar-url"));
