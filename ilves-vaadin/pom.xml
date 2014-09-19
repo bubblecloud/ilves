@@ -9,7 +9,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jettyVersion>9.2.0.M0</jettyVersion>
+        <jettyVersion>9.2.2.v20140723</jettyVersion>
     </properties>
 
     <repositories>
@@ -99,16 +99,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.5.2</version>
-            </plugin>
-        </plugins>
-    </reporting>
 
     <dependencies>
 
