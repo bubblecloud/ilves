@@ -122,6 +122,47 @@ public class CertificateUtil {
     }
 
     /**
+     * Gets certificate from key store.
+     * @param certificateAlias the certificate alias
+     * @param keyStorePath the key store path
+     * @param keyStorePassword the key store password
+     * @return the certificate or null if certificate does not exist.
+     */
+    public static void saveCertificate(final String certificateAlias,
+                                                 final String keyStorePath,
+                                                 final String keyStorePassword, final X509Certificate certificate) {
+        try {
+            final KeyStore keyStore = loadKeyStore(keyStorePath, keyStorePassword);
+            keyStore.setCertificateEntry(certificateAlias, certificate);
+            saveKeyStore(keyStore, keyStorePath, keyStorePassword);
+        } catch (final Exception e) {
+            throw new SecurityException("Error saving certificate '" + certificateAlias + "' to key store: "
+                    + keyStorePath, e);
+        }
+    }
+
+    /**
+     * Gets certificate private key from key store.
+     * @param certificateAlias the certificate alias
+     * @param keyStorePath the key store path
+     * @param keyStorePassword the key store password
+     * @param keyEntryPassword the key entry password
+     * @return the certificate or null if certificate does not exist.
+     */
+    public static PrivateKey getPrivateKey(final String certificateAlias,
+                                                 final String keyStorePath,
+                                                 final String keyStorePassword,
+                                                 final String keyEntryPassword) {
+        try {
+            final KeyStore keyStore = loadKeyStore(keyStorePath, keyStorePassword);
+            return (PrivateKey) keyStore.getKey(certificateAlias, keyEntryPassword.toCharArray());
+        } catch (final Exception e) {
+            throw new SecurityException("Error loading private key '" + certificateAlias + "' from key store: "
+                    + keyStorePath, e);
+        }
+    }
+
+    /**
      * Removes certificate from key store.
      * @param certificateAlias the certificate alias
      * @param keyStorePath the key store path
