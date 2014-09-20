@@ -1,5 +1,6 @@
 package org.vaadin.addons.sitekit.util;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.bouncycastle.asn1.ASN1Sequence;
@@ -87,7 +88,7 @@ public class CertificateUtil {
      * @param certificateAlias the certificate alias
      * @param keyStorePath the key store path
      * @param keyStorePassword the key store password
-     * @return
+     * @return TRUE if certificate exists.
      */
     public static boolean hasCertificate(final String certificateAlias,
                                          final String keyStorePath,
@@ -96,7 +97,45 @@ public class CertificateUtil {
             final KeyStore keyStore = loadKeyStore(keyStorePath, keyStorePassword);
             return keyStore.containsAlias(certificateAlias);
         } catch (final Exception e) {
-            throw new SecurityException("Error checking if certificate exists: " + certificateAlias + " in key store: "
+            throw new SecurityException("Error checking if certificate exists '" + certificateAlias + "' in key store: "
+                    + keyStorePath, e);
+        }
+    }
+
+    /**
+     * Gets certificate from key store.
+     * @param certificateAlias the certificate alias
+     * @param keyStorePath the key store path
+     * @param keyStorePassword the key store password
+     * @return the certificate or null if certificate does not exist.
+     */
+    public static X509Certificate getCertificate(final String certificateAlias,
+                                                 final String keyStorePath,
+                                                 final String keyStorePassword) {
+        try {
+            final KeyStore keyStore = loadKeyStore(keyStorePath, keyStorePassword);
+            return (X509Certificate) keyStore.getCertificate(certificateAlias);
+        } catch (final Exception e) {
+            throw new SecurityException("Error loading certificate '" + certificateAlias + "' from key store: "
+                    + keyStorePath, e);
+        }
+    }
+
+    /**
+     * Removes certificate from key store.
+     * @param certificateAlias the certificate alias
+     * @param keyStorePath the key store path
+     * @param keyStorePassword the key store password
+     */
+    public static void removeCertificate(final String certificateAlias,
+                                                 final String keyStorePath,
+                                                 final String keyStorePassword) {
+        try {
+            final KeyStore keyStore = loadKeyStore(keyStorePath, keyStorePassword);
+            keyStore.deleteEntry(certificateAlias);
+            saveKeyStore(keyStore, keyStorePath, keyStorePassword);
+        } catch (final Exception e) {
+            throw new SecurityException("Error removing certificate '" + certificateAlias + "' from key store: "
                     + keyStorePath, e);
         }
     }
@@ -126,6 +165,38 @@ public class CertificateUtil {
             keyStore.setKeyEntry(alias, (Key) keyPair.getPrivate(), keyEntryPassword.toCharArray(),
                     new X509Certificate[]{certificate});
             saveKeyStore(keyStore, keyStorePath, keyStorePassword);
+        } catch (final Exception e) {
+            throw new RuntimeException("Unable to generate self signed certificate.", e);
+        }
+    }
+
+    /**
+     * Generates and self signed certificate and saves it to key store with fingerprint as alias.
+     *
+     * @param commonName the certificate common name
+     * @param ipAddress the subject alternative name IP address or null
+     * @param keyStorePath the key store path
+     * @param keyStorePassword the key store password
+     * @param keyEntryPassword the key entry password
+     * @return fingerprint e.q. alias of the generated certificate.
+     */
+    public static String generateSelfSignedCertificate(final String commonName,
+                                                      final String ipAddress,
+                                                      final String keyStorePath,
+                                                      final String keyStorePassword,
+                                                      final String keyEntryPassword) {
+        try {
+            final KeyPairGenerator keyGen = KeyPairGenerator.getInstance(CERTIFICATE_ENCRYPTION_ALGORITHM, PROVIDER);
+            keyGen.initialize(CERTIFICATE_KEY_SIZE);
+            final KeyPair keyPair = keyGen.generateKeyPair();
+            final X509Certificate certificate = buildCertificate(commonName,ipAddress, keyPair);
+            final String alias = DigestUtils.sha256Hex(certificate.getEncoded());
+            LOGGER.info("Generated self signed certificate: " + certificate);
+            final KeyStore keyStore = loadKeyStore(keyStorePath, keyStorePassword);
+            keyStore.setKeyEntry(alias, (Key) keyPair.getPrivate(), keyEntryPassword.toCharArray(),
+                    new X509Certificate[]{certificate});
+            saveKeyStore(keyStore, keyStorePath, keyStorePassword);
+            return alias;
         } catch (final Exception e) {
             throw new RuntimeException("Unable to generate self signed certificate.", e);
         }
