@@ -122,11 +122,11 @@ public class CertificateUtil {
     }
 
     /**
-     * Gets certificate from key store.
+     * Saves certificate to key store.
      * @param certificateAlias the certificate alias
      * @param keyStorePath the key store path
      * @param keyStorePassword the key store password
-     * @return the certificate or null if certificate does not exist.
+     * @param certificate the certificate
      */
     public static void saveCertificate(final String certificateAlias,
                                                  final String keyStorePath,

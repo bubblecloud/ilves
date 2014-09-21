@@ -53,10 +53,11 @@ public class PasswordLoginUtil {
     /**
      * Calculates and sets user password hash. Updates password expiration date.
      *
+     * @param company the company (local web site) entity under which user belongs to
      * @param user the user
      * @param password the password
-     * @throws UnsupportedEncodingException
-     * @throws NoSuchAlgorithmException
+     * @throws UnsupportedEncodingException if encoding is not supported
+     * @throws NoSuchAlgorithmException if algorithm is not supported
      */
     public static void setUserPasswordHash(final Company company, final User user, final String password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         if (user.getUserId() == null) {
