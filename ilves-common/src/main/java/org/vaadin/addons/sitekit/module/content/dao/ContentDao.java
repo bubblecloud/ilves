@@ -121,4 +121,20 @@ public class ContentDao {
             return null;
         }
     }
+
+    /**
+     * Gets list of contents.
+     * @param entityManager the entity manager.
+     * @param owner the owning company
+     * @param type the asset mimeType
+     * @return list of contents
+     */
+    public static final List<Asset> getAssetsByMimeType(final EntityManager entityManager, final Company owner, final String type) {
+        final TypedQuery<Asset> query = entityManager.createQuery(
+                "select e from Asset as e where e.owner=:owner and e.type = :type",
+                Asset.class);
+        query.setParameter("owner", owner);
+        query.setParameter("type", type);
+        return query.getResultList();
+    }
 }

@@ -63,9 +63,10 @@ public class UserClientCertificateCache {
      * Get user by certificate.
      *
      * @param clientCertificate the client certificate
+     * @param blackListNotFound whether certificate should be blacklisted if user is not found
      * @return the user or null if no matching user or more than one matching user was found.
      */
-    public static synchronized User getUserByCertificate(final Certificate clientCertificate) {
+    public static synchronized User getUserByCertificate(final Certificate clientCertificate, final boolean blackListNotFound) {
         if (blacklistCache.get(clientCertificate) != null) {
             LOGGER.debug("Blacklisted TSL client certificate: "
                     + ((X509Certificate) clientCertificate).getSubjectDN());
@@ -100,9 +101,14 @@ public class UserClientCertificateCache {
             LOGGER.error("Blacklisted TSL client certificate. More than one user had the certificate: " + clientCertificate);
             return null;
         } else {
-            blacklistCache.put(clientCertificate, clientCertificate);
-            LOGGER.warn("Blacklisted TSL client certificate. User not found matching the certificate: "
-                    + ((X509Certificate) clientCertificate).getSubjectDN());
+            if (blackListNotFound) {
+                blacklistCache.put(clientCertificate, clientCertificate);
+                LOGGER.warn("Blacklisted TSL client certificate. User not found matching the certificate: "
+                        + ((X509Certificate) clientCertificate).getSubjectDN());
+            } else {
+                LOGGER.warn("User not found matching the certificate: "
+                        + ((X509Certificate) clientCertificate).getSubjectDN());
+            }
             return null;
         }
     }

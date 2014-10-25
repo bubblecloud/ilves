@@ -77,7 +77,7 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                 && securityProvider.getUserFromSession() == null
                 && company != null
                 && company.isCertificateLogin()) {
-            final User user = UserClientCertificateCache.getUserByCertificate(clientCertificates[0]);
+            final User user = UserClientCertificateCache.getUserByCertificate(clientCertificates[0], true);
             if (user != null && user.getOwner().equals(company)) {
                 securityProvider.setUser(user, UserDao.getUserGroups(entityManager, company, user));
                 LOGGER.info("User certificate login: " + user.getEmailAddress() + " Remote address: "
@@ -146,7 +146,7 @@ public final class DefaultSiteUI extends AbstractSiteUI {
         return new Site(SiteMode.PRODUCTION, contentProvider, localizationProvider, securityProvider, siteContext);
     }
 
-    private static Company resolveCompany(EntityManager entityManager, VaadinServletRequest servletRequest) {
+    public static Company resolveCompany(EntityManager entityManager, VaadinServletRequest servletRequest) {
         final String hostName = servletRequest.getHttpServletRequest().getServerName();
         Company company = CompanyDao.getCompany(entityManager, hostName);
         if (company == null) {

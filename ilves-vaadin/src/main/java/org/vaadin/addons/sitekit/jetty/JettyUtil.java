@@ -165,7 +165,7 @@ public class JettyUtil {
                     if (x509Certificates.length != 1) {
                         throw new CertificateException("Certificate paths not supported.");
                     }
-                    if (UserClientCertificateCache.getUserByCertificate(x509Certificates[0]) == null) {
+                    if (UserClientCertificateCache.getUserByCertificate(x509Certificates[0], true) == null) {
                         throw new CertificateException("Unknown certificate.");
                     }
                 }
