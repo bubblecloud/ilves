@@ -180,5 +180,11 @@
             <where>url = 'http://127.0.0.1:8081/'</where>
         </update>
     </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1414525790433-22">
+        <addUniqueConstraint columnNames="owner_companyid, page" constraintName="unq_content_0" deferrable="false" disabled="false" initiallyDeferred="false" tableName="content"/>
+    </changeSet>
+    <changeSet author="tlaukkan (generated)" id="1414525790433-23">
+        <addUniqueConstraint columnNames="user_userid, group_groupid" constraintName="unq_privilege_0" deferrable="false" disabled="false" initiallyDeferred="false" tableName="privilege"/>
+    </changeSet>
 </databaseChangeLog>
 
