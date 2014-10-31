@@ -443,6 +443,30 @@ public class UserDao {
     }
 
     /**
+     * Adds new user privileges to database.
+     * @param entityManager the entity manager
+     * @param user the user
+     * @param privilegeKey the privilegeKey
+     * @param dataIds the dataIds
+     */
+    public static void addUserPrivileges(final EntityManager entityManager, final User user, final String privilegeKey, final List<String> dataIds) {
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try {
+            for (final String dataId : dataIds) {
+                entityManager.persist(new Privilege(null, user, privilegeKey, dataId));
+            }
+            transaction.commit();
+        } catch (final Exception e) {
+            LOG.error("Error in adding user privilege.", e);
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Adds new group privilege to database.
      * @param entityManager the entity manager
      * @param group the group
@@ -466,7 +490,32 @@ public class UserDao {
     }
 
     /**
-     * Removes new user privilege from database.
+     * Adds new group privilege to database.
+     * @param entityManager the entity manager
+     * @param group the group
+     * @param privilegeKey the privilegeKey
+     * @param dataIds the dataIds
+     */
+    public static void addGroupPrivileges(final EntityManager entityManager,
+                                         final Group group, final String privilegeKey, final List<String> dataIds) {
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try {
+            for (final String dataId : dataIds) {
+                entityManager.persist(new Privilege(group, null, privilegeKey, dataId));
+            }
+            transaction.commit();
+        } catch (final Exception e) {
+            LOG.error("Error in adding group privilege.", e);
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Removes user privilege from database.
      * @param entityManager the entity manager
      * @param user the user
      * @param privilegeKey the privilegeKey
@@ -497,7 +546,40 @@ public class UserDao {
     }
 
     /**
-     * Removes new group privilege from database.
+     * Removes user privileges from database.
+     * @param entityManager the entity manager
+     * @param user the user
+     * @param privilegeKey the privilegeKey
+     * @param dataIds the dataIds
+     */
+    public static void removeUserPrivileges(final EntityManager entityManager, final User user, final String privilegeKey, final List<String> dataIds) {
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try {
+            for (final String dataId : dataIds) {
+                final TypedQuery<Privilege> query = entityManager.createQuery(
+                        "select e from Privilege as e where e.user=:user and e.key=:key and e.dataId=:dataId",
+                        Privilege.class);
+                query.setParameter("user", user);
+                query.setParameter("key", privilegeKey);
+                query.setParameter("dataId", dataId);
+                final List<Privilege> privileges = query.getResultList();
+                if (privileges.size() > 0) {
+                    entityManager.remove(privileges.get(0));
+                }
+            }
+            transaction.commit();
+        } catch (final Exception e) {
+            LOG.error("Error in removing user privilege.", e);
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Removes group privilege from database.
      * @param entityManager the entity manager
      * @param group the group
      * @param privilegeKey the privilegeKey
@@ -527,6 +609,38 @@ public class UserDao {
         }
     }
 
+    /**
+     * Removes group privileges from database.
+     * @param entityManager the entity manager
+     * @param group the group
+     * @param privilegeKey the privilegeKey
+     * @param dataIds the dataIds
+     */
+    public static void removeGroupPrivilege(final EntityManager entityManager, final Group group, final String privilegeKey, final List<String> dataIds) {
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try {
+            for (final String dataId : dataIds) {
+                final TypedQuery<Privilege> query = entityManager.createQuery(
+                        "select e from Privilege as e where e.group=:group and e.key=:key and e.dataId=:dataId",
+                        Privilege.class);
+                query.setParameter("group", group);
+                query.setParameter("key", privilegeKey);
+                query.setParameter("dataId", dataId);
+                final List<Privilege> privileges = query.getResultList();
+                if (privileges.size() > 0) {
+                    entityManager.remove(privileges.get(0));
+                }
+            }
+            transaction.commit();
+        } catch (final Exception e) {
+            LOG.error("Error in removing group privilege.", e);
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * Check if user has given privilege.
      * @param entityManager the entity manager
