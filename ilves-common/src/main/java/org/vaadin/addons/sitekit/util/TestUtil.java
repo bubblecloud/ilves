@@ -41,14 +41,22 @@ public class TestUtil {
     private static EntityManagerFactory entityManagerFactory;
 
     public static void before() {
-        entityManagerFactory = PersistenceUtil.getEntityManagerFactory("site", "site");
+        before("site", "site");
+    }
+
+    public static void before(final String persistenceUnit, final String propertiesCategory) {
+        entityManagerFactory = PersistenceUtil.getEntityManagerFactory(persistenceUnit, propertiesCategory);
     }
 
     public static void after() {
+        after("site", "site");
+    }
+
+    public static void after(final String persistenceUnit, final String propertiesCategory) {
         final EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             final String changeLog = PropertiesUtil.getProperty(
-                    "site", "liquibase-change-log");
+                    propertiesCategory, "liquibase-change-log");
             entityManager.getTransaction().begin();
             final Connection connection = entityManager.unwrap(Connection.class);
             final Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(
@@ -60,7 +68,7 @@ public class TestUtil {
         }
         entityManager.close();
         entityManagerFactory.close();
-        PersistenceUtil.removeEntityManagerFactory("site", "site");
+        PersistenceUtil.removeEntityManagerFactory(persistenceUnit, propertiesCategory);
     }
 
     public static EntityManagerFactory getEntityManagerFactory() {
