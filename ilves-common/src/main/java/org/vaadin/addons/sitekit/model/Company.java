@@ -81,6 +81,10 @@ public final class Company implements Serializable {
     @Column(nullable = false)
     private String bic;
 
+    /** Flag for enabling user self registration. */
+    @Column(nullable = false)
+    private boolean selfRegistration;
+
     /** Flag for enabling email password reset. */
     @Column(nullable = false)
     private boolean emailPasswordReset;
@@ -394,6 +398,20 @@ public final class Company implements Serializable {
      */
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    /**
+     * @return true if self registration is enabled
+     */
+    public boolean isSelfRegistration() {
+        return selfRegistration;
+    }
+
+    /**
+     * @param selfRegistration true if self registration is to be enabled
+     */
+    public void setSelfRegistration(boolean selfRegistration) {
+        this.selfRegistration = selfRegistration;
     }
 
     /**

@@ -93,14 +93,16 @@ public final class LoginFlowlet extends AbstractFlowlet {
             throw new SiteException("Error loading login form.", e);
         }
 
-        final Button registerButton = new Button(getSite().localize("button-register") + " >>");
-        registerButton.addClickListener(new ClickListener() {
-            @Override
-            public void buttonClick(final ClickEvent event) {
-                getFlow().forward(RegisterFlowlet.class);
-            }
-        });
-        layout.addComponent(registerButton);
+        if (company.isSelfRegistration()) {
+            final Button registerButton = new Button(getSite().localize("button-register") + " >>");
+            registerButton.addClickListener(new ClickListener() {
+                @Override
+                public void buttonClick(final ClickEvent event) {
+                    getFlow().forward(RegisterFlowlet.class);
+                }
+            });
+            layout.addComponent(registerButton);
+        }
 
         if (company.isEmailPasswordReset()) {
             final Button forgotPasswordButton = new Button(getSite().localize("button-forgot-password") + " >>");

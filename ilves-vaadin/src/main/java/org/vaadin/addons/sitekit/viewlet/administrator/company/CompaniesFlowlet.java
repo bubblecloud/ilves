@@ -97,6 +97,7 @@ public final class CompaniesFlowlet extends AbstractFlowlet {
         table.setColumnCollapsed("created", true);
         table.setColumnCollapsed("modified", true);
         table.setColumnCollapsed("company", true);
+        table.setColumnCollapsed("selfRegistration", true);
         table.setColumnCollapsed("emailPasswordReset", true);
         table.setColumnCollapsed("openIdLogin", true);
         table.setColumnCollapsed("certificateLogin", true);

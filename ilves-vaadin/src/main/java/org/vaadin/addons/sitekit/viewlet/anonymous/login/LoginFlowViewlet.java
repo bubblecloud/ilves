@@ -35,9 +35,11 @@ public final class LoginFlowViewlet extends AbstractFlowViewlet {
     protected void addFlowlets() {
         final Flowlet rootView = new LoginFlowlet();
         addFlowlet(rootView);
-        addFlowlet(new RegisterFlowlet());
 
         final Company company = getSite().getSiteContext().getObject(Company.class);
+        if (company.isSelfRegistration()) {
+            addFlowlet(new RegisterFlowlet());
+        }
         if (company.isEmailPasswordReset()) {
             addFlowlet(new ForgotPasswordFlowlet());
         }

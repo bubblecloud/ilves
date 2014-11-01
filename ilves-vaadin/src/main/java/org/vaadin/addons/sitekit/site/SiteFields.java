@@ -111,6 +111,7 @@ public final class SiteFields {
                 false, true, true), new EmailValidator("Email address is not valid."));
         SiteFields.add(Company.class, new FieldDescriptor("invoicingEmailAddress", "Invoicing Email Address", TextField.class, null, 150, null, String.class, "",
                 false, true, true), new EmailValidator("Email address is not valid."));
+        SiteFields.add(Company.class, new FieldDescriptor("selfRegistration", "Self Registration", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
         SiteFields.add(Company.class, new FieldDescriptor("emailPasswordReset", "Email Password Reset", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
         SiteFields.add(Company.class, new FieldDescriptor("maxFailedLoginCount", "Max Failed Logins", TextField.class, new StringToIntegerConverter(), 50, null, Integer.class, null,
                 false, true, false).addValidator(new IntegerRangeValidator("Invalid value", 0, 10)));

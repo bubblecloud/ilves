@@ -3,6 +3,7 @@ build
 .project
 .settings
 *.iml
+*.log
 target
 .idea
 release.properties
