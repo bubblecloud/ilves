@@ -55,7 +55,7 @@ public class CertificateUtil {
     /**
      * The certificate asymmetric encryption key size.
      */
-    public static final int CERTIFICATE_KEY_SIZE = 512;
+    public static final int CERTIFICATE_KEY_SIZE = 1024;
     /**
      * The certificate signature algorithm.
      */
