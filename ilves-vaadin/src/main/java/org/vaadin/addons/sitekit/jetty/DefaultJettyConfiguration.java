@@ -39,7 +39,7 @@ public class DefaultJettyConfiguration {
         Security.addProvider(new BouncyCastleProvider());
 
         // Configure logging.
-        DOMConfigurator.configure("./log4j.xml");
+        //DOMConfigurator.configure("log4j.xml");
 
         // Configuration loading with HEROKU support.
         final String environmentDatabaseString = System.getenv("DATABASE_URL");
