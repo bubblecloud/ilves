@@ -152,7 +152,7 @@ public abstract class AbstractSiteView extends GridLayout implements View, SiteV
                 }
             }
             if (!roleMatch) {
-                UI.getCurrent().getNavigator().navigateTo("login");
+                UI.getCurrent().getNavigator().navigateTo("denied");
                 return;
             }
         }

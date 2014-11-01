@@ -156,7 +156,7 @@ public abstract class AbstractCustomView extends CustomLayout implements View, S
                 }
             }
             if (!roleMatch) {
-                UI.getCurrent().getNavigator().navigateTo("login");
+                UI.getCurrent().getNavigator().navigateTo("denied");
             }
         }
 

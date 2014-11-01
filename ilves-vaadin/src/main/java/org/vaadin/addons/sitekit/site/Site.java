@@ -269,17 +269,17 @@ public final class Site implements ViewProvider, ViewChangeListener {
         }
         if (!views.containsKey(viewName)) {
             final Company company = getSiteContext().getObject(Company.class);
-            ((AbstractSiteUI) UI.getCurrent()).navigateTo(
-                    getCurrentNavigationVersion().getDefaultPageName(),
+            /*((AbstractSiteUI) UI.getCurrent()).navigateTo(
+                    "denied",
                     localize("message-access-denied"), Notification.Type.WARNING_MESSAGE);
-
+            */
             for (final ViewDescriptor viewDescriptor : contentProvider.getDynamicSiteDescriptor().getViewDescriptors()) {
-                if (viewDescriptor.getName().equals(getCurrentNavigationVersion().getDefaultPageName())) {
+                if ("denied".equals(viewDescriptor.getName())) {
                     constructView(viewDescriptor);
                 }
             }
 
-            return views.get(getCurrentNavigationVersion().getDefaultPageName());
+            return views.get("denied");
         }
         return views.get(viewName);
     }

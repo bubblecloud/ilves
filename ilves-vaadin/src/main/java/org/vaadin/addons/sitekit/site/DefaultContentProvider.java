@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import org.vaadin.addons.sitekit.viewlet.AccessDeniedViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.company.CompanyFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.directory.UserDirectoryFlowViewlet;
@@ -80,6 +81,11 @@ public class DefaultContentProvider implements ContentProvider {
         companies.setViewerRoles("administrator");
         companies.setViewletClass("content", CompanyFlowViewlet.class);
         viewDescriptors.add(companies);
+
+        final ViewDescriptor accessDenied = new ViewDescriptor("denied", "Access Denied", DefaultView.class);
+        accessDenied.setViewerRoles("anonymous");
+        accessDenied.setViewletClass("content", AccessDeniedViewlet.class);
+        viewDescriptors.add(accessDenied);
 
         final ViewDescriptor login = new ViewDescriptor("login", "Login", DefaultView.class);
         login.setViewerRoles("anonymous");
