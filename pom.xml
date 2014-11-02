@@ -67,9 +67,6 @@
     <modules>
         <module>ilves-common</module>
         <module>ilves-vaadin</module>
-        <module>ilves-vaadin-example-postgresql</module>
-        <module>ilves-vaadin-example-mysql</module>
-        <module>ilves-vaadin-tutorial</module>
     </modules>
 
 </project>

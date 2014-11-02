@@ -21,6 +21,18 @@ $page-color: #F8F8F8;
 
 $footer-color: #DDDDDD;
 
+@mixin blue-vertical-gradient($beginColor, $endColor) {
+  background: $endColor;
+  background: -moz-linear-gradient(top, $beginColor 2%, $endColor 98%);
+  background: -webkit-gradient(linear, left top, right top, color-stop(2%,$beginColor), color-stop(98%,$endColor));
+  background-image: -webkit-linear-gradient(top, $beginColor 2%, $endColor 98%);
+  background: -o-linear-gradient(top, $beginColor 2%, $endColor 98%);
+  background: -ms-linear-gradient(top, $beginColor 2%, $endColor 98%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$beginColor', endColorstr='$endColor',GradientType=1 );
+  -ms-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$beginColor', endColorstr='$endColor',GradientType=1 );
+  background: -ms-linear-gradient(top, $beginColor 2%, $endColor 98%);
+}
+
 @mixin ilves {
 
   @include valo;
@@ -30,16 +42,7 @@ $footer-color: #DDDDDD;
   }
 
   div#ilves-header-wrapper {
-    background: #999999;
-    background: -moz-linear-gradient(top, #1b87e3 2%, #166ed5 98%);
-    background: -webkit-gradient(linear, left top, right top, color-stop(2%,#1b87e3), color-stop(98%,#166ed5));
-    background-image: -webkit-linear-gradient(top, #1b87e3 2%, #166ed5 98%);
-    background: -o-linear-gradient(top, #1b87e3 2%, #166ed5 98%);
-    background: -ms-linear-gradient(top, #1b87e3 2%, #166ed5 98%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b87e3', endColorstr='#166ed5',GradientType=1 );
-    -ms-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b87e3', endColorstr='#166ed5',GradientType=1 );
-    background: -ms-linear-gradient(top, #1b87e3 2%, #166ed5 98%);
-
+    @include blue-vertical-gradient(#1b87e3, #166ed5);
     height: 52px;
   }
 
@@ -109,7 +112,7 @@ $footer-color: #DDDDDD;
   }
 
   div#ilves-footer-wrapper {
-    background: $footer-color;
+    @include blue-vertical-gradient($content-color, white);
     clear: both;
     width: 100%;
     min-height: 20px;
@@ -200,22 +203,6 @@ $footer-color: #DDDDDD;
     visibility: hidden;
   }
 
-/*
-  .v-button-link:focus .v-button-caption {
-    outline: none;
-  }
-
-  .v-button-link .v-button-caption {
-    line-height: inherit;
-    font-weight: normal;
-    color: #333333;
-    font-size: 11px;
-    font-weight: bold;
-    text-shadow: 0 1px 0 #FFFFFF;
-    text-decoration: none;
-    text-align: left;
-  }
-*/
   .image-button {
     cursor: pointer;
     width: 40px;
@@ -231,41 +218,6 @@ $footer-color: #DDDDDD;
   .image-button:active {
     background-image: url('button/img/image-button-pressed.png');
   }
-
-  /*
-
-  .horizontal-navigation-logout {
-    float: right;
-    margin-right: 10px;
-  }
-
-  .horizontal-navigation-login {
-    float: right;
-    margin-right: 10px;
-  }
-  .menu-bar-navigation {
-    color: #333333;
-    text-shadow: 0 1px 0 #FFFFFF;
-    background: $navigation-background-color;
-  }
-
-  .menu-bar-navigation .v-menubar-menuitem:hover {
-    color: #999999;
-    cursor: pointer;
-    cursor: hand;
-  }
-  .menu-bar-navigation .v-menubar-menuitem-selected, .v-menubar-submenu .v-menubar-menuitem-selected {
-    color: #999999;
-    text-shadow: 0 1px 0 #FFFFFF;
-    background: $navigation-background-color;
-  }
-
-  .menu-bar-navigation .v-menubar-menuitem-caption .v-icon {
-    margin-right: 6px;
-    width: 18px;
-    height: 18px;
-    vertical-align: bottom;
-  }*/
 
   .v-menubar-menu-bar-navigation {
     height: 40px;
