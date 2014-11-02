@@ -183,16 +183,10 @@
     <changeSet author="tlaukkan (generated)" id="1414525790433-22">
         <addUniqueConstraint columnNames="owner_companyid, page" constraintName="unq_content_0" deferrable="false" disabled="false" initiallyDeferred="false" tableName="content"/>
     </changeSet>
-    <changeSet author="tlaukkan (generated)" id="1414525790433-23">
-        <addUniqueConstraint columnNames="user_userid, group_groupid" constraintName="unq_privilege_0" deferrable="false" disabled="false" initiallyDeferred="false" tableName="privilege"/>
-    </changeSet>
     <changeSet author="tlaukkan" id="2a688190-61be-11e4-9803-0800200c9a66">
         <addColumn  tableName="company">
             <column name="selfregistration" type="boolean" defaultValueBoolean="false"/>
         </addColumn>
-    </changeSet>
-    <changeSet author="tlaukkan (generated)" id="36d7a550-6277-11e4-9803-0800200c9a66">
-        <dropUniqueConstraint constraintName="unq_privilege_0" tableName="privilege"/>
     </changeSet>
 
 </databaseChangeLog>
