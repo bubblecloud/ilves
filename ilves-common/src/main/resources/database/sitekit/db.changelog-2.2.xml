@@ -191,5 +191,9 @@
             <column name="selfregistration" type="boolean" defaultValueBoolean="false"/>
         </addColumn>
     </changeSet>
+    <changeSet author="tlaukkan (generated)" id="36d7a550-6277-11e4-9803-0800200c9a66">
+        <dropUniqueConstraint constraintName="unq_privilege_0" tableName="privilege"/>
+    </changeSet>
+
 </databaseChangeLog>
 
