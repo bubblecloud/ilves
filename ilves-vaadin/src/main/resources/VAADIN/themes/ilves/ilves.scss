@@ -33,6 +33,12 @@ $footer-color: #DDDDDD;
   background: -ms-linear-gradient(top, $beginColor 2%, $endColor 98%);
 }
 
+.v-generated-body {
+  margin: auto;
+  max-width: 1200px;
+  background-color: #333;
+}
+
 @mixin ilves {
 
   @include valo;
@@ -45,17 +51,17 @@ $footer-color: #DDDDDD;
 
   input.ilves-login-username {
     margin-bottom: 10px;
-    width: 250px;
+    width: 150px;
   }
 
   input.ilves-login-password {
     margin-bottom: 10px;
-    width: 250px;
+    width: 150px;
   }
 
   input.ilves-login-button {
     margin-bottom: 10px;
-    width: 250px;
+    width: 150px;
   }
 
   .v-tabsheet-tabsheetpanel {
