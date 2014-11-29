@@ -216,7 +216,7 @@ public class ContentModule implements SiteModule {
             }
 
             // Describe content view.
-            final ViewDescriptor viewDescriptor = new ViewDescriptor(page, title, DefaultView.class);
+            final ViewDescriptor viewDescriptor = new ViewDescriptor(page, title, DefaultValoView.class);
             viewDescriptor.getProductionVersion().setDynamic(true);
             if (editPrivilege) {
                 viewDescriptor.setViewletClass("content", RenderFlow.class, content);
