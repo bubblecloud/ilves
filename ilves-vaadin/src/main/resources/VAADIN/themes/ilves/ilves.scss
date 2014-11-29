@@ -3,7 +3,7 @@ $v-layout-margin-bottom: 20px;
 $v-layout-margin-left: 20px;
 $v-layout-margin-right: 20px;
 
-$v-unit-size: 30px;
+$v-unit-size: 40px;
 $v-font-size: 14px;
 
 @import "../valo/valo";
@@ -39,93 +39,8 @@ $footer-color: #DDDDDD;
 
   &.v-app {
     background: $application-background-color;
-  }
-
-  div#ilves-header-wrapper {
-    @include blue-vertical-gradient(#1b87e3, #166ed5);
-    height: 52px;
-  }
-
-  div#ilves-header {
-    width: 1000px;
-    margin: 0 auto;
-    height: 52px
-  }
-
-  div#ilves-logo-wrapper {
-    background: $logo-background-color;
-    margin: 6px 0px 6px 0px;
-    border: 0px;
-    border-radius: 6px;
-    float: left;
-    width: 40px;
-    height: 40px
-  }
-
-  div#ilves-logo {
-    margin-top: 4px
-  }
-
-  div#ilves-profile-wrapper {
-    background: $profile-background-color;
-    margin: 6px 0px 6px 0px;
-    border: 0px;
-    border-radius: 6px;
-    float: right;
-    width: 40px;
-    height: 40px
-  }
-
-  div#ilves-profile {
-    margin: 4px 4px 4px 4px
-  }
-
-  div#ilves-navigation-wrapper {
-    background: $navigation-background-color;
-    margin: 6px 0px 6px 6px;
-    border: 0px;
-    border-radius: 6px;
-    float: left;
-    width: 908px;
-    height: 40px;
-//    font-weight: bold
-  }
-
-  div#ilves-navigation {
-    margin-left: 8px
-  }
-
-  div#ilves-container {
-    width: 1000px;
-    margin: 0 auto
-  }
-
-  div#ilves-content-wrapper {
-    margin: 12px 0px 12px 0px;
-  }
-
-  div#ilves-content {
-    background: $content-color;
-    border: 0px;
-    border-radius: 6px;
-    padding: 30px 40px 30px 40px;
-  }
-
-  div#ilves-footer-wrapper {
-    @include blue-vertical-gradient($content-color, white);
-    clear: both;
-    width: 100%;
-    min-height: 20px;
-    border: 0px solid;
-    border-radius: 10px;
-  }
-
-  div#ilves-footer {
-    padding: 8px;
-  }
-
-  div.company-footer-label {
-    text-align: center;
+    color: #464646;
+    cursor: default;
   }
 
   input.ilves-login-username {
@@ -141,18 +56,6 @@ $footer-color: #DDDDDD;
   input.ilves-login-button {
     margin-bottom: 10px;
     width: 250px;
-  }
-
-  h1 {
-    font-size: 2em;
-    margin-top: 0px;
-    margin-bottom: 0px;
-  }
-
-  h2 {
-    font-size: 1.5em;
-    margin-top: 8px;
-    margin-bottom: 0px;
   }
 
   .v-tabsheet-tabsheetpanel {
@@ -173,20 +76,6 @@ $footer-color: #DDDDDD;
 
   .v-table-body {
     border: 1px solid #eee;
-  }
-
-  .v-caption .v-icon {
-    display: inline-block;
-    padding-right: 2px;
-    vertical-align: top;
-  }
-
-  .v-button .v-icon {
-    vertical-align: text-top;
-    margin-right: 3px;
-    border: none;
-    width: 20px;
-    height: 20px;
   }
 
   .v-caption .v-required-field-indicator {
@@ -219,21 +108,6 @@ $footer-color: #DDDDDD;
     background-image: url('button/img/image-button-pressed.png');
   }
 
-  .v-menubar-menu-bar-navigation {
-    height: 40px;
-  }
-
-  .menu-bar-navigation .v-menubar-menuitem-caption {
-    line-height: 40px;
-  }
-  .menu-bar-navigation .v-menubar-menuitem-caption .v-icon {
-    width: 24px;
-    height: 24px;
-    margin-top: -4px;
-    margin-right: 6px;
-    margin-left: 4px;
-  }
-
   div.gravatar a img {
     width: 32px;
     height: 32px;
@@ -242,4 +116,44 @@ $footer-color: #DDDDDD;
   div.wiki-content {
     overflow: hidden;
   }
+
+  h1 {
+    font-size: 2em;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  h2 {
+    font-size: 1.5em;
+    margin-top: 8px;
+    margin-bottom: 0px;
+  }
+
+
+  .v-caption .v-icon {
+    display: inline-block;
+    padding-right: 2px;
+    vertical-align: top;
+  }
+
+  .v-menubar-user-menu > .v-menubar-menuitem img.v-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 14px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
+    display: block;
+    margin: 0 auto 0.3em;
+    border: 5px solid #555;
+  }
+
+  .valo-content {
+    padding: 20px;
+    background-color: $page-color;
+  }
+
+  .valo-menu-item .v-icon {
+    width: 32px;
+    height: 32px;
+  }
+
 }

@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import org.vaadin.addons.sitekit.valo.DefaultValoView;
 import org.vaadin.addons.sitekit.viewlet.AccessDeniedViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.company.CompanyFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowViewlet;
@@ -45,7 +46,7 @@ public class DefaultContentProvider implements ContentProvider {
     public DefaultContentProvider() {
         final List<ViewDescriptor> viewDescriptors = Collections.synchronizedList(new ArrayList<ViewDescriptor>());
 
-        final ViewDescriptor master = new ViewDescriptor("master", "Master", DefaultView.class);
+        final ViewDescriptor master = new ViewDescriptor("master", "Master", DefaultValoView.class);
         master.setViewerRoles("superuser");
         master.setViewletClass("logo", ImageViewlet.class, "logo.png");
         master.setViewletClass("navigation", MenuNavigationViewlet.class);
@@ -53,65 +54,65 @@ public class DefaultContentProvider implements ContentProvider {
         master.setViewletClass("footer", CompanyFooterViewlet.class);
         viewDescriptors.add(master);
 
-        final ViewDescriptor configuration = new ViewDescriptor("configuration", "Configuration", DefaultView.class);
+        final ViewDescriptor configuration = new ViewDescriptor("configuration", "Configuration", DefaultValoView.class);
         configuration.setViewerRoles("user", "administrator");
         viewDescriptors.add(configuration);
 
-        final ViewDescriptor users = new ViewDescriptor("users", "Users", DefaultView.class);
+        final ViewDescriptor users = new ViewDescriptor("users", "Users", DefaultValoView.class);
         users.setViewerRoles("administrator");
         users.setViewletClass("content", UserFlowViewlet.class);
         viewDescriptors.add(users);
 
-        final ViewDescriptor groups = new ViewDescriptor("groups", "Groups", DefaultView.class);
+        final ViewDescriptor groups = new ViewDescriptor("groups", "Groups", DefaultValoView.class);
         groups.setViewerRoles("administrator");
         groups.setViewletClass("content", GroupFlowViewlet.class);
         viewDescriptors.add(groups);
 
-        final ViewDescriptor customers = new ViewDescriptor("customers", "Customers", DefaultView.class);
+        final ViewDescriptor customers = new ViewDescriptor("customers", "Customers", DefaultValoView.class);
         customers.setViewerRoles("administrator");
         customers.setViewletClass("content", CustomerFlowViewlet.class);
         viewDescriptors.add(customers);
 
-        final ViewDescriptor directories = new ViewDescriptor("directories", "Directories", DefaultView.class);
+        final ViewDescriptor directories = new ViewDescriptor("directories", "Directories", DefaultValoView.class);
         directories.setViewerRoles("administrator");
         directories.setViewletClass("content", UserDirectoryFlowViewlet.class);
         viewDescriptors.add(directories);
 
-        final ViewDescriptor companies = new ViewDescriptor("companies", "Companies", DefaultView.class);
+        final ViewDescriptor companies = new ViewDescriptor("companies", "Companies", DefaultValoView.class);
         companies.setViewerRoles("administrator");
         companies.setViewletClass("content", CompanyFlowViewlet.class);
         viewDescriptors.add(companies);
 
-        final ViewDescriptor accessDenied = new ViewDescriptor("denied", "Access Denied", DefaultView.class);
+        final ViewDescriptor accessDenied = new ViewDescriptor("denied", "Access Denied", DefaultValoView.class);
         accessDenied.setViewerRoles("anonymous");
         accessDenied.setViewletClass("content", AccessDeniedViewlet.class);
         viewDescriptors.add(accessDenied);
 
-        final ViewDescriptor login = new ViewDescriptor("login", "Login", DefaultView.class);
+        final ViewDescriptor login = new ViewDescriptor("login", "Login", DefaultValoView.class);
         login.setViewerRoles("anonymous");
         login.setViewletClass("content", LoginFlowViewlet.class);
         viewDescriptors.add(login);
 
-        final ViewDescriptor account = new ViewDescriptor("account", "Account", DefaultView.class);
+        final ViewDescriptor account = new ViewDescriptor("account", "Account", DefaultValoView.class);
         account.setViewerRoles("user", "administrator");
         account.setViewletClass("content", AccountFlowViewlet.class);
         viewDescriptors.add(account);
 
-        final ViewDescriptor validate = new ViewDescriptor("validate", "Email Validation", DefaultView.class);
+        final ViewDescriptor validate = new ViewDescriptor("validate", "Email Validation", DefaultValoView.class);
         validate.setViewletClass("content", EmailValidationViewlet.class);
         viewDescriptors.add(validate);
 
-        final ViewDescriptor openidlink = new ViewDescriptor("openidlink", "OpenID Link", DefaultView.class);
+        final ViewDescriptor openidlink = new ViewDescriptor("openidlink", "OpenID Link", DefaultValoView.class);
         openidlink.setViewerRoles("user", "administrator");
         openidlink.setViewletClass("content", OpenIdLinkViewlet.class);
         viewDescriptors.add(openidlink);
 
-        final ViewDescriptor openidlogin = new ViewDescriptor("openidlogin", "OpenID Login", DefaultView.class);
+        final ViewDescriptor openidlogin = new ViewDescriptor("openidlogin", "OpenID Login", DefaultValoView.class);
         openidlogin.setViewerRoles("anonymous");
         openidlogin.setViewletClass("content", OpenIdLoginViewlet.class);
         viewDescriptors.add(openidlogin);
 
-        final ViewDescriptor reset = new ViewDescriptor("reset", "Password Reset", DefaultView.class);
+        final ViewDescriptor reset = new ViewDescriptor("reset", "Password Reset", DefaultValoView.class);
         reset.setViewletClass("content", PasswordResetViewlet.class);
         viewDescriptors.add(reset);
 

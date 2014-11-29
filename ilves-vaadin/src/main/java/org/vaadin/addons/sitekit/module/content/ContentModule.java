@@ -30,6 +30,7 @@ import org.vaadin.addons.sitekit.module.content.model.Content;
 import org.vaadin.addons.sitekit.module.content.model.MarkupType;
 import org.vaadin.addons.sitekit.module.content.view.*;
 import org.vaadin.addons.sitekit.site.*;
+import org.vaadin.addons.sitekit.valo.DefaultValoView;
 
 import javax.persistence.EntityManager;
 import java.util.*;
@@ -50,12 +51,12 @@ public class ContentModule implements SiteModule {
         navigationVersion.addChildPage("configuration", "content", "assets");
 
         // Describe content view.
-        final ViewDescriptor contentView = new ViewDescriptor("content", "Content", DefaultView.class);
+        final ViewDescriptor contentView = new ViewDescriptor("content", "Content", DefaultValoView.class);
         contentView.setViewerRoles("administrator");
         contentView.setViewletClass("content", ContentFlow.class);
         siteDescriptor.getViewDescriptors().add(contentView);
 
-        final ViewDescriptor assetsView = new ViewDescriptor("assets", "Assets", DefaultView.class);
+        final ViewDescriptor assetsView = new ViewDescriptor("assets", "Assets", DefaultValoView.class);
         assetsView.setViewerRoles("administrator");
         assetsView.setViewletClass("content", AssetFlow.class);
         siteDescriptor.getViewDescriptors().add(assetsView);

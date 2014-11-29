@@ -21,6 +21,7 @@ import org.vaadin.addons.sitekit.grid.formatter.TimestampConverter;
 import org.vaadin.addons.sitekit.module.audit.model.AuditLogEntry;
 import org.vaadin.addons.sitekit.module.audit.view.AuditFlow;
 import org.vaadin.addons.sitekit.site.*;
+import org.vaadin.addons.sitekit.valo.DefaultValoView;
 
 /**
  * Audit module adds support for viewing audit logs.
@@ -37,7 +38,7 @@ public class AuditModule implements SiteModule {
         navigationVersion.addChildPage("configuration", "companies", "audit");
 
         // Describe content view.
-        final ViewDescriptor viewDescriptor = new ViewDescriptor("audit", "Audit", DefaultView.class);
+        final ViewDescriptor viewDescriptor = new ViewDescriptor("audit", "Audit", DefaultValoView.class);
         viewDescriptor.setViewerRoles("administrator");
         viewDescriptor.setViewletClass("content", AuditFlow.class);
         siteDescriptor.getViewDescriptors().add(viewDescriptor);

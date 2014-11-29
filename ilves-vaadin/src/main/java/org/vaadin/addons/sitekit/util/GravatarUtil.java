@@ -18,7 +18,7 @@ public class GravatarUtil {
     private final static String GRAVATAR_URL = "http://www.gravatar.com/avatar/";
 
     public static Link getGravatarImageLink(final String email) {
-        final URL gravatarUrl = GravatarUtil.getGravatarUrl(email);
+        final URL gravatarUrl = GravatarUtil.getGravatarUrl(email, 32);
         final Link link = new Link(null, new ExternalResource("http://www.gravatar.com/"));
         link.setStyleName("gravatar");
         link.setIcon(new ExternalResource(gravatarUrl));
@@ -30,11 +30,12 @@ public class GravatarUtil {
     /**
      * Get the gravatar URL based on email address.
      * @param email the email address
+     * @param size the size in pixels
      * @return the gravatar URL
      */
-    public static URL getGravatarUrl(final String email) {
+    public static URL getGravatarUrl(final String email, int size) {
         if (Site.getCurrent().getSiteContext().getObject("gravatar-url-" + email) == null) {
-            Site.getCurrent().getSiteContext().putObject("gravatar-url-" + email, constructGravatarUrl(email));
+            Site.getCurrent().getSiteContext().putObject("gravatar-url-" + email, constructGravatarUrl(email, size));
         }
         try {
             return new URL((String) Site.getCurrent().getSiteContext().getObject("gravatar-url-" + email));
@@ -47,10 +48,11 @@ public class GravatarUtil {
     /**
      * Constructs gravatar URL from email address.
      * @param email the email address
+     * @param size the size in pixels
      * @return the gravatar URL.
      */
-    private static String constructGravatarUrl(final String email) {
-        return GRAVATAR_URL + DigestUtils.md5Hex(email.toLowerCase().trim()) + ".jpg?s=32&d=mm&r=g";
+    private static String constructGravatarUrl(final String email, final int size) {
+        return GRAVATAR_URL + DigestUtils.md5Hex(email.toLowerCase().trim()) + ".jpg?s=" + size + "&d=mm&r=g";
     }
 
 }
