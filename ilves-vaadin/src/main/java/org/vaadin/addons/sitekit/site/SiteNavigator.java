@@ -25,8 +25,8 @@ public class SiteNavigator extends Navigator {
             final Notification notification = new Notification(
                     (String) UI.getCurrent().getSession().getAttribute("redirectNotification"),
                     (Notification.Type) UI.getCurrent().getSession().getAttribute("redirectNotificationType"));
-            notification.setDelayMsec(3000);
-            notification.setPosition(Position.TOP_RIGHT);
+            //notification.setPosition(Position.TOP_RIGHT);
+            //notification.setDelayMsec(3000);
             notification.show(Page.getCurrent());
             UI.getCurrent().getSession().setAttribute("redirectNotification", null);
             UI.getCurrent().getSession().setAttribute("redirectNotificationType", null);

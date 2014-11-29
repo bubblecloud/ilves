@@ -22,6 +22,7 @@ import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.FilterDescriptor;
+import org.vaadin.addons.sitekit.grid.FormattingTable;
 import org.vaadin.addons.sitekit.grid.Grid;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.PostalAddress;
@@ -79,7 +80,7 @@ public final class CompaniesFlowlet extends AbstractFlowlet {
         final List<FieldDescriptor> fieldDefinitions = SiteFields.getFieldDescriptors(Company.class);
 
         final List<FilterDescriptor> filterDefinitions = new ArrayList<FilterDescriptor>();
-        filterDefinitions.add(new FilterDescriptor("companyName", "companyName", "Company Name", new TextField(), 101, "=", String.class, ""));
+        //filterDefinitions.add(new FilterDescriptor("companyName", "companyName", "Company Name", new TextField(), 101, "=", String.class, ""));
 
         entityContainer = new EntityContainer<Company>(entityManager, true, false, false, Company.class, 1000,
                 new String[] { "companyName" },
@@ -89,7 +90,7 @@ public final class CompaniesFlowlet extends AbstractFlowlet {
                     fieldDefinition.isReadOnly(), fieldDefinition.isSortable());
         }
 
-        final Table table = new Table();
+        final Table table = new FormattingTable();
         entityGrid = new Grid(table, entityContainer);
         entityGrid.setFields(fieldDefinitions);
         entityGrid.setFilters(filterDefinitions);

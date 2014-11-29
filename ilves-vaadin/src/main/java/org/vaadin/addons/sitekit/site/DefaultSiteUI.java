@@ -130,7 +130,7 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                                             + ": " + daysUntilExpiration, Notification.Type.WARNING_MESSAGE);
                                 } else {
                                     setNotification(DefaultSiteUI.getLocalizationProvider().localize(
-                                            "message-login-success", locale), Notification.Type.HUMANIZED_MESSAGE);
+                                            "message-login-success", locale), Notification.Type.TRAY_NOTIFICATION);
                                 }
                             } else {
                                 // Login failure

@@ -15,7 +15,10 @@
  */
 package org.vaadin.addons.sitekit.viewlet.anonymous;
 
+import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.VerticalLayout;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
 
@@ -35,10 +38,13 @@ public final class CompanyFooterViewlet extends AbstractViewlet {
      * Default constructor which sets up widget content.
      */
     public CompanyFooterViewlet() {
+        final VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(new MarginInfo(true, false, true, false));
         companyLabel = new Label();
         companyLabel.setStyleName("company-footer-label");
         companyLabel.setValue("-");
-        this.setCompositionRoot(companyLabel);
+        layout.addComponent(companyLabel);
+        this.setCompositionRoot(layout);
     }
 
     @Override

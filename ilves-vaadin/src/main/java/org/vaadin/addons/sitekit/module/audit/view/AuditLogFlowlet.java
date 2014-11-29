@@ -24,10 +24,7 @@ import com.vaadin.ui.Table;
 import org.joda.time.DateTime;
 import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
-import org.vaadin.addons.sitekit.grid.FieldDescriptor;
-import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
-import org.vaadin.addons.sitekit.grid.FilterDescriptor;
-import org.vaadin.addons.sitekit.grid.Grid;
+import org.vaadin.addons.sitekit.grid.*;
 import org.vaadin.addons.sitekit.grid.field.TimestampField;
 import org.vaadin.addons.sitekit.module.audit.model.AuditLogEntry;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
@@ -77,10 +74,10 @@ public final class AuditLogFlowlet extends AbstractFlowlet {
         final List<FilterDescriptor> filterDescriptors = new ArrayList<FilterDescriptor>();
         filterDescriptors.add(new FilterDescriptor("startTime", "created", getSite().localize("filter-start-time"),
                 new TimestampField(),
-        130, ">=", Date.class, new DateTime().withTimeAtStartOfDay().toDate()));
+        200, ">=", Date.class, new DateTime().withTimeAtStartOfDay().toDate()));
         filterDescriptors.add(new FilterDescriptor("endTime", "created", getSite().localize("filter-end-time"),
                 new TimestampField(),
-                130, "<=", Date.class, new DateTime().withTimeAtStartOfDay().plusDays(1).toDate()));
+                200, "<=", Date.class, new DateTime().withTimeAtStartOfDay().plusDays(1).toDate()));
         final List<FieldDescriptor> fieldDescriptors = FieldSetDescriptorRegister.getFieldSetDescriptor(
                 AuditLogEntry.class).getFieldDescriptors();
         ContainerUtil.addContainerProperties(entityContainer, fieldDescriptors);
@@ -97,8 +94,11 @@ public final class AuditLogFlowlet extends AbstractFlowlet {
         buttonLayout.setSizeUndefined();
         gridLayout.addComponent(buttonLayout, 0, 0);
 
+        final Table table = new FormattingTable();
+        table.setPageLength(13);
+
         // Initialize grid
-        entityGrid = new Grid(new Table(), entityContainer);
+        entityGrid = new Grid(table, entityContainer);
         entityGrid.setFields(fieldDescriptors);
         entityGrid.setFilters(filterDescriptors);
         gridLayout.addComponent(entityGrid, 0, 1);
