@@ -3,7 +3,7 @@
 
     <groupId>org.bubblecloud.ilves</groupId>
     <artifactId>ilves</artifactId>
-    <version>2.7.12-SNAPSHOT</version>
+    <version>3.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <scm>
