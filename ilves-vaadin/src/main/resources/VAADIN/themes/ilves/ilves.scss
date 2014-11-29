@@ -3,7 +3,7 @@ $v-layout-margin-bottom: 20px;
 $v-layout-margin-left: 20px;
 $v-layout-margin-right: 20px;
 
-$v-unit-size: 40px;
+$v-unit-size: 30px;
 $v-font-size: 14px;
 
 @import "../valo/valo";
@@ -152,8 +152,8 @@ $footer-color: #DDDDDD;
   }
 
   .valo-menu-item .v-icon {
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
   }
 
 }
