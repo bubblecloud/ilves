@@ -153,8 +153,19 @@ $footer-color: #DDDDDD;
   }
 
   .valo-content {
-    padding: 20px;
     background-color: $page-color;
+    @include width-range($min: 801px, $max: 1100px) {
+      padding: 60px;
+    }
+    @include width-range($min: 501px, $max: 800px) {
+      padding: 40px;
+    }
+    @include width-range($min: 301px, $max: 500px) {
+      padding: 20px;
+    }
+    @include width-range($min: 0px, $max: 300px) {
+      padding: 10px;
+    }
   }
 
   .valo-menu-item .v-icon {

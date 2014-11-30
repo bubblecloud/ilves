@@ -116,9 +116,7 @@ public abstract class AbstractValoView extends ValoLayout implements View, SiteV
                 slotComponentMap.put(slot, component);
                 return component;
             } else {
-                final Panel panel = new Panel();
-                panel.setContent(new Label(slot));
-                return panel;
+                return null;
             }
         } catch (final Exception e) {
             throw new SiteException("Error instantiating viewlet for page: " + pageVersion.getTitle()

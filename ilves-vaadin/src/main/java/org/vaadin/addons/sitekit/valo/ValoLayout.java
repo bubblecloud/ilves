@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.valo;
 
+import com.vaadin.server.Responsive;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CssLayout;
@@ -39,6 +40,7 @@ public class ValoLayout extends HorizontalLayout {
         contentArea.addStyleName("v-scrollable");
         contentArea.setSizeFull();
 
+        Responsive.makeResponsive(contentArea);
         addComponents(menuArea, contentArea);
         setExpandRatio(contentArea, 1);
     }
