@@ -86,7 +86,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Implementation-Title>Site Kit</Implementation-Title>
+                            <Implementation-Title>Ilves</Implementation-Title>
                             <Implementation-Version>${project.version}</Implementation-Version>
                             <Vaadin-Package-Version>1</Vaadin-Package-Version>
                         </manifestEntries>
