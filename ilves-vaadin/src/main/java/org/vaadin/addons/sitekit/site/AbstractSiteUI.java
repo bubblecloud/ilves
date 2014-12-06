@@ -21,6 +21,7 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
+import org.apache.log4j.Logger;
 
 /**
  * Abstract base class for UI which need to track page requests
@@ -29,6 +30,8 @@ import com.vaadin.ui.UI;
  * @author Tommi S.E. Laukkanen
  */
 public abstract class AbstractSiteUI extends UI {
+    /** The logger. */
+    private static final Logger LOGGER = Logger.getLogger(AbstractSiteUI.class);
     /** The default serial version UID. */
     private static final long serialVersionUID = 1L;
     /** The site object. */
@@ -38,11 +41,13 @@ public abstract class AbstractSiteUI extends UI {
 
     @Override
     protected final void init(final VaadinRequest request) {
+        final long startTimeMillis = System.currentTimeMillis();
         navigator = new SiteNavigator(this, this);
         site = constructSite(request);
         navigator.addViewChangeListener(site);
         navigator.addProvider(site);
         site.initialize();
+        LOGGER.debug("Ilves site init took: " + (System.currentTimeMillis() - startTimeMillis) + "ms.");
     }
 
     /**

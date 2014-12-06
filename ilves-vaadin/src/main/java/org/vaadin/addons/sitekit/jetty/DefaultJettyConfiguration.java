@@ -2,7 +2,6 @@ package org.vaadin.addons.sitekit.jetty;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -50,14 +49,18 @@ public class DefaultJettyConfiguration {
             PropertiesUtil.setProperty(propertiesCategory, "javax.persistence.jdbc.url", dbUrl);
             PropertiesUtil.setProperty(propertiesCategory, "javax.persistence.jdbc.user", dbUser);
             PropertiesUtil.setProperty(propertiesCategory, "javax.persistence.jdbc.password", dbPassword);
-            LOGGER.info("Environment variable defined database URL: " + environmentDatabaseString);
+            LOGGER.info("HEROKU environment variable defined database URL: " + environmentDatabaseString);
         }
 
         final String environmentPortString = System.getenv().get("PORT");
         final int httpPort;
         if (StringUtils.isNotEmpty(environmentPortString)) {
             httpPort = Integer.parseInt(environmentPortString);
-            LOGGER.info("Environment variable defined HTTP port: " + httpPort);
+            LOGGER.info("HEROKU environment variable defined HTTP port: " + httpPort);
+            if (!"true".equals(PropertiesUtil.getProperty("site", "production-mode"))) {
+                LOGGER.warn("Ilves production mode enforced in HEROKU.");
+                PropertiesUtil.setProperty("site", "production-mode", "true");
+            }
         } else {
             httpPort = Integer.parseInt(PropertiesUtil.getProperty("site", "http-port"));
             LOGGER.info("Configuration defined HTTP port: " + httpPort);
@@ -95,6 +98,7 @@ public class DefaultJettyConfiguration {
         if (developmentEnvironment) {
             webappUrl = DefaultSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm().replace(
                     "target/classes", "src/main/resources");
+            LOGGER.info("Jetty is loading static resources from src/main/resources.");
         } else {
             webappUrl = DefaultSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm();
         }
@@ -104,6 +108,13 @@ public class DefaultJettyConfiguration {
         context.setDescriptor(webappUrl + "/WEB-INF/web.xml");
         context.setResourceBase(webappUrl);
         context.setParentLoaderPriority(true);
+        if ("true".equals(PropertiesUtil.getProperty("site", "production-mode"))) {
+            context.setInitParameter("productionMode", "true");
+            LOGGER.info("Ilves is in production mode.");
+        } else {
+            context.setInitParameter("productionMode", "false");
+            LOGGER.info("Ilves is in development mode.");
+        }
         if (developmentEnvironment) {
             context.setInitParameter("cacheControl","no-cache");
             context.setInitParameter("useFileMappedBuffer", "false");

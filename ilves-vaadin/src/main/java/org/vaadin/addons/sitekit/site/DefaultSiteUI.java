@@ -73,6 +73,7 @@ public final class DefaultSiteUI extends AbstractSiteUI {
 
         final X509Certificate[] clientCertificates = (X509Certificate[])
                 servletRequest.getHttpServletRequest().getAttribute("javax.servlet.request.X509Certificate");
+
         if (clientCertificates != null && clientCertificates.length == 1
                 && securityProvider.getUserFromSession() == null
                 && company != null
@@ -85,6 +86,16 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                         + servletRequest.getHttpServletRequest().getRemotePort() + ")");
             }
         }
+
+        addCredentialPostRequestHandler();
+
+        return new Site(SiteMode.PRODUCTION, contentProvider, localizationProvider, securityProvider, siteContext);
+    }
+
+    /**
+     * Adds handler for credential posts.
+     */
+    private void addCredentialPostRequestHandler() {
 
         // Add handler for credentials post.
         VaadinSession.getCurrent().addRequestHandler(
@@ -142,8 +153,6 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                         return false; // No response was written
                     }
                 });
-
-        return new Site(SiteMode.PRODUCTION, contentProvider, localizationProvider, securityProvider, siteContext);
     }
 
     public static Company resolveCompany(EntityManager entityManager, VaadinServletRequest servletRequest) {
