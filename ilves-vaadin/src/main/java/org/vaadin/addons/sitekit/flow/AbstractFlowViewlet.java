@@ -66,6 +66,8 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
     public final void attach() {
         super.attach();
 
+        setStyleName("ui-content");
+
         final GridLayout layout = new GridLayout(1, 3);
         layout.setSizeFull();
         this.setCompositionRoot(layout);

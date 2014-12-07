@@ -17,9 +17,9 @@ package org.vaadin.addons.sitekit.module.content.view;
 
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
 import org.apache.log4j.Logger;
 import org.markdown4j.Markdown4jProcessor;
+import org.vaadin.addons.sitekit.cache.InMemoryCache;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
 import org.vaadin.addons.sitekit.site.SiteException;
 
@@ -34,30 +34,30 @@ public final class RenderViewlet extends AbstractViewlet {
     private static final Logger LOGGER = Logger.getLogger(RenderViewlet.class);
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
+    /** The view HTML. */
+    private static InMemoryCache<String, String> markupHtmlMap = new InMemoryCache<>(
+            24 * 60 * 60 * 1000, 60 * 1000, 100
+    );
 
     @Override
     public void attach() {
         super.attach();
-        final String html;
+        final String markup = (String) getViewletDescriptor().getConfiguration();
+
         try {
-            final long startTimeMillis = System.currentTimeMillis();
-            html = new Markdown4jProcessor().process((String) getViewletDescriptor().getConfiguration());
-            LOGGER.debug("Mark4j processing took: " + (System.currentTimeMillis() -  startTimeMillis) + " ms.");
+            if (!markupHtmlMap.containsKey(markup)) {
+                final long startTimeMillis = System.currentTimeMillis();
+                final String html = new Markdown4jProcessor().process(markup);
+                markupHtmlMap.put(markup, html);
+                LOGGER.debug("Markup processing took: " + (System.currentTimeMillis() -  startTimeMillis) + " ms.");
+            }
         } catch (IOException e) {
             throw new SiteException("Error processing markdown.", e);
         }
 
-        final VerticalLayout layout = new VerticalLayout();
-        layout.addComponent(new Label(html, ContentMode.HTML));
-        layout.setSpacing(true);
-        layout.setMargin(false);
         setStyleName("wiki-content");
-        //final Panel panel = new Panel();
-        //panel.setStyleName("wiki-panel");
-        //panel.setStyleName(Reindeer.PANEL_LIGHT);
-        //panel.setContent(layout);
-
-        setCompositionRoot(layout);
+        final Label label = new Label(markupHtmlMap.get(markup), ContentMode.HTML);
+        setCompositionRoot(label);
     }
 
     /**

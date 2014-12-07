@@ -8,30 +8,8 @@ $v-font-size: 14px;
 
 @import "../valo/valo";
 
-$application-background-color: #FFFFFF;
-
-$header-background-color: #4b4b4b;
-
-$logo-background-color: #FFFFFF;
-$navigation-background-color: #FFFFFF;
-$profile-background-color: #FFFFFF;
-
-$content-color: #F8F8F8;
 $page-color: #F8F8F8;
-
-$footer-color: #DDDDDD;
-
-@mixin blue-vertical-gradient($beginColor, $endColor) {
-  background: $endColor;
-  background: -moz-linear-gradient(top, $beginColor 2%, $endColor 98%);
-  background: -webkit-gradient(linear, left top, right top, color-stop(2%,$beginColor), color-stop(98%,$endColor));
-  background-image: -webkit-linear-gradient(top, $beginColor 2%, $endColor 98%);
-  background: -o-linear-gradient(top, $beginColor 2%, $endColor 98%);
-  background: -ms-linear-gradient(top, $beginColor 2%, $endColor 98%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$beginColor', endColorstr='$endColor',GradientType=1 );
-  -ms-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$beginColor', endColorstr='$endColor',GradientType=1 );
-  background: -ms-linear-gradient(top, $beginColor 2%, $endColor 98%);
-}
+$application-background-color: #FFFFFF;
 
 .v-generated-body {
   margin: auto;
@@ -123,18 +101,17 @@ $footer-color: #DDDDDD;
     overflow: hidden;
   }
 
-  h1 {
+  div.ui-content h1 {
     font-size: 2em;
     margin-top: 0px;
     margin-bottom: 0px;
   }
 
-  h2 {
+  div.ui-content h2 {
     font-size: 1.5em;
     margin-top: 8px;
     margin-bottom: 0px;
   }
-
 
   .v-caption .v-icon {
     display: inline-block;

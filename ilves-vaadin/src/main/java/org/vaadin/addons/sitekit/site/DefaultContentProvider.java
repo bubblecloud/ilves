@@ -48,9 +48,6 @@ public class DefaultContentProvider implements ContentProvider {
 
         final ViewDescriptor master = new ViewDescriptor("master", "Master", DefaultValoView.class);
         master.setViewerRoles("superuser");
-        master.setViewletClass("logo", ImageViewlet.class, "logo.png");
-        master.setViewletClass("navigation", MenuNavigationViewlet.class);
-        master.setViewletClass("profile", ProfileImageViewlet.class);
         viewDescriptors.add(master);
 
         final ViewDescriptor configuration = new ViewDescriptor("configuration", "Configuration", DefaultValoView.class);
