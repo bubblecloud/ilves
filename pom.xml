@@ -3,14 +3,14 @@
 
     <groupId>org.bubblecloud.ilves</groupId>
     <artifactId>ilves</artifactId>
-    <version>3.0.7-SNAPSHOT</version>
+    <version>3.0.7</version>
     <packaging>pom</packaging>
 
     <scm>
         <url>https://github.com/bubblecloud/ilves.git</url>
         <connection>scm:git:git://github.com:bubblecloud/ilves.git</connection>
         <developerConnection>scm:git:git@github.com:bubblecloud/ilves.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>ilves-3.0.7</tag>
     </scm>
 
     <!-- Deploy releases and snapshots to the CloudBees maven repositories -->
