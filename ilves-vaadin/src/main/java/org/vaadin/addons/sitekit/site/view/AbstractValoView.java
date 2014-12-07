@@ -13,28 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.site;
+package org.vaadin.addons.sitekit.site.view;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 import org.apache.log4j.Logger;
+import org.vaadin.addons.sitekit.site.*;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Abstract base class for site view implementations.
+ * Abstract base class for view layout implementations.
+ *
  * @author Tommi S.E. Laukkanen
  */
-public abstract class AbstractCustomView extends CustomLayout implements View, SiteView {
+public abstract class AbstractValoView extends ValoLayout implements View, SiteView {
 
     /** Default version UID. */
     private static final long serialVersionUID = 1L;
     /** The logger. */
-    private static final Logger LOGGER = Logger.getLogger(AbstractCustomView.class);
+    private static final Logger LOGGER = Logger.getLogger(AbstractValoView.class);
     /** The site this flow belongs to. */
     private Site site;
     /** The page descriptor represented by this site flow. */
@@ -48,11 +49,10 @@ public abstract class AbstractCustomView extends CustomLayout implements View, S
 
     /**
      * Default constructor.
-     * @param templateStream the template stream
-     * @throws IOException If template stream can not be read.
+     *
+     * @throws java.io.IOException If template stream can not be read.
      */
-    public AbstractCustomView(final InputStream templateStream) throws IOException {
-        super(templateStream);
+    public AbstractValoView() throws IOException {
         this.site = ((AbstractSiteUI) UI.getCurrent()).getSite();
     }
 
@@ -116,9 +116,7 @@ public abstract class AbstractCustomView extends CustomLayout implements View, S
                 slotComponentMap.put(slot, component);
                 return component;
             } else {
-                final Panel panel = new Panel();
-                panel.setContent(new Label(slot));
-                return panel;
+                return null;
             }
         } catch (final Exception e) {
             throw new SiteException("Error instantiating viewlet for page: " + pageVersion.getTitle()
@@ -167,4 +165,7 @@ public abstract class AbstractCustomView extends CustomLayout implements View, S
         }
     }
 
+    public Site getSite() {
+        return site;
+    }
 }

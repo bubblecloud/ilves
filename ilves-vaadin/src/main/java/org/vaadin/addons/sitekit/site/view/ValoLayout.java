@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.vaadin.addons.sitekit.valo;
+package org.vaadin.addons.sitekit.site.view;
 
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.Component;

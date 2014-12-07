@@ -30,7 +30,7 @@ import org.vaadin.addons.sitekit.module.content.model.Content;
 import org.vaadin.addons.sitekit.module.content.model.MarkupType;
 import org.vaadin.addons.sitekit.module.content.view.*;
 import org.vaadin.addons.sitekit.site.*;
-import org.vaadin.addons.sitekit.valo.DefaultValoView;
+import org.vaadin.addons.sitekit.site.view.DefaultValoView;
 
 import javax.persistence.EntityManager;
 import java.util.*;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.valo;
+package org.vaadin.addons.sitekit.site.view;
 
 import com.vaadin.server.*;
 import com.vaadin.shared.ui.label.ContentMode;

@@ -15,7 +15,7 @@
  */
 package org.vaadin.addons.sitekit.site;
 
-import org.vaadin.addons.sitekit.valo.DefaultValoView;
+import org.vaadin.addons.sitekit.site.view.DefaultValoView;
 import org.vaadin.addons.sitekit.viewlet.AccessDeniedViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.company.CompanyFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.customer.CustomerFlowViewlet;
@@ -27,7 +27,6 @@ import org.vaadin.addons.sitekit.viewlet.anonymous.login.LoginFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.anonymous.login.OpenIdLoginViewlet;
 import org.vaadin.addons.sitekit.viewlet.user.AccountFlowViewlet;
 import org.vaadin.addons.sitekit.viewlet.user.OpenIdLinkViewlet;
-import org.vaadin.addons.sitekit.viewlet.user.ProfileImageViewlet;
 
 import java.util.ArrayList;
 import java.util.Collections;
