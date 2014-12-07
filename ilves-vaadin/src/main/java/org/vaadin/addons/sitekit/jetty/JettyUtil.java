@@ -25,6 +25,7 @@ import org.vaadin.addons.sitekit.util.PropertiesUtil;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
+import java.io.IOException;
 import java.security.KeyStore;
 import java.security.cert.CRL;
 import java.security.cert.CertificateException;
@@ -48,7 +49,7 @@ public class JettyUtil {
     public static Server newServer(
             final int httpPort,
             final int httpsPort,
-            final boolean requireClientAuthentication) throws Exception {
+            final boolean requireClientAuthentication) throws IOException {
         UserClientCertificateCache.init(DefaultSiteUI.getEntityManagerFactory());
 
         final String keyStorePath = PropertiesUtil.getProperty("site", "key-store-path");
@@ -123,7 +124,7 @@ public class JettyUtil {
                                                                   final String keyStorePassword,
                                                                   final String certificatePassword,
                                                                   final boolean requireClientAuthentication)
-            throws Exception {
+            throws IOException {
 
         final JettySiteSslContextFactory sslContextFactory = new JettySiteSslContextFactory();
         sslContextFactory.setCertAlias(certificateAlias);

@@ -11,7 +11,9 @@ import org.vaadin.addons.sitekit.site.*;
 import org.vaadin.addons.sitekit.util.PersistenceUtil;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.Security;
 
 /**
@@ -31,7 +33,7 @@ public class DefaultJettyConfiguration {
      * @throws Exception if exception occurs in server construction
      */
     public static Server configureServer(final String persistenceUnit,
-                                         final String localizationBundle) throws Exception {
+                                         final String localizationBundle) throws IOException, URISyntaxException {
         final String propertiesCategory = "site";
 
         // Configure security provider.

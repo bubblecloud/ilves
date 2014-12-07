@@ -37,7 +37,6 @@ public class DefaultValoView extends AbstractValoView {
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
 
-    private final ComponentContainer viewDisplay = getContentContainer();
     private final CssLayout menu = new CssLayout();
     private final CssLayout menuItemsLayout = new CssLayout();
 
