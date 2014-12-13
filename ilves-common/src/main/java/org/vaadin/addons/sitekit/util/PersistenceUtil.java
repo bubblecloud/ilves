@@ -132,22 +132,31 @@ public final class PersistenceUtil {
      */
     public static String diff(final String persistenceUnit, final String propertiesCategory) throws Exception {
 
+        final String originalDllGeneration = PropertiesUtil.getProperty(propertiesCategory, PersistenceUnitProperties.DDL_GENERATION);
+        final String originalJdbcUrl = PropertiesUtil.getProperty(
+                propertiesCategory, PersistenceUnitProperties.JDBC_URL);
         final String refJdbcUrl = PropertiesUtil.getProperty(
                 propertiesCategory, PersistenceUnitProperties.JDBC_URL) + "ref";
 
         // Construct schema according to liquibase changelog.
         PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.DDL_GENERATION, "none");
         final EntityManagerFactory factory = getEntityManagerFactory(persistenceUnit, propertiesCategory);
+        removeEntityManagerFactory(persistenceUnit, propertiesCategory);
 
         // Construct ref schema according to liquibase changelog.
         PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.JDBC_URL, refJdbcUrl);
-        getEntityManagerFactory(persistenceUnit, propertiesCategory);
+        getEntityManagerFactory(persistenceUnit, propertiesCategory).close();
+        removeEntityManagerFactory(persistenceUnit, propertiesCategory);
 
         // Update ref schema according to JPA changes.
-        PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.DDL_GENERATION, "create-and-extend-tables");
+        PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.DDL_GENERATION, "create-or-extend-tables");
         PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.JDBC_URL, refJdbcUrl);
         final EntityManagerFactory refFactory = getEntityManagerFactory(persistenceUnit, propertiesCategory);
+        removeEntityManagerFactory(persistenceUnit, propertiesCategory);
 
+        // Reset original settings.
+        PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.DDL_GENERATION, originalDllGeneration);
+        PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.JDBC_URL, originalJdbcUrl);
 
         final String changeLog = PropertiesUtil.getProperty(
                 propertiesCategory, "liquibase-change-log");
@@ -173,4 +182,5 @@ public final class PersistenceUtil {
 
         return byteArrayOutputStream.toString();
     }
+
 }
