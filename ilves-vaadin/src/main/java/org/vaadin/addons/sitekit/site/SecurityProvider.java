@@ -24,6 +24,11 @@ import java.util.List;
  */
 public interface SecurityProvider {
     /**
+     * Gets current user ID or null if use has not logged in.
+     * @return the user ID.
+     */
+    String getUserId();
+    /**
      * Gets current user or null if use has not logged in.
      * @return the user name.
      */

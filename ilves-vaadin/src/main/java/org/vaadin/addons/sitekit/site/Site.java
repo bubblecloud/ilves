@@ -21,7 +21,6 @@ import com.vaadin.navigator.ViewProvider;
 import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 import org.apache.log4j.Logger;

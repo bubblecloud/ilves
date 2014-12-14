@@ -30,6 +30,8 @@ import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.module.audit.AuditService;
+import org.vaadin.addons.sitekit.service.LoginService;
 import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
 
 import javax.persistence.EntityManager;
@@ -62,16 +64,18 @@ public final class DefaultSiteUI extends AbstractSiteUI {
 
     @Override
     protected Site constructSite(final VaadinRequest request) {
-        final SiteContext siteContext = new SiteContext();
-
         // Construct entity manager for this site context.
         final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        siteContext.putObject(EntityManager.class, entityManager);
-        siteContext.putObject(EntityManagerFactory.class, entityManagerFactory);
-
+        // Construct audit entity manager for this site context.
+        final EntityManager auditEntityManager = entityManagerFactory.createEntityManager();
         // Choose company for this site context.
         final VaadinServletRequest servletRequest = (VaadinServletRequest) VaadinService.getCurrentRequest();
-        Company company = resolveCompany(entityManager, servletRequest);
+        // The virtual host based on URL.
+        final Company company = resolveCompany(entityManager, servletRequest);
+
+        final SiteContext siteContext = new SiteContext(entityManager, auditEntityManager, servletRequest, securityProvider);
+        siteContext.putObject(EntityManager.class, entityManager);
+        siteContext.putObject(EntityManagerFactory.class, entityManagerFactory);
         siteContext.putObject(Company.class, company);
 
         final X509Certificate[] clientCertificates = (X509Certificate[])
@@ -118,20 +122,20 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                             final String emailAddress = request.getParameter("username");
                             final String password = request.getParameter("password");
 
-                            final EntityManager entityManager = entityManagerFactory.createEntityManager();
+                            final EntityManager entityManager = getSite().getSiteContext().getEntityManager();
                             final Locale locale = getLocale();
 
                             final Company company = resolveCompany(entityManager, (VaadinServletRequest) request);
                             final User user = UserDao.getUser(entityManager, company, emailAddress);
-                            final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
 
-                            final String errorKey = PasswordLoginUtil.login(emailAddress, request.getRemoteHost(),
-                                    request.getRemoteAddr(), request.getRemotePort(),
-                                    entityManager, company, user, password);
+                            final String errorKey = LoginService.login(getSite().getSiteContext(), company,
+                                    user, emailAddress, password);
 
                             if (errorKey == null) {
                                 // Login success
+                                final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
                                 DefaultSiteUI.getSecurityProvider().setUser(user, groups);
+
                                 // Check for imminent password expiration.
                                 if (user.getPasswordExpirationDate() != null
                                         && new DateTime().plusDays(14).toDate().getTime()

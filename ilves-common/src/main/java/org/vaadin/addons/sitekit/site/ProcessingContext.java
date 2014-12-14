@@ -124,7 +124,11 @@ public class ProcessingContext {
                              final HttpServletRequest request) {
         this.entityManager = entityManager;
         this.auditEntityManager = auditEntityManager;
-        this.componentPort = Integer.parseInt(PropertiesUtil.getProperty("site", "http"));
+        if (Integer.parseInt(PropertiesUtil.getProperty("site", "https-port")) == 0) {
+            this.componentPort = Integer.parseInt(PropertiesUtil.getProperty("site", "http-port"));
+        } else {
+            this.componentPort = Integer.parseInt(PropertiesUtil.getProperty("site", "https-port"));
+        }
         this.componentType = PropertiesUtil.getProperty("site", "site-type");
         this.serverName = request.getServerName();
         this.localIpAddress = request.getLocalAddr();

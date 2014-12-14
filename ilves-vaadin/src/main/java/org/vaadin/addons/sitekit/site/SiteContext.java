@@ -15,6 +15,8 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,15 +26,14 @@ import java.util.Map;
  *
  * @author Tommi S.E. Laukkanen
  */
-public final class SiteContext {
+public final class SiteContext extends SecurityContext {
 
     /** The object map. */
     private final Map<Object, Object> serviceMap = new HashMap<Object, Object>();
 
-    /**
-     * Default constructor.
-     */
-    public SiteContext() {
+    public SiteContext(EntityManager entityManager, EntityManager auditEntityManager, HttpServletRequest request,
+                       SecurityProvider securityProvider) {
+        super(entityManager, auditEntityManager, request, securityProvider);
     }
 
     /**

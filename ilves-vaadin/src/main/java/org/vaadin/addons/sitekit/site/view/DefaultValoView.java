@@ -20,6 +20,7 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addons.sitekit.model.Company;
+import org.vaadin.addons.sitekit.service.LoginService;
 import org.vaadin.addons.sitekit.site.*;
 import org.vaadin.addons.sitekit.util.GravatarUtil;
 
@@ -127,6 +128,7 @@ public class DefaultValoView extends AbstractValoView {
             settingsItem.addItem(Site.getCurrent().localize("button-logout"), new MenuBar.Command() {
                 @Override
                 public void menuSelected(MenuBar.MenuItem selectedItem) {
+                    LoginService.logout(Site.getCurrent().getSiteContext());
                     final Company company = Site.getCurrent().getSiteContext().getObject(Company.class);
                     getUI().getPage().setLocation(company.getUrl());
                     getSession().getSession().invalidate();

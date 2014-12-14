@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 import org.vaadin.addons.sitekit.model.Group;
@@ -61,6 +62,16 @@ public final class SecurityProviderSessionImpl implements SecurityProvider {
         this.availableRoles = Arrays.asList(availableRoles);
     }
 
+    @Override
+    public String getUserId() {
+        final User user = getUserFromSession();
+        if (user != null) {
+            return user.getUserId();
+        } else {
+            return null;
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -79,6 +90,9 @@ public final class SecurityProviderSessionImpl implements SecurityProvider {
      * @return the user or null.
      */
     public User getUserFromSession() {
+        if ((AbstractSiteUI) UI.getCurrent() == null) {
+            return null;
+        }
         return (User) ((AbstractSiteUI) UI.getCurrent()).getSession().getAttribute("user");
     }
 
@@ -108,7 +122,6 @@ public final class SecurityProviderSessionImpl implements SecurityProvider {
         VaadinSession.getCurrent().getSession().setAttribute("groups", groups);
     }
 
-
     /**
      * Gets roles from session.
      * @return the roles or null.
@@ -125,7 +138,6 @@ public final class SecurityProviderSessionImpl implements SecurityProvider {
         VaadinSession.getCurrent().setAttribute("roles", roles);
         VaadinSession.getCurrent().getSession().setAttribute("roles", roles);
     }
-
 
     /**
      * {@inheritDoc}
