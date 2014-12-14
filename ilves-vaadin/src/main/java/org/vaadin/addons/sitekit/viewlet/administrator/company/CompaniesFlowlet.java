@@ -107,6 +107,7 @@ public final class CompaniesFlowlet extends AbstractFlowlet {
         table.setColumnCollapsed("salesEmailAddress", true);
         table.setColumnCollapsed("supportEmailAddress", true);
         table.setColumnCollapsed("invoicingEmailAddress", true);
+        table.setColumnCollapsed("gaTrackingId", true);
         gridLayout.addComponent(entityGrid, 0, 1);
 
         final HorizontalLayout buttonLayout = new HorizontalLayout();

@@ -66,20 +66,7 @@ public final class PersistenceUtil {
         final String entityManagerFactoryKey = persistenceUnit + "-" + propertiesCategory;
         synchronized (entityManagerFactories) {
             if (!entityManagerFactories.containsKey(entityManagerFactoryKey)) {
-                final Map properties = new HashMap();
-                properties.put(PersistenceUnitProperties.JDBC_DRIVER, PropertiesUtil.getProperty(
-                        propertiesCategory, PersistenceUnitProperties.JDBC_DRIVER));
-                properties.put(PersistenceUnitProperties.JDBC_URL, PropertiesUtil.getProperty(
-                        propertiesCategory, PersistenceUnitProperties.JDBC_URL));
-                properties.put(PersistenceUnitProperties.JDBC_USER, PropertiesUtil.getProperty(
-                        propertiesCategory, PersistenceUnitProperties.JDBC_USER));
-                properties.put(PersistenceUnitProperties.JDBC_PASSWORD, PropertiesUtil.getProperty(
-                        propertiesCategory, PersistenceUnitProperties.JDBC_PASSWORD));
-                properties.put(PersistenceUnitProperties.DDL_GENERATION, PropertiesUtil.getProperty(
-                        propertiesCategory, PersistenceUnitProperties.DDL_GENERATION));
-
-                final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(
-                        persistenceUnit, properties);
+                final EntityManagerFactory entityManagerFactory = newEntityManagerFactory(persistenceUnit, propertiesCategory);
 
                 final String changeLog = PropertiesUtil.getProperty(
                         propertiesCategory, "liquibase-change-log");
@@ -102,7 +89,6 @@ public final class PersistenceUtil {
                 entityManagerFactories.put(entityManagerFactoryKey, entityManagerFactory);
             }
 
-
             return entityManagerFactories.get(entityManagerFactoryKey);
         }
     }
@@ -124,63 +110,114 @@ public final class PersistenceUtil {
     }
 
     /**
-     * Diffs database schema against new changes in JPA model.
+     * Diffs database schema against new changes in JPA model and returns Liquibase diff XML file as String.
      *
      * @param persistenceUnit the persistence unit
      * @param propertiesCategory the properties category
-     * @return the entity manager factory singleton
+     * @return the Liquibase diff XML file as String.
      */
-    public static String diff(final String persistenceUnit, final String propertiesCategory) throws Exception {
+    public static String diff(final String persistenceUnit, final String propertiesCategory) {
+        try {
+            final String originalDllGeneration = PropertiesUtil.getProperty(propertiesCategory, PersistenceUnitProperties.DDL_GENERATION);
+            final String originalJdbcUrl = PropertiesUtil.getProperty(
+                    propertiesCategory, PersistenceUnitProperties.JDBC_URL);
+            final String refJdbcUrl = PropertiesUtil.getProperty(
+                    propertiesCategory, PersistenceUnitProperties.JDBC_URL) + "ref";
 
-        final String originalDllGeneration = PropertiesUtil.getProperty(propertiesCategory, PersistenceUnitProperties.DDL_GENERATION);
-        final String originalJdbcUrl = PropertiesUtil.getProperty(
-                propertiesCategory, PersistenceUnitProperties.JDBC_URL);
-        final String refJdbcUrl = PropertiesUtil.getProperty(
-                propertiesCategory, PersistenceUnitProperties.JDBC_URL) + "ref";
+            // Construct schema according to liquibase changelog.
+            PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.DDL_GENERATION, "none");
+            final EntityManagerFactory factory = getEntityManagerFactory(persistenceUnit, propertiesCategory);
+            removeEntityManagerFactory(persistenceUnit, propertiesCategory);
 
-        // Construct schema according to liquibase changelog.
-        PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.DDL_GENERATION, "none");
-        final EntityManagerFactory factory = getEntityManagerFactory(persistenceUnit, propertiesCategory);
-        removeEntityManagerFactory(persistenceUnit, propertiesCategory);
+            // Empty ref schema
+            PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.JDBC_URL, refJdbcUrl);
+            dropDatabaseObjects(persistenceUnit, propertiesCategory);
 
-        // Construct ref schema according to liquibase changelog.
-        PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.JDBC_URL, refJdbcUrl);
-        getEntityManagerFactory(persistenceUnit, propertiesCategory).close();
-        removeEntityManagerFactory(persistenceUnit, propertiesCategory);
+            // Construct ref schema according to liquibase changelog.
+            getEntityManagerFactory(persistenceUnit, propertiesCategory).close();
+            removeEntityManagerFactory(persistenceUnit, propertiesCategory);
 
-        // Update ref schema according to JPA changes.
-        PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.DDL_GENERATION, "create-or-extend-tables");
-        PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.JDBC_URL, refJdbcUrl);
-        final EntityManagerFactory refFactory = getEntityManagerFactory(persistenceUnit, propertiesCategory);
-        removeEntityManagerFactory(persistenceUnit, propertiesCategory);
+            // Update ref schema according to JPA changes.
+            PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.DDL_GENERATION, "create-or-extend-tables");
+            PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.JDBC_URL, refJdbcUrl);
+            final EntityManagerFactory refFactory = newEntityManagerFactory(persistenceUnit, propertiesCategory);
 
-        // Reset original settings.
-        PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.DDL_GENERATION, originalDllGeneration);
-        PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.JDBC_URL, originalJdbcUrl);
+            // Reset original settings.
+            PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.DDL_GENERATION, originalDllGeneration);
+            PropertiesUtil.setProperty(propertiesCategory, PersistenceUnitProperties.JDBC_URL, originalJdbcUrl);
 
-        final String changeLog = PropertiesUtil.getProperty(
-                propertiesCategory, "liquibase-change-log");
+            final String changeLog = PropertiesUtil.getProperty(
+                    propertiesCategory, "liquibase-change-log");
 
-        final EntityManager entityManager = factory.createEntityManager();
-        final EntityManager refEntityManager = refFactory.createEntityManager();
-        entityManager.getTransaction().begin();
-        refEntityManager.getTransaction().begin();
-        final Connection connection = entityManager.unwrap(Connection.class);
-        final Connection refConnection = refEntityManager.unwrap(Connection.class);
-        final Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
-        final Database refDatabase = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(refConnection));
-        final Liquibase liquibase = new Liquibase(changeLog, new ClassLoaderResourceAccessor(), database);
-        final DiffResult diffResult = liquibase.diff(refDatabase, database, CompareControl.STANDARD);
+            final EntityManager entityManager = factory.createEntityManager();
+            final EntityManager refEntityManager = refFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            refEntityManager.getTransaction().begin();
+            final Connection connection = entityManager.unwrap(Connection.class);
+            final Connection refConnection = refEntityManager.unwrap(Connection.class);
+            final Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+            final Database refDatabase = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(refConnection));
+            final Liquibase liquibase = new Liquibase(changeLog, new ClassLoaderResourceAccessor(), database);
+            final DiffResult diffResult = liquibase.diff(refDatabase, database, CompareControl.STANDARD);
 
-        final ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-        final PrintStream printStream=new PrintStream(byteArrayOutputStream);
-        final DiffToChangeLog diffToChangeLog = new DiffToChangeLog(diffResult, new DiffOutputControl());
-        diffToChangeLog.print(printStream);
+            final ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+            final PrintStream printStream=new PrintStream(byteArrayOutputStream);
+            final DiffToChangeLog diffToChangeLog = new DiffToChangeLog(diffResult, new DiffOutputControl());
+            diffToChangeLog.print(printStream);
 
-        entityManager.getTransaction().rollback();
-        refEntityManager.getTransaction().rollback();
+            entityManager.getTransaction().rollback();
+            refEntityManager.getTransaction().rollback();
 
-        return byteArrayOutputStream.toString();
+            return byteArrayOutputStream.toString();
+        } catch(final Exception e) {
+            throw new SiteException("Error diffing liquibase and JPA schemas.", e);
+        }
     }
 
+    /**
+     * Drops database objects of given schema.
+     * @param persistenceUnit the persistence unit
+     * @param propertiesCategory the properties category
+     */
+    private static void dropDatabaseObjects(String persistenceUnit, String propertiesCategory) {
+        try {
+            final EntityManagerFactory tempRefEntityManagerFactory = newEntityManagerFactory(persistenceUnit, propertiesCategory);
+            final EntityManager entityManager = tempRefEntityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            final Connection connection = entityManager.unwrap(Connection.class);
+            final Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+            database.dropDatabaseObjects(database.getDefaultSchema());
+            entityManager.getTransaction().commit();
+            entityManager.close();
+            database.close();
+            tempRefEntityManagerFactory.close();
+        } catch(final Exception e) {
+            throw new SiteException("Error dropping database objects.", e);
+        }
+    }
+
+
+    /**
+     * Constructs new entity manager factory.
+     *
+     * @param persistenceUnit the persistence unit
+     * @param propertiesCategory the properties category
+     * @return the new entity manager factory.
+     */
+    private static EntityManagerFactory newEntityManagerFactory(String persistenceUnit, String propertiesCategory) {
+        final Map properties = new HashMap();
+        properties.put(PersistenceUnitProperties.JDBC_DRIVER, PropertiesUtil.getProperty(
+                propertiesCategory, PersistenceUnitProperties.JDBC_DRIVER));
+        properties.put(PersistenceUnitProperties.JDBC_URL, PropertiesUtil.getProperty(
+                propertiesCategory, PersistenceUnitProperties.JDBC_URL));
+        properties.put(PersistenceUnitProperties.JDBC_USER, PropertiesUtil.getProperty(
+                propertiesCategory, PersistenceUnitProperties.JDBC_USER));
+        properties.put(PersistenceUnitProperties.JDBC_PASSWORD, PropertiesUtil.getProperty(
+                propertiesCategory, PersistenceUnitProperties.JDBC_PASSWORD));
+        properties.put(PersistenceUnitProperties.DDL_GENERATION, PropertiesUtil.getProperty(
+                propertiesCategory, PersistenceUnitProperties.DDL_GENERATION));
+
+        return Persistence.createEntityManagerFactory(
+                persistenceUnit, properties);
+    }
 }

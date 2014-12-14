@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
+import org.vaadin.addons.sitekit.analytics.Analyser;
 import org.vaadin.addons.sitekit.cache.UserClientCertificateCache;
 import org.vaadin.addons.sitekit.dao.CompanyDao;
 import org.vaadin.addons.sitekit.dao.UserDao;
@@ -56,6 +57,8 @@ public final class DefaultSiteUI extends AbstractSiteUI {
     private static ContentProvider contentProvider;
     /** The shared localization provider. */
     private static LocalizationProvider localizationProvider;
+    /** The analyser. */
+    private Analyser analyser;
 
     @Override
     protected Site constructSite(final VaadinRequest request) {
@@ -89,6 +92,8 @@ public final class DefaultSiteUI extends AbstractSiteUI {
 
         addCredentialPostRequestHandler();
 
+        analyser = new Analyser(this, company.getGaTrackingId());
+        this.getNavigator().addViewChangeListener(analyser);
         return new Site(SiteMode.PRODUCTION, contentProvider, localizationProvider, securityProvider, siteContext);
     }
 

@@ -105,6 +105,10 @@ public final class Company implements Serializable {
     @Column(nullable = true)
     private int passwordValidityPeriodDays;
 
+    /** Google analytics tracking code. */
+    @Column(nullable = true)
+    private String gaTrackingId;
+
     /** Created time of the task. */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
@@ -484,6 +488,14 @@ public final class Company implements Serializable {
      */
     public void setCertificateLogin(final boolean certificateLogin) {
         this.certificateLogin = certificateLogin;
+    }
+
+    public String getGaTrackingId() {
+        return gaTrackingId;
+    }
+
+    public void setGaTrackingId(String gaTrackingId) {
+        this.gaTrackingId = gaTrackingId;
     }
 
     @Override
