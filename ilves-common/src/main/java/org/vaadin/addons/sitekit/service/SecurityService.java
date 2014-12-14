@@ -24,12 +24,14 @@ public class SecurityService {
      * @param defaultGroup the default group
      */
     public static final void addUser(final ProcessingContext context, final User user, final Group defaultGroup) {
-        if (user.getOwner().isSelfRegistration()) {
+        final Company company = context.getObject(Company.class);
+        if (company.isSelfRegistration()) {
             requireRole(SitePrivileges.ADMINISTER, context, SiteRoles.ADMINISTRATOR, SiteRoles.ANONYMOUS);
         } else {
             requireRole(SitePrivileges.ADMINISTER, context, SiteRoles.ADMINISTRATOR);
         }
         UserDao.addUser(context.getEntityManager(), user, defaultGroup);
+        AuditService.log(context, "add", "user", user.getUserId(), user.getEmailAddress());
     }
 
     /**
@@ -44,6 +46,7 @@ public class SecurityService {
             requireRole(SitePrivileges.ADMINISTER, context, SiteRoles.ADMINISTRATOR);
         }
         UserDao.updateUser(context.getEntityManager(), user);
+        AuditService.log(context, "update", "user", user.getUserId(), user.getEmailAddress());
     }
 
     /**
@@ -54,6 +57,7 @@ public class SecurityService {
     public static final void removeUser(final ProcessingContext context, final User user) {
         requireRole(SitePrivileges.ADMINISTER, context, SiteRoles.ADMINISTRATOR);
         UserDao.removeUser(context.getEntityManager(), user);
+        AuditService.log(context, "remove", "user", user.getUserId(), user.getEmailAddress());
     }
 
     /**
@@ -65,6 +69,7 @@ public class SecurityService {
     public static void addGroupMember(final ProcessingContext context, final Group group, final User user) {
         requirePrivilege(SitePrivileges.ADMINISTER, "group", group.getGroupId(), group.getName(), context, SiteRoles.ADMINISTRATOR);
         UserDao.addGroupMember(context.getEntityManager(), group, user);
+        AuditService.log(context, group.getName() + " member add", "user", user.getUserId(), user.getEmailAddress());
     }
 
     /**
@@ -76,6 +81,7 @@ public class SecurityService {
     public static void removeGroupMember(final ProcessingContext context, final Group group, final User user) {
         requirePrivilege(SitePrivileges.ADMINISTER, "group", group.getGroupId(), group.getName(), context, SiteRoles.ADMINISTRATOR);
         UserDao.addGroupMember(context.getEntityManager(), group, user);
+        AuditService.log(context, group.getName() + " member remove", "user", user.getUserId(), user.getEmailAddress());
     }
 
     /**
@@ -91,6 +97,7 @@ public class SecurityService {
                                         final String dataType, final String dataId, final String dataLabel) {
         requirePrivilege(SitePrivileges.ADMINISTER, dataType, dataId, dataLabel, context, SiteRoles.ADMINISTRATOR);
         UserDao.addUserPrivilege(context.getEntityManager(), user, privilegeKey, dataId);
+        AuditService.log(context, user.getEmailAddress() + " had " + privilegeKey + " granted", dataType, dataId, dataLabel);
     }
 
     /**
@@ -106,7 +113,7 @@ public class SecurityService {
                                          final Group group, final String privilegeKey,
                                          final String dataType, final String dataId, final String dataLabel) {
         requirePrivilege(SitePrivileges.ADMINISTER, dataType, dataId, dataLabel, context, SiteRoles.ADMINISTRATOR);
-        UserDao.addGroupPrivilege(context.getEntityManager(), group, privilegeKey, dataId);
+        AuditService.log(context, group.getName() + " had " + privilegeKey + " granted", dataType, dataId, dataLabel);
     }
 
     /**
@@ -123,6 +130,7 @@ public class SecurityService {
                                            final String dataType, final String dataId, final String dataLabel) {
         requirePrivilege(SitePrivileges.ADMINISTER, dataType, dataId, dataLabel, context, SiteRoles.ADMINISTRATOR);
         UserDao.removeUserPrivilege(context.getEntityManager(), user, privilegeKey, dataId);
+        AuditService.log(context, user.getEmailAddress() + " had " + privilegeKey + " revoked", dataType, dataId, dataLabel);
     }
 
     /**
@@ -139,6 +147,7 @@ public class SecurityService {
                                             final String dataType, final String dataId, final String dataLabel) {
         requirePrivilege(SitePrivileges.ADMINISTER, dataType, dataId, dataLabel, context, SiteRoles.ADMINISTRATOR);
         UserDao.removeGroupPrivilege(context.getEntityManager(), group, privilegeKey, dataId);
+        AuditService.log(context, group.getName()  + " had " + privilegeKey + " revoked", dataType, dataId, dataLabel);
     }
 
     /**
