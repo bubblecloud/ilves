@@ -28,34 +28,9 @@ import java.util.Map;
  */
 public final class SiteContext extends SecurityContext {
 
-    /** The object map. */
-    private final Map<Object, Object> serviceMap = new HashMap<Object, Object>();
-
     public SiteContext(EntityManager entityManager, EntityManager auditEntityManager, HttpServletRequest request,
                        SecurityProvider securityProvider) {
         super(entityManager, auditEntityManager, request, securityProvider);
     }
 
-    /**
-     * Gets object which exists once per session.
-     *
-     * @param <T> The type of the object.
-     * @param objectKey the object key
-     * @return the service class singleton instance.
-     */
-    @SuppressWarnings({ "unchecked" })
-    public <T> T getObject(final Object objectKey) {
-        return (T) serviceMap.get(objectKey);
-    }
-
-    /**
-     * Puts object which exists once per session.
-     *
-     * @param <T> The type of the object.
-     * @param objectKey the object key
-     * @param object the object
-     */
-    public <T> void putObject(final Object objectKey, final T object) {
-        serviceMap.put(objectKey, object);
-    }
 }

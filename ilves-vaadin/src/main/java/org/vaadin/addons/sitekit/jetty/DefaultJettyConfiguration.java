@@ -77,7 +77,7 @@ public class DefaultJettyConfiguration {
         // Configure providers.
         // --------------------
         // Configure security provider.
-        DefaultSiteUI.setSecurityProvider(new SecurityProviderSessionImpl("administrator", "user"));
+        DefaultSiteUI.setSecurityProvider(new SecurityProviderSessionImpl(SiteRoles.ADMINISTRATOR, SiteRoles.USER));
         // Configure content provider.
         DefaultSiteUI.setContentProvider(new DefaultContentProvider());
         // Configure localization provider.

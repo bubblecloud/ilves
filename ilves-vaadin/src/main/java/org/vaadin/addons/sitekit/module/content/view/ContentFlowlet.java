@@ -28,6 +28,7 @@ import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.module.content.dao.ContentDao;
 import org.vaadin.addons.sitekit.module.content.model.Content;
+import org.vaadin.addons.sitekit.site.SiteRoles;
 import org.vaadin.addons.sitekit.viewlet.user.privilege.PrivilegesFlowlet;
 
 import javax.persistence.EntityManager;
@@ -137,7 +138,7 @@ public final class ContentFlowlet extends AbstractFlowlet implements ValidatingE
         this.entity = entity;
         contentEditor.setItem(new BeanItem<Content>(entity), newEntity);
         editPrivilegesButton.setEnabled(!newEntity
-                && getSite().getSecurityProvider().getRoles().contains("administrator"));
+                && getSite().getSecurityProvider().getRoles().contains(SiteRoles.ADMINISTRATOR));
     }
 
     @Override

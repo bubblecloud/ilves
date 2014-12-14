@@ -18,6 +18,7 @@ package org.vaadin.addons.sitekit.dao;
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.model.Customer;
 import org.vaadin.addons.sitekit.model.Group;
+import org.vaadin.addons.sitekit.site.SitePrivileges;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -81,7 +82,9 @@ public class CustomerDao {
             throw new RuntimeException(e);
         }
         UserDao.addGroupPrivilege(entityManager, customer.getMemberGroup(), "member", customer.getCustomerId());
-        UserDao.addGroupPrivilege(entityManager, customer.getAdminGroup(), "administrator", customer.getCustomerId());
+        UserDao.addGroupPrivilege(entityManager, customer.getAdminGroup(), SitePrivileges.ADMINISTER, customer.getCustomerId());
+        UserDao.addGroupPrivilege(entityManager, customer.getAdminGroup(), SitePrivileges.ADMINISTER, customer.getAdminGroup().getGroupId());
+        UserDao.addGroupPrivilege(entityManager, customer.getAdminGroup(), SitePrivileges.ADMINISTER, customer.getMemberGroup().getGroupId());
     }
 
 }

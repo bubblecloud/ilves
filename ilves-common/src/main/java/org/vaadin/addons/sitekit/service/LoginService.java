@@ -15,9 +15,7 @@
  */
 package org.vaadin.addons.sitekit.service;
 
-import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.model.Company;
-import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.module.audit.AuditService;
 import org.vaadin.addons.sitekit.site.ProcessingContext;

@@ -39,7 +39,7 @@ public class AuditModule implements SiteModule {
 
         // Describe content view.
         final ViewDescriptor viewDescriptor = new ViewDescriptor("audit", "Audit", DefaultValoView.class);
-        viewDescriptor.setViewerRoles("administrator");
+        viewDescriptor.setViewerRoles(SiteRoles.ADMINISTRATOR);
         viewDescriptor.setViewletClass("content", AuditFlow.class);
         siteDescriptor.getViewDescriptors().add(viewDescriptor);
 

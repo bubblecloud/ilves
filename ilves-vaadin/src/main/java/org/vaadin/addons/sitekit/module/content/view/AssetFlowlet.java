@@ -27,6 +27,7 @@ import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.module.content.dao.ContentDao;
 import org.vaadin.addons.sitekit.module.content.model.Asset;
 import org.vaadin.addons.sitekit.site.SiteException;
+import org.vaadin.addons.sitekit.site.SiteRoles;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
 import org.vaadin.addons.sitekit.viewlet.user.privilege.PrivilegesFlowlet;
 
@@ -229,7 +230,7 @@ public final class AssetFlowlet extends AbstractFlowlet implements ValidatingEdi
         }
         assetEditor.setItem(new BeanItem<Asset>(entity), newEntity);
         editPrivilegesButton.setEnabled(!newEntity
-                && getSite().getSecurityProvider().getRoles().contains("administrator"));
+                && getSite().getSecurityProvider().getRoles().contains(SiteRoles.ADMINISTRATOR));
     }
 
     @Override

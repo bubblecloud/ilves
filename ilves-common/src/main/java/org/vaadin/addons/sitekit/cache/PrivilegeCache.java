@@ -20,6 +20,7 @@ import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.Privilege;
 import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.site.SiteRoles;
 
 import javax.persistence.EntityManager;
 import java.util.*;
@@ -29,6 +30,8 @@ import java.util.*;
  * @author Tommi S.E. Laukkanen
  */
 public class PrivilegeCache {
+    public static final String USER_FOR_PRIVILEGE_CHECK = "user-for-privilege-check";
+    public static final String USER_GROUPS_FOR_PRIVILEGE_CHECK = "user-groups-for-privilege-check";
     /** The cached group privileges. */
     private static Map<Company, InMemoryCache<Group, Map<String, Set<String>>>> groupPrivileges =
             new HashMap<Company, InMemoryCache<Group, Map<String, Set<String>>>>();
@@ -42,7 +45,29 @@ public class PrivilegeCache {
         userPrivileges.remove(company);
     }
 
-
+    public static  synchronized boolean hasPrivilege(final EntityManager entityManager, final Company company,
+                                                     final User user, final List<Group> groups, final String key,
+                                                     final String dataId) {
+        if (user != null) {
+            if (PrivilegeCache.hasPrivilege(entityManager, company, user, key, dataId)) {
+                return true;
+            } else {
+                for (final Group group : groups) {
+                    if (PrivilegeCache.hasPrivilege(entityManager, company, group, key, dataId)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        } else {
+            final Group group = UserDao.getGroup(entityManager, company, SiteRoles.ANONYMOUS);
+            if (PrivilegeCache.hasPrivilege(entityManager, company, group, key, dataId)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 
     public static synchronized void load(final EntityManager entityManager, final Company company, final Group group) {
         if (!groupPrivileges.get(company).containsKey(group)) {
@@ -103,27 +128,4 @@ public class PrivilegeCache {
         return userPrivileges.get(company).get(user).get(key).contains(dataId);
     }
 
-    public static  synchronized boolean hasPrivilege(final EntityManager entityManager, final Company company,
-                                                     final User user, final List<Group> groups, final String key,
-                                                     final String dataId) {
-        if (user != null) {
-            if (PrivilegeCache.hasPrivilege(entityManager, company, user, key, dataId)) {
-                return true;
-            } else {
-                for (final Group group : groups) {
-                    if (PrivilegeCache.hasPrivilege(entityManager, company, group, key, dataId)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        } else {
-            final Group group = UserDao.getGroup(entityManager, company, "anonymous");
-            if (PrivilegeCache.hasPrivilege(entityManager, company, group, key, dataId)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
 }

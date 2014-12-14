@@ -30,9 +30,7 @@ import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
-import org.vaadin.addons.sitekit.module.audit.AuditService;
 import org.vaadin.addons.sitekit.service.LoginService;
-import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -132,6 +130,7 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                                     user, emailAddress, password);
 
                             if (errorKey == null) {
+
                                 // Login success
                                 final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
                                 DefaultSiteUI.getSecurityProvider().setUser(user, groups);

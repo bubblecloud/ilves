@@ -52,12 +52,12 @@ public class ContentModule implements SiteModule {
 
         // Describe content view.
         final ViewDescriptor contentView = new ViewDescriptor("content", "Content", DefaultValoView.class);
-        contentView.setViewerRoles("administrator");
+        contentView.setViewerRoles(SiteRoles.ADMINISTRATOR);
         contentView.setViewletClass("content", ContentFlow.class);
         siteDescriptor.getViewDescriptors().add(contentView);
 
         final ViewDescriptor assetsView = new ViewDescriptor("assets", "Assets", DefaultValoView.class);
-        assetsView.setViewerRoles("administrator");
+        assetsView.setViewerRoles(SiteRoles.ADMINISTRATOR);
         assetsView.setViewletClass("content", AssetFlow.class);
         siteDescriptor.getViewDescriptors().add(assetsView);
 
