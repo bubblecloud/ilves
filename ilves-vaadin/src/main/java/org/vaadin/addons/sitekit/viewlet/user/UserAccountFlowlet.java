@@ -26,6 +26,7 @@ import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.service.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
 
@@ -104,7 +105,6 @@ public final class UserAccountFlowlet extends AbstractFlowlet implements Validat
             @Override
             public void buttonClick(final ClickEvent event) {
                 editor.commit();
-                entityManager.getTransaction().begin();
                 try {
 
                     if (user.getPasswordHash() != null) {
@@ -120,8 +120,7 @@ public final class UserAccountFlowlet extends AbstractFlowlet implements Validat
                     // UserLogic.updateUser(user,
                     // UserDao.getGroupMembers(entityManager, user));
                     user = entityManager.merge(user);
-                    entityManager.persist(user);
-                    entityManager.getTransaction().commit();
+                    SecurityService.updateUser(getSite().getSiteContext(), user);
                     editor.setItem(new BeanItem<User>(user), false);
                     entityManager.detach(user);
                 } catch (final Throwable t) {

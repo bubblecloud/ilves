@@ -50,7 +50,9 @@ public class UserDao {
         transaction.begin();
         try {
             entityManager.persist(user);
-            entityManager.persist(new GroupMember(defaultGroup, user));
+            if (defaultGroup != null) {
+                entityManager.persist(new GroupMember(defaultGroup, user));
+            }
             transaction.commit();
         } catch (final Exception e) {
             LOG.error("Error in add user.", e);

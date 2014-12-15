@@ -36,6 +36,7 @@ import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.grid.validator.PasswordValidator;
 import org.vaadin.addons.sitekit.grid.validator.PasswordVerificationValidator;
 import org.vaadin.addons.sitekit.model.*;
+import org.vaadin.addons.sitekit.service.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.EmailUtil;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
@@ -175,11 +176,7 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                     final User user = new User(company, customer.getFirstName(), customer.getLastName(),
                             customer.getEmailAddress(), customer.getPhoneNumber(), StringUtil.toHexString(passwordAndSaltDigest));
 
-                    if (UserDao.getGroup(entityManager, company, "user") == null) {
-                        UserDao.addGroup(entityManager, new Group(company, "user", "Default user group."));
-                    }
-
-                    UserDao.addUser(entityManager, user, UserDao.getGroup(entityManager, company, "user"));
+                    SecurityService.addUser(getSite().getSiteContext(), user, UserDao.getGroup(entityManager, company, "user"));
                     CustomerDao.saveCustomer(entityManager, customer);
                     UserDao.addGroupMember(entityManager, customer.getAdminGroup(), user);
                     UserDao.addGroupMember(entityManager, customer.getMemberGroup(), user);

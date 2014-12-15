@@ -24,11 +24,14 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import org.vaadin.addons.lazyquerycontainer.EntityContainer;
+import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.*;
 import org.vaadin.addons.sitekit.model.GroupMember;
 import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.service.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
+import org.vaadin.addons.sitekit.site.SiteRoles;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
 import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
 
@@ -133,8 +136,8 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
             @Override
             public void buttonClick(final ClickEvent event) {
                 editor.commit();
-                entityManager.getTransaction().begin();
                 try {
+                    final boolean toBeAdded = user.getUserId() == null;
                     if (user.getPasswordHash() != null) {
                         final int hashSize = 64;
                         if (user.getPasswordHash().length() != hashSize) {
@@ -147,9 +150,14 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
                     }
                     // UserLogic.updateUser(user,
                     // UserDao.getGroupMembers(entityManager, user));
-                    user = entityManager.merge(user);
-                    entityManager.persist(user);
-                    entityManager.getTransaction().commit();
+                    if (toBeAdded) {
+                        SecurityService.addUser(getSite().getSiteContext(), user,
+                                UserDao.getGroup(entityManager, user.getOwner(), SiteRoles.USER));
+                        childGrid.refresh();
+                    } else {
+                        SecurityService.updateUser(getSite().getSiteContext(), entityManager.merge(user));
+                    }
+
                     editor.setItem(new BeanItem<User>(user), false);
                     //entityManager.detach(user);
                 } catch (final Throwable t) {

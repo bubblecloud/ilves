@@ -26,9 +26,9 @@ public class SecurityService {
     public static final void addUser(final ProcessingContext context, final User user, final Group defaultGroup) {
         final Company company = context.getObject(Company.class);
         if (company.isSelfRegistration()) {
-            requireRole(SitePrivileges.ADMINISTER, context, SiteRoles.ADMINISTRATOR, SiteRoles.ANONYMOUS);
+            requireRole("add-user", context, SiteRoles.ADMINISTRATOR, SiteRoles.ANONYMOUS);
         } else {
-            requireRole(SitePrivileges.ADMINISTER, context, SiteRoles.ADMINISTRATOR);
+            requireRole("add-user", context, SiteRoles.ADMINISTRATOR);
         }
         UserDao.addUser(context.getEntityManager(), user, defaultGroup);
         AuditService.log(context, "add", "user", user.getUserId(), user.getEmailAddress());
@@ -41,9 +41,9 @@ public class SecurityService {
      */
     public static final void updateUser(final ProcessingContext context, final User user) {
         if (user.getUserId().equals(context.getUserId())) {
-            requireRole(SitePrivileges.ADMINISTER, context, SiteRoles.ADMINISTRATOR, SiteRoles.USER);
+            requireRole("update-user", context, SiteRoles.ADMINISTRATOR, SiteRoles.USER);
         } else {
-            requireRole(SitePrivileges.ADMINISTER, context, SiteRoles.ADMINISTRATOR);
+            requireRole("update-user", context, SiteRoles.ADMINISTRATOR);
         }
         UserDao.updateUser(context.getEntityManager(), user);
         AuditService.log(context, "update", "user", user.getUserId(), user.getEmailAddress());
@@ -55,7 +55,7 @@ public class SecurityService {
      * @param user the user
      */
     public static final void removeUser(final ProcessingContext context, final User user) {
-        requireRole(SitePrivileges.ADMINISTER, context, SiteRoles.ADMINISTRATOR);
+        requireRole("remove-user", context, SiteRoles.ADMINISTRATOR);
         UserDao.removeUser(context.getEntityManager(), user);
         AuditService.log(context, "remove", "user", user.getUserId(), user.getEmailAddress());
     }
@@ -80,7 +80,7 @@ public class SecurityService {
      */
     public static void removeGroupMember(final ProcessingContext context, final Group group, final User user) {
         requirePrivilege(SitePrivileges.ADMINISTER, "group", group.getGroupId(), group.getName(), context, SiteRoles.ADMINISTRATOR);
-        UserDao.addGroupMember(context.getEntityManager(), group, user);
+        UserDao.removeGroupMember(context.getEntityManager(), group, user);
         AuditService.log(context, group.getName() + " member remove", "user", user.getUserId(), user.getEmailAddress());
     }
 
@@ -113,6 +113,7 @@ public class SecurityService {
                                          final Group group, final String privilegeKey,
                                          final String dataType, final String dataId, final String dataLabel) {
         requirePrivilege(SitePrivileges.ADMINISTER, dataType, dataId, dataLabel, context, SiteRoles.ADMINISTRATOR);
+        UserDao.addGroupPrivilege(context.getEntityManager(), group, privilegeKey, dataId);
         AuditService.log(context, group.getName() + " had " + privilegeKey + " granted", dataType, dataId, dataLabel);
     }
 
@@ -184,7 +185,7 @@ public class SecurityService {
                                          final ProcessingContext context, final String... roles) {
         for (final String role : roles) {
             if (context.getRoles().contains(role)) {
-                AuditService.log(context, key + " access granted");
+                AuditService.log(context, key + " access granted for " + role);
                 return;
             }
         }

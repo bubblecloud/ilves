@@ -33,6 +33,7 @@ import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.Privilege;
 import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.service.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
 
@@ -162,16 +163,16 @@ public final class UsersFlowlet extends AbstractFlowlet {
                         (Company) getSite().getSiteContext().getObject(Company.class), entity);
 
                 for (final Group group : groups) {
-                    UserDao.removeGroupMember(entityManager, group, entity);
+                    SecurityService.removeGroupMember(getSite().getSiteContext(), group, entity);
                 }
 
                 final List<Privilege> privileges = UserDao.getUserPrivileges(entityManager, entity);
                 for (final Privilege privilege : privileges) {
-                    UserDao.removeUserPrivilege(entityManager, entity, privilege.getKey(), privilege.getDataId());
+                    SecurityService.removeUserPrivilege(getSite().getSiteContext(), entity, privilege.getKey(), null, privilege.getDataId(), null);
                 }
 
-                container.removeItem(grid.getSelectedItemId());
-                container.commit();
+                SecurityService.removeUser(getSite().getSiteContext(), entity);
+                container.refresh();
             }
         });
 
@@ -189,7 +190,7 @@ public final class UsersFlowlet extends AbstractFlowlet {
                 }
                 final User user = container.getEntity(grid.getSelectedItemId());
                 user.setLockedOut(true);
-                UserDao.updateUser(entityManager, entityManager.merge(user));
+                SecurityService.updateUser(getSite().getSiteContext(), entityManager.merge(user));
                 container.refresh();
             }
         });
@@ -209,7 +210,7 @@ public final class UsersFlowlet extends AbstractFlowlet {
                 final User user = container.getEntity(grid.getSelectedItemId());
                 user.setLockedOut(false);
                 user.setFailedLoginCount(0);
-                UserDao.updateUser(entityManager, entityManager.merge(user));
+                SecurityService.updateUser(getSite().getSiteContext(), entityManager.merge(user));
                 container.refresh();
             }
         });
