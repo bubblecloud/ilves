@@ -190,7 +190,7 @@ public final class UsersFlowlet extends AbstractFlowlet {
                 }
                 final User user = container.getEntity(grid.getSelectedItemId());
                 user.setLockedOut(true);
-                SecurityService.updateUser(getSite().getSiteContext(), entityManager.merge(user));
+                SecurityService.updateUser(getSite().getSiteContext(), user);
                 container.refresh();
             }
         });
@@ -210,7 +210,7 @@ public final class UsersFlowlet extends AbstractFlowlet {
                 final User user = container.getEntity(grid.getSelectedItemId());
                 user.setLockedOut(false);
                 user.setFailedLoginCount(0);
-                SecurityService.updateUser(getSite().getSiteContext(), entityManager.merge(user));
+                SecurityService.updateUser(getSite().getSiteContext(), user);
                 container.refresh();
             }
         });

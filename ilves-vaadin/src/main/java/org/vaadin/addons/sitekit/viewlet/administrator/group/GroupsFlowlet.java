@@ -33,6 +33,7 @@ import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.Privilege;
 import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.service.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
 
@@ -154,17 +155,16 @@ public final class GroupsFlowlet extends AbstractFlowlet {
                         (Company) getSite().getSiteContext().getObject(Company.class), entity);
 
                 for (final User user : users) {
-                    UserDao.removeGroupMember(entityManager, entity, user);
+                    SecurityService.removeGroupMember(getSite().getSiteContext(), entity, user);
                 }
 
                 final List<Privilege> privileges = UserDao.getGroupPrivileges(entityManager, entity);
                 for (final Privilege privilege : privileges) {
-                    UserDao.removeGroupPrivilege(entityManager, entity, privilege.getKey(), privilege.getDataId());
+                    SecurityService.removeGroupPrivilege(getSite().getSiteContext(), entity, privilege.getKey(), null, privilege.getDataId(), null);
                 }
 
-
-                container.removeItem(grid.getSelectedItemId());
-                container.commit();
+                SecurityService.removeGroup(getSite().getSiteContext(), entity);
+                container.refresh();
             }
         });
 

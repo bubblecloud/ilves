@@ -155,7 +155,7 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
                                 UserDao.getGroup(entityManager, user.getOwner(), SiteRoles.USER));
                         childGrid.refresh();
                     } else {
-                        SecurityService.updateUser(getSite().getSiteContext(), entityManager.merge(user));
+                        SecurityService.updateUser(getSite().getSiteContext(), user);
                     }
 
                     editor.setItem(new BeanItem<User>(user), false);

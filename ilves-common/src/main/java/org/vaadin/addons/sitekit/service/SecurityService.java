@@ -10,6 +10,8 @@ import org.vaadin.addons.sitekit.site.SitePrivileges;
 import org.vaadin.addons.sitekit.site.SiteRoles;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,6 +60,39 @@ public class SecurityService {
         requireRole("remove-user", context, SiteRoles.ADMINISTRATOR);
         UserDao.removeUser(context.getEntityManager(), user);
         AuditService.log(context, "remove", "user", user.getUserId(), user.getEmailAddress());
+    }
+
+    /**
+     * Adds new group to database.
+     * @param context the processing context
+     * @param group the group
+     */
+    public static void addGroup(final ProcessingContext context, final Group group) {
+        requireRole("add-group", context, SiteRoles.ADMINISTRATOR);
+        UserDao.addGroup(context.getEntityManager(), group);
+        AuditService.log(context, "add", "group", group.getGroupId(), group.getName());
+    }
+
+    /**
+     * Updates new group to database.
+     * @param context the processing context
+     * @param group the group
+     */
+    public static void updateGroup(final ProcessingContext context, final Group group) {
+        requireRole("update-group", context, SiteRoles.ADMINISTRATOR);
+        UserDao.updateGroup(context.getEntityManager(), group);
+        AuditService.log(context, "update", "group", group.getGroupId(), group.getName());
+    }
+
+    /**
+     * Removes group from database.
+     * @param context the processing context
+     * @param group the group
+     */
+    public static void removeGroup(final ProcessingContext context, final Group group) {
+        requireRole("remove-group", context, SiteRoles.ADMINISTRATOR);
+        UserDao.removeGroup(context.getEntityManager(), group);
+        AuditService.log(context, "remove", "group", group.getGroupId(), group.getName());
     }
 
     /**
@@ -165,7 +200,7 @@ public class SecurityService {
                                                       final ProcessingContext context, final String... roles) {
         for (final String role : roles) {
             if (context.getRoles().contains(role)) {
-                AuditService.log(context, key + " access granted");
+                AuditService.log(context, key + " access granted based on role " + role);
                 return;
             }
         }
@@ -173,6 +208,7 @@ public class SecurityService {
             AuditService.log(context, key + " access denied", dataType, dataId, dataLabel);
             throw new SiteException("Access denied.");
         }
+        AuditService.log(context, key + " access granted based on privilege", dataType, dataId, dataLabel);
     }
 
     /**
@@ -185,7 +221,7 @@ public class SecurityService {
                                          final ProcessingContext context, final String... roles) {
         for (final String role : roles) {
             if (context.getRoles().contains(role)) {
-                AuditService.log(context, key + " access granted for " + role);
+                AuditService.log(context, key + " access granted based on role " + role);
                 return;
             }
         }

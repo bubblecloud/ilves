@@ -28,6 +28,7 @@ import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.*;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.GroupMember;
+import org.vaadin.addons.sitekit.service.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
 
@@ -140,17 +141,10 @@ public final class GroupFlowlet extends AbstractFlowlet implements ValidatingEdi
             @Override
             public void buttonClick(final ClickEvent event) {
                 groupEditor.commit();
-                entityManager.getTransaction().begin();
-                try {
-                    entity = entityManager.merge(entity);
-                    entityManager.persist(entity);
-                    entityManager.getTransaction().commit();
-                    //entityManager.detach(entity);
-                } catch (final Throwable t) {
-                    if (entityManager.getTransaction().isActive()) {
-                        entityManager.getTransaction().rollback();
-                    }
-                    throw new RuntimeException("Failed to save entity: " + entity, t);
+                if (entity.getGroupId() == null) {
+                    SecurityService.addGroup(getSite().getSiteContext(), entity);
+                } else {
+                    SecurityService.updateGroup(getSite().getSiteContext(), entity);
                 }
             }
         });
@@ -201,8 +195,11 @@ public final class GroupFlowlet extends AbstractFlowlet implements ValidatingEdi
                 if (childGrid.getSelectedItemId() == null) {
                     return;
                 }
-                childContainer.removeItem(childGrid.getSelectedItemId());
-                childContainer.commit();
+                final GroupMember groupMember = childContainer.getEntity(childGrid.getSelectedItemId());
+                if (groupMember != null) {
+                    SecurityService.removeGroupMember(getSite().getSiteContext(), groupMember.getGroup(), groupMember.getUser());
+                    childContainer.refresh();
+                }
             }
         });
     }
