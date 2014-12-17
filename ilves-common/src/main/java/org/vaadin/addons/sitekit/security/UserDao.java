@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.dao;
+package org.vaadin.addons.sitekit.security;
 
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.model.*;
@@ -42,7 +42,7 @@ public class UserDao {
      * @param user the user
      * @param defaultGroup the default group
      */
-    public static final void addUser(final EntityManager entityManager, final User user, final Group defaultGroup) {
+    protected static final void addUser(final EntityManager entityManager, final User user, final Group defaultGroup) {
         if (!user.getOwner().equals(defaultGroup.getOwner())) {
             throw new RuntimeException("User and group are not owner by same company.");
         }
@@ -68,7 +68,7 @@ public class UserDao {
      * @param entityManager the entity manager
      * @param user the user
      */
-    public static final void updateUser(final EntityManager entityManager, final User user) {
+    protected static final void updateUser(final EntityManager entityManager, final User user) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -89,7 +89,7 @@ public class UserDao {
      * @param entityManager the entity manager
      * @param user the user
      */
-    public static final void removeUser(final EntityManager entityManager, final User user) {
+    protected static final void removeUser(final EntityManager entityManager, final User user) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -282,7 +282,7 @@ public class UserDao {
      * @param entityManager the entity manager
      * @param group the group
      */
-    public static void addGroup(final EntityManager entityManager, final Group group) {
+    protected static void addGroup(final EntityManager entityManager, final Group group) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -302,7 +302,7 @@ public class UserDao {
      * @param entityManager the entity manager
      * @param group the group
      */
-    public static void updateGroup(final EntityManager entityManager, final Group group) {
+    protected static void updateGroup(final EntityManager entityManager, final Group group) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -323,7 +323,7 @@ public class UserDao {
      * @param entityManager the entity manager
      * @param group the group
      */
-    public static void removeGroup(final EntityManager entityManager, final Group group) {
+    protected static void removeGroup(final EntityManager entityManager, final Group group) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -379,7 +379,7 @@ public class UserDao {
      * @param group the group
      * @param user the user
      */
-    public static void addGroupMember(final EntityManager entityManager, final Group group, final User user) {
+    protected static void addGroupMember(final EntityManager entityManager, final Group group, final User user) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -400,7 +400,7 @@ public class UserDao {
      * @param group the group
      * @param user the user
      */
-    public static void removeGroupMember(final EntityManager entityManager, final Group group, final User user) {
+    protected static void removeGroupMember(final EntityManager entityManager, final Group group, final User user) {
         final EntityTransaction transaction = entityManager.getTransaction();
         final TypedQuery<GroupMember> query = entityManager.createQuery("select e from GroupMember as e where e.user=:user and e.group=:group",
                 GroupMember.class);
@@ -429,7 +429,7 @@ public class UserDao {
      * @param privilegeKey the privilegeKey
      * @param dataId the dataId
      */
-    public static void addUserPrivilege(final EntityManager entityManager, final User user, final String privilegeKey, final String dataId) {
+    protected static void addUserPrivilege(final EntityManager entityManager, final User user, final String privilegeKey, final String dataId) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -451,7 +451,7 @@ public class UserDao {
      * @param privilegeKey the privilegeKey
      * @param dataIds the dataIds
      */
-    public static void addUserPrivileges(final EntityManager entityManager, final User user, final String privilegeKey, final List<String> dataIds) {
+    protected static void addUserPrivileges(final EntityManager entityManager, final User user, final String privilegeKey, final List<String> dataIds) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -475,7 +475,7 @@ public class UserDao {
      * @param privilegeKey the privilegeKey
      * @param dataId the dataId
      */
-    public static void addGroupPrivilege(final EntityManager entityManager,
+    protected static void addGroupPrivilege(final EntityManager entityManager,
             final Group group, final String privilegeKey, final String dataId) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
@@ -498,7 +498,7 @@ public class UserDao {
      * @param privilegeKey the privilegeKey
      * @param dataIds the dataIds
      */
-    public static void addGroupPrivileges(final EntityManager entityManager,
+    protected static void addGroupPrivileges(final EntityManager entityManager,
                                          final Group group, final String privilegeKey, final List<String> dataIds) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
@@ -523,7 +523,7 @@ public class UserDao {
      * @param privilegeKey the privilegeKey
      * @param dataId the dataId
      */
-    public static void removeUserPrivilege(final EntityManager entityManager, final User user, final String privilegeKey, final String dataId) {
+    protected static void removeUserPrivilege(final EntityManager entityManager, final User user, final String privilegeKey, final String dataId) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -554,7 +554,7 @@ public class UserDao {
      * @param privilegeKey the privilegeKey
      * @param dataIds the dataIds
      */
-    public static void removeUserPrivileges(final EntityManager entityManager, final User user, final String privilegeKey, final List<String> dataIds) {
+    protected static void removeUserPrivileges(final EntityManager entityManager, final User user, final String privilegeKey, final List<String> dataIds) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -587,7 +587,7 @@ public class UserDao {
      * @param privilegeKey the privilegeKey
      * @param dataId the dataId
      */
-    public static void removeGroupPrivilege(final EntityManager entityManager, final Group group, final String privilegeKey, final String dataId) {
+    protected static void removeGroupPrivilege(final EntityManager entityManager, final Group group, final String privilegeKey, final String dataId) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -618,7 +618,7 @@ public class UserDao {
      * @param privilegeKey the privilegeKey
      * @param dataIds the dataIds
      */
-    public static void removeGroupPrivilege(final EntityManager entityManager, final Group group, final String privilegeKey, final List<String> dataIds) {
+    protected static void removeGroupPrivilege(final EntityManager entityManager, final Group group, final String privilegeKey, final List<String> dataIds) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {

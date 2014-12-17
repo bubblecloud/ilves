@@ -1,10 +1,11 @@
-package org.vaadin.addons.sitekit.module.audit;
+package org.vaadin.addons.sitekit.security;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.vaadin.addons.sitekit.module.audit.model.AuditLogEntry;
+import org.vaadin.addons.sitekit.security.AuditService;
 import org.vaadin.addons.sitekit.util.TestUtil;
 
 import javax.persistence.EntityManager;

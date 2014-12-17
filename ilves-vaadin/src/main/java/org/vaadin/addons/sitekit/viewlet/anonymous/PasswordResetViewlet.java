@@ -10,7 +10,7 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import org.apache.log4j.Logger;
-import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.security.UserDao;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
@@ -19,7 +19,7 @@ import org.vaadin.addons.sitekit.model.EmailPasswordReset;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
 import org.vaadin.addons.sitekit.site.SiteException;
-import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
+import org.vaadin.addons.sitekit.security.PasswordLoginUtil;
 import org.vaadin.addons.sitekit.util.StringUtil;
 
 import javax.persistence.EntityManager;

@@ -15,12 +15,12 @@
  */
 package org.vaadin.addons.sitekit.cache;
 
-import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.security.DefaultRoles;
+import org.vaadin.addons.sitekit.security.UserDao;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.Privilege;
 import org.vaadin.addons.sitekit.model.User;
-import org.vaadin.addons.sitekit.site.SiteRoles;
 
 import javax.persistence.EntityManager;
 import java.util.*;
@@ -60,7 +60,7 @@ public class PrivilegeCache {
                 return false;
             }
         } else {
-            final Group group = UserDao.getGroup(entityManager, company, SiteRoles.ANONYMOUS);
+            final Group group = UserDao.getGroup(entityManager, company, DefaultRoles.ANONYMOUS);
             if (PrivilegeCache.hasPrivilege(entityManager, company, group, key, dataId)) {
                 return true;
             } else {

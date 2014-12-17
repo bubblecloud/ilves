@@ -1,7 +1,8 @@
 package org.vaadin.addons.sitekit.viewlet.anonymous;
 
 import com.vaadin.ui.Notification;
-import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.security.SecurityService;
+import org.vaadin.addons.sitekit.security.UserDao;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
 
@@ -21,7 +22,7 @@ public class EmailValidationViewlet extends AbstractViewlet {
 
         if (user != null) {
             user.setEmailAddressValidated(true);
-            UserDao.updateUser(entityManager, user);
+            SecurityService.updateUser(getSite().getSiteContext(), user);
             Notification.show(getSite().localize("message-email-verification.success"),
                     Notification.Type.HUMANIZED_MESSAGE);
         } else {

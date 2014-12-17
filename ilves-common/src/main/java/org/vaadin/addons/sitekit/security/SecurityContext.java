@@ -1,4 +1,4 @@
-package org.vaadin.addons.sitekit.site;
+package org.vaadin.addons.sitekit.security;
 
 import org.apache.commons.lang.StringUtils;
 import org.vaadin.addons.sitekit.model.User;
@@ -15,7 +15,7 @@ import java.util.Map;
  * Processing context to be passed to processing layer. Processing context
  * is used for access control and audit logging.
  */
-public class ProcessingContext {
+public class SecurityContext {
 
     /** The object map. */
     private final Map<Object, Object> objectMap = new HashMap<Object, Object>();
@@ -60,18 +60,18 @@ public class ProcessingContext {
      * @param userName the user name
      * @param roles the user roles
      */
-    public ProcessingContext(final EntityManager entityManager,
-                             final EntityManager auditEntityManager,
-                             final String serverName,
-                             final String localIpAddress,
-                             final Integer componentPort,
-                             final String componentType,
-                             final String remoteHost,
-                             final String remoteIpAddress,
-                             final Integer remotePort,
-                             final String userId,
-                             final String userName,
-                             final List<String> roles) {
+    public SecurityContext(final EntityManager entityManager,
+                           final EntityManager auditEntityManager,
+                           final String serverName,
+                           final String localIpAddress,
+                           final Integer componentPort,
+                           final String componentType,
+                           final String remoteHost,
+                           final String remoteIpAddress,
+                           final Integer remotePort,
+                           final String userId,
+                           final String userName,
+                           final List<String> roles) {
         this.entityManager = entityManager;
         this.auditEntityManager = auditEntityManager;
         this.serverName = serverName;
@@ -95,11 +95,11 @@ public class ProcessingContext {
      * @param user the user
      * @param roles the user roles
      */
-    public ProcessingContext(final EntityManager entityManager,
-                             final EntityManager auditEntityManager,
-                             final HttpServletRequest request,
-                             final User user,
-                             final List<String> roles) {
+    public SecurityContext(final EntityManager entityManager,
+                           final EntityManager auditEntityManager,
+                           final HttpServletRequest request,
+                           final User user,
+                           final List<String> roles) {
         this.entityManager = entityManager;
         this.auditEntityManager = auditEntityManager;
         this.componentPort = Integer.parseInt(PropertiesUtil.getProperty("site", "http-port"));
@@ -119,9 +119,9 @@ public class ProcessingContext {
      * @param auditEntityManager the audit entity manager
      * @param request the HTTP servlet request
      */
-    public ProcessingContext(final EntityManager entityManager,
-                             final EntityManager auditEntityManager,
-                             final HttpServletRequest request) {
+    public SecurityContext(final EntityManager entityManager,
+                           final EntityManager auditEntityManager,
+                           final HttpServletRequest request) {
         this.entityManager = entityManager;
         this.auditEntityManager = auditEntityManager;
         if (Integer.parseInt(PropertiesUtil.getProperty("site", "https-port")) == 0) {

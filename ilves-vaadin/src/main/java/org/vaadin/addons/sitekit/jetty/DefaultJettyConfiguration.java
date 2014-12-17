@@ -7,6 +7,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.vaadin.addons.sitekit.module.audit.AuditModule;
 import org.vaadin.addons.sitekit.module.content.ContentModule;
+import org.vaadin.addons.sitekit.security.DefaultRoles;
 import org.vaadin.addons.sitekit.site.*;
 import org.vaadin.addons.sitekit.util.PersistenceUtil;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
@@ -77,7 +78,7 @@ public class DefaultJettyConfiguration {
         // Configure providers.
         // --------------------
         // Configure security provider.
-        DefaultSiteUI.setSecurityProvider(new SecurityProviderSessionImpl(SiteRoles.ADMINISTRATOR, SiteRoles.USER));
+        DefaultSiteUI.setSecurityProvider(new SecurityProviderSessionImpl(DefaultRoles.ADMINISTRATOR, DefaultRoles.USER));
         // Configure content provider.
         DefaultSiteUI.setContentProvider(new DefaultContentProvider());
         // Configure localization provider.

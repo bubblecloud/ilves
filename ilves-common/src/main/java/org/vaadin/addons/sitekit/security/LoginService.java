@@ -13,15 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.service;
+package org.vaadin.addons.sitekit.security;
 
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.User;
-import org.vaadin.addons.sitekit.module.audit.AuditService;
-import org.vaadin.addons.sitekit.site.ProcessingContext;
-import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
-
-import java.util.List;
 
 /**
  * Login service.
@@ -30,7 +25,7 @@ import java.util.List;
  */
 public class LoginService {
 
-    public static String login(final ProcessingContext context, final Company company, final User user, final String emailAddress, final String password) {
+    public static String login(final SecurityContext context, final Company company, final User user, final String emailAddress, final String password) {
         final String errorKey = PasswordLoginUtil.login(emailAddress, context.getRemoteHost(),
                 context.getRemoteIpAddress(), context.getRemotePort(),
                 context.getEntityManager(), company, user, password);
@@ -42,7 +37,7 @@ public class LoginService {
         return errorKey;
     }
 
-    public static void logout(final ProcessingContext context) {
+    public static void logout(final SecurityContext context) {
         AuditService.log(context, " logout");
     }
 }

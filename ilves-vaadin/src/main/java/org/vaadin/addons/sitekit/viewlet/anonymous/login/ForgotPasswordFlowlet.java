@@ -25,7 +25,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import org.apache.log4j.Logger;
-import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.security.UserDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;

@@ -20,6 +20,7 @@ import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.grid.formatter.TimestampConverter;
 import org.vaadin.addons.sitekit.module.audit.model.AuditLogEntry;
 import org.vaadin.addons.sitekit.module.audit.view.AuditFlow;
+import org.vaadin.addons.sitekit.security.DefaultRoles;
 import org.vaadin.addons.sitekit.site.*;
 import org.vaadin.addons.sitekit.site.view.DefaultValoView;
 
@@ -39,7 +40,7 @@ public class AuditModule implements SiteModule {
 
         // Describe content view.
         final ViewDescriptor viewDescriptor = new ViewDescriptor("audit", "Audit", DefaultValoView.class);
-        viewDescriptor.setViewerRoles(SiteRoles.ADMINISTRATOR);
+        viewDescriptor.setViewerRoles(DefaultRoles.ADMINISTRATOR);
         viewDescriptor.setViewletClass("content", AuditFlow.class);
         siteDescriptor.getViewDescriptors().add(viewDescriptor);
 

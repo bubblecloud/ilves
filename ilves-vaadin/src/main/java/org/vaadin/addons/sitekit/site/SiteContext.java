@@ -15,22 +15,50 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import org.vaadin.addons.sitekit.security.SecurityContext;
+
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
- * The session context containing application specific objects with UI life
- * time.
+ * The security context.
  *
  * @author Tommi S.E. Laukkanen
  */
-public final class SiteContext extends SecurityContext {
+public class SiteContext extends SecurityContext {
 
-    public SiteContext(EntityManager entityManager, EntityManager auditEntityManager, HttpServletRequest request,
-                       SecurityProvider securityProvider) {
-        super(entityManager, auditEntityManager, request, securityProvider);
+    private SecurityProvider securityProvider;
+
+    /**
+     * @param entityManager
+     * @param auditEntityManager
+     * @param request
+     */
+    public SiteContext(EntityManager entityManager,
+                           EntityManager auditEntityManager,
+                           HttpServletRequest request,
+                           SecurityProvider securityProvider) {
+        super(entityManager, auditEntityManager, request);
+        this.securityProvider = securityProvider;
     }
 
+    @Override
+    public List<String> getRoles() {
+        return securityProvider.getRoles();
+    }
+
+    @Override
+    public String getUserName() {
+        return securityProvider.getUser();
+    }
+
+    @Override
+    public String getUserId() {
+        return securityProvider.getUserId();
+    }
+
+    public SecurityProvider getSecurityProvider() {
+        return securityProvider;
+    }
 }

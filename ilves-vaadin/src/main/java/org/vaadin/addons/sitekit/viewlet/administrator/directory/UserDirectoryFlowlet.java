@@ -21,12 +21,11 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
-import org.vaadin.addons.sitekit.dao.UserDirectoryDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.model.UserDirectory;
-import org.vaadin.addons.sitekit.service.SecurityService;
+import org.vaadin.addons.sitekit.security.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 
 import javax.persistence.EntityManager;

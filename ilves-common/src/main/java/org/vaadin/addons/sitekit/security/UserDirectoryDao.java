@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.dao;
+package org.vaadin.addons.sitekit.security;
 
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.model.Company;
@@ -41,7 +41,7 @@ public class UserDirectoryDao {
      * @param entityManager the entity manager
      * @param userDirectory the userDirectory
      */
-    public static final void addUserDirectory(final EntityManager entityManager, final UserDirectory userDirectory) {
+    protected static final void addUserDirectory(final EntityManager entityManager, final UserDirectory userDirectory) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -61,7 +61,7 @@ public class UserDirectoryDao {
      * @param entityManager the entity manager
      * @param userDirectory the userDirectory
      */
-    public static final void updateUserDirectory(final EntityManager entityManager, final UserDirectory userDirectory) {
+    protected static final void updateUserDirectory(final EntityManager entityManager, final UserDirectory userDirectory) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -82,7 +82,7 @@ public class UserDirectoryDao {
      * @param entityManager the entity manager
      * @param userDirectory the userDirectory
      */
-    public static final void removeUserDirectory(final EntityManager entityManager, final UserDirectory userDirectory) {
+    protected static final void removeUserDirectory(final EntityManager entityManager, final UserDirectory userDirectory) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {

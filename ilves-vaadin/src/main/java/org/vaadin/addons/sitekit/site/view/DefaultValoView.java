@@ -20,7 +20,7 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addons.sitekit.model.Company;
-import org.vaadin.addons.sitekit.service.LoginService;
+import org.vaadin.addons.sitekit.security.LoginService;
 import org.vaadin.addons.sitekit.site.*;
 import org.vaadin.addons.sitekit.util.GravatarUtil;
 

@@ -15,32 +15,18 @@
  */
 package org.vaadin.addons.sitekit.viewlet.anonymous.login;
 
-import com.vaadin.event.ShortcutAction;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.themes.ValoTheme;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.model.Company;
-import org.vaadin.addons.sitekit.model.Group;
-import org.vaadin.addons.sitekit.model.User;
-import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
 import org.vaadin.addons.sitekit.site.SiteException;
 import org.vaadin.addons.sitekit.util.JadeUtil;
 import org.vaadin.addons.sitekit.util.OpenIdUtil;
-import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
 
-import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**

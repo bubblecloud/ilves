@@ -28,7 +28,7 @@ import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.*;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.GroupMember;
-import org.vaadin.addons.sitekit.service.SecurityService;
+import org.vaadin.addons.sitekit.security.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
 

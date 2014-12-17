@@ -18,7 +18,8 @@ package org.vaadin.addons.sitekit.module.content;
 import com.vaadin.data.util.converter.StringToIntegerConverter;
 import org.apache.commons.lang.StringUtils;
 import org.vaadin.addons.sitekit.cache.PrivilegeCache;
-import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.security.DefaultRoles;
+import org.vaadin.addons.sitekit.security.UserDao;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptor;
 import org.vaadin.addons.sitekit.grid.FieldSetDescriptorRegister;
 import org.vaadin.addons.sitekit.model.Company;
@@ -52,12 +53,12 @@ public class ContentModule implements SiteModule {
 
         // Describe content view.
         final ViewDescriptor contentView = new ViewDescriptor("content", "Content", DefaultValoView.class);
-        contentView.setViewerRoles(SiteRoles.ADMINISTRATOR);
+        contentView.setViewerRoles(DefaultRoles.ADMINISTRATOR);
         contentView.setViewletClass("content", ContentFlow.class);
         siteDescriptor.getViewDescriptors().add(contentView);
 
         final ViewDescriptor assetsView = new ViewDescriptor("assets", "Assets", DefaultValoView.class);
-        assetsView.setViewerRoles(SiteRoles.ADMINISTRATOR);
+        assetsView.setViewerRoles(DefaultRoles.ADMINISTRATOR);
         assetsView.setViewletClass("content", AssetFlow.class);
         siteDescriptor.getViewDescriptors().add(assetsView);
 

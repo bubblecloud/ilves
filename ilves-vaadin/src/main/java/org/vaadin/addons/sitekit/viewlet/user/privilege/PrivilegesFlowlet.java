@@ -21,7 +21,8 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
 import org.vaadin.addons.sitekit.cache.PrivilegeCache;
-import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.security.SecurityService;
+import org.vaadin.addons.sitekit.security.UserDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
@@ -205,9 +206,9 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
                 final boolean privilegedInDatabase =
                         UserDao.hasGroupPrivilege(entityManager, groups.get(j), privilegeKeys[i], dataId);
                 if (privileged && !privilegedInDatabase) {
-                    UserDao.addGroupPrivilege(entityManager, groups.get(j), privilegeKeys[i], dataId);
+                    SecurityService.addGroupPrivilege(getSite().getSiteContext(), groups.get(j), privilegeKeys[i], null, dataId, null);
                 } else if (!privileged && privilegedInDatabase) {
-                    UserDao.removeGroupPrivilege(entityManager, groups.get(j), privilegeKeys[i], dataId);
+                    SecurityService.removeGroupPrivilege(getSite().getSiteContext(), groups.get(j), privilegeKeys[i],  null, dataId, null);
                 }
             }
         }
@@ -281,9 +282,9 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
                 final boolean privilegedInDatabase =
                         UserDao.hasUserPrivilege(entityManager, users.get(j), privilegeKeys[i], dataId);
                 if (privileged && !privilegedInDatabase) {
-                    UserDao.addUserPrivilege(entityManager, users.get(j), privilegeKeys[i], dataId);
+                    SecurityService.addUserPrivilege(getSite().getSiteContext(), users.get(j), privilegeKeys[i], null, dataId, null);
                 } else if (!privileged && privilegedInDatabase) {
-                    UserDao.removeUserPrivilege(entityManager, users.get(j), privilegeKeys[i], dataId);
+                    SecurityService.removeUserPrivilege(getSite().getSiteContext(), users.get(j), privilegeKeys[i], null, dataId, null);
                 }
             }
         }

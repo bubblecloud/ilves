@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.dao;
+package org.vaadin.addons.sitekit.security;
 
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.model.Customer;
 import org.vaadin.addons.sitekit.model.Group;
-import org.vaadin.addons.sitekit.site.SitePrivileges;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -40,7 +39,7 @@ public class CustomerDao {
      * @param entityManager the entity manager
      * @param customer the group
      */
-    public static void addCustomer(final EntityManager entityManager, final Customer customer) {
+    protected static void addCustomer(final EntityManager entityManager, final Customer customer) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -73,9 +72,9 @@ public class CustomerDao {
             throw new RuntimeException(e);
         }
         UserDao.addGroupPrivilege(entityManager, customer.getMemberGroup(), "member", customer.getCustomerId());
-        UserDao.addGroupPrivilege(entityManager, customer.getAdminGroup(), SitePrivileges.ADMINISTER, customer.getCustomerId());
-        UserDao.addGroupPrivilege(entityManager, customer.getAdminGroup(), SitePrivileges.ADMINISTER, customer.getAdminGroup().getGroupId());
-        UserDao.addGroupPrivilege(entityManager, customer.getAdminGroup(), SitePrivileges.ADMINISTER, customer.getMemberGroup().getGroupId());
+        UserDao.addGroupPrivilege(entityManager, customer.getAdminGroup(), DefaultPrivileges.ADMINISTER, customer.getCustomerId());
+        UserDao.addGroupPrivilege(entityManager, customer.getAdminGroup(), DefaultPrivileges.ADMINISTER, customer.getAdminGroup().getGroupId());
+        UserDao.addGroupPrivilege(entityManager, customer.getAdminGroup(), DefaultPrivileges.ADMINISTER, customer.getMemberGroup().getGroupId());
     }
 
     /**
@@ -83,7 +82,7 @@ public class CustomerDao {
      * @param entityManager the entity manager
      * @param customer the group
      */
-    public static void updateCustomer(final EntityManager entityManager, final Customer customer) {
+    protected static void updateCustomer(final EntityManager entityManager, final Customer customer) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -115,7 +114,7 @@ public class CustomerDao {
      * @param entityManager the entity manager
      * @param customer the customer
      */
-    public static final void removeCustomer(final EntityManager entityManager, final Customer customer) {
+    protected static final void removeCustomer(final EntityManager entityManager, final Customer customer) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {

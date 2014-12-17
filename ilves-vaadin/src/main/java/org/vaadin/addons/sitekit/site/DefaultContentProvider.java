@@ -15,6 +15,7 @@
  */
 package org.vaadin.addons.sitekit.site;
 
+import org.vaadin.addons.sitekit.security.DefaultRoles;
 import org.vaadin.addons.sitekit.site.view.DefaultValoView;
 import org.vaadin.addons.sitekit.viewlet.AccessDeniedViewlet;
 import org.vaadin.addons.sitekit.viewlet.administrator.company.CompanyFlowViewlet;
@@ -50,46 +51,46 @@ public class DefaultContentProvider implements ContentProvider {
         viewDescriptors.add(master);
 
         final ViewDescriptor configuration = new ViewDescriptor("configuration", "Configuration", DefaultValoView.class);
-        configuration.setViewerRoles(SiteRoles.USER, SiteRoles.ADMINISTRATOR);
+        configuration.setViewerRoles(DefaultRoles.USER, DefaultRoles.ADMINISTRATOR);
         viewDescriptors.add(configuration);
 
         final ViewDescriptor users = new ViewDescriptor("users", "Users", DefaultValoView.class);
-        users.setViewerRoles(SiteRoles.ADMINISTRATOR);
+        users.setViewerRoles(DefaultRoles.ADMINISTRATOR);
         users.setViewletClass("content", UserFlowViewlet.class);
         viewDescriptors.add(users);
 
         final ViewDescriptor groups = new ViewDescriptor("groups", "Groups", DefaultValoView.class);
-        groups.setViewerRoles(SiteRoles.ADMINISTRATOR);
+        groups.setViewerRoles(DefaultRoles.ADMINISTRATOR);
         groups.setViewletClass("content", GroupFlowViewlet.class);
         viewDescriptors.add(groups);
 
         final ViewDescriptor customers = new ViewDescriptor("customers", "Customers", DefaultValoView.class);
-        customers.setViewerRoles(SiteRoles.ADMINISTRATOR);
+        customers.setViewerRoles(DefaultRoles.ADMINISTRATOR);
         customers.setViewletClass("content", CustomerFlowViewlet.class);
         viewDescriptors.add(customers);
 
         final ViewDescriptor directories = new ViewDescriptor("directories", "Directories", DefaultValoView.class);
-        directories.setViewerRoles(SiteRoles.ADMINISTRATOR);
+        directories.setViewerRoles(DefaultRoles.ADMINISTRATOR);
         directories.setViewletClass("content", UserDirectoryFlowViewlet.class);
         viewDescriptors.add(directories);
 
         final ViewDescriptor companies = new ViewDescriptor("companies", "Companies", DefaultValoView.class);
-        companies.setViewerRoles(SiteRoles.ADMINISTRATOR);
+        companies.setViewerRoles(DefaultRoles.ADMINISTRATOR);
         companies.setViewletClass("content", CompanyFlowViewlet.class);
         viewDescriptors.add(companies);
 
         final ViewDescriptor accessDenied = new ViewDescriptor("denied", "Access Denied", DefaultValoView.class);
-        accessDenied.setViewerRoles(SiteRoles.ANONYMOUS);
+        accessDenied.setViewerRoles(DefaultRoles.ANONYMOUS);
         accessDenied.setViewletClass("content", AccessDeniedViewlet.class);
         viewDescriptors.add(accessDenied);
 
         final ViewDescriptor login = new ViewDescriptor("login", "Login", DefaultValoView.class);
-        login.setViewerRoles(SiteRoles.ANONYMOUS);
+        login.setViewerRoles(DefaultRoles.ANONYMOUS);
         login.setViewletClass("content", LoginFlowViewlet.class);
         viewDescriptors.add(login);
 
         final ViewDescriptor account = new ViewDescriptor("account", "Account", DefaultValoView.class);
-        account.setViewerRoles(SiteRoles.USER, SiteRoles.ADMINISTRATOR);
+        account.setViewerRoles(DefaultRoles.USER, DefaultRoles.ADMINISTRATOR);
         account.setViewletClass("content", AccountFlowViewlet.class);
         viewDescriptors.add(account);
 
@@ -98,12 +99,12 @@ public class DefaultContentProvider implements ContentProvider {
         viewDescriptors.add(validate);
 
         final ViewDescriptor openidlink = new ViewDescriptor("openidlink", "OpenID Link", DefaultValoView.class);
-        openidlink.setViewerRoles(SiteRoles.USER, SiteRoles.ADMINISTRATOR);
+        openidlink.setViewerRoles(DefaultRoles.USER, DefaultRoles.ADMINISTRATOR);
         openidlink.setViewletClass("content", OpenIdLinkViewlet.class);
         viewDescriptors.add(openidlink);
 
         final ViewDescriptor openidlogin = new ViewDescriptor("openidlogin", "OpenID Login", DefaultValoView.class);
-        openidlogin.setViewerRoles(SiteRoles.ANONYMOUS);
+        openidlogin.setViewerRoles(DefaultRoles.ANONYMOUS);
         openidlogin.setViewletClass("content", OpenIdLoginViewlet.class);
         viewDescriptors.add(openidlogin);
 

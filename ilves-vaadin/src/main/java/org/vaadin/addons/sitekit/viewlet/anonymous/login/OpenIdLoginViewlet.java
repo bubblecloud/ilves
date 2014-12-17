@@ -22,14 +22,14 @@ import com.vaadin.ui.UI;
 import org.apache.log4j.Logger;
 import org.openid4java.consumer.VerificationResult;
 import org.openid4java.discovery.Identifier;
-import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.security.SecurityService;
+import org.vaadin.addons.sitekit.security.UserDao;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
-import org.vaadin.addons.sitekit.module.audit.AuditService;
+import org.vaadin.addons.sitekit.security.AuditService;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
 import org.vaadin.addons.sitekit.site.AbstractViewlet;
-import org.vaadin.addons.sitekit.site.ProcessingContext;
 import org.vaadin.addons.sitekit.site.SecurityProviderSessionImpl;
 import org.vaadin.addons.sitekit.util.OpenIdUtil;
 
@@ -97,17 +97,13 @@ public final class OpenIdLoginViewlet extends AbstractViewlet {
                 return;
             }
 
-            final ProcessingContext processingContext = new ProcessingContext(entityManager, entityManager,
-                    request, user,
-                    getSite().getSecurityProvider().getRoles());
-
             LOGGER.info("User login: " + user.getEmailAddress()
                     + " (IP: " + request.getRemoteHost() + ":" + request.getRemotePort() + ")");
-            AuditService.log(processingContext, "openid password login");
+            AuditService.log(getSite().getSiteContext(), "openid password login");
 
             final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
 
-            UserDao.updateUser(entityManager, user);
+            SecurityService.updateUser(getSite().getSiteContext(), user);
 
             ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).setUser(user, groups);
 

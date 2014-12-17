@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.util;
+package org.vaadin.addons.sitekit.security;
 
 import org.apache.directory.api.ldap.model.cursor.EntryCursor;
 import org.apache.directory.api.ldap.model.entry.Entry;
@@ -23,12 +23,12 @@ import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.vaadin.addons.sitekit.dao.UserDao;
-import org.vaadin.addons.sitekit.dao.UserDirectoryDao;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.model.UserDirectory;
+import org.vaadin.addons.sitekit.util.CidrUtil;
+import org.vaadin.addons.sitekit.util.StringUtil;
 
 import javax.persistence.EntityManager;
 import java.io.UnsupportedEncodingException;

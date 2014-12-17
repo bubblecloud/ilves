@@ -20,7 +20,8 @@ import com.vaadin.ui.UI;
 import org.apache.log4j.Logger;
 import org.openid4java.consumer.VerificationResult;
 import org.openid4java.discovery.Identifier;
-import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.security.SecurityService;
+import org.vaadin.addons.sitekit.security.UserDao;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.User;
 import org.vaadin.addons.sitekit.site.AbstractSiteUI;
@@ -60,7 +61,7 @@ public final class OpenIdLinkViewlet extends AbstractViewlet {
                 final String userEmailAddress = getSite().getSecurityProvider().getUser();
                 final User user = UserDao.getUser(entityManager, company, userEmailAddress);
                 user.setOpenIdIdentifier(identifier.getIdentifier());
-                UserDao.updateUser(entityManager, user);
+                SecurityService.updateUser(getSite().getSiteContext(), user);
                 ((AbstractSiteUI) UI.getCurrent()).redirectTo(company.getUrl(), "account",
                         "OpenID authenticated user as: " + identifier.getIdentifier(),
                         Notification.Type.HUMANIZED_MESSAGE);

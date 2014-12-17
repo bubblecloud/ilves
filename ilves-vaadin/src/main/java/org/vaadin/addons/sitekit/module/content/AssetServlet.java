@@ -4,7 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.cache.InMemoryCache;
 import org.vaadin.addons.sitekit.cache.PrivilegeCache;
-import org.vaadin.addons.sitekit.dao.CompanyDao;
+import org.vaadin.addons.sitekit.security.CompanyDao;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.User;

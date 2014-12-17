@@ -26,9 +26,9 @@ import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.model.User;
-import org.vaadin.addons.sitekit.service.SecurityService;
+import org.vaadin.addons.sitekit.security.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
-import org.vaadin.addons.sitekit.util.PasswordLoginUtil;
+import org.vaadin.addons.sitekit.security.PasswordLoginUtil;
 
 import javax.persistence.EntityManager;
 import java.security.NoSuchAlgorithmException;

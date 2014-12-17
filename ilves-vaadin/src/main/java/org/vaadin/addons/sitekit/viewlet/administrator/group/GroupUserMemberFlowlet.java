@@ -26,7 +26,7 @@ import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.model.GroupMember;
-import org.vaadin.addons.sitekit.service.SecurityService;
+import org.vaadin.addons.sitekit.security.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 
 import javax.persistence.EntityManager;

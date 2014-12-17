@@ -23,7 +23,7 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import org.vaadin.addons.lazyquerycontainer.EntityContainer;
-import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.security.UserDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.FilterDescriptor;
@@ -33,7 +33,7 @@ import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Group;
 import org.vaadin.addons.sitekit.model.Privilege;
 import org.vaadin.addons.sitekit.model.User;
-import org.vaadin.addons.sitekit.service.SecurityService;
+import org.vaadin.addons.sitekit.security.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.ContainerUtil;
 

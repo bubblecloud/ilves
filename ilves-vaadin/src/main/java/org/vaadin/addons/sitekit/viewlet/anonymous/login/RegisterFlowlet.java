@@ -27,8 +27,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 import org.apache.log4j.Logger;
 import org.vaadin.addons.lazyquerycontainer.CompositeItem;
-import org.vaadin.addons.sitekit.dao.CustomerDao;
-import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.security.UserDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.FieldDescriptor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
@@ -36,7 +35,7 @@ import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.grid.validator.PasswordValidator;
 import org.vaadin.addons.sitekit.grid.validator.PasswordVerificationValidator;
 import org.vaadin.addons.sitekit.model.*;
-import org.vaadin.addons.sitekit.service.SecurityService;
+import org.vaadin.addons.sitekit.security.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 import org.vaadin.addons.sitekit.util.EmailUtil;
 import org.vaadin.addons.sitekit.util.PropertiesUtil;
@@ -190,8 +189,7 @@ public final class RegisterFlowlet extends AbstractFlowlet {
 
                     SecurityService.addUser(getSite().getSiteContext(), user, UserDao.getGroup(entityManager, company, "user"));
                     SecurityService.addCustomer(getSite().getSiteContext(), customer);
-                    UserDao.addGroupMember(entityManager, customer.getAdminGroup(), user);
-                    UserDao.addGroupMember(entityManager, customer.getMemberGroup(), user);
+
 
                     final String url = company.getUrl() +
                             "#!validate/" + user.getUserId();

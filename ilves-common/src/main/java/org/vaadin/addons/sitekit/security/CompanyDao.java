@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.dao;
+package org.vaadin.addons.sitekit.security;
 
 import org.apache.log4j.Logger;
-import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Company;
 
 import javax.persistence.EntityManager;
@@ -43,7 +42,7 @@ public class CompanyDao {
      * @param entityManager the entity manager
      * @param company the company
      */
-    public static void addCompany(final EntityManager entityManager, final Company company) {
+    protected static void addCompany(final EntityManager entityManager, final Company company) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -63,7 +62,7 @@ public class CompanyDao {
      * @param entityManager the entity manager
      * @param company the company
      */
-    public static void updateCompany(final EntityManager entityManager, final Company company) {
+    protected static void updateCompany(final EntityManager entityManager, final Company company) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
@@ -84,7 +83,7 @@ public class CompanyDao {
      * @param entityManager the entity manager
      * @param company the company
      */
-    public static void removeCompany(final EntityManager entityManager, final Company company) {
+    protected static void removeCompany(final EntityManager entityManager, final Company company) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {

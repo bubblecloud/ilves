@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.vaadin.addons.sitekit.module.audit;
+package org.vaadin.addons.sitekit.security;
 
 import org.apache.log4j.Logger;
 import org.vaadin.addons.sitekit.module.audit.model.AuditLogEntry;
-import org.vaadin.addons.sitekit.site.ProcessingContext;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
@@ -33,20 +32,20 @@ public class AuditService {
 
     /**
      * Log audit event.
-     * @param processingContext the processing context
+     * @param securityContext the processing context
      * @param event the event
      */
-    public static void log(final ProcessingContext processingContext,
+    public static void log(final SecurityContext securityContext,
                            final String event) {
-        log(processingContext.getAuditEntityManager(),
+        log(securityContext.getAuditEntityManager(),
                 event,
-                processingContext.getLocalIpAddress() + ":" +
-                        processingContext.getComponentPort() + " (" + processingContext.getServerName() + ")",
-                processingContext.getComponentType(),
-                processingContext.getRemoteIpAddress() + ":" +
-                        processingContext.getRemotePort() + " (" + processingContext.getRemoteHost() + ")",
-                processingContext.getUserId(),
-                processingContext.getUserName(),
+                securityContext.getLocalIpAddress() + ":" +
+                        securityContext.getComponentPort() + " (" + securityContext.getServerName() + ")",
+                securityContext.getComponentType(),
+                securityContext.getRemoteIpAddress() + ":" +
+                        securityContext.getRemotePort() + " (" + securityContext.getRemoteHost() + ")",
+                securityContext.getUserId(),
+                securityContext.getUserName(),
                 null,
                 null,
                 null,
@@ -56,26 +55,26 @@ public class AuditService {
 
     /**
      * Log audit event related to data
-     * @param processingContext the processing context
+     * @param securityContext the processing context
      * @param event the event
      * @param dataType the data type
      * @param dataId the data ID
      * @param dataLabel the data label
      */
-    public static void log(final ProcessingContext processingContext,
+    public static void log(final SecurityContext securityContext,
                            final String event,
                            final String dataType,
                            final String dataId,
                            final String dataLabel) {
-        log(processingContext.getAuditEntityManager(),
+        log(securityContext.getAuditEntityManager(),
                 event,
-                processingContext.getLocalIpAddress() + ":" +
-                        processingContext.getComponentPort() + " (" + processingContext.getServerName() + ")",
-                processingContext.getComponentType(),
-                processingContext.getRemoteIpAddress() + ":" +
-                        processingContext.getRemotePort() + " (" + processingContext.getRemoteHost() + ")",
-                processingContext.getUserId(),
-                processingContext.getUserName(),
+                securityContext.getLocalIpAddress() + ":" +
+                        securityContext.getComponentPort() + " (" + securityContext.getServerName() + ")",
+                securityContext.getComponentType(),
+                securityContext.getRemoteIpAddress() + ":" +
+                        securityContext.getRemotePort() + " (" + securityContext.getRemoteHost() + ")",
+                securityContext.getUserId(),
+                securityContext.getUserName(),
                 dataType,
                 dataId,
                 null,
@@ -85,7 +84,7 @@ public class AuditService {
 
     /**
      * Log audit event related to versioned data.
-     * @param processingContext the processing context
+     * @param securityContext the processing context
      * @param event the event
      * @param dataType the data type
      * @param dataId the data ID
@@ -93,22 +92,22 @@ public class AuditService {
      * @param dataNewVersionId the new data version ID
      * @param dataLabel the data label
      */
-    public static void log(final ProcessingContext processingContext,
+    public static void log(final SecurityContext securityContext,
                            final String event,
                            final String dataType,
                            final String dataId,
                            final String dataOldVersionId,
                            final String dataNewVersionId,
                            final String dataLabel) {
-        log(processingContext.getAuditEntityManager(),
+        log(securityContext.getAuditEntityManager(),
                 event,
-                processingContext.getLocalIpAddress() + ":" +
-                processingContext.getComponentPort() + " (" + processingContext.getServerName() + ")",
-                processingContext.getComponentType(),
-                processingContext.getRemoteIpAddress() + ":" +
-                processingContext.getRemotePort() + " (" + processingContext.getRemoteHost() + ")",
-                processingContext.getUserId(),
-                processingContext.getUserName(),
+                securityContext.getLocalIpAddress() + ":" +
+                securityContext.getComponentPort() + " (" + securityContext.getServerName() + ")",
+                securityContext.getComponentType(),
+                securityContext.getRemoteIpAddress() + ":" +
+                securityContext.getRemotePort() + " (" + securityContext.getRemoteHost() + ")",
+                securityContext.getUserId(),
+                securityContext.getUserName(),
                 dataType,
                 dataId,
                 dataOldVersionId,

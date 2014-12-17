@@ -1,10 +1,14 @@
-package org.vaadin.addons.sitekit.model;
+package org.vaadin.addons.sitekit.security;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.model.Company;
+import org.vaadin.addons.sitekit.model.Group;
+import org.vaadin.addons.sitekit.model.PostalAddress;
+import org.vaadin.addons.sitekit.model.User;
+import org.vaadin.addons.sitekit.security.UserDao;
 import org.vaadin.addons.sitekit.util.TestUtil;
 
 import javax.persistence.EntityManager;

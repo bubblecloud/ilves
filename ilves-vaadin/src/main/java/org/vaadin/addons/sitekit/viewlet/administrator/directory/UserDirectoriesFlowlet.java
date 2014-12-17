@@ -29,7 +29,7 @@ import org.vaadin.addons.sitekit.grid.FilterDescriptor;
 import org.vaadin.addons.sitekit.grid.Grid;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.UserDirectory;
-import org.vaadin.addons.sitekit.service.SecurityService;
+import org.vaadin.addons.sitekit.security.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 
 import javax.persistence.EntityManager;
