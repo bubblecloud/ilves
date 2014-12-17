@@ -26,6 +26,7 @@ import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.model.UserDirectory;
+import org.vaadin.addons.sitekit.service.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 
 import javax.persistence.EntityManager;
@@ -97,10 +98,9 @@ public final class UserDirectoryFlowlet extends AbstractFlowlet implements Valid
             public void buttonClick(final ClickEvent event) {
                 userDirectoryEditor.commit();
                 if (entity.getUserDirectoryId() == null) {
-                    UserDirectoryDao.addUserDirectory(entityManager, entity);
+                    SecurityService.addUserDirectory(getSite().getSiteContext(), entity);
                 } else {
-                    entity = entityManager.merge(entity);
-                    UserDirectoryDao.updateUserDirectory(entityManager, entity);
+                    SecurityService.updateUserDirectory(getSite().getSiteContext(), entity);
                 }
             }
         });

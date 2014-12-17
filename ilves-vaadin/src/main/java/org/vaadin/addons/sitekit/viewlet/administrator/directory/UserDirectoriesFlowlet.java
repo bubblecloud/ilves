@@ -29,6 +29,7 @@ import org.vaadin.addons.sitekit.grid.FilterDescriptor;
 import org.vaadin.addons.sitekit.grid.Grid;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.UserDirectory;
+import org.vaadin.addons.sitekit.service.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 
 import javax.persistence.EntityManager;
@@ -164,8 +165,9 @@ public final class UserDirectoriesFlowlet extends AbstractFlowlet {
                 if (entityGrid.getSelectedItemId() == null) {
                     return;
                 }
-                entityContainer.removeItem(entityGrid.getSelectedItemId());
-                entityContainer.commit();
+                final UserDirectory entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
+                SecurityService.removeUserDirectory(getSite().getSiteContext(), entity);
+                entityContainer.refresh();
             }
         });
 

@@ -3,6 +3,7 @@ package org.vaadin.addons.sitekit.service;
 import org.vaadin.addons.sitekit.cache.PrivilegeCache;
 import org.vaadin.addons.sitekit.dao.CompanyDao;
 import org.vaadin.addons.sitekit.dao.UserDao;
+import org.vaadin.addons.sitekit.dao.UserDirectoryDao;
 import org.vaadin.addons.sitekit.model.*;
 import org.vaadin.addons.sitekit.module.audit.AuditService;
 import org.vaadin.addons.sitekit.site.ProcessingContext;
@@ -19,6 +20,39 @@ import java.util.List;
  * Created by tlaukkan on 12/14/2014.
  */
 public class SecurityService {
+
+    /**
+     * Adds new userDirectory to database.
+     * @param context the processing context
+     * @param userDirectory the userDirectory
+     */
+    public static void addUserDirectory(final ProcessingContext context, final UserDirectory userDirectory) {
+        requireRole("add-user-directory", context, SiteRoles.ADMINISTRATOR);
+        UserDirectoryDao.addUserDirectory(context.getEntityManager(), userDirectory);
+        AuditService.log(context, "add", "user-directory", userDirectory.getUserDirectoryId(), userDirectory.getAddress());
+    }
+
+    /**
+     * Updates new userDirectory to database.
+     * @param context the processing context
+     * @param userDirectory the userDirectory
+     */
+    public static void updateUserDirectory(final ProcessingContext context, final UserDirectory userDirectory) {
+        requireRole("update-user-directory", context, SiteRoles.ADMINISTRATOR);
+        UserDirectoryDao.updateUserDirectory(context.getEntityManager(), userDirectory);
+        AuditService.log(context, "update", "user-directory", userDirectory.getUserDirectoryId(), userDirectory.getAddress());
+    }
+
+    /**
+     * Removes userDirectory from database.
+     * @param context the processing context
+     * @param userDirectory the userDirectory
+     */
+    public static void removeUserDirectory(final ProcessingContext context, final UserDirectory userDirectory) {
+        requireRole("remove-user-directory", context, SiteRoles.ADMINISTRATOR);
+        UserDirectoryDao.removeUserDirectory(context.getEntityManager(), userDirectory);
+        AuditService.log(context, "remove", "user-directory", userDirectory.getUserDirectoryId(), userDirectory.getAddress());
+    }
 
     /**
      * Adds new company to database.
