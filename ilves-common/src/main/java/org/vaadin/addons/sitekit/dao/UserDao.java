@@ -34,7 +34,7 @@ import java.util.List;
 public class UserDao {
 
     /** The logger. */
-    private static final Logger LOG = Logger.getLogger(UserDao.class);
+    private static final Logger LOGGER = Logger.getLogger(UserDao.class);
 
     /**
      * Adds user to database.
@@ -55,7 +55,7 @@ public class UserDao {
             }
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in add user.", e);
+            LOGGER.error("Error in add user.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -76,7 +76,7 @@ public class UserDao {
             entityManager.persist(user);
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in update user.", e);
+            LOGGER.error("Error in update user.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -96,7 +96,7 @@ public class UserDao {
             entityManager.remove(user);
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in remove user.", e);
+            LOGGER.error("Error in remove user.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -289,7 +289,7 @@ public class UserDao {
             entityManager.persist(group);
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in add group.", e);
+            LOGGER.error("Error in add group.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -310,7 +310,7 @@ public class UserDao {
             entityManager.persist(group);
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in update group.", e);
+            LOGGER.error("Error in update group.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -330,7 +330,7 @@ public class UserDao {
             entityManager.remove(group);
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in remove group.", e);
+            LOGGER.error("Error in remove group.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -386,7 +386,7 @@ public class UserDao {
             entityManager.persist(new GroupMember(group, user));
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in add group member.", e);
+            LOGGER.error("Error in add group member.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -414,7 +414,7 @@ public class UserDao {
                 entityManager.remove(groupMembers.get(0));
                 transaction.commit();
             } catch (final Exception e) {
-                LOG.error("Error in remove group member.", e);
+                LOGGER.error("Error in remove group member.", e);
                 if (transaction.isActive()) {
                     transaction.rollback();
                 }
@@ -436,7 +436,7 @@ public class UserDao {
             entityManager.persist(new Privilege(null, user, privilegeKey, dataId));
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in adding user privilege.", e);
+            LOGGER.error("Error in adding user privilege.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -460,7 +460,7 @@ public class UserDao {
             }
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in adding user privilege.", e);
+            LOGGER.error("Error in adding user privilege.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -483,7 +483,7 @@ public class UserDao {
             entityManager.persist(new Privilege(group, null, privilegeKey, dataId));
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in adding group privilege.", e);
+            LOGGER.error("Error in adding group privilege.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -508,7 +508,7 @@ public class UserDao {
             }
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in adding group privilege.", e);
+            LOGGER.error("Error in adding group privilege.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -539,7 +539,7 @@ public class UserDao {
             }
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in removing user privilege.", e);
+            LOGGER.error("Error in removing user privilege.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -572,7 +572,7 @@ public class UserDao {
             }
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in removing user privilege.", e);
+            LOGGER.error("Error in removing user privilege.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -603,7 +603,7 @@ public class UserDao {
             }
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in removing group privilege.", e);
+            LOGGER.error("Error in removing group privilege.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -636,7 +636,7 @@ public class UserDao {
             }
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in removing group privilege.", e);
+            LOGGER.error("Error in removing group privilege.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }

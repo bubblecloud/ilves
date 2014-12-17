@@ -1,6 +1,7 @@
 package org.vaadin.addons.sitekit.service;
 
 import org.vaadin.addons.sitekit.cache.PrivilegeCache;
+import org.vaadin.addons.sitekit.dao.CompanyDao;
 import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.model.*;
 import org.vaadin.addons.sitekit.module.audit.AuditService;
@@ -18,6 +19,39 @@ import java.util.List;
  * Created by tlaukkan on 12/14/2014.
  */
 public class SecurityService {
+
+    /**
+     * Adds new company to database.
+     * @param context the processing context
+     * @param company the company
+     */
+    public static void addCompany(final ProcessingContext context, final Company company) {
+        requireRole("add-company", context, SiteRoles.ADMINISTRATOR);
+        CompanyDao.addCompany(context.getEntityManager(), company);
+        AuditService.log(context, "add", "company", company.getCompanyId(), company.getCompanyName());
+    }
+
+    /**
+     * Updates new company to database.
+     * @param context the processing context
+     * @param company the company
+     */
+    public static void updateCompany(final ProcessingContext context, final Company company) {
+        requireRole("update-company", context, SiteRoles.ADMINISTRATOR);
+        CompanyDao.updateCompany(context.getEntityManager(), company);
+        AuditService.log(context, "update", "company", company.getCompanyId(), company.getCompanyName());
+    }
+
+    /**
+     * Removes company from database.
+     * @param context the processing context
+     * @param company the company
+     */
+    public static void removeCompany(final ProcessingContext context, final Company company) {
+        requireRole("remove-company", context, SiteRoles.ADMINISTRATOR);
+        CompanyDao.removeCompany(context.getEntityManager(), company);
+        AuditService.log(context, "remove", "company", company.getCompanyId(), company.getCompanyName());
+    }
 
     /**
      * Adds user to database.

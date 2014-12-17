@@ -15,14 +15,18 @@
  */
 package org.vaadin.addons.sitekit.dao;
 
+import org.apache.log4j.Logger;
+import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Company;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,6 +35,70 @@ import java.util.List;
  * @author Tommi S.E. Laukkanen
  */
 public class CompanyDao {
+    /** The logger. */
+    private static final Logger LOGGER = Logger.getLogger(UserDao.class);
+
+    /**
+     * Adds new company to database.
+     * @param entityManager the entity manager
+     * @param company the company
+     */
+    public static void addCompany(final EntityManager entityManager, final Company company) {
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try {
+            entityManager.persist(company);
+            transaction.commit();
+        } catch (final Exception e) {
+            LOGGER.error("Error in add company.", e);
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Updates new company to database.
+     * @param entityManager the entity manager
+     * @param company the company
+     */
+    public static void updateCompany(final EntityManager entityManager, final Company company) {
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try {
+            company.setModified(new Date());
+            entityManager.persist(company);
+            transaction.commit();
+        } catch (final Exception e) {
+            LOGGER.error("Error in update company.", e);
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Removes company from database.
+     * @param entityManager the entity manager
+     * @param company the company
+     */
+    public static void removeCompany(final EntityManager entityManager, final Company company) {
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try {
+            entityManager.remove(company);
+            transaction.commit();
+        } catch (final Exception e) {
+            LOGGER.error("Error in remove company.", e);
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Gets company.
      * @param entityManager the entity manager

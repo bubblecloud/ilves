@@ -26,6 +26,7 @@ import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.PostalAddress;
+import org.vaadin.addons.sitekit.service.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 
 import javax.persistence.EntityManager;
@@ -112,17 +113,10 @@ public final class CompanyFlowlet extends AbstractFlowlet implements ValidatingE
                 companyEditor.commit();
                 invoicingAddressEditor.commit();
                 deliveryAddressEditor.commit();
-                entityManager.getTransaction().begin();
-                try {
-                    entity = entityManager.merge(entity);
-                    entityManager.persist(entity);
-                    entityManager.getTransaction().commit();
-                    entityManager.detach(entity);
-                } catch (final Throwable t) {
-                    if (entityManager.getTransaction().isActive()) {
-                        entityManager.getTransaction().rollback();
-                    }
-                    throw new RuntimeException("Failed to save entity: " + entity, t);
+                if (entity.getCompanyId() == null) {
+                    SecurityService.addCompany(getSite().getSiteContext(), entity);
+                } else {
+                    SecurityService.updateCompany(getSite().getSiteContext(), entity);
                 }
             }
         });
