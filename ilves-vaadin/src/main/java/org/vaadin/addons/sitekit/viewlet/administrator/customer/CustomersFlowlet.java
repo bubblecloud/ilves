@@ -28,6 +28,7 @@ import org.vaadin.addons.sitekit.grid.Grid;
 import org.vaadin.addons.sitekit.model.Company;
 import org.vaadin.addons.sitekit.model.Customer;
 import org.vaadin.addons.sitekit.model.PostalAddress;
+import org.vaadin.addons.sitekit.service.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 
 import javax.persistence.EntityManager;
@@ -155,8 +156,9 @@ public final class CustomersFlowlet extends AbstractFlowlet {
                 if (entityGrid.getSelectedItemId() == null) {
                     return;
                 }
-                entityContainer.removeItem(entityGrid.getSelectedItemId());
-                entityContainer.commit();
+                final Customer entity = entityContainer.getEntity(entityGrid.getSelectedItemId());
+                SecurityService.removeCustomer(getSite().getSiteContext(), entity);
+                entityContainer.refresh();
             }
         });
 

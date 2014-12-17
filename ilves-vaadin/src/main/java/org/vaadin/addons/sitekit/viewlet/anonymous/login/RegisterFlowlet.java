@@ -152,7 +152,19 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                 final Company company = getSite().getSiteContext().getObject(Company.class);
 
                 final PostalAddress invoicingAddress = new PostalAddress();
+                invoicingAddress.setAddressLineOne("?");
+                invoicingAddress.setAddressLineTwo("?");
+                invoicingAddress.setAddressLineThree("?");
+                invoicingAddress.setCity("?");
+                invoicingAddress.setPostalCode("?");
+                invoicingAddress.setCountry("?");
                 final PostalAddress deliveryAddress = new PostalAddress();
+                deliveryAddress.setAddressLineOne("?");
+                deliveryAddress.setAddressLineTwo("?");
+                deliveryAddress.setAddressLineThree("?");
+                deliveryAddress.setCity("?");
+                deliveryAddress.setPostalCode("?");
+                deliveryAddress.setCountry("?");
                 customer.setInvoicingAddress(invoicingAddress);
                 customer.setDeliveryAddress(deliveryAddress);
 
@@ -177,7 +189,7 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                             customer.getEmailAddress(), customer.getPhoneNumber(), StringUtil.toHexString(passwordAndSaltDigest));
 
                     SecurityService.addUser(getSite().getSiteContext(), user, UserDao.getGroup(entityManager, company, "user"));
-                    CustomerDao.saveCustomer(entityManager, customer);
+                    SecurityService.addCustomer(getSite().getSiteContext(), customer);
                     UserDao.addGroupMember(entityManager, customer.getAdminGroup(), user);
                     UserDao.addGroupMember(entityManager, customer.getMemberGroup(), user);
 

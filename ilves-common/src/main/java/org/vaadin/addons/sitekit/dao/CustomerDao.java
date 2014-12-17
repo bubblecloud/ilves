@@ -33,49 +33,40 @@ import java.util.Date;
 public class CustomerDao {
 
     /** The logger. */
-    private static final Logger LOG = Logger.getLogger(CustomerDao.class);
+    private static final Logger LOGGER = Logger.getLogger(CustomerDao.class);
 
     /**
      * Adds new customer to database.
      * @param entityManager the entity manager
      * @param customer the group
      */
-    public static void saveCustomer(final EntityManager entityManager, final Customer customer) {
+    public static void addCustomer(final EntityManager entityManager, final Customer customer) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
-            if (customer.getCustomerId() != null) {
-                customer.setCreated(new Date());
-            }
+            customer.setCreated(new Date());
             customer.setModified(new Date());
 
+            final Group memberGroup = new Group();
+            memberGroup.setOwner(customer.getOwner());
+            memberGroup.setCreated(new Date());
+            memberGroup.setModified(new Date());
+            memberGroup.setName("members_" + customer.toString().toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_"));
+            memberGroup.setDescription("Members of " + customer.toString());
+            customer.setMemberGroup(memberGroup);
 
-            if (customer.getMemberGroup() == null) {
-                final Group memberGroup = new Group();
-                memberGroup.setOwner(customer.getOwner());
-                memberGroup.setCreated(new Date());
-                customer.setMemberGroup(memberGroup);
-            }
-            customer.getMemberGroup().setModified(new Date());
-            customer.getMemberGroup().setName("customer_members_" +
-                    customer.toString().toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_"));
-            customer.getMemberGroup().setDescription("Members / " + customer.toString());
-
-            if (customer.getAdminGroup() == null) {
-                final Group adminGroup = new Group();
-                adminGroup.setOwner(customer.getOwner());
-                adminGroup.setCreated(new Date());
-                customer.setAdminGroup(adminGroup);
-            }
-            customer.getAdminGroup().setModified(new Date());
-            customer.getAdminGroup().setName("customer_admins_" +
-                    customer.toString().toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_"));
-            customer.getAdminGroup().setDescription("Admins / " + customer.toString());
+            final Group adminGroup = new Group();
+            adminGroup.setOwner(customer.getOwner());
+            adminGroup.setCreated(new Date());
+            adminGroup.setModified(new Date());
+            adminGroup.setName("admins_" + customer.toString().toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_"));
+            adminGroup.setDescription("Administrators of " + customer.toString());
+            customer.setAdminGroup(adminGroup);
 
             entityManager.persist(customer);
             transaction.commit();
         } catch (final Exception e) {
-            LOG.error("Error in add customer.", e);
+            LOGGER.error("Error adding customer.", e);
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -85,6 +76,58 @@ public class CustomerDao {
         UserDao.addGroupPrivilege(entityManager, customer.getAdminGroup(), SitePrivileges.ADMINISTER, customer.getCustomerId());
         UserDao.addGroupPrivilege(entityManager, customer.getAdminGroup(), SitePrivileges.ADMINISTER, customer.getAdminGroup().getGroupId());
         UserDao.addGroupPrivilege(entityManager, customer.getAdminGroup(), SitePrivileges.ADMINISTER, customer.getMemberGroup().getGroupId());
+    }
+
+    /**
+     * Updates customer to database.
+     * @param entityManager the entity manager
+     * @param customer the group
+     */
+    public static void updateCustomer(final EntityManager entityManager, final Customer customer) {
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try {
+            customer.setModified(new Date());
+
+            customer.getMemberGroup().setModified(new Date());
+            customer.getMemberGroup().setName("members_" +
+                    customer.toString().toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_"));
+            customer.getMemberGroup().setDescription("Members of " + customer.toString());
+
+            customer.getAdminGroup().setModified(new Date());
+            customer.getAdminGroup().setName("admins_" +
+                    customer.toString().toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_"));
+            customer.getAdminGroup().setDescription("Admins of " + customer.toString());
+
+            entityManager.persist(customer);
+            transaction.commit();
+        } catch (final Exception e) {
+            LOGGER.error("Error updating customer.", e);
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Removes customer from database.
+     * @param entityManager the entity manager
+     * @param customer the customer
+     */
+    public static final void removeCustomer(final EntityManager entityManager, final Customer customer) {
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try {
+            entityManager.remove(customer);
+            transaction.commit();
+        } catch (final Exception e) {
+            LOGGER.error("Error removing customer.", e);
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        }
     }
 
 }

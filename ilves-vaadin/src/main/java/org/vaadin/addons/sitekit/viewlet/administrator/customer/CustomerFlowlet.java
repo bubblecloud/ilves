@@ -21,12 +21,14 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
 import org.vaadin.addons.sitekit.dao.CustomerDao;
 import org.vaadin.addons.sitekit.flow.AbstractFlowlet;
 import org.vaadin.addons.sitekit.grid.ValidatingEditor;
 import org.vaadin.addons.sitekit.grid.ValidatingEditorStateListener;
 import org.vaadin.addons.sitekit.model.Customer;
 import org.vaadin.addons.sitekit.model.PostalAddress;
+import org.vaadin.addons.sitekit.service.SecurityService;
 import org.vaadin.addons.sitekit.site.SiteFields;
 
 import javax.persistence.EntityManager;
@@ -87,15 +89,17 @@ public final class CustomerFlowlet extends AbstractFlowlet implements Validating
         customerEditor.addListener((ValidatingEditorStateListener) this);
         gridLayout.addComponent(customerEditor, 0, 0);
 
+        final VerticalLayout invoiceLayout = new VerticalLayout();
         invoicingAddressEditor = new ValidatingEditor(SiteFields.getFieldDescriptors(PostalAddress.class));
         invoicingAddressEditor.setCaption("Invoicing Address");
         invoicingAddressEditor.addListener((ValidatingEditorStateListener) this);
-        gridLayout.addComponent(invoicingAddressEditor, 1, 0);
+        invoiceLayout.addComponent(invoicingAddressEditor);
 
         deliveryAddressEditor = new ValidatingEditor(SiteFields.getFieldDescriptors(PostalAddress.class));
         deliveryAddressEditor.setCaption("Delivery Address");
         deliveryAddressEditor.addListener((ValidatingEditorStateListener) this);
-        gridLayout.addComponent(deliveryAddressEditor, 2, 0);
+        invoiceLayout.addComponent(deliveryAddressEditor);
+        gridLayout.addComponent(invoiceLayout, 1, 0, 2 ,0);
 
         final HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing(true);
@@ -113,11 +117,12 @@ public final class CustomerFlowlet extends AbstractFlowlet implements Validating
                 customerEditor.commit();
                 invoicingAddressEditor.commit();
                 deliveryAddressEditor.commit();
-                entity = entityManager.merge(entity);
 
-                CustomerDao.saveCustomer(entityManager, entity);
-
-                //entityManager.detach(entity);
+                if (entity.getCustomerId() == null) {
+                    SecurityService.addCustomer(getSite().getSiteContext(), entity);
+                } else {
+                    SecurityService.updateCustomer(getSite().getSiteContext(), entity);
+                }
             }
         });
 

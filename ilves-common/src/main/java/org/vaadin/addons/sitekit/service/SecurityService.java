@@ -2,6 +2,7 @@ package org.vaadin.addons.sitekit.service;
 
 import org.vaadin.addons.sitekit.cache.PrivilegeCache;
 import org.vaadin.addons.sitekit.dao.CompanyDao;
+import org.vaadin.addons.sitekit.dao.CustomerDao;
 import org.vaadin.addons.sitekit.dao.UserDao;
 import org.vaadin.addons.sitekit.dao.UserDirectoryDao;
 import org.vaadin.addons.sitekit.model.*;
@@ -20,6 +21,43 @@ import java.util.List;
  * Created by tlaukkan on 12/14/2014.
  */
 public class SecurityService {
+    /**
+     * Adds new customer to database.
+     * @param context the processing context
+     * @param customer the customer
+     */
+    public static void addCustomer(final ProcessingContext context, final Customer customer) {
+        final Company company = context.getObject(Company.class);
+        if (company.isSelfRegistration()) {
+            requireRole("add-customer", context, SiteRoles.ADMINISTRATOR, SiteRoles.ANONYMOUS);
+        } else {
+            requireRole("add-customer", context, SiteRoles.ADMINISTRATOR);
+        }
+        CustomerDao.addCustomer(context.getEntityManager(), customer);
+        AuditService.log(context, "add", "customer", customer.getCustomerId(), customer.toString());
+    }
+
+    /**
+     * Updates new customer to database.
+     * @param context the processing context
+     * @param customer the customer
+     */
+    public static void updateCustomer(final ProcessingContext context, final Customer customer) {
+        requirePrivilege(SitePrivileges.ADMINISTER, "customer", customer.getCustomerId(), customer.toString(), context, SiteRoles.ADMINISTRATOR);
+        CustomerDao.updateCustomer(context.getEntityManager(), customer);
+        AuditService.log(context, "update", "customer", customer.getCustomerId(), customer.toString());
+    }
+
+    /**
+     * Removes customer from database.
+     * @param context the processing context
+     * @param customer the customer
+     */
+    public static void removeCustomer(final ProcessingContext context, final Customer customer) {
+        requireRole("remove-customer", context, SiteRoles.ADMINISTRATOR);
+        CustomerDao.removeCustomer(context.getEntityManager(), customer);
+        AuditService.log(context, "remove", "customer", customer.getCustomerId(), customer.toString());
+    }
 
     /**
      * Adds new userDirectory to database.
