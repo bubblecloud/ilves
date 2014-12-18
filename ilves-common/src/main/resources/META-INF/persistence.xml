@@ -17,7 +17,7 @@
         <class>org.bubblecloud.ilves.module.content.Content</class>
         <class>org.bubblecloud.ilves.module.content.Asset</class>
 		<properties>
-			<property name="eclipselink.session.customizer" value="org.vaadin.addons.sitekit.model.UuidSequence"/>
+			<property name="eclipselink.session.customizer" value="org.bubblecloud.ilves.model.UuidSequence"/>
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://127.0.0.1:5432/site"/>
 			<property name="javax.persistence.jdbc.user" value="site"/>
 			<property name="javax.persistence.jdbc.password" value="password"/>
