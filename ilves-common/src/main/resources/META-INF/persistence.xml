@@ -2,20 +2,20 @@
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="site" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<class>org.vaadin.addons.sitekit.model.Company</class>
-		<class>org.vaadin.addons.sitekit.model.Customer</class>
-		<class>org.vaadin.addons.sitekit.model.PostalAddress</class>
-		<class>org.vaadin.addons.sitekit.model.User</class>
-        <class>org.vaadin.addons.sitekit.model.UserDirectory</class>
-        <class>org.vaadin.addons.sitekit.model.EmailPasswordReset</class>
-		<class>org.vaadin.addons.sitekit.model.Group</class>
-		<class>org.vaadin.addons.sitekit.model.GroupMember</class>
-		<class>org.vaadin.addons.sitekit.model.Privilege</class>
-        <class>org.vaadin.addons.sitekit.model.Feedback</class>
-        <class>org.vaadin.addons.sitekit.model.SchemaVersion</class>
-        <class>org.vaadin.addons.sitekit.module.audit.model.AuditLogEntry</class>
-        <class>org.vaadin.addons.sitekit.module.content.model.Content</class>
-        <class>org.vaadin.addons.sitekit.module.content.model.Asset</class>
+		<class>org.bubblecloud.ilves.model.Company</class>
+		<class>org.bubblecloud.ilves.model.Customer</class>
+		<class>org.bubblecloud.ilves.model.PostalAddress</class>
+		<class>org.bubblecloud.ilves.model.User</class>
+        <class>org.bubblecloud.ilves.model.UserDirectory</class>
+        <class>org.bubblecloud.ilves.model.EmailPasswordReset</class>
+		<class>org.bubblecloud.ilves.model.Group</class>
+		<class>org.bubblecloud.ilves.model.GroupMember</class>
+		<class>org.bubblecloud.ilves.model.Privilege</class>
+        <class>org.bubblecloud.ilves.model.Feedback</class>
+        <class>org.bubblecloud.ilves.model.SchemaVersion</class>
+        <class>org.bubblecloud.ilves.model.AuditLogEntry</class>
+        <class>org.bubblecloud.ilves.module.content.Content</class>
+        <class>org.bubblecloud.ilves.module.content.Asset</class>
 		<properties>
 			<property name="eclipselink.session.customizer" value="org.vaadin.addons.sitekit.model.UuidSequence"/>
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://127.0.0.1:5432/site"/>

@@ -1,0 +1,34 @@
+package org.bubblecloud.ilves.security;
+
+import org.bubblecloud.ilves.util.PropertiesUtil;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.File;
+
+/**
+ * Created by tlaukkan on 8/18/14.
+ */
+public class CertificateUtilTest {
+
+    @Before
+    public void before() {
+        PropertiesUtil.setProperty("site", "key-store-path", System.getProperty("java.io.tmpdir") + File.separator +
+                "site.jks");
+    }
+
+    @Test
+    public void testEnsureServerCertificateExists() {
+        final String alias = "alias";
+        final String ipAddress = "192.168.1.1";
+        final String commonName = "test";
+        final String keyStorePath = PropertiesUtil.getProperty("site", "key-store-path");
+        final String keyStorePassword = PropertiesUtil.getProperty("site", "key-store-password");
+
+        CertificateUtil.ensureServerCertificateExists(alias, ipAddress, commonName, keyStorePassword, keyStorePath, keyStorePassword);
+
+        Assert.assertTrue(CertificateUtil.hasCertificate(alias, keyStorePath, keyStorePassword));
+    }
+
+}

@@ -2,11 +2,11 @@ package org.bubblecloud.ilves;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Component;
+import org.bubblecloud.ilves.server.jetty.DefaultJettyConfiguration;
+import org.bubblecloud.ilves.site.*;
+import org.bubblecloud.ilves.site.view.valo.DefaultValoView;
+import org.bubblecloud.ilves.util.PropertiesUtil;
 import org.eclipse.jetty.server.Server;
-import org.vaadin.addons.sitekit.jetty.DefaultJettyConfiguration;
-import org.vaadin.addons.sitekit.site.*;
-import org.vaadin.addons.sitekit.site.view.DefaultValoView;
-import org.vaadin.addons.sitekit.util.PropertiesUtil;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
