@@ -31,33 +31,14 @@ public class SiteModuleManager {
     private static final Logger LOGGER = Logger.getLogger(SiteModuleManager.class);
 
     /**
-     * List of available site modules.
-     */
-    private static List<SiteModule> availableSiteModules = new ArrayList<SiteModule>();
-    /**
      * Set of initialized site modules.
      */
     private static List<Class<? extends SiteModule>> initializedSiteModules = new ArrayList<Class<? extends SiteModule>>();
-
     /**
-     * Register builtin modules.
+     * The site modules.
      */
-    static {
-        SiteModuleManager.registerModule(ContentModule.class);
-        SiteModuleManager.registerModule(AuditModule.class);
-    }
+    private static List<SiteModule> siteModules = new ArrayList<>();
 
-    /**
-     * Registers module but does not initialize it.
-     * @param siteModuleClass the site module class
-     */
-    public static synchronized void registerModule(final Class<? extends SiteModule> siteModuleClass) {
-        try {
-            availableSiteModules.add(siteModuleClass.newInstance());
-        } catch (final Exception e) {
-            throw new SiteException("Failed to initialize module. Modules should use default constructors.", e);
-        }
-    }
 
     /**
      * Initializes site module.
@@ -68,18 +49,19 @@ public class SiteModuleManager {
         if (initializedSiteModules.contains(siteModuleClass)) {
             throw new SiteException("Module already enabled.");
         }
-        for (final SiteModule siteModule : availableSiteModules) {
-            if (siteModuleClass.isAssignableFrom(siteModule.getClass())) {
-                try {
-                    siteModule.initialize();
-                } catch (final Exception e) {
-                    LOGGER.error("Error initializing module: " + siteModuleClass, e);
-                }
-                initializedSiteModules.add(siteModuleClass);
-                return true;
+        if (SiteModule.class.isAssignableFrom(siteModuleClass)) {
+            try {
+                final SiteModule siteModule = siteModuleClass.newInstance();
+                siteModule.initialize();
+                siteModules.add(siteModule);
+            } catch (final Exception e) {
+                LOGGER.error("Error initializing module: " + siteModuleClass, e);
             }
+            initializedSiteModules.add(siteModuleClass);
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     /**
@@ -96,10 +78,8 @@ public class SiteModuleManager {
      * @param dynamicSiteDescriptor the dynamic site descriptor
      */
     public static synchronized void injectDynamicContent(final SiteDescriptor dynamicSiteDescriptor) {
-        for (final SiteModule siteModule : availableSiteModules) {
-            if (isModuleInitialized(siteModule.getClass())) {
-                siteModule.injectDynamicContent(dynamicSiteDescriptor);
-            }
+        for (final SiteModule siteModule : siteModules) {
+            siteModule.injectDynamicContent(dynamicSiteDescriptor);
         }
     }
 

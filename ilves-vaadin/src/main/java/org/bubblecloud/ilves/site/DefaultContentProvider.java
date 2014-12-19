@@ -65,11 +65,6 @@ public class DefaultContentProvider implements ContentProvider {
         groups.setViewletClass("content", GroupFlowViewlet.class);
         viewDescriptors.add(groups);
 
-        final ViewDescriptor customers = new ViewDescriptor("customers", "Customers", DefaultValoView.class);
-        customers.setViewerRoles(DefaultRoles.ADMINISTRATOR);
-        customers.setViewletClass("content", CustomerFlowViewlet.class);
-        viewDescriptors.add(customers);
-
         final ViewDescriptor directories = new ViewDescriptor("directories", "Directories", DefaultValoView.class);
         directories.setViewerRoles(DefaultRoles.ADMINISTRATOR);
         directories.setViewletClass("content", UserDirectoryFlowViewlet.class);
@@ -118,7 +113,6 @@ public class DefaultContentProvider implements ContentProvider {
         navigationVersion.addRootPage("login");
         navigationVersion.addRootPage("configuration");
         navigationVersion.addChildPage("configuration", "account");
-        navigationVersion.addChildPage("configuration", "customers");
         navigationVersion.addChildPage("configuration", "users");
         navigationVersion.addChildPage("configuration", "groups");
         navigationVersion.addChildPage("configuration", "directories");

@@ -42,6 +42,15 @@ public class Ilves {
     }
 
     /**
+     * Initializes site module.
+     * @param siteModuleClass the site  module class
+     * @return true if initialization succeeded.
+     */
+    public static synchronized boolean initializeModule(final Class<? extends SiteModule> siteModuleClass) {
+        return SiteModuleManager.initializeModule(siteModuleClass);
+    }
+
+    /**
      * Adds root page to Ilves site.
      * @param page the page
      * @param viewClass the view class

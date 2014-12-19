@@ -88,9 +88,6 @@ public class DefaultJettyConfiguration {
             DefaultSiteUI.setLocalizationProvider(new LocalizationProviderBundleImpl("site-localization",
                     localizationBundle));
         }
-        // Initialize modules
-        SiteModuleManager.initializeModule(AuditModule.class);
-        SiteModuleManager.initializeModule(ContentModule.class);
 
         // Configure Embedded jetty.
         // -------------------------

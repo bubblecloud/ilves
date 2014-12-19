@@ -36,9 +36,11 @@ import org.bubblecloud.ilves.model.Company;
 import org.bubblecloud.ilves.model.Customer;
 import org.bubblecloud.ilves.model.PostalAddress;
 import org.bubblecloud.ilves.model.User;
+import org.bubblecloud.ilves.module.customer.CustomerModule;
 import org.bubblecloud.ilves.security.SecurityService;
 import org.bubblecloud.ilves.security.UserDao;
 import org.bubblecloud.ilves.site.SiteFields;
+import org.bubblecloud.ilves.site.SiteModuleManager;
 import org.bubblecloud.ilves.util.EmailUtil;
 import org.bubblecloud.ilves.util.PropertiesUtil;
 import org.bubblecloud.ilves.util.StringUtil;
@@ -191,8 +193,10 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                             customer.getEmailAddress(), customer.getPhoneNumber(), StringUtil.toHexString(passwordAndSaltDigest));
 
                     SecurityService.addUser(getSite().getSiteContext(), user, UserDao.getGroup(entityManager, company, "user"));
-                    SecurityService.addCustomer(getSite().getSiteContext(), customer);
 
+                    if (SiteModuleManager.isModuleInitialized(CustomerModule.class)) {
+                        SecurityService.addCustomer(getSite().getSiteContext(), customer, user);
+                    }
 
                     final String url = company.getUrl() +
                             "#!validate/" + user.getUserId();
