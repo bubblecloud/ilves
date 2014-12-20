@@ -3,10 +3,13 @@ $v-layout-margin-bottom: 20px;
 $v-layout-margin-left: 20px;
 $v-layout-margin-right: 20px;
 
-$v-unit-size: 30px;
+$v-unit-size: 32px;
 $v-font-size: 14px;
 
 @import "../valo/valo";
+@import "ilves_login";
+@import "ilves_valo";
+@import "ilves_flow";
 
 $page-color: #F8F8F8;
 $application-background-color: #FFFFFF;
@@ -20,6 +23,9 @@ $application-background-color: #FFFFFF;
 @mixin ilves {
 
   @include valo;
+  @include ilves_login;
+  @include ilves_valo;
+  @include ilves_flow;
 
   &.v-app {
     background: $application-background-color;
@@ -27,39 +33,16 @@ $application-background-color: #FFFFFF;
     cursor: default;
   }
 
-  input.ilves-login-username {
-    margin-bottom: 10px;
-    width: 150px;
+  div.ui-content h1 {
+    font-size: 2em;
+    margin-top: 0px;
+    margin-bottom: 0px;
   }
 
-  input.ilves-login-password {
-    margin-bottom: 10px;
-    width: 150px;
-  }
-
-  input.ilves-login-button {
-    margin-bottom: 10px;
-    width: 150px;
-  }
-
-  .v-tabsheet-tabsheetpanel {
-    background: $page-color;
-  }
-
-  .v-tabsheet-deco, .white .v-tabsheet-deco {
-    border-top: 0px;
-  }
-
-  .white .v-panel .v-panel-content {
-    background:$page-color;
-  }
-
-  .dashboard {
-    background: $page-color;
-  }
-
-  .v-table-body {
-    border: 1px solid #eee;
+  div.ui-content h2 {
+    font-size: 1.5em;
+    margin-top: 8px;
+    margin-bottom: 0px;
   }
 
   .v-caption .v-required-field-indicator {
@@ -68,12 +51,8 @@ $application-background-color: #FFFFFF;
     padding-top: 2px;
   }
 
-  .v-colorpicker-button-color {
-    margin-right: 0px;
-  }
-
-  .v-datefield-button-readonly {
-    visibility: hidden;
+  div.wiki-content {
+    overflow: hidden;
   }
 
   .image-button {
@@ -90,65 +69,6 @@ $application-background-color: #FFFFFF;
 
   .image-button:active {
     background-image: url('button/img/image-button-pressed.png');
-  }
-
-  div.gravatar a img {
-    width: 32px;
-    height: 32px;
-  }
-
-  div.wiki-content {
-    overflow: hidden;
-  }
-
-  div.ui-content h1 {
-    font-size: 2em;
-    margin-top: 0px;
-    margin-bottom: 0px;
-  }
-
-  div.ui-content h2 {
-    font-size: 1.5em;
-    margin-top: 8px;
-    margin-bottom: 0px;
-  }
-
-  .v-caption .v-icon {
-    display: inline-block;
-    padding-right: 2px;
-    vertical-align: top;
-  }
-
-  .v-menubar-user-menu > .v-menubar-menuitem img.v-icon {
-    width: 45px;
-    height: 45px;
-    border-radius: 14px;
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
-    display: block;
-    margin: 0 auto 0.3em;
-    border: 5px solid #555;
-  }
-
-  .valo-content {
-    background-color: $page-color;
-    padding: 60px;
-    @include width-range($min: 801px, $max: 1100px) {
-      padding: 60px;
-    }
-    @include width-range($min: 501px, $max: 800px) {
-      padding: 40px;
-    }
-    @include width-range($min: 301px, $max: 500px) {
-      padding: 20px;
-    }
-    @include width-range($min: 0px, $max: 300px) {
-      padding: 10px;
-    }
-  }
-
-  .valo-menu-item .v-icon {
-    width: 24px;
-    height: 24px;
   }
 
 }

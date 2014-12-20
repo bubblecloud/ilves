@@ -15,6 +15,7 @@
  */
 package org.bubblecloud.ilves.ui.anonymous.login;
 
+import com.vaadin.server.Responsive;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
@@ -73,6 +74,7 @@ public final class LoginFlowlet extends AbstractFlowlet {
         try {
             final CustomLayout loginFormLayout = new CustomLayout(
                     JadeUtil.parse("/VAADIN/themes/ilves/layouts/login.jade"));
+            Responsive.makeResponsive(loginFormLayout);
             loginFormLayout.setCaption(getSite().localize("header-email-and-password-login"));
             layout.addComponent(loginFormLayout);
         } catch (final IOException e) {

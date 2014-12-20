@@ -1,0 +1,14 @@
+@mixin ilves_flow {
+  div.flow-top {
+    padding-bottom: 10px;
+    div.v-label {
+      padding: 4px 10px 4px 10px;
+    }
+  }
+  div.flow-bottom {
+    padding-top: 20px;
+    div.v-label {
+      padding: 4px 6px 4px 6px;
+    }
+  }
+}

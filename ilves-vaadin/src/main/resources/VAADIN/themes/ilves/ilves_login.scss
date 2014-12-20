@@ -1,0 +1,22 @@
+@mixin ilves_login {
+
+  form.ilves-login {
+    width: 200px;
+  }
+
+  input.ilves-login-username {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  input.ilves-login-password {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  input.ilves-login-button {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+}

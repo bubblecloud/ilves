@@ -91,34 +91,32 @@ public class DefaultJettyConfiguration {
 
         // Configure Embedded jetty.
         // -------------------------
-        final boolean developmentEnvironment = DefaultJettyConfiguration.class.getClassLoader()
-                .getResource("webapp/").toExternalForm().startsWith("file:");
+        final boolean developmentEnvironment = !"true".equals(PropertiesUtil.getProperty("site", "production-mode"));
 
         final String webappUrl;
         if (developmentEnvironment) {
             webappUrl = DefaultSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm().replace(
                     "target/classes", "src/main/resources");
-            LOGGER.info("Jetty is loading static resources from src/main/resources.");
         } else {
             webappUrl = DefaultSiteUI.class.getClassLoader().getResource("webapp/").toExternalForm();
         }
+
+        LOGGER.info("Jetty is loading static resources from " + webappUrl);
 
         final WebAppContext context = new WebAppContext();
         context.setContextPath("/");
         context.setDescriptor(webappUrl + "/WEB-INF/web.xml");
         context.setResourceBase(webappUrl);
         context.setParentLoaderPriority(true);
-        if ("true".equals(PropertiesUtil.getProperty("site", "production-mode"))) {
+        if (!developmentEnvironment) {
             context.setInitParameter("productionMode", "true");
             LOGGER.info("Ilves is in production mode.");
         } else {
             context.setInitParameter("productionMode", "false");
-            LOGGER.info("Ilves is in development mode.");
-        }
-        if (developmentEnvironment) {
             context.setInitParameter("cacheControl","no-cache");
             context.setInitParameter("useFileMappedBuffer", "false");
             context.setInitParameter("maxCachedFiles", "0");
+            LOGGER.info("Ilves is in development mode.");
         }
 
         final boolean clientCertificateRequired = "true".equals(

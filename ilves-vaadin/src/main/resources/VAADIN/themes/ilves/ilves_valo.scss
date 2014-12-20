@@ -1,0 +1,33 @@
+@mixin ilves_valo {
+  .valo-content {
+    background-color: $page-color;
+    padding: 60px;
+    @include width-range($min: 801px, $max: 1100px) {
+      padding: 60px;
+    }
+    @include width-range($min: 501px, $max: 800px) {
+      padding: 40px;
+    }
+    @include width-range($min: 301px, $max: 500px) {
+      padding: 20px;
+    }
+    @include width-range($min: 0px, $max: 300px) {
+      padding: 10px;
+    }
+  }
+
+  .v-menubar-user-menu > .v-menubar-menuitem img.v-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 14px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
+    display: block;
+    margin: 0 auto 0.3em;
+    border: 5px solid #555;
+  }
+
+  .valo-menu-item .v-icon {
+    width: 24px;
+    height: 24px;
+  }
+}

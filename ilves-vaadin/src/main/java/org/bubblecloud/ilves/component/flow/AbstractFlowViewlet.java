@@ -53,13 +53,13 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
     /** The tab sheet containing flows. */
     private TabSheet tabSheet;
     /** The top layout. */
-    private HorizontalLayout bottomLayout;
+    private CssLayout bottomLayout;
     /** The bottom layout. */
-    private HorizontalLayout topLayout;
+    private CssLayout topLayout;
     /** The top layout. */
-    private HorizontalLayout bottomRightLayout;
+    private CssLayout bottomRightLayout;
     /** The bottom layout. */
-    private HorizontalLayout topRightLayout;
+    private CssLayout topRightLayout;
 
 
     @Override
@@ -68,53 +68,40 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
 
         setStyleName("ui-content");
 
-        final GridLayout layout = new GridLayout(1, 3);
+        final CssLayout layout = new CssLayout();
         layout.setSizeFull();
         this.setCompositionRoot(layout);
-        layout.setRowExpandRatio(1, 1.0f);
-        layout.setMargin(false);
-        layout.setSpacing(true);
 
-        topLayout = new HorizontalLayout();
-        layout.addComponent(topLayout, 0, 0);
+        topLayout = new CssLayout();
+        topLayout.setStyleName("flow-top");
 
         topBackButton = new Button(getSite().localize("button-back"));
-        topBackButton.setEnabled(false);
         topBackButton.addClickListener(this);
         topLayout.addComponent(topBackButton);
-        topLayout.setExpandRatio(topBackButton, 0.0f);
 
         topPathLabel = new Label("", ContentMode.HTML);
+        topPathLabel.setSizeUndefined();
 
         topLayout.addComponent(topPathLabel);
-        topLayout.setComponentAlignment(topPathLabel, Alignment.MIDDLE_LEFT);
-        topLayout.setExpandRatio(topPathLabel, 1f);
 
-        topRightLayout = new HorizontalLayout();
+        topRightLayout = new CssLayout();
         topLayout.addComponent(topRightLayout);
-        topLayout.setComponentAlignment(topRightLayout, Alignment.MIDDLE_RIGHT);
-        topLayout.setExpandRatio(topRightLayout, 0.0f);
         topLayout.setWidth(100, Unit.PERCENTAGE);
 
-        bottomLayout = new HorizontalLayout();
-        layout.addComponent(bottomLayout, 0, 2);
+        bottomLayout = new CssLayout();
+        bottomLayout.setStyleName("flow-bottom");
 
         bottomBackButton = new Button(getSite().localize("button-back"));
-        bottomBackButton.setEnabled(false);
         bottomBackButton.addClickListener(this);
         bottomLayout.addComponent(bottomBackButton);
-        bottomLayout.setExpandRatio(bottomBackButton, 0f);
 
         bottomPathLabel = new Label("", ContentMode.HTML);
+        bottomPathLabel.setSizeUndefined();
 
         bottomLayout.addComponent(bottomPathLabel);
-        bottomLayout.setExpandRatio(bottomPathLabel, 1f);
-        bottomLayout.setComponentAlignment(bottomPathLabel, Alignment.MIDDLE_LEFT);
 
-        bottomRightLayout = new HorizontalLayout();
+        bottomRightLayout = new CssLayout();
         bottomLayout.addComponent(bottomRightLayout);
-        bottomLayout.setComponentAlignment(bottomRightLayout, Alignment.MIDDLE_RIGHT);
-        bottomLayout.setExpandRatio(bottomRightLayout, 0f);
         bottomLayout.setWidth(100, Unit.PERCENTAGE);
 
 
@@ -122,7 +109,10 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
         tabSheet.setStyleName("flow-sheet");
         tabSheet.hideTabs(true);
         tabSheet.setSizeFull();
-        layout.addComponent(tabSheet, 0, 1);
+
+        layout.addComponent(topLayout);
+        layout.addComponent(tabSheet);
+        layout.addComponent(bottomLayout);
 
         addFlowlets();
 
@@ -142,10 +132,10 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
             }
             pathLabelBuilder.append(getSite().localize("view-" + view.getFlowletKey()));
         }
-        topPathLabel.setValue("&nbsp;&nbsp;&nbsp;" + pathLabelBuilder.toString());
-        bottomPathLabel.setValue("&nbsp;&nbsp;&nbsp;" + pathLabelBuilder.toString());
-        topBackButton.setEnabled(viewPath.size() > 1);
-        bottomBackButton.setEnabled(viewPath.size() > 1);
+        topPathLabel.setValue(pathLabelBuilder.toString());
+        bottomPathLabel.setValue(pathLabelBuilder.toString());
+        topLayout.setVisible(viewPath.size() > 1);
+        bottomLayout.setVisible(viewPath.size() > 1);
     }
 
     /**
@@ -222,7 +212,7 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
      * Gets top layout.
      * @return the top layout.
      */
-    public HorizontalLayout getTopRightLayout() {
+    public CssLayout getTopRightLayout() {
         return topRightLayout;
     }
 
@@ -230,7 +220,7 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
      * Gets bottom layout.
      * @return the bottom layout.
      */
-    public HorizontalLayout getBottomRightLayout() {
+    public CssLayout getBottomRightLayout() {
         return bottomRightLayout;
     }
 }

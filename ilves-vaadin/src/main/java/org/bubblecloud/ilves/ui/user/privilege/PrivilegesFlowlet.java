@@ -105,18 +105,12 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
             }
         });
 
-        final VerticalLayout panel = new VerticalLayout();
+        final CssLayout panel = new CssLayout();
         panel.addComponent(titleLayout);
         panel.addComponent(matrixLayout);
         panel.addComponent(buttonLayout);
-        panel.setSpacing(true);
-        panel.setMargin(true);
 
-        final Panel mainLayout = new Panel();
-        mainLayout.setStyleName(Reindeer.PANEL_LIGHT);
-        mainLayout.setContent(panel);
-
-        setCompositionRoot(mainLayout);
+        setCompositionRoot(panel);
     }
 
     @Override
