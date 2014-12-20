@@ -1,14 +1,14 @@
 @mixin ilves_flow {
   div.flow-top {
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     div.v-label {
-      padding: 4px 10px 4px 10px;
+      padding: 6px 12px 6px 12px;
     }
   }
   div.flow-bottom {
     padding-top: 20px;
     div.v-label {
-      padding: 4px 6px 4px 6px;
+      padding: 6px 12px 6px 12px;
     }
   }
 }

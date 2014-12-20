@@ -134,8 +134,12 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
         }
         topPathLabel.setValue(pathLabelBuilder.toString());
         bottomPathLabel.setValue(pathLabelBuilder.toString());
-        topLayout.setVisible(viewPath.size() > 1);
-        bottomLayout.setVisible(viewPath.size() > 1);
+        topLayout.setVisible(viewPath.size() > 1 || topRightLayout.getComponentCount() > 0);
+        bottomLayout.setVisible(viewPath.size() > 1 || bottomRightLayout.getComponentCount() > 0);
+        topPathLabel.setVisible(viewPath.size() > 1);
+        bottomPathLabel.setVisible(viewPath.size() > 1);
+        topBackButton.setVisible(viewPath.size() > 1);
+        bottomBackButton.setVisible(viewPath.size() > 1);
     }
 
     /**

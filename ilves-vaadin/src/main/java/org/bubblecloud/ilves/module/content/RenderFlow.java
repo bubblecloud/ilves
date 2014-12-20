@@ -38,6 +38,7 @@ public final class RenderFlow extends AbstractFlowViewlet {
         final Flowlet contentPrivilegesFlowlet = new PrivilegesFlowlet();
         addFlowlet(contentPrivilegesFlowlet);
         setRootFlowlet(markdownFlowlet);
+        setStyleName("ui-content");
     }
 
 }

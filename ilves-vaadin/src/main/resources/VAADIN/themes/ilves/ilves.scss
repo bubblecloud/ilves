@@ -33,16 +33,18 @@ $application-background-color: #FFFFFF;
     cursor: default;
   }
 
-  div.ui-content h1 {
-    font-size: 2em;
-    margin-top: 0px;
-    margin-bottom: 0px;
-  }
+  div.ui-content {
+    h1 {
+      font-size: 2em;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
 
-  div.ui-content h2 {
-    font-size: 1.5em;
-    margin-top: 8px;
-    margin-bottom: 0px;
+    h2 {
+      font-size: 1.5em;
+      margin-top: 8px;
+      margin-bottom: 0px;
+    }
   }
 
   .v-caption .v-required-field-indicator {
@@ -53,6 +55,17 @@ $application-background-color: #FFFFFF;
 
   div.wiki-content {
     overflow: hidden;
+    h1 {
+      font-size: 2.4em;
+      margin-top: 1.4em;
+      margin-bottom: 1em;
+    }
+
+    h2 {
+      font-size: 1.6em;
+      margin-top: 1.6em;
+      margin-bottom: 0.77em;
+    }
   }
 
   .image-button {

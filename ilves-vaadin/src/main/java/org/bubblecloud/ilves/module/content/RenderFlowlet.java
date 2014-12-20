@@ -16,10 +16,7 @@
 package org.bubblecloud.ilves.module.content;
 
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
 import org.bubblecloud.ilves.component.flow.AbstractFlowViewlet;
 import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
@@ -42,8 +39,6 @@ public final class RenderFlowlet extends AbstractFlowlet {
 
     private final Button topEditButton;
 
-    private final Button bottomEditButton;
-
     public RenderFlowlet(final Content content) {
         this.content = content;
         topEditButton = getSite().getButton("edit");
@@ -53,18 +48,7 @@ public final class RenderFlowlet extends AbstractFlowlet {
                 final ContentFlowlet contentFlowlet = getFlow().getFlowlet(ContentFlowlet.class);
                 contentFlowlet.edit(content, false);
                 ((AbstractFlowViewlet) getFlow()).getTopRightLayout().removeComponent(topEditButton);
-                ((AbstractFlowViewlet) getFlow()).getBottomRightLayout().removeComponent(bottomEditButton);
-                getFlow().forward(ContentFlowlet.class);
-            }
-        });
-        bottomEditButton = getSite().getButton("edit");
-        bottomEditButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                final ContentFlowlet contentFlowlet = getFlow().getFlowlet(ContentFlowlet.class);
-                contentFlowlet.edit(content, false);
-                ((AbstractFlowViewlet) getFlow()).getTopRightLayout().removeComponent(topEditButton);
-                ((AbstractFlowViewlet) getFlow()).getBottomRightLayout().removeComponent(bottomEditButton);
+                ((AbstractFlowViewlet) getFlow()).refreshPathLabels();
                 getFlow().forward(ContentFlowlet.class);
             }
         });
@@ -91,22 +75,15 @@ public final class RenderFlowlet extends AbstractFlowlet {
         }
 
         ((AbstractFlowViewlet) getFlow()).getTopRightLayout().removeComponent(topEditButton);
-        ((AbstractFlowViewlet) getFlow()).getBottomRightLayout().removeComponent(bottomEditButton);
         ((AbstractFlowViewlet) getFlow()).getTopRightLayout().addComponent(topEditButton);
-        ((AbstractFlowViewlet) getFlow()).getBottomRightLayout().addComponent(bottomEditButton);
+        ((AbstractFlowViewlet) getFlow()).refreshPathLabels();
 
-
-        final VerticalLayout layout = new VerticalLayout();
+        final CssLayout layout = new CssLayout();
         //layout.addComponent(topEditButton);
+        layout.setStyleName("wiki-content");
         layout.addComponent(new Label(html, ContentMode.HTML));
-        layout.setSpacing(true);
-        layout.setMargin(true);
 
-        final Panel panel = new Panel();
-        panel.setStyleName(Reindeer.PANEL_LIGHT);
-        panel.setContent(layout);
-
-        setCompositionRoot(panel);
+        setCompositionRoot(layout);
     }
 
     @Override
