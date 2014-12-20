@@ -65,12 +65,16 @@ public final class RenderFlowlet extends AbstractFlowlet {
         return false;
     }
 
+    public static String escapeHtml(final String markup) {
+        return StringEscapeUtils.escapeHtml(markup).replace("&quot;", "\"");
+    }
+
     @Override
     public void enter() {
         final EntityManager entityManager = Site.getCurrent().getSiteContext().getObject(EntityManager.class);
         final String html;
         try {
-            html = new Markdown4jProcessor().process(StringEscapeUtils.escapeHtml(content.getMarkup()));
+            html = new Markdown4jProcessor().process(escapeHtml(content.getMarkup()));
         } catch (IOException e) {
             throw new SiteException("Error processing markdown.", e);
         }

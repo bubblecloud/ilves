@@ -48,7 +48,7 @@ public final class RenderViewlet extends AbstractViewlet {
         try {
             if (!markupHtmlMap.containsKey(markup)) {
                 final long startTimeMillis = System.currentTimeMillis();
-                final String html = new Markdown4jProcessor().process(StringEscapeUtils.escapeHtml(markup));
+                final String html = new Markdown4jProcessor().process(RenderFlowlet.escapeHtml(markup));
                 markupHtmlMap.put(markup, html);
                 LOGGER.debug("Markup processing took: " + (System.currentTimeMillis() -  startTimeMillis) + " ms.");
             }
