@@ -18,6 +18,7 @@ package org.bubblecloud.ilves.module.content;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.bubblecloud.ilves.component.flow.AbstractFlowViewlet;
 import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
 import org.bubblecloud.ilves.exception.SiteException;
@@ -69,7 +70,7 @@ public final class RenderFlowlet extends AbstractFlowlet {
         final EntityManager entityManager = Site.getCurrent().getSiteContext().getObject(EntityManager.class);
         final String html;
         try {
-            html = new Markdown4jProcessor().process(content.getMarkup());
+            html = new Markdown4jProcessor().process(StringEscapeUtils.escapeHtml(content.getMarkup()));
         } catch (IOException e) {
             throw new SiteException("Error processing markdown.", e);
         }

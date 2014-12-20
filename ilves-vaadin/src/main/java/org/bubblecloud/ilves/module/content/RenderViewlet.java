@@ -17,6 +17,7 @@ package org.bubblecloud.ilves.module.content;
 
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Label;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.bubblecloud.ilves.cache.InMemoryCache;
 import org.bubblecloud.ilves.exception.SiteException;
@@ -47,7 +48,7 @@ public final class RenderViewlet extends AbstractViewlet {
         try {
             if (!markupHtmlMap.containsKey(markup)) {
                 final long startTimeMillis = System.currentTimeMillis();
-                final String html = new Markdown4jProcessor().process(markup);
+                final String html = new Markdown4jProcessor().process(StringEscapeUtils.escapeHtml(markup));
                 markupHtmlMap.put(markup, html);
                 LOGGER.debug("Markup processing took: " + (System.currentTimeMillis() -  startTimeMillis) + " ms.");
             }
