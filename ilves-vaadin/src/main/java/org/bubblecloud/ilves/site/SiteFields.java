@@ -112,14 +112,14 @@ public final class SiteFields {
                 false, true, true), new EmailValidator("Email address is not valid."));
         SiteFields.add(Company.class, new FieldDescriptor("invoicingEmailAddress", "Invoicing Email Address", TextField.class, null, 150, null, String.class, "",
                 false, true, true), new EmailValidator("Email address is not valid."));
-        SiteFields.add(Company.class, new FieldDescriptor("selfRegistration", "Self Registration", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
-        SiteFields.add(Company.class, new FieldDescriptor("emailPasswordReset", "Email Password Reset", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
+        SiteFields.add(Company.class, new FieldDescriptor("selfRegistration", "Self Registration", CheckBox.class, null, 100, null, Boolean.class, false, false, true, false));
+        SiteFields.add(Company.class, new FieldDescriptor("emailPasswordReset", "Email Password Reset", CheckBox.class, null, 100, null, Boolean.class, false, false, true, false));
         SiteFields.add(Company.class, new FieldDescriptor("maxFailedLoginCount", "Max Failed Logins", TextField.class, new StringToIntegerConverter(), 50, null, Integer.class, null,
                 false, true, false).addValidator(new IntegerRangeValidator("Invalid value", 0, 10)));
         SiteFields.add(Company.class, new FieldDescriptor("passwordValidityPeriodDays", "Password Validity Period", TextField.class, new StringToIntegerConverter(), 50, null, Integer.class, null,
                 false, true, true).addValidator(new IntegerRangeValidator("Invalid value", 0, 10)));
-        SiteFields.add(Company.class, new FieldDescriptor("openIdLogin", "Open ID Login", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
-        SiteFields.add(Company.class, new FieldDescriptor("certificateLogin", "Certificate Login", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
+        SiteFields.add(Company.class, new FieldDescriptor("openIdLogin", "Open ID Login", CheckBox.class, null, 100, null, Boolean.class, false, false, true, false));
+        SiteFields.add(Company.class, new FieldDescriptor("certificateLogin", "Certificate Login", CheckBox.class, null, 100, null, Boolean.class, false, false, true, false));
         SiteFields.add(Company.class, new FieldDescriptor("gaTrackingId", "GA Tracking ID", TextField.class, null, 100, null, String.class, "", false, true, false));
         SiteFields.add(Company.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
                 true, true));
@@ -135,7 +135,7 @@ public final class SiteFields {
                 null, true, true, false));
         SiteFields.add(Customer.class, new FieldDescriptor("adminGroup", "Admins", GroupField.class, null, 100, null, Group.class,
                 null, true, true, false));
-        SiteFields.add(Customer.class, new FieldDescriptor("company", "Is Company", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
+        SiteFields.add(Customer.class, new FieldDescriptor("company", "Is Company", CheckBox.class, null, 100, null, Boolean.class, false, false, true, false));
         SiteFields.add(Customer.class, new FieldDescriptor("companyName", "Company Name", TextField.class, null, -1, null, String.class, "", false, true, false));
         SiteFields.add(Customer.class, new FieldDescriptor("companyCode", "Company Code", TextField.class, null, 100, null, String.class, "", false, true, false));
         SiteFields.add(Customer.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
@@ -166,12 +166,12 @@ public final class SiteFields {
         SiteFields.add(User.class, new FieldDescriptor("firstName", "First Name", TextField.class, null, 100, null, String.class, "", false, true, true));
         SiteFields.add(User.class, new FieldDescriptor("lastName", "Last Name", TextField.class, null, 100, null, String.class, "", false, true, true));
         SiteFields.add(User.class, new FieldDescriptor("emailAddress", "Email Address", TextField.class, null, -1, null, String.class, "", false, true, true), new EmailValidator("Email address is not valid."));
-        SiteFields.add(User.class, new FieldDescriptor("emailAddressValidated", "Email Validated", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
+        SiteFields.add(User.class, new FieldDescriptor("emailAddressValidated", "Email Validated", CheckBox.class, null, 100, null, Boolean.class, false, false, true, false));
         SiteFields.add(User.class, new FieldDescriptor("passwordHash", "Password", PasswordField.class, null, 100, null, String.class, "", false, true, true));
         SiteFields.add(User.class, new FieldDescriptor("passwordExpirationDate", "Password Expiration", DatePartField.class, new DatePartConverter(), 100, null, Date.class, null, true,
                 true, false));
         SiteFields.add(User.class, new FieldDescriptor("phoneNumber", "Phone Number", TextField.class, null, 150, null, String.class, "", false, true, true));
-        SiteFields.add(User.class, new FieldDescriptor("lockedOut", "Locked Out", CheckBox.class, null, 100, null, Boolean.class, false, true, true, true));
+        SiteFields.add(User.class, new FieldDescriptor("lockedOut", "Locked Out", CheckBox.class, null, 100, null, Boolean.class, false, true, true, false));
         SiteFields.add(User.class, new FieldDescriptor("failedLoginCount", "Failed Logins", TextField.class, new StringToIntegerConverter(), 50, null, Integer.class, null,
                 true, true, true));
         SiteFields.add(User.class, new FieldDescriptor("openIdIdentifier", "Open ID Identifier", TextField.class, null, -1, null, String.class, "", false, true, false));
@@ -202,7 +202,7 @@ public final class SiteFields {
         SiteFields.add(UserDirectory.class, new FieldDescriptor("remoteLocalGroupMapping", "Remote-Local Group Mapping", TextField.class, null, 200, null, String.class, "", false, true, true));
         SiteFields.add(UserDirectory.class, new FieldDescriptor("requiredRemoteGroup", "Required Remote Group", TextField.class, null, 100, null, String.class, "", false, true, true));
         SiteFields.add(UserDirectory.class, new FieldDescriptor("subNetWhiteList", "Sub Net White List", TextField.class, null, 200, null, String.class, "", false, true, true));
-        SiteFields.add(UserDirectory.class, new FieldDescriptor("enabled", "Enabled", CheckBox.class, null, 100, null, Boolean.class, false, false, true, true));
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("enabled", "Enabled", CheckBox.class, null, 100, null, Boolean.class, false, false, true, false));
         SiteFields.add(UserDirectory.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
                 true, true));
         SiteFields.add(UserDirectory.class, new FieldDescriptor("modified", "Modified", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null,
