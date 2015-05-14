@@ -132,8 +132,8 @@ public class DefaultValoView extends AbstractValoView {
             settingsItem.addItem(Site.getCurrent().localize("button-logout"), new MenuBar.Command() {
                 @Override
                 public void menuSelected(MenuBar.MenuItem selectedItem) {
-                    LoginService.logout(Site.getCurrent().getSiteContext());
                     final Company company = Site.getCurrent().getSiteContext().getObject(Company.class);
+                    LoginService.logout(Site.getCurrent().getSiteContext());
                     getUI().getPage().setLocation(company.getUrl());
                     getSession().getSession().invalidate();
                     getSession().close();

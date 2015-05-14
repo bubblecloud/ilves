@@ -19,12 +19,23 @@ import org.bubblecloud.ilves.model.Company;
 import org.bubblecloud.ilves.model.User;
 
 /**
- * Login service.
+ * Login service for performing directory / database layer login / logout operations. This service does not
+ * perform user login / logout for web container layer.
  *
  * @author Tommi S.E. Laukkanen
  */
 public class LoginService {
 
+    /**
+     * Execute login operations on directory / database layer with given email address and password.
+     * This function does not perform user login for web container layer.
+     * @param context the security context
+     * @param company the company
+     * @param user the user
+     * @param emailAddress the email addres
+     * @param password the password
+     * @return null if success or error key
+     */
     public static String login(final SecurityContext context, final Company company, final User user, final String emailAddress, final String password) {
         final String errorKey = PasswordLoginUtil.login(emailAddress, context.getRemoteHost(),
                 context.getRemoteIpAddress(), context.getRemotePort(),
@@ -37,7 +48,14 @@ public class LoginService {
         return errorKey;
     }
 
+    /**
+     * Execute logout operations on directory / database layer with given email address and password.
+     * This function does not perform user logout for web container layer.
+     * @param context the security context
+     */
     public static void logout(final SecurityContext context) {
         AuditService.log(context, " logout");
+        context.getEntityManager().clear();
+        context.getAuditEntityManager().clear();
     }
 }
