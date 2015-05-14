@@ -9,6 +9,7 @@ import org.bubblecloud.ilves.exception.SiteException;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Class for parsing Jade templates.
@@ -42,7 +43,8 @@ public class JadeUtil {
 
         try {
             final JadeTemplate template = config.getTemplate("name");
-            final String htmlString = config.renderTemplate(template, model);
+            final String htmlString = config.renderTemplate(template, model).replace(
+                    "UITRANSACTIONID", UUID.randomUUID().toString());
             return new ByteArrayInputStream(htmlString.getBytes("UTF-8"));
         } catch (final IOException e) {
             LOGGER.error("Error parsing JADE template: " + templatePath, e);

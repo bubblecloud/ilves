@@ -5,6 +5,11 @@ import org.bubblecloud.ilves.exception.SiteException;
 import org.bubblecloud.ilves.model.*;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 /**
@@ -359,4 +364,60 @@ public class SecurityService {
             return true;
         }
     }
+
+    public static void addUserSession(final EntityManager entityManager, final UserSession userSession) {
+        entityManager.getTransaction().begin();
+        try {
+            entityManager.persist(userSession);
+            entityManager.getTransaction().commit();
+        } catch (final Exception e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw new RuntimeException("Unable to persist user session.", e);
+        }
+    }
+
+    /**
+     * Gets user session.
+     * @param entityManager the entity manager
+     * @param sessionIdHash the session ID hash
+     * @return user session or null
+     */
+    public static UserSession getUserSessionByIdHash(final EntityManager entityManager, final String sessionIdHash) {
+        final CriteriaBuilder queryBuilder = entityManager.getCriteriaBuilder();
+        final CriteriaQuery<UserSession> criteriaQuery = queryBuilder.createQuery(UserSession.class);
+        final Root<UserSession> root = criteriaQuery.from(UserSession.class);
+        final Predicate condition = queryBuilder.equal(root.get("sessionIdHash"), sessionIdHash);
+        criteriaQuery.where(condition);
+        final TypedQuery<UserSession> typedQuery = entityManager.createQuery(criteriaQuery);
+        final List<UserSession> resultList = typedQuery.getResultList();
+        if (resultList.size() > 0) {
+            return resultList.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Gets user session.
+     * @param entityManager the entity manager
+     * @param loginTransactionIdHash the login transaction ID hash
+     * @return user session or null
+     */
+    public static UserSession getUserSessionByLoginTransactionIdHash(final EntityManager entityManager, final String loginTransactionIdHash) {
+        final CriteriaBuilder queryBuilder = entityManager.getCriteriaBuilder();
+        final CriteriaQuery<UserSession> criteriaQuery = queryBuilder.createQuery(UserSession.class);
+        final Root<UserSession> root = criteriaQuery.from(UserSession.class);
+        final Predicate condition = queryBuilder.equal(root.get("loginTransactionIdHash"), loginTransactionIdHash);
+        criteriaQuery.where(condition);
+        final TypedQuery<UserSession> typedQuery = entityManager.createQuery(criteriaQuery);
+        final List<UserSession> resultList = typedQuery.getResultList();
+        if (resultList.size() > 0) {
+            return resultList.get(0);
+        } else {
+            return null;
+        }
+    }
+
 }

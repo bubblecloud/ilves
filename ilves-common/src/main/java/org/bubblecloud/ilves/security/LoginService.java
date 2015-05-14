@@ -15,8 +15,13 @@
  */
 package org.bubblecloud.ilves.security;
 
+import org.apache.commons.codec.binary.Hex;
 import org.bubblecloud.ilves.model.Company;
 import org.bubblecloud.ilves.model.User;
+import org.bubblecloud.ilves.model.UserSession;
+
+import java.security.MessageDigest;
+import java.util.Date;
 
 /**
  * Login service for performing directory / database layer login / logout operations. This service does not
@@ -34,18 +39,50 @@ public class LoginService {
      * @param user the user
      * @param emailAddress the email addres
      * @param password the password
+     * @param sessionId the session ID for blocking duplicated login posts for same session
      * @return null if success or error key
      */
-    public static String login(final SecurityContext context, final Company company, final User user, final String emailAddress, final String password) {
+    public static String login(final SecurityContext context, final Company company, final User user, final String emailAddress, final String password, final String sessionId, final String loginTransactionId) {
+        final String sessionIdHash = calculateIdHash(sessionId);
+        final String loginTransactionIdHash = calculateIdHash(loginTransactionId);
+
+        if (SecurityService.getUserSessionByIdHash(context.getEntityManager(), sessionIdHash) != null) {
+            return "message-login-failed-duplicate-login-for-session";
+        }
+        if (SecurityService.getUserSessionByLoginTransactionIdHash(context.getEntityManager(), loginTransactionIdHash) != null) {
+            return "message-login-failed-duplicate-login-for-login-transaction-id";
+        }
+
+
         final String errorKey = PasswordLoginUtil.login(emailAddress, context.getRemoteHost(),
                 context.getRemoteIpAddress(), context.getRemotePort(),
                 context.getEntityManager(), company, user, password);
         if (errorKey == null) {
+
+            final UserSession userSession = new UserSession();
+            userSession.setSessionIdHash(sessionIdHash);
+            userSession.setLoginTransactionIdHash(loginTransactionIdHash);
+            userSession.setUser(user);
+            userSession.setCreated(new Date());
+
+            SecurityService.addUserSession(context.getEntityManager(), userSession);
+
             AuditService.log(context, "password login success", "User", user.getUserId(), user.getEmailAddress());
         } else {
             AuditService.log(context, "password login failure", "User", user != null ? user.getUserId() : null, emailAddress);
         }
         return errorKey;
+    }
+
+    public static String calculateIdHash(String sessionId) {
+        final MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+            md.update(sessionId.getBytes("UTF-8")); // Change this to "UTF-16" if needed
+        } catch (final Exception e) {
+            throw new RuntimeException("Unable to compute session ID hash.", e);
+        }
+        return Hex.encodeHexString(md.digest());
     }
 
     /**

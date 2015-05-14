@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+    <changeSet author="tlaukkan (generated)" id="f106dbf4-91c9-40b7-8ffe-73683839779a">
+        <createTable tableName="usersession">
+            <column name="usersessionid" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sessionidhash" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="logintransactionidhash" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_userid" type="VARCHAR(36)"/>
+        </createTable>
+        <addPrimaryKey columnNames="usersessionid" constraintName="usersession_pkey" tableName="usersession"/>
+        <addForeignKeyConstraint baseColumnNames="user_userid" baseTableName="usersession" constraintName="fk_usersession_user_userid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="userid" referencedTableName="user_"/>
+        <createIndex indexName="index_usersession_sessionidhash" tableName="usersession" unique="true">
+            <column name="sessionidhash"/>
+        </createIndex>
+        <createIndex indexName="index_usersession_logintransactionidhash" tableName="usersession" unique="true">
+            <column name="logintransactionidhash"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
+

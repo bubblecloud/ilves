@@ -7,6 +7,7 @@
 		<class>org.bubblecloud.ilves.model.PostalAddress</class>
 		<class>org.bubblecloud.ilves.model.User</class>
         <class>org.bubblecloud.ilves.model.UserDirectory</class>
+		<class>org.bubblecloud.ilves.model.UserSession</class>
         <class>org.bubblecloud.ilves.model.EmailPasswordReset</class>
 		<class>org.bubblecloud.ilves.model.Group</class>
 		<class>org.bubblecloud.ilves.model.GroupMember</class>

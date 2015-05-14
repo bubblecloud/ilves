@@ -117,6 +117,7 @@ public final class DefaultSiteUI extends AbstractSiteUI {
 
                             final String emailAddress = request.getParameter("username");
                             final String password = request.getParameter("password");
+                            final String transactionId = request.getParameter("uiTransactionId");
 
                             final EntityManager entityManager = getSite().getSiteContext().getEntityManager();
                             final Locale locale = getLocale();
@@ -125,7 +126,7 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                             final User user = UserDao.getUser(entityManager, company, emailAddress);
 
                             final String errorKey = LoginService.login(getSite().getSiteContext(), company,
-                                    user, emailAddress, password);
+                                    user, emailAddress, password, VaadinSession.getCurrent().getSession().getId(), transactionId);
 
                             if (errorKey == null) {
 
@@ -149,6 +150,8 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                                     setNotification(DefaultSiteUI.getLocalizationProvider().localize(
                                             "message-login-success", locale), Notification.Type.TRAY_NOTIFICATION);
                                 }
+                            } else if (errorKey.equals("message-login-failed-duplicate-login-for-login-transaction-id")) {
+                                // Silently fail.
                             } else {
                                 // Login failure
                                 setNotification(DefaultSiteUI.getLocalizationProvider().localize(errorKey, locale),
