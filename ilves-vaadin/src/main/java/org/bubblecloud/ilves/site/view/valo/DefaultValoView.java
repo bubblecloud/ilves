@@ -115,8 +115,8 @@ public class DefaultValoView extends AbstractValoView {
         final String userMenuCaption;
         final Resource userMenuIcon;
         if (user == null) {
-            userMenuCaption = Site.getCurrent().localize("page-link-login");
             userMenuIcon = new ThemeResource("ilves_logo.png");
+            userMenuCaption = "";
         } else {
             final URL gravatarUrl = GravatarUtil.getGravatarUrl(user, 64);
             userMenuIcon = new ExternalResource(gravatarUrl);
@@ -140,13 +140,6 @@ public class DefaultValoView extends AbstractValoView {
                     getUI().getPage().setLocation(company.getUrl());
                     getSession().getSession().invalidate();
                     getSession().close();
-                }
-            });
-        } else {
-            settingsItem.addItem(Site.getCurrent().localize("page-link-login"), new MenuBar.Command() {
-                @Override
-                public void menuSelected(MenuBar.MenuItem selectedItem) {
-                    UI.getCurrent().getNavigator().navigateTo("login");
                 }
             });
         }

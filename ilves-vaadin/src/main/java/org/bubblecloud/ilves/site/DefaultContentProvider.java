@@ -111,7 +111,7 @@ public class DefaultContentProvider implements ContentProvider {
         final NavigationVersion navigationVersion = new NavigationVersion(0, "users", null, true);
 
         navigationVersion.addRootPage("login");
-        navigationVersion.addRootPage("configuration");
+        navigationVersion.addRootPage("login", "configuration");
         navigationVersion.addChildPage("configuration", "account");
         navigationVersion.addChildPage("configuration", "users");
         navigationVersion.addChildPage("configuration", "groups");
