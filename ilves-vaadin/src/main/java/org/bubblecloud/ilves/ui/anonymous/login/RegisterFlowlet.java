@@ -204,7 +204,7 @@ public final class RegisterFlowlet extends AbstractFlowlet {
                     final Thread emailThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            EmailUtil.send(PropertiesUtil.getProperty("site", "smtp-host"),
+                            EmailUtil.send(
                                     user.getEmailAddress(), company.getSupportEmailAddress(), "Email Validation",
                                     "Please validate your email by browsing to this URL: " + url);
                         }

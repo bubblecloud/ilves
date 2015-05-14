@@ -15,11 +15,11 @@
  */
 package org.bubblecloud.ilves.util;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
 import javax.activation.DataSource;
-import javax.mail.Message;
-import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -28,7 +28,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 
@@ -38,21 +40,63 @@ import java.util.Properties;
  * @author Tommi S.E. Laukkanen
  */
 public class EmailUtil {
+    /** The logger. */
+    private static final Logger LOGGER = Logger.getLogger(EmailUtil.class);
 
     /**
      * Sends email.
-     * @param smtpHost the SMTP host
-     * @param to target email address
+     * @param to target email addresses
      * @param from from email address
      * @param subject the email subject
      * @param body the email body
      */
-    public static void send(final String smtpHost,
-                            final String to, final String from, final String subject, final String body) {
+    public static void send(final String to, final String from, final String subject, final String body) {
+        final String smtpHost = PropertiesUtil.getProperty("site", "smtp-host");
+        final String smtpPort = PropertiesUtil.getProperty("site", "smtp-port");
+        final String smtpUser = PropertiesUtil.getProperty("site", "smtp-user");
+        final String smtpPassword = PropertiesUtil.getProperty("site", "smtp-password");
+        send(smtpHost, smtpPort, smtpUser, smtpPassword, Collections.singletonList(to), from, subject, body);
+    }
+
+    /**
+     * Sends email.
+     * @param smtpHost the SMTP host
+     * @param smtpPort the SMTP host port
+     * @param smtpUser the SMTP user
+     * @param smtpPassword the SMTP user password
+     * @param to target email addresses
+     * @param from from email address
+     * @param subject the email subject
+     * @param body the email body
+     */
+    public static void send(final String smtpHost, final String smtpPort,
+                            final String smtpUser, final String smtpPassword,
+                            final List<String> to, final String from, final String subject, final String body) {
         try {
             final Properties properties = System.getProperties();
             properties.put("mail.smtp.host", smtpHost);
-            final Session session = Session.getDefaultInstance(properties, null);
+
+            if (!StringUtils.isEmpty(smtpPort)) {
+                properties.put("mail.smtp.port", smtpPort);
+            }
+
+            final Session session;
+            if (StringUtils.isEmpty(smtpUser) || StringUtils.isEmpty(smtpPassword)) {
+                session = Session.getDefaultInstance(properties, null);
+                LOGGER.info("Sending unauthenticated plain text transmission of email via "
+                        + smtpHost + ": " + smtpPort + " from address: " + from);
+            } else {
+                properties.put("mail.smtp.auth", "true");
+                properties.put("mail.smtp.starttls.enable", "true");
+                session = Session.getInstance(properties,
+                        new javax.mail.Authenticator() {
+                            protected PasswordAuthentication getPasswordAuthentication() {
+                                return new PasswordAuthentication(smtpUser, smtpPassword);
+                            }
+                        });
+                LOGGER.info("Sending authenticated TLS encrypted transmission of email via "
+                        + smtpHost + ": " + smtpPort + " from address: " + from);
+            }
 
             // Text part
             final MimeBodyPart textPart = new MimeBodyPart();
@@ -85,7 +129,20 @@ public class EmailUtil {
             message.setHeader("X-Mailer", "Site Kit");
             message.setSentDate(new Date());
             message.setFrom(new InternetAddress(from));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
+
+            if (to.size() == 1) {
+                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to.get(0), false));
+            } else {
+                final InternetAddress[] recipientAddresses = new InternetAddress[to.size()];
+                for (int i = 0; i < to.size(); i++) {
+                    final InternetAddress[] parsedAddress = InternetAddress.parse(to.get(i), false);
+                    if (parsedAddress.length == 1) {
+                        recipientAddresses[i] = parsedAddress[0];
+                    }
+                }
+                message.setRecipients(Message.RecipientType.BCC, recipientAddresses);
+            }
+
             message.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(from, false));
             message.setSubject(subject);
             message.setContent(multiPartContent);

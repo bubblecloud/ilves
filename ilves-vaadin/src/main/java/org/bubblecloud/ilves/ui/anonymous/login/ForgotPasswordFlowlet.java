@@ -168,7 +168,7 @@ public final class ForgotPasswordFlowlet extends AbstractFlowlet {
                     final Thread emailThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            EmailUtil.send(PropertiesUtil.getProperty("site", "smtp-host"),
+                            EmailUtil.send(
                                     user.getEmailAddress(), company.getSupportEmailAddress(), "Password Reset Link",
                                     "Password reset has been requested for your user account." +
                                             "You can perform the reset using the following link: " + url);
