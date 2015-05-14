@@ -15,7 +15,6 @@
  */
 package org.bubblecloud.ilves.site;
 
-import org.bubblecloud.ilves.oauth.OpenAuthViewlet;
 import org.bubblecloud.ilves.security.DefaultRoles;
 import org.bubblecloud.ilves.site.view.valo.DefaultValoView;
 import org.bubblecloud.ilves.ui.AccessDeniedViewlet;
@@ -103,11 +102,6 @@ public class DefaultContentProvider implements ContentProvider {
         openidlogin.setViewerRoles(DefaultRoles.ANONYMOUS);
         openidlogin.setViewletClass("content", OpenIdLoginViewlet.class);
         viewDescriptors.add(openidlogin);
-
-        final ViewDescriptor oauth = new ViewDescriptor("oauth", "OAuth", DefaultValoView.class);
-        oauth.setViewerRoles(DefaultRoles.ANONYMOUS);
-        oauth.setViewletClass("content", OpenAuthViewlet.class);
-        viewDescriptors.add(oauth);
 
         final ViewDescriptor reset = new ViewDescriptor("reset", "Password Reset", DefaultValoView.class);
         reset.setViewletClass("content", PasswordResetViewlet.class);
