@@ -24,6 +24,7 @@ import org.bubblecloud.ilves.cache.UserClientCertificateCache;
 import org.bubblecloud.ilves.model.Company;
 import org.bubblecloud.ilves.model.Group;
 import org.bubblecloud.ilves.model.User;
+import org.bubblecloud.ilves.security.OpenAuthService;
 import org.bubblecloud.ilves.security.CompanyDao;
 import org.bubblecloud.ilves.security.LoginService;
 import org.bubblecloud.ilves.security.UserDao;
@@ -110,6 +111,30 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                                                  VaadinRequest request,
                                                  VaadinResponse response)
                             throws IOException {
+                        final VaadinServletResponse vaadinServletResponse = (VaadinServletResponse) response;
+                        final String pathInfo = request.getPathInfo();
+
+                        if (pathInfo.contains("oauthredirect")) {
+                            final EntityManager entityManager = getSite().getSiteContext().getEntityManager();
+                            final Company company = resolveCompany(entityManager, (VaadinServletRequest) request);
+
+                            final String code = request.getParameter("code");
+
+                            final Locale locale = getLocale();
+
+                            final User user = OpenAuthService.processOAuthRedirect(getSite().getSiteContext(), company, code);
+
+                            if (user!= null) {
+                                login(locale, entityManager, company, user);
+                            } else {
+                                setNotification(DefaultSiteUI.getLocalizationProvider().localize("message-login-failed",
+                                                locale), Notification.Type.WARNING_MESSAGE);
+                            }
+
+                            vaadinServletResponse.sendRedirect(company.getUrl());
+                            return true;
+                        }
+
                         if (!StringUtils.isEmpty(request.getParameter("username")) &&
                                 !StringUtils.isEmpty(request.getParameter("password")) &&
                                 getSession() != null &&
@@ -119,9 +144,9 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                             final String password = request.getParameter("password");
                             final String transactionId = request.getParameter("uiTransactionId");
 
-                            final EntityManager entityManager = getSite().getSiteContext().getEntityManager();
                             final Locale locale = getLocale();
 
+                            final EntityManager entityManager = getSite().getSiteContext().getEntityManager();
                             final Company company = resolveCompany(entityManager, (VaadinServletRequest) request);
                             final User user = UserDao.getUser(entityManager, company, emailAddress);
 
@@ -131,25 +156,7 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                             if (errorKey == null) {
 
                                 // Login success
-                                final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
-                                DefaultSiteUI.getSecurityProvider().setUser(user, groups);
-
-                                // Check for imminent password expiration.
-                                if (user.getPasswordExpirationDate() != null
-                                        && new DateTime().plusDays(14).toDate().getTime()
-                                        > user.getPasswordExpirationDate().getTime() ) {
-                                    final DateTime expirationDate = new DateTime(user.getPasswordExpirationDate());
-                                    final DateTime currentDate = new DateTime();
-                                    final long daysUntilExpiration = new Duration(currentDate.toDate().getTime(),
-                                            expirationDate.toDate().getTime()).getStandardDays();
-
-                                    setNotification( DefaultSiteUI.getLocalizationProvider().localize(
-                                            "message-password-expires-in-days", locale)
-                                            + ": " + daysUntilExpiration, Notification.Type.WARNING_MESSAGE);
-                                } else {
-                                    setNotification(DefaultSiteUI.getLocalizationProvider().localize(
-                                            "message-login-success", locale), Notification.Type.TRAY_NOTIFICATION);
-                                }
+                                login(locale, entityManager, company, user);
                             } else if (errorKey.equals("message-login-failed-duplicate-login-for-login-transaction-id")) {
                                 // Silently fail.
                             } else {
@@ -160,6 +167,28 @@ public final class DefaultSiteUI extends AbstractSiteUI {
 
                         }
                         return false; // No response was written
+                    }
+
+                    public void login(Locale locale, EntityManager entityManager, Company company, User user) {
+                        final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
+                        DefaultSiteUI.getSecurityProvider().setUser(user, groups);
+
+                        // Check for imminent password expiration.
+                        if (user.getPasswordExpirationDate() != null
+                                && new DateTime().plusDays(14).toDate().getTime()
+                                > user.getPasswordExpirationDate().getTime() ) {
+                            final DateTime expirationDate = new DateTime(user.getPasswordExpirationDate());
+                            final DateTime currentDate = new DateTime();
+                            final long daysUntilExpiration = new Duration(currentDate.toDate().getTime(),
+                                    expirationDate.toDate().getTime()).getStandardDays();
+
+                            setNotification( DefaultSiteUI.getLocalizationProvider().localize(
+                                    "message-password-expires-in-days", locale)
+                                    + ": " + daysUntilExpiration, Notification.Type.WARNING_MESSAGE);
+                        } else {
+                            setNotification(DefaultSiteUI.getLocalizationProvider().localize(
+                                    "message-login-success", locale), Notification.Type.TRAY_NOTIFICATION);
+                        }
                     }
                 });
     }
