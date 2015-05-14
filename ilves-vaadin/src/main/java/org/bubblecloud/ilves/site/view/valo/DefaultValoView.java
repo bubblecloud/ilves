@@ -51,6 +51,9 @@ public class DefaultValoView extends AbstractValoView {
      */
     public DefaultValoView() throws IOException {
         setImmediate(true);
+        if (!UI.getCurrent().getStyleName().contains(ValoTheme.UI_WITH_MENU)) {
+            UI.getCurrent().addStyleName(ValoTheme.UI_WITH_MENU);
+        }
     }
 
     /**
