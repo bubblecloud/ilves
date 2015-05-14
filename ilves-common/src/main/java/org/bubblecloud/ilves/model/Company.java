@@ -101,6 +101,22 @@ public final class Company implements Serializable {
     @Column(nullable = false)
     private boolean certificateLogin;
 
+    /** Flag for enabling OAuth login. */
+    @Column(nullable = false)
+    private boolean oAuthLogin;
+
+    /** Flag for enabling OAuth self registration. */
+    @Column(nullable = false)
+    private boolean oAuthSelfRegistration;
+
+    /** GitHub client ID. */
+    @Column(nullable = true)
+    private String gitHubClientId;
+
+    /** GitHub client secret. */
+    @Column(nullable = true)
+    private String gitHubClientSecret;
+
     /** Password validity period in days. 0 corresponds to password never expiring. */
     @Column(nullable = true)
     private int passwordValidityPeriodDays;
@@ -496,6 +512,38 @@ public final class Company implements Serializable {
 
     public void setGaTrackingId(String gaTrackingId) {
         this.gaTrackingId = gaTrackingId;
+    }
+
+    public String getGitHubClientId() {
+        return gitHubClientId;
+    }
+
+    public void setGitHubClientId(String gitHubClientId) {
+        this.gitHubClientId = gitHubClientId;
+    }
+
+    public String getGitHubClientSecret() {
+        return gitHubClientSecret;
+    }
+
+    public void setGitHubClientSecret(String gitHubClientSecret) {
+        this.gitHubClientSecret = gitHubClientSecret;
+    }
+
+    public boolean isoAuthLogin() {
+        return oAuthLogin;
+    }
+
+    public void setoAuthLogin(boolean oAuthLogin) {
+        this.oAuthLogin = oAuthLogin;
+    }
+
+    public boolean isoAuthSelfRegistration() {
+        return oAuthSelfRegistration;
+    }
+
+    public void setoAuthSelfRegistration(boolean oAuthSelfRegistration) {
+        this.oAuthSelfRegistration = oAuthSelfRegistration;
     }
 
     @Override

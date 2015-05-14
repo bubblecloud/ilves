@@ -15,6 +15,7 @@
  */
 package org.bubblecloud.ilves.ui.anonymous.login;
 
+import com.vaadin.event.MouseEvents;
 import com.vaadin.server.Responsive;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
@@ -24,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
 import org.bubblecloud.ilves.exception.SiteException;
 import org.bubblecloud.ilves.model.Company;
+import org.bubblecloud.ilves.security.OpenAuthService;
 import org.bubblecloud.ilves.util.JadeUtil;
 import org.bubblecloud.ilves.util.OpenIdUtil;
 
@@ -69,6 +71,34 @@ public final class LoginFlowlet extends AbstractFlowlet {
             for (final String url : urlIconMap.keySet()) {
                 openIdLayout.addComponent(OpenIdUtil.getLoginButton(url,urlIconMap.get(url), returnViewName));
             }
+        }
+
+        if (company.isoAuthLogin()) {
+            final VerticalLayout mainPanel = new VerticalLayout();
+            mainPanel.setCaption(getSite().localize("header-oauth-login"));
+            layout.addComponent(mainPanel);
+            final HorizontalLayout oAuthLayout = new HorizontalLayout();
+            mainPanel.addComponent(oAuthLayout);
+            oAuthLayout.setMargin(new MarginInfo(false, false, true, false));
+            oAuthLayout.setSpacing(true);
+            final Embedded embedded = new Embedded(null, getSite().getIcon("openid/github_32"));
+            embedded.setStyleName("image-button");
+            embedded.addClickListener(new MouseEvents.ClickListener() {
+                @Override
+                public void click(MouseEvents.ClickEvent event) {
+                    try {
+                        final String locationUri = OpenAuthService.requestOAuthLocationUri(getSite().getSiteContext());
+                        if (locationUri != null) {
+                            getUI().getPage().setLocation(locationUri);
+                        }
+                    } catch (final Exception e) {
+                        LOGGER.error("Error in requesting OAuth location URI.", e);
+                        Notification.show("Error in requesting OAuth location URI.", Notification.Type.ERROR_MESSAGE);
+                    }
+
+                }
+            });
+            oAuthLayout.addComponent(embedded);
         }
 
         try {

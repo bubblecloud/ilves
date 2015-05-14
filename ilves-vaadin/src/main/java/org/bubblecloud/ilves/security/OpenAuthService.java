@@ -33,8 +33,29 @@ public class OpenAuthService {
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(OpenAuthService.class);
 
+    public static String requestOAuthLocationUri(final SiteContext context) {
+        try {
+            final Company company = context.getObject(Company.class);
+            if (!company.isoAuthLogin()) {
+                return null;
+            }
+            OAuthClientRequest request = OAuthClientRequest
+                    .authorizationProvider(OAuthProviderType.GITHUB)
+                    .setClientId(company.getGitHubClientId())
+                    .setRedirectURI("http://ilves.herokuapp.com/oauthredirect")
+                    .setScope("user:email")
+                    .buildQueryMessage();
+            return request.getLocationUri();
+        } catch (final Exception e) {
+            LOGGER.error("Error in oauth.", e);
+            return null;
+        }
+    }
 
     public static User processOAuthRedirect(final SiteContext context, final Company company, String code) {
+        if (!company.isoAuthLogin()) {
+            return null;
+        }
         final EntityManager entityManager = context.getEntityManager();
 
         if (StringUtils.isEmpty(code)) {
@@ -46,8 +67,8 @@ public class OpenAuthService {
             final OAuthClientRequest oAuthClientRequest = OAuthClientRequest
                     .tokenProvider(OAuthProviderType.GITHUB)
                     .setGrantType(GrantType.AUTHORIZATION_CODE)
-                    .setClientId("fb25e127304779496d00")
-                    .setClientSecret("75617e986436912f6eefc72bd05b090f5992722d")
+                    .setClientId(company.getGitHubClientId())
+                    .setClientSecret(company.getGitHubClientSecret())
                     .setRedirectURI("http://ilves.herokuapp.com/oauthredirect")
                     .setCode(code)
                     .buildQueryMessage();
@@ -68,6 +89,9 @@ public class OpenAuthService {
                 }
                 return existingUser;
             } else {
+                if (!company.isoAuthSelfRegistration()) {
+                    return null;
+                }
                 final String name = primaryVerifiedEmail.split("@")[0];
                 final String[] nameParts = name.split("\\.");
                 final String firstName = capitalizeFirstLetter(nameParts[0]);

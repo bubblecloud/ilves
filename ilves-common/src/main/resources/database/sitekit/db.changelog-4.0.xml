@@ -24,6 +24,22 @@
         <createIndex indexName="index_usersession_logintransactionidhash" tableName="usersession" unique="true">
             <column name="logintransactionidhash"/>
         </createIndex>
+        <addColumn tableName="company">
+            <column name="githubclientid" type="varchar(255)"/>
+        </addColumn>
+        <addColumn tableName="company">
+            <column name="githubclientsecret" type="varchar(255)"/>
+        </addColumn>
+        <addColumn tableName="company">
+            <column name="oauthlogin" type="BOOLEAN" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="company">
+            <column name="oauthselfregistration" type="BOOLEAN" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>
 

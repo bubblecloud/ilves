@@ -118,17 +118,16 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                             final EntityManager entityManager = getSite().getSiteContext().getEntityManager();
                             final Company company = resolveCompany(entityManager, (VaadinServletRequest) request);
 
-                            final String code = request.getParameter("code");
-
-                            final Locale locale = getLocale();
-
-                            final User user = OpenAuthService.processOAuthRedirect(getSite().getSiteContext(), company, code);
-
-                            if (user!= null) {
-                                login(locale, entityManager, company, user);
-                            } else {
-                                setNotification(DefaultSiteUI.getLocalizationProvider().localize("message-login-failed",
-                                                locale), Notification.Type.WARNING_MESSAGE);
+                            if (getSession().getSession().getAttribute("user") == null) {
+                                final String code = request.getParameter("code");
+                                final Locale locale = getLocale();
+                                final User user = OpenAuthService.processOAuthRedirect(getSite().getSiteContext(), company, code);
+                                if (user != null) {
+                                    login(locale, entityManager, company, user);
+                                } else {
+                                    setNotification(DefaultSiteUI.getLocalizationProvider().localize("message-login-failed",
+                                            locale), Notification.Type.WARNING_MESSAGE);
+                                }
                             }
 
                             vaadinServletResponse.sendRedirect(company.getUrl());
