@@ -24,10 +24,7 @@ import org.bubblecloud.ilves.cache.UserClientCertificateCache;
 import org.bubblecloud.ilves.model.Company;
 import org.bubblecloud.ilves.model.Group;
 import org.bubblecloud.ilves.model.User;
-import org.bubblecloud.ilves.security.OpenAuthService;
-import org.bubblecloud.ilves.security.CompanyDao;
-import org.bubblecloud.ilves.security.LoginService;
-import org.bubblecloud.ilves.security.UserDao;
+import org.bubblecloud.ilves.security.*;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
@@ -122,6 +119,8 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                                 final String code = request.getParameter("code");
                                 final Locale locale = getLocale();
                                 final User user = OpenAuthService.processOAuthRedirect(getSite().getSiteContext(), company, code);
+                                entityManager.refresh(user);
+
                                 if (user != null) {
                                     login(locale, entityManager, company, user);
                                 } else {
@@ -148,13 +147,21 @@ public final class DefaultSiteUI extends AbstractSiteUI {
                             final EntityManager entityManager = getSite().getSiteContext().getEntityManager();
                             final Company company = resolveCompany(entityManager, (VaadinServletRequest) request);
                             final User user = UserDao.getUser(entityManager, company, emailAddress);
+                            entityManager.refresh(user);
+
+                            if (user.getGoogleAuthenticatorSecret() != null) {
+                                final String code = request.getParameter("code");
+                                if (code == null || !GoogleAuthenticatorService.checkCode(SecurityUtil.decryptSecretKey(user.getGoogleAuthenticatorSecret()), code)) {
+                                    setNotification(DefaultSiteUI.getLocalizationProvider().localize("message-login-failed", locale),
+                                            Notification.Type.WARNING_MESSAGE);
+                                    return false;
+                                }
+                            }
 
                             final String errorKey = LoginService.login(getSite().getSiteContext(), company,
                                     user, emailAddress, password, VaadinSession.getCurrent().getSession().getId(), transactionId);
 
                             if (errorKey == null) {
-
-                                // Login success
                                 login(locale, entityManager, company, user);
                             } else if (errorKey.equals("message-login-failed-duplicate-login-for-login-transaction-id")) {
                                 // Silently fail.

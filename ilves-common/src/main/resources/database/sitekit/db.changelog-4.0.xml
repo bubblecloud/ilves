@@ -41,5 +41,10 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet author="tlaukkan (generated)" id="ba14e8e4-3176-4f06-8d67-0e88ba17f8ac">
+        <addColumn tableName="user_">
+            <column name="googleauthenticatorsecret" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
 

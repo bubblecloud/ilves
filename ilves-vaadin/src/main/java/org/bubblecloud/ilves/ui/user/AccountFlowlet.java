@@ -19,11 +19,14 @@ import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.Or;
+import com.vaadin.event.MouseEvents;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import org.bubblecloud.ilves.Ilves;
 import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
 import org.bubblecloud.ilves.component.grid.FieldDescriptor;
 import org.bubblecloud.ilves.component.grid.FilterDescriptor;
@@ -33,10 +36,11 @@ import org.bubblecloud.ilves.model.Customer;
 import org.bubblecloud.ilves.model.Group;
 import org.bubblecloud.ilves.model.User;
 import org.bubblecloud.ilves.module.customer.CustomerModule;
+import org.bubblecloud.ilves.security.GoogleAuthenticatorService;
+import org.bubblecloud.ilves.security.SecurityService;
+import org.bubblecloud.ilves.security.SecurityUtil;
 import org.bubblecloud.ilves.security.UserDao;
-import org.bubblecloud.ilves.site.SecurityProviderSessionImpl;
-import org.bubblecloud.ilves.site.SiteFields;
-import org.bubblecloud.ilves.site.SiteModuleManager;
+import org.bubblecloud.ilves.site.*;
 import org.bubblecloud.ilves.ui.administrator.customer.CustomerFlowlet;
 import org.bubblecloud.ilves.ui.administrator.group.GroupFlowlet;
 import org.bubblecloud.ilves.util.OpenIdUtil;
@@ -60,6 +64,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
     private EntityContainer<Customer> entityContainer;
     /** The customer grid. */
     private Grid entityGrid;
+    private Embedded googleAuthenticatorButton;
 
     @Override
     public String getFlowletKey() {
@@ -78,13 +83,14 @@ public final class AccountFlowlet extends AbstractFlowlet {
 
     @Override
     public void initialize() {
-        final GridLayout gridLayout = new GridLayout(1, 6);
+        final GridLayout gridLayout = new GridLayout(1, 7);
         gridLayout.setRowExpandRatio(0, 0.0f);
         gridLayout.setRowExpandRatio(1, 0.0f);
         gridLayout.setRowExpandRatio(2, 0.0f);
         gridLayout.setRowExpandRatio(3, 0.0f);
         gridLayout.setRowExpandRatio(4, 0.0f);
-        gridLayout.setRowExpandRatio(5, 1.0f);
+        gridLayout.setRowExpandRatio(5, 0.0f);
+        gridLayout.setRowExpandRatio(6, 1.0f);
 
         gridLayout.setSizeFull();
         gridLayout.setMargin(false);
@@ -106,7 +112,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
 
         final Button editUserButton = new Button("Edit User Account");
         editUserButton.setIcon(getSite().getIcon("button-icon-edit"));
-        gridLayout.addComponent(editUserButton, 0, 2);
+        gridLayout.addComponent(editUserButton, 0, 3);
         editUserButton.addClickListener(new ClickListener() {
             /** Serial version UID. */
             private static final long serialVersionUID = 1L;
@@ -124,7 +130,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
         final Company company = getSite().getSiteContext().getObject(Company.class);
         if (company.isOpenIdLogin()) {
             final VerticalLayout mainPanel = new VerticalLayout();
-            mainPanel.setCaption("Choose OpenID Provider:");
+            mainPanel.setCaption(getSite().localize("header-choose-open-id-provider"));
             gridLayout.addComponent(mainPanel, 0, 1);
             final HorizontalLayout openIdLayout = new HorizontalLayout();
             mainPanel.addComponent(openIdLayout);
@@ -135,6 +141,55 @@ public final class AccountFlowlet extends AbstractFlowlet {
             for (final String url : urlIconMap.keySet()) {
                 openIdLayout.addComponent(OpenIdUtil.getLoginButton(url, urlIconMap.get(url), returnViewName));
             }
+        }
+
+        // Two factor authentication
+        {
+            final VerticalLayout mainPanel = new VerticalLayout();
+            mainPanel.setCaption(getSite().localize("header-two-factor-authentication"));
+            gridLayout.addComponent(mainPanel, 0, 2);
+            final HorizontalLayout horizontalLayout = new HorizontalLayout();
+            mainPanel.addComponent(horizontalLayout);
+            horizontalLayout.setMargin(new MarginInfo(false, false, true, false));
+            horizontalLayout.setSpacing(true);
+            final Site site = ((AbstractSiteUI) UI.getCurrent()).getSite();
+            googleAuthenticatorButton = new Embedded(null, site.getIcon("twofactor/google-authenticator"));
+            googleAuthenticatorButton.addClickListener(new MouseEvents.ClickListener() {
+                @Override
+                public void click(MouseEvents.ClickEvent event) {
+                    if (((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() == null) {
+
+                        final String secretKey = GoogleAuthenticatorService.generateSecretKey();
+                        final User user = ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession();
+                        user.setGoogleAuthenticatorSecret(SecurityUtil.encryptSecretKey(secretKey));
+                        SecurityService.updateUser(getSite().getSiteContext(), getSite().getSiteContext().getEntityManager().merge(user));
+                        final String qrCodeUrl = GoogleAuthenticatorService.getQRBarcodeURL(user.getEmailAddress(), company.getHost(), secretKey);
+
+                        final Window subWindow = new Window(getSite().localize("header-scan-qr-code-with-google-authenticator"));
+                        subWindow.setModal(true);
+                        final VerticalLayout verticalLayout = new VerticalLayout();
+                        verticalLayout.setMargin(true);
+                        final Image qrCodeImage = new Image(null, new ExternalResource(qrCodeUrl));
+                        verticalLayout.addComponent(qrCodeImage);
+                        verticalLayout.setComponentAlignment(qrCodeImage, Alignment.MIDDLE_CENTER);
+                        subWindow.setContent(verticalLayout);
+                        subWindow.setResizable(false);
+                        subWindow.setWidth(230, Unit.PIXELS);
+                        subWindow.setHeight(260, Unit.PIXELS);
+                        subWindow.center();
+                        UI.getCurrent().addWindow(subWindow);
+
+                    } else {
+                        final User user = ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession();
+                        user.setGoogleAuthenticatorSecret(null);
+                        SecurityService.updateUser(getSite().getSiteContext(), getSite().getSiteContext().getEntityManager().merge(user));
+                    }
+
+                    googleAuthenticatorButton.setStyleName(((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() == null ?
+                            "image-button" : "image-button-on");
+                }
+            });
+            horizontalLayout.addComponent(googleAuthenticatorButton);
         }
 
         if (SiteModuleManager.isModuleInitialized(CustomerModule.class)) {
@@ -162,7 +217,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
             titleLayout.addComponent(titleIcon);
             final Label titleLabel = new Label("<h2>Customer Accounts</h2>", ContentMode.HTML);
             titleLayout.addComponent(titleLabel);
-            gridLayout.addComponent(titleLayout, 0, 3);
+            gridLayout.addComponent(titleLayout, 0, 4);
 
             final Table table = new Table();
             table.setPageLength(5);
@@ -174,10 +229,10 @@ public final class AccountFlowlet extends AbstractFlowlet {
             table.setColumnCollapsed("created", true);
             table.setColumnCollapsed("modified", true);
             table.setColumnCollapsed("company", true);
-            gridLayout.addComponent(entityGrid, 0, 5);
+            gridLayout.addComponent(entityGrid, 0, 6);
 
             final HorizontalLayout customerButtonsLayout = new HorizontalLayout();
-            gridLayout.addComponent(customerButtonsLayout, 0, 4);
+            gridLayout.addComponent(customerButtonsLayout, 0, 5);
             customerButtonsLayout.setMargin(false);
             customerButtonsLayout.setSpacing(true);
 
@@ -283,6 +338,10 @@ public final class AccountFlowlet extends AbstractFlowlet {
             entityGrid.refresh();
         }
 
+        if (((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession() != null) {
+            googleAuthenticatorButton.setStyleName(((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() == null ?
+                    "image-button" : "image-button-on");
+        }
     }
 
 }

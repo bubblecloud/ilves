@@ -1,4 +1,4 @@
-package org.bubblecloud.ilves.oauth;
+package org.bubblecloud.ilves.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bubblecloud.ilves.security.OpenAuthService;
