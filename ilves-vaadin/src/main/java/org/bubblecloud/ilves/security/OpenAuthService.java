@@ -42,7 +42,7 @@ public class OpenAuthService {
             OAuthClientRequest request = OAuthClientRequest
                     .authorizationProvider(OAuthProviderType.GITHUB)
                     .setClientId(company.getGitHubClientId())
-                    .setRedirectURI("http://ilves.herokuapp.com/oauthredirect")
+                    .setRedirectURI(company.getUrl() + "oauthredirect")
                     .setScope("user:email")
                     .buildQueryMessage();
             return request.getLocationUri();
@@ -69,7 +69,7 @@ public class OpenAuthService {
                     .setGrantType(GrantType.AUTHORIZATION_CODE)
                     .setClientId(company.getGitHubClientId())
                     .setClientSecret(company.getGitHubClientSecret())
-                    .setRedirectURI("http://ilves.herokuapp.com/oauthredirect")
+                    .setRedirectURI(company.getUrl() + "oauthredirect")
                     .setCode(code)
                     .buildQueryMessage();
 
