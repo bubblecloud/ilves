@@ -16,12 +16,9 @@
 package org.bubblecloud.ilves.ui.administrator.user;
 
 import com.vaadin.data.util.filter.Compare;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Table;
 import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
 import org.bubblecloud.ilves.component.grid.FieldDescriptor;
 import org.bubblecloud.ilves.component.grid.FilterDescriptor;
@@ -212,6 +209,30 @@ public final class UsersFlowlet extends AbstractFlowlet {
                 user.setFailedLoginCount(0);
                 SecurityService.updateUser(getSite().getSiteContext(), user);
                 container.refresh();
+            }
+        });
+
+        final Button disableTwoFactorAuthentication = getSite().getButton("disable-two-factor-authentication");
+        disableTwoFactorAuthentication.setImmediate(true);
+        buttonLayout.addComponent(disableTwoFactorAuthentication);
+        disableTwoFactorAuthentication.addClickListener(new ClickListener() {
+            /** Serial version UID. */
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void buttonClick(final ClickEvent event) {
+                if (grid.getSelectedItemId() == null) {
+                    return;
+                }
+                final User user = container.getEntity(grid.getSelectedItemId());
+                if (user.getGoogleAuthenticatorSecret() != null) {
+                    user.setGoogleAuthenticatorSecret(null);
+                    user.setFailedLoginCount(0);
+                    SecurityService.updateUser(getSite().getSiteContext(), user);
+                    container.refresh();
+                    Notification.show(getSite().localize("message-disabled-two-factor-authentication-for-user"),
+                            Notification.Type.HUMANIZED_MESSAGE);
+                }
             }
         });
 
