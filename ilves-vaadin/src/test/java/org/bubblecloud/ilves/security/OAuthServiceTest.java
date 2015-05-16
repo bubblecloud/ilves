@@ -1,7 +1,6 @@
 package org.bubblecloud.ilves.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.bubblecloud.ilves.security.OpenAuthService;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -17,7 +16,7 @@ public class OAuthServiceTest {
     @Test
     @Ignore
     public void testGet() throws Exception {
-        final String response = OpenAuthService.get("https://api.github.com/user/emails", "xxx");
+        final String response = OAuthService.get("https://api.github.com/user/emails", "xxx");
         ObjectMapper objectMapper = new ObjectMapper();
         final ArrayList<Map<String, Object>> emailList = objectMapper.readValue(response, ArrayList.class);
         System.out.println(emailList);
@@ -30,7 +29,7 @@ public class OAuthServiceTest {
     @Test
     @Ignore
     public void getGetEmail() throws Exception {
-        final String response = OpenAuthService.getEmail("xxx");
+        final String response = OAuthService.getEmail("xxx");
         Assert.assertEquals("tommi.s.e.laukkanen@gmail.com", response);
     }
 }

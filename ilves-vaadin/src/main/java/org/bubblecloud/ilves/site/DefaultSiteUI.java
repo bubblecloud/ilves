@@ -17,23 +17,15 @@ package org.bubblecloud.ilves.site;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.*;
-import com.vaadin.ui.Notification;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.bubblecloud.ilves.cache.UserClientCertificateCache;
 import org.bubblecloud.ilves.model.Company;
-import org.bubblecloud.ilves.model.Group;
 import org.bubblecloud.ilves.model.User;
 import org.bubblecloud.ilves.security.*;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import java.io.IOException;
 import java.security.cert.X509Certificate;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * BareSite UI.
@@ -88,115 +80,12 @@ public final class DefaultSiteUI extends AbstractSiteUI {
             }
         }
 
-        addCredentialPostRequestHandler();
+        VaadinSession.getCurrent().addRequestHandler(
+                new CredentialPostRequestHandler(this));
 
         analyser = new SiteAnalyser(this, company.getGaTrackingId());
         this.getNavigator().addViewChangeListener(analyser);
         return new Site(SiteMode.PRODUCTION, contentProvider, localizationProvider, securityProvider, siteContext);
-    }
-
-    /**
-     * Adds handler for credential posts.
-     */
-    private void addCredentialPostRequestHandler() {
-
-        // Add handler for credentials post.
-        VaadinSession.getCurrent().addRequestHandler(
-                new RequestHandler() {
-                    @Override
-                    public boolean handleRequest(VaadinSession session,
-                                                 VaadinRequest request,
-                                                 VaadinResponse response)
-                            throws IOException {
-                        final VaadinServletResponse vaadinServletResponse = (VaadinServletResponse) response;
-                        final String pathInfo = request.getPathInfo();
-
-                        if (pathInfo.contains("oauthredirect")) {
-                            final EntityManager entityManager = getSite().getSiteContext().getEntityManager();
-                            final Company company = resolveCompany(entityManager, (VaadinServletRequest) request);
-
-                            if (getSession().getSession().getAttribute("user") == null) {
-                                final String code = request.getParameter("code");
-                                final Locale locale = getLocale();
-                                final User user = OpenAuthService.processOAuthRedirect(getSite().getSiteContext(), company, code);
-                                entityManager.refresh(user);
-
-                                if (user != null) {
-                                    login(locale, entityManager, company, user);
-                                } else {
-                                    setNotification(DefaultSiteUI.getLocalizationProvider().localize("message-login-failed",
-                                            locale), Notification.Type.WARNING_MESSAGE);
-                                }
-                            }
-
-                            vaadinServletResponse.sendRedirect(company.getUrl());
-                            return true;
-                        }
-
-                        if (!StringUtils.isEmpty(request.getParameter("username")) &&
-                                !StringUtils.isEmpty(request.getParameter("password")) &&
-                                getSession() != null &&
-                                getSession().getSession().getAttribute("user") == null) {
-
-                            final String emailAddress = request.getParameter("username");
-                            final String password = request.getParameter("password");
-                            final String transactionId = request.getParameter("uiTransactionId");
-
-                            final Locale locale = getLocale();
-
-                            final EntityManager entityManager = getSite().getSiteContext().getEntityManager();
-                            final Company company = resolveCompany(entityManager, (VaadinServletRequest) request);
-                            final User user = UserDao.getUser(entityManager, company, emailAddress);
-                            entityManager.refresh(user);
-
-                            if (user.getGoogleAuthenticatorSecret() != null) {
-                                final String code = request.getParameter("code");
-                                if (code == null || !GoogleAuthenticatorService.checkCode(SecurityUtil.decryptSecretKey(user.getGoogleAuthenticatorSecret()), code)) {
-                                    setNotification(DefaultSiteUI.getLocalizationProvider().localize("message-login-failed", locale),
-                                            Notification.Type.WARNING_MESSAGE);
-                                    return false;
-                                }
-                            }
-
-                            final String errorKey = LoginService.login(getSite().getSiteContext(), company,
-                                    user, emailAddress, password, VaadinSession.getCurrent().getSession().getId(), transactionId);
-
-                            if (errorKey == null) {
-                                login(locale, entityManager, company, user);
-                            } else if (errorKey.equals("message-login-failed-duplicate-login-for-login-transaction-id")) {
-                                // Silently fail.
-                            } else {
-                                // Login failure
-                                setNotification(DefaultSiteUI.getLocalizationProvider().localize(errorKey, locale),
-                                        Notification.Type.WARNING_MESSAGE);
-                            }
-
-                        }
-                        return false; // No response was written
-                    }
-
-                    public void login(Locale locale, EntityManager entityManager, Company company, User user) {
-                        final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
-                        DefaultSiteUI.getSecurityProvider().setUser(user, groups);
-
-                        // Check for imminent password expiration.
-                        if (user.getPasswordExpirationDate() != null
-                                && new DateTime().plusDays(14).toDate().getTime()
-                                > user.getPasswordExpirationDate().getTime() ) {
-                            final DateTime expirationDate = new DateTime(user.getPasswordExpirationDate());
-                            final DateTime currentDate = new DateTime();
-                            final long daysUntilExpiration = new Duration(currentDate.toDate().getTime(),
-                                    expirationDate.toDate().getTime()).getStandardDays();
-
-                            setNotification( DefaultSiteUI.getLocalizationProvider().localize(
-                                    "message-password-expires-in-days", locale)
-                                    + ": " + daysUntilExpiration, Notification.Type.WARNING_MESSAGE);
-                        } else {
-                            setNotification(DefaultSiteUI.getLocalizationProvider().localize(
-                                    "message-login-success", locale), Notification.Type.TRAY_NOTIFICATION);
-                        }
-                    }
-                });
     }
 
     public static Company resolveCompany(EntityManager entityManager, VaadinServletRequest servletRequest) {

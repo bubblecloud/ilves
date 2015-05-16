@@ -5,6 +5,7 @@ import de.neuland.jade4j.template.JadeTemplate;
 import de.neuland.jade4j.template.TemplateLoader;
 import org.apache.log4j.Logger;
 import org.bubblecloud.ilves.exception.SiteException;
+import org.bubblecloud.ilves.site.Site;
 
 import java.io.*;
 import java.util.HashMap;
@@ -43,8 +44,11 @@ public class JadeUtil {
 
         try {
             final JadeTemplate template = config.getTemplate("name");
-            final String htmlString = config.renderTemplate(template, model).replace(
-                    "UITRANSACTIONID", UUID.randomUUID().toString());
+            final String htmlString = config.renderTemplate(template, model)
+                    .replace("UITRANSACTIONID", UUID.randomUUID().toString())
+                    .replace("USERNAME_LABEL", Site.getCurrent().localize("label-username"))
+                    .replace("PASSWORD_LABEL", Site.getCurrent().localize("label-password"))
+                    .replace("CODE_LABEL", Site.getCurrent().localize("label-authentication-code"));
             return new ByteArrayInputStream(htmlString.getBytes("UTF-8"));
         } catch (final IOException e) {
             LOGGER.error("Error parsing JADE template: " + templatePath, e);

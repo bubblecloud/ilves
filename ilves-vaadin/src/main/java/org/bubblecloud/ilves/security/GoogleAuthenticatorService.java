@@ -1,6 +1,10 @@
 package org.bubblecloud.ilves.security;
 
+import com.vaadin.server.ExternalResource;
+import com.vaadin.server.Sizeable;
+import com.vaadin.ui.*;
 import org.apache.commons.codec.binary.Base32;
+import org.bubblecloud.ilves.site.Site;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -124,4 +128,23 @@ public class GoogleAuthenticatorService {
         }
     }
 
+    /**
+     * Shows QR Code dialog.
+     * @param qrCodeUrl the QR code URL
+     */
+    public static void showGrCodeDialog(final String qrCodeUrl) {
+        final Window subWindow = new Window(Site.getCurrent().localize("header-scan-qr-code-with-google-authenticator"));
+        subWindow.setModal(true);
+        final VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setMargin(true);
+        final Image qrCodeImage = new Image(null, new ExternalResource(qrCodeUrl));
+        verticalLayout.addComponent(qrCodeImage);
+        verticalLayout.setComponentAlignment(qrCodeImage, Alignment.MIDDLE_CENTER);
+        subWindow.setContent(verticalLayout);
+        subWindow.setResizable(false);
+        subWindow.setWidth(230, Sizeable.Unit.PIXELS);
+        subWindow.setHeight(260, Sizeable.Unit.PIXELS);
+        subWindow.center();
+        UI.getCurrent().addWindow(subWindow);
+    }
 }

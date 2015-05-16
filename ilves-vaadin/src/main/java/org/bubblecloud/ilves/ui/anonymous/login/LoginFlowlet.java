@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
 import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
 import org.bubblecloud.ilves.exception.SiteException;
 import org.bubblecloud.ilves.model.Company;
-import org.bubblecloud.ilves.security.OpenAuthService;
+import org.bubblecloud.ilves.security.OAuthService;
 import org.bubblecloud.ilves.util.JadeUtil;
 import org.bubblecloud.ilves.util.OpenIdUtil;
 
@@ -57,14 +57,22 @@ public final class LoginFlowlet extends AbstractFlowlet {
         layout.setMargin(true);
         layout.setSpacing(true);
 
+        try {
+            final CustomLayout loginFormLayout = new CustomLayout(
+                    JadeUtil.parse("/VAADIN/themes/ilves/layouts/login.jade"));
+            Responsive.makeResponsive(loginFormLayout);
+            layout.addComponent(loginFormLayout);
+        } catch (final IOException e) {
+            throw new SiteException("Error loading login form.", e);
+        }
+
         final Company company = getSite().getSiteContext().getObject(Company.class);
         if (company.isOpenIdLogin()) {
             final VerticalLayout mainPanel = new VerticalLayout();
-            mainPanel.setCaption(getSite().localize("header-open-id-login"));
             layout.addComponent(mainPanel);
             final HorizontalLayout openIdLayout = new HorizontalLayout();
             mainPanel.addComponent(openIdLayout);
-            openIdLayout.setMargin(new MarginInfo(false, false, true, false));
+            openIdLayout.setMargin(new MarginInfo(false, false, false, false));
             openIdLayout.setSpacing(true);
             final String returnViewName = "openidlogin";
             final Map<String, String> urlIconMap = OpenIdUtil.getOpenIdProviderUrlIconMap();
@@ -75,11 +83,10 @@ public final class LoginFlowlet extends AbstractFlowlet {
 
         if (company.isoAuthLogin()) {
             final VerticalLayout mainPanel = new VerticalLayout();
-            mainPanel.setCaption(getSite().localize("header-oauth-login"));
             layout.addComponent(mainPanel);
             final HorizontalLayout oAuthLayout = new HorizontalLayout();
             mainPanel.addComponent(oAuthLayout);
-            oAuthLayout.setMargin(new MarginInfo(false, false, true, false));
+            oAuthLayout.setMargin(new MarginInfo(false, false, false, false));
             oAuthLayout.setSpacing(true);
             final Embedded embedded = new Embedded(null, getSite().getIcon("openid/github_32"));
             embedded.setStyleName("image-button");
@@ -87,7 +94,7 @@ public final class LoginFlowlet extends AbstractFlowlet {
                 @Override
                 public void click(MouseEvents.ClickEvent event) {
                     try {
-                        final String locationUri = OpenAuthService.requestOAuthLocationUri(getSite().getSiteContext());
+                        final String locationUri = OAuthService.requestOAuthLocationUri(getSite().getSiteContext());
                         if (locationUri != null) {
                             getUI().getPage().setLocation(locationUri);
                         }
@@ -99,16 +106,6 @@ public final class LoginFlowlet extends AbstractFlowlet {
                 }
             });
             oAuthLayout.addComponent(embedded);
-        }
-
-        try {
-            final CustomLayout loginFormLayout = new CustomLayout(
-                    JadeUtil.parse("/VAADIN/themes/ilves/layouts/login.jade"));
-            Responsive.makeResponsive(loginFormLayout);
-            loginFormLayout.setCaption(getSite().localize("header-email-and-password-login"));
-            layout.addComponent(loginFormLayout);
-        } catch (final IOException e) {
-            throw new SiteException("Error loading login form.", e);
         }
 
         if (company.isSelfRegistration()) {

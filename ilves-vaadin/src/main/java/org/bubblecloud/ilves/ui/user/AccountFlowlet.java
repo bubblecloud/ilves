@@ -20,13 +20,12 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.event.MouseEvents;
-import com.vaadin.server.ExternalResource;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import org.bubblecloud.ilves.Ilves;
+import org.bubblecloud.ilves.component.button.ImageToggleButton;
 import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
 import org.bubblecloud.ilves.component.grid.FieldDescriptor;
 import org.bubblecloud.ilves.component.grid.FilterDescriptor;
@@ -64,7 +63,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
     private EntityContainer<Customer> entityContainer;
     /** The customer grid. */
     private Grid entityGrid;
-    private Embedded googleAuthenticatorButton;
+    private ImageToggleButton googleAuthenticatorButton;
 
     @Override
     public String getFlowletKey() {
@@ -146,47 +145,28 @@ public final class AccountFlowlet extends AbstractFlowlet {
         // Two factor authentication
         {
             final VerticalLayout mainPanel = new VerticalLayout();
-            mainPanel.setCaption(getSite().localize("header-two-factor-authentication"));
             gridLayout.addComponent(mainPanel, 0, 2);
+            mainPanel.setCaption(getSite().localize("header-two-factor-authentication"));
             final HorizontalLayout horizontalLayout = new HorizontalLayout();
             mainPanel.addComponent(horizontalLayout);
             horizontalLayout.setMargin(new MarginInfo(false, false, true, false));
             horizontalLayout.setSpacing(true);
-            final Site site = ((AbstractSiteUI) UI.getCurrent()).getSite();
-            googleAuthenticatorButton = new Embedded(null, site.getIcon("twofactor/google-authenticator"));
+            googleAuthenticatorButton = new ImageToggleButton("icons/twofactor/google-authenticator.png");
             googleAuthenticatorButton.addClickListener(new MouseEvents.ClickListener() {
                 @Override
                 public void click(MouseEvents.ClickEvent event) {
+                    final User user = ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession();
                     if (((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() == null) {
-
                         final String secretKey = GoogleAuthenticatorService.generateSecretKey();
-                        final User user = ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession();
                         user.setGoogleAuthenticatorSecret(SecurityUtil.encryptSecretKey(secretKey));
                         SecurityService.updateUser(getSite().getSiteContext(), getSite().getSiteContext().getEntityManager().merge(user));
                         final String qrCodeUrl = GoogleAuthenticatorService.getQRBarcodeURL(user.getEmailAddress(), company.getHost(), secretKey);
-
-                        final Window subWindow = new Window(getSite().localize("header-scan-qr-code-with-google-authenticator"));
-                        subWindow.setModal(true);
-                        final VerticalLayout verticalLayout = new VerticalLayout();
-                        verticalLayout.setMargin(true);
-                        final Image qrCodeImage = new Image(null, new ExternalResource(qrCodeUrl));
-                        verticalLayout.addComponent(qrCodeImage);
-                        verticalLayout.setComponentAlignment(qrCodeImage, Alignment.MIDDLE_CENTER);
-                        subWindow.setContent(verticalLayout);
-                        subWindow.setResizable(false);
-                        subWindow.setWidth(230, Unit.PIXELS);
-                        subWindow.setHeight(260, Unit.PIXELS);
-                        subWindow.center();
-                        UI.getCurrent().addWindow(subWindow);
-
+                        GoogleAuthenticatorService.showGrCodeDialog(qrCodeUrl);
                     } else {
-                        final User user = ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession();
                         user.setGoogleAuthenticatorSecret(null);
                         SecurityService.updateUser(getSite().getSiteContext(), getSite().getSiteContext().getEntityManager().merge(user));
                     }
-
-                    googleAuthenticatorButton.setStyleName(((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() == null ?
-                            "image-button" : "image-button-on");
+                    googleAuthenticatorButton.setState(((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() != null);
                 }
             });
             horizontalLayout.addComponent(googleAuthenticatorButton);
@@ -339,8 +319,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
         }
 
         if (((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession() != null) {
-            googleAuthenticatorButton.setStyleName(((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() == null ?
-                    "image-button" : "image-button-on");
+            googleAuthenticatorButton.setState(((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() != null);
         }
     }
 
