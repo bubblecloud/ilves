@@ -80,12 +80,18 @@ public class OAuthService {
             final String accessToken = oAuthResponse.getAccessToken();
 
             final String primaryVerifiedEmail = getEmail(accessToken);
+            if (primaryVerifiedEmail == null) {
+                AuditService.log(context, "oauth login failed, no matching email");
+                return null;
+            }
 
             final User existingUser = UserDao.getUser(entityManager, company, primaryVerifiedEmail);
             if (existingUser != null) {
                 if (existingUser.isLockedOut()) {
+                    AuditService.log(context, "oauth login failed, locked user", "User", existingUser.getUserId(), existingUser.getEmailAddress());
                     return null;
                 }
+                AuditService.log(context, "oauth login success", "User", existingUser.getUserId(), existingUser.getEmailAddress());
                 return existingUser;
             } else {
                 if (!company.isoAuthSelfRegistration()) {
@@ -129,7 +135,8 @@ public class OAuthService {
                 return newUser;
             }
         } catch (final Exception e) {
-            LOGGER.error("Error exchanging oauth code to access token.", e);
+            LOGGER.error("Error exchanging oauth code to access token: " + e.getMessage());
+            AuditService.log(context, "oauth login exception");
             return null;
         }
     }
