@@ -153,39 +153,4 @@ public class EmailUtil {
         }
     }
 
-    /**
-     * Inner class to act as a JAF datasource to send HTML e-mail content.
-     */
-    static class HTMLDataSource implements DataSource {
-        /** The HTML content. */
-        private final String htmlContent;
-
-        /**
-         * Default constructor for setting the source HTML.
-         * @param htmlContent the HTML content
-         */
-        public HTMLDataSource(final String htmlContent) {
-            this.htmlContent = htmlContent;
-        }
-
-        @Override
-        public InputStream getInputStream() throws IOException {
-            return new ByteArrayInputStream(htmlContent.getBytes());
-        }
-
-        @Override
-        public OutputStream getOutputStream() throws IOException {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public String getContentType() {
-            return "text/html";
-        }
-
-        @Override
-        public String getName() {
-            return "JAF text/html dataSource to send e-mail.";
-        }
-    }
 }

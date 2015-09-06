@@ -43,7 +43,10 @@ public class CredentialPostRequestHandler implements RequestHandler {
 
             if (VaadinSession.getCurrent().getSession().getAttribute("user") == null) {
                 final String code = request.getParameter("code");
-                final Locale locale = ui.getLocale();
+                Locale locale = ui.getLocale();
+                if (locale == null) {
+                    locale = Locale.ENGLISH;
+                }
                 final User user = OAuthService.processOAuthRedirect(ui.getSite().getSiteContext(), company, code);
 
                 if (user != null) {
@@ -68,7 +71,10 @@ public class CredentialPostRequestHandler implements RequestHandler {
             final String password = request.getParameter("password");
             final String transactionId = request.getParameter("uiTransactionId");
 
-            final Locale locale = ui.getLocale();
+            Locale locale = ui.getLocale();
+            if (locale == null) {
+                locale = Locale.ENGLISH;
+            }
 
             final EntityManager entityManager = ui.getSite().getSiteContext().getEntityManager();
             final Company company = DefaultSiteUI.resolveCompany(entityManager, (VaadinServletRequest) request);
