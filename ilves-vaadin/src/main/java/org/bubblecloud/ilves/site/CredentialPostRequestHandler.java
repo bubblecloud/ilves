@@ -79,6 +79,11 @@ public class CredentialPostRequestHandler implements RequestHandler {
             final EntityManager entityManager = ui.getSite().getSiteContext().getEntityManager();
             final Company company = DefaultSiteUI.resolveCompany(entityManager, (VaadinServletRequest) request);
             final User user = UserDao.getUser(entityManager, company, emailAddress);
+
+            if (user == null) {
+                return false;
+            }
+
             entityManager.refresh(user);
 
             if (user.getGoogleAuthenticatorSecret() != null) {
