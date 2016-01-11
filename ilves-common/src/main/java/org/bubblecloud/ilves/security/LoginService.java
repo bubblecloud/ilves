@@ -42,7 +42,7 @@ public class LoginService {
      * @param sessionId the session ID for blocking duplicated login posts for same session
      * @return null if success or error key
      */
-    public static String login(final SecurityContext context, final Company company, final User user, final String emailAddress, final String password, final String sessionId, final String loginTransactionId) {
+    public static String login(final SecurityContext context, final Company company, final User user, final String emailAddress, final char[] password, final String sessionId, final String loginTransactionId) {
         final String sessionIdHash = calculateIdHash(sessionId);
         final String loginTransactionIdHash = calculateIdHash(loginTransactionId);
 

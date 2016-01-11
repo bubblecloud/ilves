@@ -142,7 +142,7 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
                         final int hashSize = 64;
                         if (user.getPasswordHash().length() != hashSize) {
                             try {
-                                PasswordLoginUtil.setUserPasswordHash(user.getOwner(), user, user.getPasswordHash());
+                                PasswordLoginUtil.setUserPasswordHash(user.getOwner(), user, user.getPasswordHash().toCharArray());
                             } catch (NoSuchAlgorithmException e) {
                                 e.printStackTrace();
                             }

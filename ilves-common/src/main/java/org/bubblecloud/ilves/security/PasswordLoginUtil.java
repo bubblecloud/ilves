@@ -15,6 +15,7 @@
  */
 package org.bubblecloud.ilves.security;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.directory.api.ldap.model.cursor.EntryCursor;
 import org.apache.directory.api.ldap.model.entry.Entry;
 import org.apache.directory.api.ldap.model.exception.LdapException;
@@ -31,12 +32,12 @@ import org.joda.time.DateTime;
 
 import javax.persistence.EntityManager;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Password login utility.
@@ -58,12 +59,11 @@ public class PasswordLoginUtil {
      * @throws UnsupportedEncodingException if encoding is not supported
      * @throws NoSuchAlgorithmException if algorithm is not supported
      */
-    public static void setUserPasswordHash(final Company company, final User user, final String password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public static void setUserPasswordHash(final Company company, final User user, final char[] password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         if (user.getUserId() == null) {
             user.setUserId(UUID.randomUUID().toString());
         }
-        final byte[] passwordAndSaltBytes = (user.getUserId() + ":" + password)
-                .getBytes("UTF-8");
+        final byte[] passwordAndSaltBytes = convertCharactersToBytes(ArrayUtils.addAll((user.getUserId() + ":").toCharArray(), password));
         final MessageDigest md = MessageDigest.getInstance("SHA-256");
         final byte[] passwordAndSaltDigest = md.digest(passwordAndSaltBytes);
         user.setPasswordHash(StringUtil.toHexString(passwordAndSaltDigest));
@@ -94,7 +94,7 @@ public class PasswordLoginUtil {
                                final EntityManager entityManager,
                                final Company company,
                                final User user,
-                               final String userPassword) {
+                               final char[] userPassword) {
         if (user == null) {
             LOGGER.warn("User login failed due to not registered email address: " + emailAddress
                     + " (Remote address: " + remoteHost + " (" + remoteIpAddress + "):" + remotePort + ")");
@@ -153,7 +153,7 @@ public class PasswordLoginUtil {
                                           final EntityManager entityManager,
                                           final Company company,
                                           final User user,
-                                          final String userPassword,
+                                          final char[] userPassword,
                                           final UserDirectory userDirectory)
             throws Exception {
         LOGGER.info("Attempting LDAP login: address: " + userDirectory.getAddress() + ":" + userDirectory.getPort()
@@ -188,7 +188,7 @@ public class PasswordLoginUtil {
                 final Entry userEntry = userCursor.get();
                 userCursor.close();
                 connection.unBind();
-                connection.bind(userEntry.getDn(), userPassword);
+                connection.bind(userEntry.getDn(), new String(userPassword));
 
                 if (!isInRemoteGroup(connection, groupSearchBaseDn,
                         userEntry, userDirectory.getRequiredRemoteGroup())) {
@@ -307,7 +307,7 @@ public class PasswordLoginUtil {
                                    final EntityManager entityManager,
                                    final Company company,
                                    final User user,
-                                   final String userPassword)
+                                   final char[] userPassword)
             throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
         if (user.getPasswordExpirationDate() != null
@@ -347,17 +347,33 @@ public class PasswordLoginUtil {
         }
     }
 
-    private static boolean checkPasswordMatchWithUserIdAsSalt(User user, String userPassword) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        final byte[] passwordAndSaltBytes = (user.getUserId() + ":" + userPassword).getBytes("UTF-8");
+    /**
+     * Converts character array to byte array
+     * @param characters the character array
+     * @return the byte array
+     */
+    public static byte[] convertCharactersToBytes(char[] characters) {
+        CharBuffer charBuffer = CharBuffer.wrap(characters);
+        final ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(charBuffer);
+        byte[] bytes = Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
+        Arrays.fill(charBuffer.array(), '\u0000');
+        Arrays.fill(byteBuffer.array(), (byte) 0);
+        return bytes;
+    }
+
+    private static boolean checkPasswordMatchWithUserIdAsSalt(User user, char[] userPassword) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        final byte[] passwordAndSaltBytes = convertCharactersToBytes(ArrayUtils.addAll((user.getUserId() + ":").toCharArray(), userPassword));
         final MessageDigest md = MessageDigest.getInstance("SHA-256");
         final String passwordAndSaltDigest = StringUtil.toHexString(md.digest(passwordAndSaltBytes));
         return passwordAndSaltDigest.equals(user.getPasswordHash());
     }
 
-    private static boolean checkPasswordMatchWithEmailAsSalt(User user, String userPassword) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        final byte[] passwordAndSaltBytes = (user.getEmailAddress() + ":" + userPassword).getBytes("UTF-8");
+    private static boolean checkPasswordMatchWithEmailAsSalt(User user, char[] userPassword) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        final byte[] passwordAndSaltBytes = convertCharactersToBytes(ArrayUtils.addAll((user.getEmailAddress() + ":").toCharArray(), userPassword));
         final MessageDigest md = MessageDigest.getInstance("SHA-256");
         final String passwordAndSaltDigest = StringUtil.toHexString(md.digest(passwordAndSaltBytes));
         return passwordAndSaltDigest.equals(user.getPasswordHash());
     }
+
+
 }

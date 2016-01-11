@@ -105,7 +105,7 @@ public class PasswordResetViewlet extends AbstractViewlet {
 
                         if (emailPasswordReset.getPinHash().equals(pinAndSaltHash)) {
                             final String password = generatePassword();
-                            PasswordLoginUtil.setUserPasswordHash(user.getOwner(), user, password);
+                            PasswordLoginUtil.setUserPasswordHash(user.getOwner(), user, password.toCharArray());
                             passwordProperty.setValue(password);
                             submitButton.setEnabled(false);
                             fieldDescriptors.get(0).setReadOnly(true);

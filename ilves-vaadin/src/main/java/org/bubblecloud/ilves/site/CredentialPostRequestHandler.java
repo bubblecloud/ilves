@@ -96,7 +96,7 @@ public class CredentialPostRequestHandler implements RequestHandler {
             }
 
             final String errorKey = LoginService.login(ui.getSite().getSiteContext(), company,
-                    user, emailAddress, password, VaadinSession.getCurrent().getSession().getId(), transactionId);
+                    user, emailAddress, password.toCharArray(), VaadinSession.getCurrent().getSession().getId(), transactionId);
 
             if (errorKey == null) {
                 login(locale, entityManager, company, user);
