@@ -97,9 +97,17 @@ public final class AccountFlowlet extends AbstractFlowlet {
         gridLayout.setRowExpandRatio(4, 1f);
         setViewContent(gridLayout);
 
-        final HorizontalLayout userAccountTitle = new HorizontalLayout();
+        final VerticalLayout userAccountTitle = new VerticalLayout();
         userAccountTitle.setMargin(new MarginInfo(false, false, false, false));
         userAccountTitle.setSpacing(true);
+
+            /*final Embedded titleIcon = new Embedded(null, getSite().getIcon("view-icon-customer"));
+            titleIcon.setWidth(32, Unit.PIXELS);
+            titleIcon.setHeight(32, Unit.PIXELS);
+            titleLayout.addComponent(titleIcon);*/
+
+        userAccountTitle.addComponent(new Label("<hr />", ContentMode.HTML));
+
         /*final Embedded userAccountTitleIcon = new Embedded(null, getSite().getIcon("view-icon-user"));
         userAccountTitleIcon.setWidth(32, Unit.PIXELS);
         userAccountTitleIcon.setHeight(32, Unit.PIXELS);
@@ -188,13 +196,16 @@ public final class AccountFlowlet extends AbstractFlowlet {
                         fieldDefinition.isReadOnly(), fieldDefinition.isSortable());
             }
 
-            final HorizontalLayout titleLayout = new HorizontalLayout();
+            final VerticalLayout titleLayout = new VerticalLayout();
             titleLayout.setMargin(new MarginInfo(true, false, false, false));
             titleLayout.setSpacing(true);
             /*final Embedded titleIcon = new Embedded(null, getSite().getIcon("view-icon-customer"));
             titleIcon.setWidth(32, Unit.PIXELS);
             titleIcon.setHeight(32, Unit.PIXELS);
             titleLayout.addComponent(titleIcon);*/
+
+            titleLayout.addComponent(new Label("<hr />", ContentMode.HTML));
+
             final Label titleLabel = new Label("<h2>Customer Accounts</h2>", ContentMode.HTML);
             titleLayout.addComponent(titleLabel);
             gridLayout.addComponent(titleLayout, 0, 4);
