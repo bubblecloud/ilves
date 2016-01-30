@@ -2,6 +2,7 @@ package org.bubblecloud.ilves;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Component;
+import org.bubblecloud.ilves.security.DefaultRoles;
 import org.bubblecloud.ilves.server.jetty.DefaultJettyConfiguration;
 import org.bubblecloud.ilves.site.*;
 import org.bubblecloud.ilves.site.view.valo.DefaultValoView;
@@ -48,6 +49,45 @@ public class Ilves {
      */
     public static synchronized boolean initializeModule(final Class<? extends SiteModule> siteModuleClass) {
         return SiteModuleManager.initializeModule(siteModuleClass);
+    }
+
+
+    /**
+     * Adds navigation category page to Ilves site.
+     * @param page the page
+     * @param roles the roles able to access the page
+     */
+    public static void addNavigationCategoryPage(final String page, final String... roles) {
+        addViewDescriptor(page, DefaultValoView.class, roles);
+        final SiteDescriptor siteDescriptor = DefaultSiteUI.getContentProvider().getSiteDescriptor();
+        final NavigationVersion navigationVersion = siteDescriptor.getNavigationVersion();
+        navigationVersion.addRootPage(page);
+    }
+
+    /**
+     * Adds navigation category page to Ilves site.
+     * @param index the page index
+     * @param page the page
+     * @param roles the roles able to access the page
+     */
+    public static void addNavigationCategoryPage(final int index, final String page, final String... roles) {
+        addViewDescriptor(page, DefaultValoView.class, roles);
+        final SiteDescriptor siteDescriptor = DefaultSiteUI.getContentProvider().getSiteDescriptor();
+        final NavigationVersion navigationVersion = siteDescriptor.getNavigationVersion();
+        navigationVersion.addRootPage(index, page);
+    }
+
+    /**
+     * Adds navigation category page to Ilves site.
+     * @param previousCategoryPage the previous category page
+     * @param page the page
+     * @param roles the roles able to access the page
+     */
+    public static void addNavigationCategoryPage(final String previousCategoryPage, final String page, final String... roles) {
+        addViewDescriptor(page, DefaultValoView.class, roles);
+        final SiteDescriptor siteDescriptor = DefaultSiteUI.getContentProvider().getSiteDescriptor();
+        final NavigationVersion navigationVersion = siteDescriptor.getNavigationVersion();
+        navigationVersion.addRootPage(previousCategoryPage, page);
     }
 
     /**
