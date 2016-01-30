@@ -113,7 +113,6 @@ public final class UserDirectoriesFlowlet extends AbstractFlowlet {
         table.setColumnCollapsed("remoteLocalGroupMapping", true);
         table.setColumnCollapsed("created", true);
         table.setColumnCollapsed("modified", true);
-        table.setColumnCollapsed("company", true);
         gridLayout.addComponent(entityGrid, 0, 1);
 
         final Button addButton = new Button("Add");
