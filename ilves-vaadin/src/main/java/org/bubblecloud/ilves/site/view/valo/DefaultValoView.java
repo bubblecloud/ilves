@@ -170,35 +170,67 @@ public class DefaultValoView extends AbstractValoView {
                 }
             }
 
-
             if (navigationVersion.hasChildPages(pageName)) {
+                final List<String> childPages = navigationVersion.getChildPages(pageName);
 
                 final String localizedPageName = pageVersion.isDynamic() ? pageName
-                        : site.localize("page-link-" + pageName);
+                        : Site.getCurrent().localize("page-link-" + pageName);
 
-                final Label label = new Label(localizedPageName, ContentMode.HTML);
-                label.setPrimaryStyleName("valo-menu-subtitle");
-                label.addStyleName("h4");
-                label.setSizeUndefined();
-                menuItemsLayout.addComponent(label);
+                addMenuHeader(localizedPageName, childPages.size());
 
-                final List<String> childPages = navigationVersion.getChildPages(pageName);
                 for (final String childPage : childPages) {
-                    addMenuLink(navigationVersion, childPage);
+                    addMenuLink(childPage);
                 }
 
-                label.setValue(label.getValue() + " <span class=\"valo-menu-badge\">"
-                        + childPages.size() + "</span>");
             } else {
-                addMenuLink(navigationVersion, pageName);
+                addMenuLink(pageName);
             }
+
         }
+
+        if (user != null) {
+            addMenuHeader(site.localize("page-link-personal"), 1);
+            addMenuLogoutLink();        }
 
         return menu;
     }
 
-    private void addMenuLink(final NavigationVersion navigationVersion, final String pageName) {
+    private void addMenuHeader(final String localizedPageName, int childPageCount) {
+        final Label label = new Label(localizedPageName, ContentMode.HTML);
+        label.setPrimaryStyleName("valo-menu-subtitle");
+        label.addStyleName("h4");
+        label.setSizeUndefined();
+        menuItemsLayout.addComponent(label);
+        label.setValue(label.getValue() + " <span class=\"valo-menu-badge\">"
+                + childPageCount + "</span>");
+
+    }
+
+    private void addMenuLogoutLink() {
         final Site site = Site.getCurrent();
+        final NavigationVersion navigationVersion = site.getCurrentNavigationVersion();
+        final Resource iconResource = site.getIcon("page-icon-logout");
+
+        Button b = new Button(Site.getCurrent().localize("button-logout"), new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                final Company company = Site.getCurrent().getSiteContext().getObject(Company.class);
+                LoginService.logout(Site.getCurrent().getSiteContext());
+                getUI().getPage().setLocation(company.getUrl());
+                getSession().getSession().invalidate();
+                getSession().close();
+            }
+        });
+
+        b.setHtmlContentAllowed(true);
+        b.setPrimaryStyleName("valo-menu-item");
+        b.setIcon(iconResource);
+        menuItemsLayout.addComponent(b);
+    }
+
+    private void addMenuLink(final String pageName) {
+        final Site site = Site.getCurrent();
+        final NavigationVersion navigationVersion = site.getCurrentNavigationVersion();
         final ViewVersion pageVersion = site.getCurrentViewVersion(pageName);
         if (pageVersion == null) {
             throw new SiteException("Unknown page: " + pageName);
@@ -231,6 +263,5 @@ public class DefaultValoView extends AbstractValoView {
         b.setPrimaryStyleName("valo-menu-item");
         b.setIcon(iconResource);
         menuItemsLayout.addComponent(b);
-
     }
 }
