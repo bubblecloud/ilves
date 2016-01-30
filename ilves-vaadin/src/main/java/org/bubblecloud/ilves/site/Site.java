@@ -18,6 +18,7 @@ package org.bubblecloud.ilves.site;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.navigator.ViewProvider;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button;
@@ -26,6 +27,7 @@ import com.vaadin.ui.Window;
 import org.apache.log4j.Logger;
 import org.bubblecloud.ilves.exception.SiteException;
 import org.bubblecloud.ilves.model.Company;
+import org.bubblecloud.ilves.util.PropertiesUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -146,6 +148,21 @@ public final class Site implements ViewProvider, ViewChangeListener {
      * @return The localized getIcon.
      */
     public Resource getIcon(final String key) {
+        if (PropertiesUtil.hasProperty("icon", key)) {
+            final String value = PropertiesUtil.getProperty("icon", key).trim();
+            if (value.startsWith("FontAwesome.")) {
+                final String iconName = value.substring(value.indexOf('.') + 1);
+                for (final FontAwesome icon : FontAwesome.values()) {
+                    if (icon.name().equals(iconName)) {
+                        return icon;
+                    }
+                }
+                throw new IllegalArgumentException("No such icon in FontAwesome: " + iconName);
+            } else {
+                return new ThemeResource("icons/" + value + ".png");
+            }
+
+        }
         return new ThemeResource("icons/" + key + ".png");
     }
 

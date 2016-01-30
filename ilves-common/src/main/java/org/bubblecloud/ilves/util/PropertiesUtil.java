@@ -72,13 +72,35 @@ public final class PropertiesUtil {
         OVERRIDE_PROPERTIES_MAP.get(category).put(propertyKey, propertyValue);
     }
 
+
     /**
-     * Gets property value String or null if no value is defined.
+     * Gets property value String or throws exception if no value is defined.
      * @param categoryKey Category defines the property file prefix.
      * @param propertyKey Property key defines the key in property file.
      * @return property value String or null.
      */
     public static synchronized String getProperty(final String categoryKey, final String propertyKey) {
+        return getProperty(categoryKey, propertyKey, true);
+    }
+
+    /**
+     * Checks if property value is defined.
+     * @param categoryKey Category defines the property file prefix.
+     * @param propertyKey Property key defines the key in property file.
+     * @return property value String or null.
+     */
+    public static synchronized boolean hasProperty(final String categoryKey, final String propertyKey) {
+        return getProperty(categoryKey, propertyKey, false) != null;
+    }
+
+    /**
+     * Gets property value String.
+     * @param categoryKey Category defines the property file prefix.
+     * @param propertyKey Property key defines the key in property file.
+     * @param required if required then non existing property causes exception.
+     * @return property value String or null.
+     */
+    public static synchronized String getProperty(final String categoryKey, final String propertyKey, final boolean required) {
 
         final String baseCategoryKey;
         final String extendedCategoryKey;
@@ -119,7 +141,11 @@ public final class PropertiesUtil {
             }
         }
 
-        throw new RuntimeException("Property not found: " + baseCategoryKey + " / " + propertyKey);
+        if (required) {
+            throw new RuntimeException("Property not found: " + baseCategoryKey + " / " + propertyKey);
+        } else {
+            return null;
+        }
     }
 
     /**
