@@ -115,7 +115,7 @@ public class DefaultValoView extends AbstractValoView {
         final String userMenuCaption;
         final Resource userMenuIcon;
         if (user == null) {
-            userMenuIcon = new ThemeResource("ilves_logo.png");
+            userMenuIcon = getSite().getIcon("ilves_logo");
             userMenuCaption = "";
         } else {
             final URL gravatarUrl = GravatarUtil.getGravatarUrl(user, 64);
