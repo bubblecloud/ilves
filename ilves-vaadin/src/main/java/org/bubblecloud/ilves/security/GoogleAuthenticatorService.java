@@ -46,11 +46,11 @@ public class GoogleAuthenticatorService {
     }
 
     /**
-     * Get QR Code URL
+     * Get QR Barcode URL
      * @param user the user
      * @param host the host
      * @param secretKey the secret key
-     * @return
+     * @return the QR Barcode URL
      */
     public static String getQRBarcodeURL(
             final String user,

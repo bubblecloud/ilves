@@ -31,7 +31,8 @@ public class DefaultJettyConfiguration {
      * @param localizationBundle the localization bundle
      * @return the server.
      *
-     * @throws Exception if exception occurs in server construction
+     * @throws IOException if database connection fails.
+     * @throws URISyntaxException if JDBC URL is invalid
      */
     public static Server configureServer(final String persistenceUnit,
                                          final String localizationBundle) throws IOException, URISyntaxException {

@@ -44,7 +44,7 @@ public class JettyUtil {
      * @param httpsPort the HTTPS port
      * @param requireClientAuthentication true if client authentication is required
      * @return the Jetty server
-     * @throws Exception if exception occurs in construction
+     * @throws IOException if SSL context factory creation fails.
      */
     public static Server newServer(
             final int httpPort,

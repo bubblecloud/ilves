@@ -80,7 +80,7 @@ public class NavigationTreeParser {
 
     /**
      * Formats the navigation string as map.
-     * @param navigationMap
+     * @param navigationMap the navigation map
      * @return the navigation map as string
      */
     public static String format(final Map<String, List<String>> navigationMap) {

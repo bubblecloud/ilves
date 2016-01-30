@@ -31,9 +31,11 @@ public class SiteContext extends SecurityContext {
     private SecurityProvider securityProvider;
 
     /**
-     * @param entityManager
-     * @param auditEntityManager
-     * @param request
+     * Constructor which sets entity managers, HTTP request and security provider for the site context.
+     * @param entityManager the entity manager
+     * @param auditEntityManager the audit entity manager
+     * @param request the request
+     * @param securityProvider the security provider
      */
     public SiteContext(EntityManager entityManager,
                            EntityManager auditEntityManager,
