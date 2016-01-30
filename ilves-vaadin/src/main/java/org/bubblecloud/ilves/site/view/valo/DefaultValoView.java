@@ -123,9 +123,15 @@ public class DefaultValoView extends AbstractValoView {
             userMenuCaption = ((SecurityProviderSessionImpl) Site.getCurrent().getSecurityProvider()).getUserFromSession().getFirstName();
         }
 
-        final MenuBar.MenuItem settingsItem = settings.addItem(userMenuCaption, userMenuIcon, null);
         if (user != null) {
-            settingsItem.addItem(Site.getCurrent().localize("page-link-account"), new MenuBar.Command() {
+            final MenuBar.MenuItem settingsItem = settings.addItem(userMenuCaption, userMenuIcon, new MenuBar.Command() {
+                @Override
+                public void menuSelected(MenuBar.MenuItem selectedItem) {
+                    UI.getCurrent().getNavigator().navigateTo("account");
+                }
+            });
+            menu.addComponent(settings);
+            /*settingsItem.addItem(Site.getCurrent().localize("page-link-account"), new MenuBar.Command() {
                 @Override
                 public void menuSelected(MenuBar.MenuItem selectedItem) {
                     UI.getCurrent().getNavigator().navigateTo("account");
@@ -141,9 +147,11 @@ public class DefaultValoView extends AbstractValoView {
                     getSession().getSession().invalidate();
                     getSession().close();
                 }
-            });
+            });*/
+        } else {
+            final MenuBar.MenuItem settingsItem = settings.addItem(userMenuCaption, userMenuIcon, null);
+            menu.addComponent(settings);
         }
-        menu.addComponent(settings);
 
 
         menuItemsLayout.setPrimaryStyleName("valo-menuitems");
@@ -189,8 +197,8 @@ public class DefaultValoView extends AbstractValoView {
         }
 
         if (user != null) {
-            addMenuHeader(site.localize("page-link-personal"), 1);
-            addMenuLogoutLink();        }
+            addMenuLogoutLink();
+        }
 
         return menu;
     }

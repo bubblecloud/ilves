@@ -54,6 +54,11 @@ public class DefaultContentProvider implements ContentProvider {
         configuration.setViewerRoles(DefaultRoles.USER, DefaultRoles.ADMINISTRATOR);
         viewDescriptors.add(configuration);
 
+        final ViewDescriptor personal = new ViewDescriptor("personal", "Personal", DefaultValoView.class);
+        configuration.setViewerRoles(DefaultRoles.USER, DefaultRoles.ADMINISTRATOR);
+        viewDescriptors.add(personal);
+
+
         final ViewDescriptor users = new ViewDescriptor("users", "Users", DefaultValoView.class);
         users.setViewerRoles(DefaultRoles.ADMINISTRATOR);
         users.setViewletClass("content", UserFlowViewlet.class);
@@ -109,13 +114,14 @@ public class DefaultContentProvider implements ContentProvider {
 
         final NavigationVersion navigationVersion = new NavigationVersion(0, "users", null, true);
 
-        navigationVersion.addRootPage("login");
-        navigationVersion.addRootPage("login", "configuration");
-        navigationVersion.addChildPage("configuration", "account");
+        navigationVersion.addRootPage("configuration");
         navigationVersion.addChildPage("configuration", "users");
         navigationVersion.addChildPage("configuration", "groups");
         navigationVersion.addChildPage("configuration", "directories");
         navigationVersion.addChildPage("configuration", "companies");
+        navigationVersion.addRootPage("personal");
+        navigationVersion.addChildPage("personal", "account");
+        navigationVersion.addChildPage("personal", "login");
 
         final NavigationDescriptor navigationDescriptor = new NavigationDescriptor("navigation", null, null,
                 navigationVersion);
