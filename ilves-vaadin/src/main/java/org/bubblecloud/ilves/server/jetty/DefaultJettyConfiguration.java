@@ -120,11 +120,14 @@ public class DefaultJettyConfiguration {
             LOGGER.info("Ilves is in development mode.");
         }
 
+        final boolean clientCertificateRequested= "true".equals(
+                PropertiesUtil.getProperty("site", "client-certificate-requested"));
         final boolean clientCertificateRequired = "true".equals(
                 PropertiesUtil.getProperty("site", "client-certificate-required"));
         final Server server = JettyUtil.newServer(
                 httpPort,
                 httpsPort,
+                clientCertificateRequested,
                 clientCertificateRequired);
 
         server.setHandler(context);

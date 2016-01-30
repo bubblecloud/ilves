@@ -42,6 +42,7 @@ public class JettyUtil {
      * Constructs Jetty server.
      * @param httpPort the HTTP port
      * @param httpsPort the HTTPS port
+     * @param requestClientAuthentication true if client authentication is to be requested
      * @param requireClientAuthentication true if client authentication is required
      * @return the Jetty server
      * @throws IOException if SSL context factory creation fails.
@@ -49,6 +50,7 @@ public class JettyUtil {
     public static Server newServer(
             final int httpPort,
             final int httpsPort,
+            final boolean requestClientAuthentication,
             final boolean requireClientAuthentication) throws IOException {
         UserClientCertificateCache.init(DefaultSiteUI.getEntityManagerFactory());
 
@@ -93,7 +95,7 @@ public class JettyUtil {
 
             final JettySiteSslContextFactory sslContextFactory = newSslSocketFactory(certificateAlias,
                     keyStorePath, keyStorePassword,
-                    certificatePassword, requireClientAuthentication);
+                    certificatePassword, requestClientAuthentication, requireClientAuthentication);
 
             final HttpConfiguration httpsConfiguration = new HttpConfiguration(httpConfiguration);
             httpsConfiguration.addCustomizer(new SecureRequestCustomizer());
@@ -101,7 +103,7 @@ public class JettyUtil {
             final ServerConnector httpsConnector = new ServerConnector(server,
                     new SslConnectionFactory(sslContextFactory, "http/1.1"),
                     new HttpConnectionFactory(httpsConfiguration));
-            httpsConnector.setPort(8443);
+            httpsConnector.setPort(httpsPort);
             httpsConnector.setIdleTimeout(30000);
 
             server.addConnector(httpsConnector);
@@ -115,6 +117,7 @@ public class JettyUtil {
      * @param keyStorePath the key store path
      * @param keyStorePassword the key store password
      * @param certificatePassword the certificate password
+     * @param requestClientAuthentication true if client authentication is to be requested
      * @param requireClientAuthentication true if client authentication is required
      * @return the constructed SSL context factory
      * @throws Exception if exception occurs in construction
@@ -123,13 +126,14 @@ public class JettyUtil {
                                                                   final String keyStorePath,
                                                                   final String keyStorePassword,
                                                                   final String certificatePassword,
+                                                                  final boolean requestClientAuthentication,
                                                                   final boolean requireClientAuthentication)
             throws IOException {
 
         final JettySiteSslContextFactory sslContextFactory = new JettySiteSslContextFactory();
         sslContextFactory.setCertAlias(certificateAlias);
         sslContextFactory.setNeedClientAuth(requireClientAuthentication);
-        sslContextFactory.setWantClientAuth(true);
+        sslContextFactory.setWantClientAuth(requestClientAuthentication);
         sslContextFactory.setKeyStoreType("BKS");
         sslContextFactory.setKeyStorePath(keyStorePath);
         sslContextFactory.setKeyStorePassword(keyStorePassword);

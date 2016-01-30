@@ -4,6 +4,7 @@ import com.vaadin.server.*;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.bubblecloud.ilves.model.Company;
 import org.bubblecloud.ilves.model.Group;
 import org.bubblecloud.ilves.model.User;
@@ -22,6 +23,8 @@ import java.util.Locale;
  * @author Tommi S.E. Laukkanen
  */
 public class CredentialPostRequestHandler implements RequestHandler {
+    /** The logger. */
+    private static final Logger LOGGER = Logger.getLogger(CredentialPostRequestHandler.class);
 
     private DefaultSiteUI ui;
 
@@ -89,6 +92,10 @@ public class CredentialPostRequestHandler implements RequestHandler {
             if (user.getGoogleAuthenticatorSecret() != null) {
                 final String code = request.getParameter("code");
                 if (code == null || !GoogleAuthenticatorService.checkCode(SecurityUtil.decryptSecretKey(user.getGoogleAuthenticatorSecret()), code)) {
+                    if (ui.getSession() == null) {
+                        LOGGER.error("Vaadin UI not initialized when CredentialPostRequestHandler was invoked.");
+                        return false;
+                    }
                     ui.setNotification(DefaultSiteUI.getLocalizationProvider().localize("message-login-failed", locale),
                             Notification.Type.WARNING_MESSAGE);
                     return false;

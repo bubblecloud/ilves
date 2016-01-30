@@ -15,6 +15,7 @@ import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.bubblecloud.ilves.util.PropertiesUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,7 +56,8 @@ public class CertificateUtil {
     /**
      * The certificate asymmetric encryption key size.
      */
-    public static final int CERTIFICATE_KEY_SIZE = 1024;
+    public static final int CERTIFICATE_KEY_SIZE = Integer.parseInt(
+            PropertiesUtil.getProperty("site", "server-certificate-self-signed-key-size"));
     /**
      * The certificate signature algorithm.
      */

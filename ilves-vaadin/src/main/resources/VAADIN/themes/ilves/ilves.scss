@@ -106,4 +106,39 @@ hr {
     background-image: url('button/img/image-button-pressed.png');
   }
 
+
+
+
+  .image-button-large {
+    cursor: pointer;
+    width: 80px;
+    height: 80px;
+    padding: 5px 5px 5px 5px;
+    background-image: url('button/img/image-button-large.png');
+  }
+
+  .image-button-large:focus {
+    background-image: url('button/img/image-button-large-focused.png');
+  }
+
+  .image-button-large:active {
+    background-image: url('button/img/image-button-large-pressed.png');
+  }
+
+  .image-button-large-on {
+    cursor: pointer;
+    width: 80px;
+    height: 80px;
+    padding: 5px 5px 5px 5px;
+    background-image: url('button/img/image-button-large-on.png');
+  }
+
+  .image-button-large-on:focus {
+    background-image: url('button/img/image-button-large-focused.png');
+  }
+
+  .image-button-large-on:active {
+    background-image: url('button/img/image-button-large-pressed.png');
+  }
+
 }

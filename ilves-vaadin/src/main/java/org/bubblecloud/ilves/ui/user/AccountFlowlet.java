@@ -26,6 +26,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import org.bubblecloud.ilves.component.button.ImageToggleButton;
+import org.bubblecloud.ilves.component.button.LargeImageToggleButton;
 import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
 import org.bubblecloud.ilves.component.grid.FieldDescriptor;
 import org.bubblecloud.ilves.component.grid.FilterDescriptor;
@@ -63,7 +64,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
     private EntityContainer<Customer> entityContainer;
     /** The customer grid. */
     private Grid entityGrid;
-    private ImageToggleButton googleAuthenticatorButton;
+    private LargeImageToggleButton googleAuthenticatorButton;
 
     @Override
     public String getFlowletKey() {
@@ -159,7 +160,8 @@ public final class AccountFlowlet extends AbstractFlowlet {
             mainPanel.addComponent(horizontalLayout);
             horizontalLayout.setMargin(new MarginInfo(false, false, true, false));
             horizontalLayout.setSpacing(true);
-            googleAuthenticatorButton = new ImageToggleButton("icons/twofactor/google-authenticator.png");
+
+            googleAuthenticatorButton = new LargeImageToggleButton("icons/twofactor/google-authenticator-large.png");
             googleAuthenticatorButton.addClickListener(new MouseEvents.ClickListener() {
                 @Override
                 public void click(MouseEvents.ClickEvent event) {
@@ -178,6 +180,16 @@ public final class AccountFlowlet extends AbstractFlowlet {
                 }
             });
             horizontalLayout.addComponent(googleAuthenticatorButton);
+
+            final LargeImageToggleButton u2fRegisterButton = new LargeImageToggleButton("icons/twofactor/u2f.png");
+            googleAuthenticatorButton.addClickListener(new MouseEvents.ClickListener() {
+                @Override
+                public void click(MouseEvents.ClickEvent event) {
+                    //TODO Add U2F registration
+                    u2fRegisterButton.setState(((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() != null);
+                }
+            });
+            horizontalLayout.addComponent(u2fRegisterButton);
         }
 
         if (SiteModuleManager.isModuleInitialized(CustomerModule.class)) {
