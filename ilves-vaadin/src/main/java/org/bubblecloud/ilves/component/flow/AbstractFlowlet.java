@@ -80,10 +80,10 @@ public abstract class AbstractFlowlet extends CustomComponent implements Flowlet
         titleLayout.setMargin(new MarginInfo(true, false, true, false));
         titleLayout.setSpacing(true);
 
-        final Embedded titleIcon = new Embedded(null, getSite().getIcon("view-icon-" + getFlowletKey()));
+        /*final Embedded titleIcon = new Embedded(null, getSite().getIcon("view-icon-" + getFlowletKey()));
         titleIcon.setWidth(32, Unit.PIXELS);
         titleIcon.setHeight(32, Unit.PIXELS);
-        titleLayout.addComponent(titleIcon);
+        titleLayout.addComponent(titleIcon);*/
 
         final Label titleLabel = new Label("<h1>" + getSite().localize("view-" + getFlowletKey()) + "</h1>", ContentMode.HTML);
         titleLayout.addComponent(titleLabel);
