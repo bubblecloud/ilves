@@ -22,28 +22,29 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * EmailPasswordReset.
+ * Authentication device.
  *
  * @author Tommi S.E. Laukkanen
  */
 @Entity
-@Table(name = "usersession")
-public final class UserSession implements Serializable {
+@Table(name = "authenticationdevice")
+public final class AuthenticationDevice implements Serializable {
     /** Java serialization version UID. */
     private static final long serialVersionUID = 1L;
 
     /** Unique UUID of the entity. */
     @Id
     @GeneratedValue(generator = "uuid")
-    private String userSessionId;
+    private String authenticationDeviceId;
 
-    @Index(unique = true)
     @Column(nullable = false)
-    private String sessionIdHash;
+    private AuthenticationDeviceType type;
 
-    @Index(unique = true)
     @Column(nullable = false)
-    private String loginTransactionIdHash;
+    private String name;
+
+    @Column(nullable = false, length = 2048)
+    private String encryptedSecret;
 
     /** Code of the product or service sold. */
     @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH }, optional = false)
@@ -54,11 +55,17 @@ public final class UserSession implements Serializable {
     @Column(nullable = false)
     private Date created;
 
-    /**
-     * The default constructor.
-     */
-    public UserSession() {
-        super();
+    /** Created time of the task. */
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private Date modified;
+
+    public String getAuthenticationDeviceId() {
+        return authenticationDeviceId;
+    }
+
+    public void setAuthenticationDeviceId(String authenticationDeviceId) {
+        this.authenticationDeviceId = authenticationDeviceId;
     }
 
     public Date getCreated() {
@@ -69,20 +76,36 @@ public final class UserSession implements Serializable {
         this.created = created;
     }
 
-    public String getSessionIdHash() {
-        return sessionIdHash;
+    public Date getModified() {
+        return modified;
     }
 
-    public void setSessionIdHash(String sessionIdHash) {
-        this.sessionIdHash = sessionIdHash;
+    public void setModified(Date modified) {
+        this.modified = modified;
     }
 
-    public String getLoginTransactionIdHash() {
-        return loginTransactionIdHash;
+    public String getEncryptedSecret() {
+        return encryptedSecret;
     }
 
-    public void setLoginTransactionIdHash(String loginTransactionIdHash) {
-        this.loginTransactionIdHash = loginTransactionIdHash;
+    public void setEncryptedSecret(String encryptedSecret) {
+        this.encryptedSecret = encryptedSecret;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public AuthenticationDeviceType getType() {
+        return type;
+    }
+
+    public void setType(AuthenticationDeviceType type) {
+        this.type = type;
     }
 
     public User getUser() {
@@ -93,14 +116,6 @@ public final class UserSession implements Serializable {
         this.user = user;
     }
 
-    public String getUserSessionId() {
-        return userSessionId;
-    }
-
-    public void setUserSessionId(String userSessionId) {
-        this.userSessionId = userSessionId;
-    }
-
     @Override
     public String toString() {
         return "User session for: " + user.toString() + " started at " + created;
@@ -108,11 +123,11 @@ public final class UserSession implements Serializable {
 
     @Override
     public int hashCode() {
-        return userSessionId.hashCode();
+        return authenticationDeviceId.hashCode();
     }
 
     @Override
     public boolean equals(final Object obj) {
-        return obj != null && obj instanceof UserSession && userSessionId.equals(((UserSession) obj).getUserSessionId());
+        return obj != null && obj instanceof AuthenticationDevice && authenticationDeviceId.equals(((AuthenticationDevice) obj).getAuthenticationDeviceId());
     }
 }

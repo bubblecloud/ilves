@@ -1,3 +1,18 @@
+/**
+ * Copyright 2013 Tommi S.E. Laukkanen
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.bubblecloud.ilves.security;
 
 import com.vaadin.annotations.JavaScript;
@@ -12,11 +27,14 @@ import com.yubico.u2f.data.messages.RegisterResponse;
 import elemental.json.JsonArray;
 import elemental.json.impl.JreJsonNull;
 import org.apache.log4j.Logger;
+import org.bubblecloud.ilves.model.AuthenticationDevice;
+import org.bubblecloud.ilves.model.AuthenticationDeviceType;
 import org.bubblecloud.ilves.model.Company;
 import org.bubblecloud.ilves.model.User;
 import org.bubblecloud.ilves.site.SecurityProviderSessionImpl;
 import org.bubblecloud.ilves.site.Site;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +62,9 @@ public class U2fConnector extends AbstractJavaScriptExtension {
      * The register window.
      */
     private final Window registerWindow = new Window(Site.getCurrent().localize("header-register-u2f-device"));
+    private final Site site;
+    private final Company company;
+    private final String appId;
 
     /**
      * Constructor for setting up the JavaScript connector.
@@ -57,6 +78,12 @@ public class U2fConnector extends AbstractJavaScriptExtension {
                 onReqisterResponse(arguments);
             }
         });
+
+        site = Site.getCurrent();
+        company = site.getSiteContext().getObject(Company.class);
+        appId = company.getUrl().charAt(company.getUrl().length() - 1) == '/' ?
+            company.getUrl().substring(0, company.getUrl().length() - 1) : company.getUrl();
+
     }
 
     /**
@@ -82,16 +109,18 @@ public class U2fConnector extends AbstractJavaScriptExtension {
      * Send registration request to U2F JavaScript API.
      */
     private void sendRegisterRequest() {
-        final Site site = Site.getCurrent();
-        final Company company = site.getSiteContext().getObject(Company.class);
         final User user = ((SecurityProviderSessionImpl) site.getSecurityProvider()).getUserFromSession();
-        final String appId = company.getUrl();
 
-        final RegisterRequestData registerRequestData = u2f.startRegistration(appId, getRegistrations(user.getEmailAddress()));
-
-        requests.put(registerRequestData.getRequestId(), registerRequestData.toJson());
-
-        callFunction("register", registerRequestData.toJson());
+        try {
+            final RegisterRequestData registerRequestData = u2f.startRegistration(appId, getDeviceRegistrations(user.getEmailAddress()));
+            requests.put(registerRequestData.getRequestId(), registerRequestData.toJson());
+            callFunction("register", registerRequestData.toJson());
+        } catch(final Exception e) {
+            LOGGER.error("Error sending U2F registration request.", e);
+            new Notification(
+                    site.localize("message-u2f-device-registration-failed"),
+                    Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+        }
     }
 
     /**
@@ -101,7 +130,6 @@ public class U2fConnector extends AbstractJavaScriptExtension {
     public void onReqisterResponse(JsonArray arguments) {
         registerWindow.close();
 
-        final Site site = Site.getCurrent();
         try {
             final User user = ((SecurityProviderSessionImpl) site.getSecurityProvider()).getUserFromSession();
 
@@ -118,8 +146,7 @@ public class U2fConnector extends AbstractJavaScriptExtension {
 
             final RegisterRequestData registerRequestData = RegisterRequestData.fromJson(requests.remove(registerResponse.getRequestId()));
             final DeviceRegistration registration = u2f.finishRegistration(registerRequestData, registerResponse);
-
-            addRegistration(user.getEmailAddress(), registration);
+            addDeviceRegistration(user.getEmailAddress(), registration);
             AuditService.log(site.getSiteContext(), "u2f device register");
 
             new Notification(
@@ -133,15 +160,44 @@ public class U2fConnector extends AbstractJavaScriptExtension {
         }
     }
 
-    //TODO replace with database
+    private Iterable<DeviceRegistration> getDeviceRegistrations(final String emailAddress) {
+        final EntityManager entityManager = site.getSiteContext().getEntityManager();
+        final User user = UserDao.getUser(entityManager, company, emailAddress);
+        final List<AuthenticationDevice> authenticationDevices = AuthenticationDeviceDao.getAuthenticationDevices(entityManager, user);
 
-    private final List<DeviceRegistration> registrations = new ArrayList<DeviceRegistration>();
-
-    private Iterable<DeviceRegistration> getRegistrations(String username) {
-        return registrations;
+        final List<DeviceRegistration> deviceRegistrations = new ArrayList<>();
+        for (final AuthenticationDevice authenticationDevice : authenticationDevices) {
+            final String secret = SecurityUtil.decryptSecretKey(authenticationDevice.getEncryptedSecret());
+            final DeviceRegistration deviceRegistration = DeviceRegistration.fromJson(secret);
+            deviceRegistrations.add(deviceRegistration);
+        }
+        return deviceRegistrations;
     }
 
-    private void addRegistration(String emailAddress, DeviceRegistration registration) {
-        registrations.add(registration);
+    private void addDeviceRegistration(final String emailAddress, final DeviceRegistration deviceRegistration) {
+        final EntityManager entityManager = site.getSiteContext().getEntityManager();
+        final User user = UserDao.getUser(entityManager, company, emailAddress);
+
+        final String secret = deviceRegistration.toJson();
+        final String encryptedSecret = SecurityUtil.encryptSecretKey(secret);
+
+        final AuthenticationDevice authenticationDevice = new AuthenticationDevice();
+
+        String name;
+        try {
+            name = deviceRegistration.getAttestationCertificate().getSubjectDN().toString();
+            if (name.startsWith("CN=")) {
+                name = name.substring(3);
+            }
+        } catch (final Exception e) {
+            name = "u2f device";
+        }
+
+        authenticationDevice.setName(name);
+        authenticationDevice.setType(AuthenticationDeviceType.UNIVERSAL_SECOND_FACTOR);
+        authenticationDevice.setUser(user);
+        authenticationDevice.setEncryptedSecret(encryptedSecret);
+
+        AuthenticationDeviceDao.addAuthenticationDevice(entityManager, authenticationDevice);
     }
 }

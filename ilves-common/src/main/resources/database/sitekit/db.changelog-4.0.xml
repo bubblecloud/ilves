@@ -46,5 +46,33 @@
             <column name="googleauthenticatorsecret" type="varchar(255)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet author="tlaukkan (generated)" id="8b183753-d6e7-43fa-8ebe-69cdd87ee0fc">
+        <createTable tableName="authenticationdevice">
+            <column name="authenticationdeviceid" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_userid" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="encryptedsecret" type="VARCHAR(2048)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey catalogName="siteref" columnNames="authenticationdeviceid" constraintName="authenticationdevice_pkey" schemaName="public" tableName="authenticationdevice"/>
+        <addForeignKeyConstraint baseColumnNames="user_userid" baseTableCatalogName="siteref" baseTableName="authenticationdevice" baseTableSchemaName="public" constraintName="fk_authenticationdevice_user_userid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="userid" referencedTableCatalogName="siteref" referencedTableName="user_" referencedTableSchemaName="public"/>
+    </changeSet>
 </databaseChangeLog>
 
