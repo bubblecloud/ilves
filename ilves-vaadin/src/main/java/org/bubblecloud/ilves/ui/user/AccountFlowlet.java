@@ -61,6 +61,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
     /** The customer grid. */
     private Grid entityGrid;
     private LargeImageToggleButton googleAuthenticatorButton;
+    private LargeImageToggleButton u2fRegisterButton;
 
     @Override
     public String getFlowletKey() {
@@ -177,16 +178,25 @@ public final class AccountFlowlet extends AbstractFlowlet {
             });
             horizontalLayout.addComponent(googleAuthenticatorButton);
 
-            final LargeImageToggleButton u2fRegisterButton = new LargeImageToggleButton("icons/twofactor/u2f.png");
+            u2fRegisterButton = new LargeImageToggleButton("icons/twofactor/u2f.png");
             u2fRegisterButton.addClickListener(new MouseEvents.ClickListener() {
                 @Override
                 public void click(MouseEvents.ClickEvent event) {
-                    //TODO Add U2F registration
+                    final User user = ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession();
 
-                    final U2fConnector u2fConnector = new U2fConnector();
-                    u2fConnector.startRegistration();
+                    if (U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress())) {
+                        U2fService.removeDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress());
+                        u2fRegisterButton.setState(U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress()));
+                    } else {
+                        final U2fConnector u2fConnector = new U2fConnector(new U2fListener() {
+                            @Override
+                            public void onDeviceRegistrationSuccess() {
+                                u2fRegisterButton.setState(U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress()));
+                            }
+                        });
+                        u2fConnector.startRegistration();
+                    }
 
-                    //u2fRegisterButton.setState(((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() != null);
                 }
             });
             horizontalLayout.addComponent(u2fRegisterButton);
@@ -343,6 +353,8 @@ public final class AccountFlowlet extends AbstractFlowlet {
 
         if (((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession() != null) {
             googleAuthenticatorButton.setState(((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() != null);
+            final User user = ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession();
+            u2fRegisterButton.setState(U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress()));
         }
     }
 
