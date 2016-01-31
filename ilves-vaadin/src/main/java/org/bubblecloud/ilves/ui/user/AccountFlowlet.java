@@ -43,6 +43,8 @@ import org.bubblecloud.ilves.util.OpenIdUtil;
 import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 
 import javax.persistence.EntityManager;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -167,7 +169,12 @@ public final class AccountFlowlet extends AbstractFlowlet {
                         final String secretKey = GoogleAuthenticatorService.generateSecretKey();
                         user.setGoogleAuthenticatorSecret(SecurityUtil.encryptSecretKey(secretKey));
                         SecurityService.updateUser(getSite().getSiteContext(), getSite().getSiteContext().getEntityManager().merge(user));
-                        final String qrCodeUrl = GoogleAuthenticatorService.getQRBarcodeURL(user.getEmailAddress(), company.getHost(), secretKey);
+                        final String qrCodeUrl;
+                        try {
+                            qrCodeUrl = GoogleAuthenticatorService.getQRBarcodeURL(user.getEmailAddress(), new URL(company.getUrl()).getHost(), secretKey);
+                        } catch (MalformedURLException e) {
+                            throw new RuntimeException("Invalid company URL format.", e);
+                        }
                         GoogleAuthenticatorService.showGrCodeDialog(qrCodeUrl);
                     } else {
                         user.setGoogleAuthenticatorSecret(null);

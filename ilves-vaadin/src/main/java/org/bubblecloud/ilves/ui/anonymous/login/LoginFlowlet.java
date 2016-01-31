@@ -16,21 +16,20 @@
 package org.bubblecloud.ilves.ui.anonymous.login;
 
 import com.vaadin.event.MouseEvents;
-import com.vaadin.server.Responsive;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.themes.ValoTheme;
 import org.apache.log4j.Logger;
 import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
-import org.bubblecloud.ilves.exception.SiteException;
+import org.bubblecloud.ilves.model.AuthenticationDeviceType;
 import org.bubblecloud.ilves.model.Company;
 import org.bubblecloud.ilves.security.OAuthService;
-import org.bubblecloud.ilves.util.JadeUtil;
+import org.bubblecloud.ilves.security.SiteAuthenticationService;
 import org.bubblecloud.ilves.util.OpenIdUtil;
 
-import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Login Flowlet.
@@ -43,6 +42,17 @@ public final class LoginFlowlet extends AbstractFlowlet {
 
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(LoginFlowlet.class);
+    private TextField usernameField;
+    private PasswordField passwordField;
+
+    public PasswordField getPasswordField() {
+        return passwordField;
+    }
+
+    public TextField getUsernameField() {
+        return usernameField;
+    }
+
 
     @Override
     public String getFlowletKey() {
@@ -52,27 +62,88 @@ public final class LoginFlowlet extends AbstractFlowlet {
     @SuppressWarnings("serial")
     @Override
     public void initialize() {
+        final Company company = getSite().getSiteContext().getObject(Company.class);
 
         final VerticalLayout layout = new VerticalLayout();
-        layout.setMargin(true);
+        layout.setMargin(false);
         layout.setSpacing(true);
 
+        final Panel loginPanel = new Panel(getSite().localize("header-password-login"));
+        layout.addComponent(loginPanel);
+
+        final VerticalLayout passwordLoginLayout = new VerticalLayout();
+        loginPanel.setContent(passwordLoginLayout);
+        passwordLoginLayout.setMargin(true);
+        passwordLoginLayout.setSpacing(true);
+
+        usernameField = new TextField(getSite().localize("label-username"));
+        usernameField.setId("username");
+        usernameField.setWidth(100, Unit.PERCENTAGE);
+        passwordLoginLayout.addComponent(usernameField);
+
+        passwordField = new PasswordField(getSite().localize("label-password"));
+        passwordField.setId("password");
+        passwordField.setWidth(100, Unit.PERCENTAGE);
+        passwordLoginLayout.addComponent(passwordField);
+
+        final Button loginButton = new Button(getSite().localize("button-login"));
+        loginButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        loginButton.setId("login");
+        passwordLoginLayout.addComponent(loginButton);
+        loginButton.addClickListener(new ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                final String emailAddress = usernameField.getValue().toLowerCase();
+                final char[] password = passwordField.getValue().toCharArray();
+                final AuthenticationDeviceType authenticationDeviceType = SiteAuthenticationService.getAuthenticationDeviceType(emailAddress);
+                if (authenticationDeviceType == AuthenticationDeviceType.NONE) {
+                    SiteAuthenticationService.login(emailAddress, password, null, UUID.randomUUID().toString());
+                } else if (authenticationDeviceType == AuthenticationDeviceType.GOOGLE_AUTHENTICATOR) {
+                    getFlow().forward(GoogleAuthenticatorFlowlet.class);
+                }
+            }
+        });
+
+        if (company.isSelfRegistration()) {
+            final Button registerButton = new Button(getSite().localize("button-register") + " >>");
+            registerButton.addClickListener(new ClickListener() {
+                @Override
+                public void buttonClick(final ClickEvent event) {
+                    getFlow().forward(RegisterFlowlet.class);
+                }
+            });
+            passwordLoginLayout.addComponent(registerButton);
+        }
+
+        if (company.isEmailPasswordReset()) {
+            final Button forgotPasswordButton = new Button(getSite().localize("button-forgot-password") + " >>");
+            forgotPasswordButton.addClickListener(new ClickListener() {
+                @Override
+                public void buttonClick(final ClickEvent event) {
+                    getFlow().forward(ForgotPasswordFlowlet.class);
+                }
+            });
+            passwordLoginLayout.addComponent(forgotPasswordButton);
+        }
+
+        /*
         try {
             final CustomLayout loginFormLayout = new CustomLayout(
                     JadeUtil.parse("/VAADIN/themes/ilves/layouts/login.jade"));
             Responsive.makeResponsive(loginFormLayout);
             layout.addComponent(loginFormLayout);
+
         } catch (final IOException e) {
             throw new SiteException("Error loading login form.", e);
         }
+        */
 
-        final Company company = getSite().getSiteContext().getObject(Company.class);
         if (company.isOpenIdLogin()) {
-            final VerticalLayout mainPanel = new VerticalLayout();
+            final Panel mainPanel = new Panel(getSite().localize("header-openid-login"));
             layout.addComponent(mainPanel);
             final HorizontalLayout openIdLayout = new HorizontalLayout();
-            mainPanel.addComponent(openIdLayout);
-            openIdLayout.setMargin(new MarginInfo(false, false, false, false));
+            mainPanel.setContent(openIdLayout);
+            openIdLayout.setMargin(true);
             openIdLayout.setSpacing(true);
             final String returnViewName = "openidlogin";
             final Map<String, String> urlIconMap = OpenIdUtil.getOpenIdProviderUrlIconMap();
@@ -82,12 +153,12 @@ public final class LoginFlowlet extends AbstractFlowlet {
         }
 
         if (company.isoAuthLogin()) {
-            final VerticalLayout mainPanel = new VerticalLayout();
-            layout.addComponent(mainPanel);
-            final HorizontalLayout oAuthLayout = new HorizontalLayout();
-            mainPanel.addComponent(oAuthLayout);
-            oAuthLayout.setMargin(new MarginInfo(false, false, false, false));
-            oAuthLayout.setSpacing(true);
+            final Panel oauthLoginPanel = new Panel(getSite().localize("header-oauth-login"));
+            layout.addComponent(oauthLoginPanel);
+            final HorizontalLayout oauthLoginLayout = new HorizontalLayout();
+            oauthLoginPanel.setContent(oauthLoginLayout);
+            oauthLoginLayout.setMargin(true);
+            oauthLoginLayout.setSpacing(true);
             final Embedded embedded = new Embedded(null, getSite().getIcon("openid/github_32"));
             embedded.setStyleName("image-button");
             embedded.addClickListener(new MouseEvents.ClickListener() {
@@ -105,36 +176,10 @@ public final class LoginFlowlet extends AbstractFlowlet {
 
                 }
             });
-            oAuthLayout.addComponent(embedded);
+            oauthLoginLayout.addComponent(embedded);
         }
 
-        if (company.isSelfRegistration()) {
-            final Button registerButton = new Button(getSite().localize("button-register") + " >>");
-            registerButton.addClickListener(new ClickListener() {
-                @Override
-                public void buttonClick(final ClickEvent event) {
-                    getFlow().forward(RegisterFlowlet.class);
-                }
-            });
-            layout.addComponent(registerButton);
-        }
-
-        if (company.isEmailPasswordReset()) {
-            final Button forgotPasswordButton = new Button(getSite().localize("button-forgot-password") + " >>");
-            forgotPasswordButton.addClickListener(new ClickListener() {
-                @Override
-                public void buttonClick(final ClickEvent event) {
-                    getFlow().forward(ForgotPasswordFlowlet.class);
-                }
-            });
-            layout.addComponent(forgotPasswordButton);
-        }
-
-        final Panel panel = new Panel();
-        panel.setSizeUndefined();
-        panel.setContent(layout);
-
-        setViewContent(panel);
+        setViewContent(layout);
 
     }
 

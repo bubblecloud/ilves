@@ -44,6 +44,7 @@ public final class LoginFlowViewlet extends AbstractFlowViewlet {
         if (company.isEmailPasswordReset()) {
             addFlowlet(new ForgotPasswordFlowlet());
         }
+        addFlowlet(new GoogleAuthenticatorFlowlet());
 
         setRootFlowlet(rootView);
     }

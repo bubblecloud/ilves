@@ -47,12 +47,6 @@ public final class OpenIdLoginViewlet extends AbstractViewlet {
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(OpenIdLoginViewlet.class);
 
-    @Override
-    public void attach() {
-        super.attach();
-
-    }
-
     /**
      * SiteView constructSite occurred.
      */

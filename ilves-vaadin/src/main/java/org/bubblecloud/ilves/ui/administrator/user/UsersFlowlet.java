@@ -29,6 +29,7 @@ import org.bubblecloud.ilves.model.Group;
 import org.bubblecloud.ilves.model.Privilege;
 import org.bubblecloud.ilves.model.User;
 import org.bubblecloud.ilves.security.SecurityService;
+import org.bubblecloud.ilves.security.U2fService;
 import org.bubblecloud.ilves.security.UserDao;
 import org.bubblecloud.ilves.site.SiteFields;
 import org.bubblecloud.ilves.util.ContainerUtil;
@@ -229,10 +230,13 @@ public final class UsersFlowlet extends AbstractFlowlet {
                     user.setGoogleAuthenticatorSecret(null);
                     user.setFailedLoginCount(0);
                     SecurityService.updateUser(getSite().getSiteContext(), user);
-                    container.refresh();
-                    Notification.show(getSite().localize("message-disabled-two-factor-authentication-for-user"),
-                            Notification.Type.HUMANIZED_MESSAGE);
                 }
+                if (U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress())) {
+                    U2fService.removeDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress());
+                }
+                container.refresh();
+                Notification.show(getSite().localize("message-disabled-two-factor-authentication-for-user"),
+                        Notification.Type.HUMANIZED_MESSAGE);
             }
         });
 

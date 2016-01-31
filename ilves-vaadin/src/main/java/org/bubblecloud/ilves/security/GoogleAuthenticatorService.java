@@ -56,8 +56,8 @@ public class GoogleAuthenticatorService {
             final String user,
             final String host,
             final String secretKey) {
-        String format = "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=otpauth://totp/%s@%s%%3Fsecret%%3D%s";
-        return String.format(format, user, host, secretKey);
+        String format = "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=otpauth://totp/%s/%s%%3Fsecret%%3D%s";
+        return String.format(format, host, user, secretKey);
     }
 
     /**
