@@ -80,13 +80,14 @@ public class U2fConnector extends AbstractJavaScriptExtension {
         company = site.getSiteContext().getObject(Company.class);
         appId = company.getUrl().charAt(company.getUrl().length() - 1) == '/' ?
             company.getUrl().substring(0, company.getUrl().length() - 1) : company.getUrl();
-
     }
 
     /**
      * Start the registration process.
      */
     public void startRegistration() {
+        sendRegisterRequest();
+
         registerWindow.setModal(true);
         final VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.setMargin(true);
@@ -98,7 +99,6 @@ public class U2fConnector extends AbstractJavaScriptExtension {
         registerWindow.setWidth(300, Sizeable.Unit.PIXELS);
         registerWindow.setHeight(200, Sizeable.Unit.PIXELS);
         registerWindow.center();
-        sendRegisterRequest();
         UI.getCurrent().addWindow(registerWindow);
     }
 
