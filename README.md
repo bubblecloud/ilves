@@ -3,7 +3,7 @@ Ilves
 
 Ilves is a lean Java web site development framework. Demo is available at Heroku:
 
-http://ilves.herokuapp.com/
+https://ilves.herokuapp.com/
 
 Features and other details can be found from Ilves Wiki:
 
