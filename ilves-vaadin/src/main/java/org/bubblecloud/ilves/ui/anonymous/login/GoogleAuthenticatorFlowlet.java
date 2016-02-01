@@ -43,8 +43,8 @@ public class GoogleAuthenticatorFlowlet extends AbstractFlowlet {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 final LoginFlowlet loginFlowlet = getFlow().getFlowlet(LoginFlowlet.class);
-                final String emailAddress = loginFlowlet.getUsernameField().getValue().toLowerCase();
-                final char[] password = loginFlowlet.getPasswordField().getValue().toCharArray();
+                final String emailAddress = loginFlowlet.getUsername().toLowerCase();
+                final char[] password = loginFlowlet.getPassword();
                 final String code = codeField.getValue();
                 final AuthenticationDeviceType authenticationDeviceType = SiteAuthenticationService.getAuthenticationDeviceType(emailAddress);
                 SiteAuthenticationService.login(emailAddress, password, code, UUID.randomUUID().toString());

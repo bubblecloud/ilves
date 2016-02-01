@@ -65,6 +65,7 @@ public class CredentialPostRequestHandler implements RequestHandler {
             return true;
         }
 
+        /*
         if (!StringUtils.isEmpty(request.getParameter("username")) &&
                 !StringUtils.isEmpty(request.getParameter("password")) &&
                 VaadinSession.getCurrent() != null &&
@@ -116,6 +117,7 @@ public class CredentialPostRequestHandler implements RequestHandler {
             }
 
         }
+        */
         return false; // No response was written
     }
 

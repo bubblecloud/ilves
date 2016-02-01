@@ -1,13 +1,8 @@
-form.ilves-login(action="#!login",method="post")
-    label(for="username") USERNAME_LABEL
+form.ilves-login(id="loginForm",action="uuid",method="post",target="loginTarget")
+    label.v-caption(for="username") USERNAME_LABEL
     input.ilves-login-username.v-textfield.v-widget.v-has-width(type="text", id="username", name="username")
     br
-    label(for="password") PASSWORD_LABEL
+    label.v-caption(for="password") PASSWORD_LABEL
     input.ilves-login-password.v-textfield.v-widget.v-has-width(type="password", id="password", name="password")
-    br
-    label(for="code") CODE_LABEL
-    input.ilves-login-password.v-textfield.v-widget.v-has-width(type="password", id="code", name="code")
-    br
-    input.ilves-login-button.v-button-primary(type="submit", value="LOGIN")
-    br
-    input(type="hidden", id="uiTransactionId", name="uiTransactionId", value="UITRANSACTIONID")
+
+iframe(src="uuid",id="loginTarget",name="loginTarget",style="display:none")

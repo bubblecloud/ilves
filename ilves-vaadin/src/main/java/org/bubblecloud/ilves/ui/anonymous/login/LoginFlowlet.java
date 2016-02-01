@@ -16,18 +16,22 @@
 package org.bubblecloud.ilves.ui.anonymous.login;
 
 import com.vaadin.event.MouseEvents;
+import com.vaadin.server.Responsive;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 import org.apache.log4j.Logger;
 import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
+import org.bubblecloud.ilves.exception.SiteException;
 import org.bubblecloud.ilves.model.AuthenticationDeviceType;
 import org.bubblecloud.ilves.model.Company;
 import org.bubblecloud.ilves.security.OAuthService;
 import org.bubblecloud.ilves.security.SiteAuthenticationService;
+import org.bubblecloud.ilves.util.JadeUtil;
 import org.bubblecloud.ilves.util.OpenIdUtil;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 
@@ -42,17 +46,18 @@ public final class LoginFlowlet extends AbstractFlowlet {
 
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(LoginFlowlet.class);
-    private TextField usernameField;
-    private PasswordField passwordField;
 
-    public PasswordField getPasswordField() {
-        return passwordField;
+    private String username;
+
+    private char[] passwordChars;
+
+    public String getUsername() {
+        return username;
     }
 
-    public TextField getUsernameField() {
-        return usernameField;
+    public char[] getPassword() {
+        return passwordChars;
     }
-
 
     @Override
     public String getFlowletKey() {
@@ -76,15 +81,14 @@ public final class LoginFlowlet extends AbstractFlowlet {
         passwordLoginLayout.setMargin(true);
         passwordLoginLayout.setSpacing(true);
 
-        usernameField = new TextField(getSite().localize("label-username"));
-        usernameField.setId("username");
-        usernameField.setWidth(100, Unit.PERCENTAGE);
-        passwordLoginLayout.addComponent(usernameField);
-
-        passwordField = new PasswordField(getSite().localize("label-password"));
-        passwordField.setId("password");
-        passwordField.setWidth(100, Unit.PERCENTAGE);
-        passwordLoginLayout.addComponent(passwordField);
+        try {
+            final CustomLayout loginFormLayout = new CustomLayout(
+                    JadeUtil.parse("/VAADIN/themes/ilves/layouts/login.jade"));
+            Responsive.makeResponsive(loginFormLayout);
+            passwordLoginLayout.addComponent(loginFormLayout);
+        } catch (final IOException e) {
+            throw new SiteException("Error loading login form.", e);
+        }
 
         final Button loginButton = new Button(getSite().localize("button-login"));
         loginButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -93,14 +97,27 @@ public final class LoginFlowlet extends AbstractFlowlet {
         loginButton.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
-                final String emailAddress = usernameField.getValue().toLowerCase();
-                final char[] password = passwordField.getValue().toCharArray();
-                final AuthenticationDeviceType authenticationDeviceType = SiteAuthenticationService.getAuthenticationDeviceType(emailAddress);
-                if (authenticationDeviceType == AuthenticationDeviceType.NONE) {
-                    SiteAuthenticationService.login(emailAddress, password, null, UUID.randomUUID().toString());
-                } else if (authenticationDeviceType == AuthenticationDeviceType.GOOGLE_AUTHENTICATOR) {
-                    getFlow().forward(GoogleAuthenticatorFlowlet.class);
-                }
+
+                final LoginConnector loginConnector = new LoginConnector();
+                loginConnector.getCredentials(new LoginConnectorCredentialsListener() {
+                    @Override
+                    public void onCredentials(final String receivedUsername, String receivedPassword) {
+                        username = receivedUsername;
+                        passwordChars = receivedPassword.toCharArray();
+                        loginConnector.saveCredentials(new LoginConnectorSaveListener() {
+                            @Override
+                            public void onSave() {
+                                final AuthenticationDeviceType authenticationDeviceType = SiteAuthenticationService.getAuthenticationDeviceType(username);
+                                if (authenticationDeviceType == AuthenticationDeviceType.NONE) {
+                                    SiteAuthenticationService.login(username, passwordChars, null, UUID.randomUUID().toString());
+                                } else if (authenticationDeviceType == AuthenticationDeviceType.GOOGLE_AUTHENTICATOR) {
+                                    getFlow().forward(GoogleAuthenticatorFlowlet.class);
+                                }
+                            }
+                        });
+
+                    }
+                });
             }
         });
 
@@ -125,18 +142,6 @@ public final class LoginFlowlet extends AbstractFlowlet {
             });
             passwordLoginLayout.addComponent(forgotPasswordButton);
         }
-
-        /*
-        try {
-            final CustomLayout loginFormLayout = new CustomLayout(
-                    JadeUtil.parse("/VAADIN/themes/ilves/layouts/login.jade"));
-            Responsive.makeResponsive(loginFormLayout);
-            layout.addComponent(loginFormLayout);
-
-        } catch (final IOException e) {
-            throw new SiteException("Error loading login form.", e);
-        }
-        */
 
         if (company.isOpenIdLogin()) {
             final Panel mainPanel = new Panel(getSite().localize("header-openid-login"));
