@@ -19,7 +19,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Uuid Servlet</servlet-name>
-        <url-pattern>/uuid</url-pattern>
+        <url-pattern>/uuid.html</url-pattern>
     </servlet-mapping>
 
 

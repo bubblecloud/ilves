@@ -37,11 +37,15 @@ public class UuidServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.getWriter().print("<html><body>");
         resp.getWriter().print(UUID.randomUUID());
+        resp.getWriter().print("</body></html>");
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.getWriter().print("<html><body>");
         resp.getWriter().print(UUID.randomUUID());
+        resp.getWriter().print("</body></html>");
     }
 }
