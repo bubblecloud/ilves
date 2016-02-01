@@ -22,7 +22,7 @@ import elemental.json.JsonArray;
 import org.apache.log4j.Logger;
 
 /**
- * Login JavaScript API connector.
+ * Login form JavaScript connector.
  *
  * @author Tommi S.E. Laukkanen
  */
@@ -30,7 +30,9 @@ import org.apache.log4j.Logger;
 public class LoginConnector extends AbstractJavaScriptExtension {
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(LoginConnector.class);
+    /** The credentials listener. */
     private LoginConnectorCredentialsListener credentialsListener;
+    /** The save listener. */
     private LoginConnectorSaveListener saveListener;
 
     /**

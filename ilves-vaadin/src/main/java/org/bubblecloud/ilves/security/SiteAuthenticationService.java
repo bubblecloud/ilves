@@ -39,6 +39,11 @@ public class SiteAuthenticationService {
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(LoginService.class);
 
+    /**
+     * Gets current authentication device type for email address.
+     * @param emailAddress_ the email address
+     * @return the current authentication device
+     */
     public static AuthenticationDeviceType getAuthenticationDeviceType(final String emailAddress_) {
         final String emailAddress = emailAddress_.toLowerCase();
         final AbstractSiteUI ui = ((AbstractSiteUI) UI.getCurrent());
@@ -63,6 +68,13 @@ public class SiteAuthenticationService {
         return AuthenticationDeviceType.NONE;
     }
 
+    /**
+     * Logs user in to the site.
+     * @param emailAddress_ the email address
+     * @param password the password
+     * @param authenticatorCode the authenticator code (optional)
+     * @param transactionId the authentication transaction ID
+     */
     public static void login(final String emailAddress_, final char[] password, final String authenticatorCode, final String transactionId) {
         final  String emailAddress = emailAddress_.toLowerCase();
         final AbstractSiteUI ui = ((AbstractSiteUI)UI.getCurrent());
@@ -117,6 +129,13 @@ public class SiteAuthenticationService {
         }
     }
 
+    /**
+     * Helper function for final login.
+     * @param locale the locale
+     * @param entityManager the entity manager
+     * @param company the company
+     * @param user the user
+     */
     private static void login(Locale locale, EntityManager entityManager, Company company, User user) {
         final AbstractSiteUI ui = ((AbstractSiteUI)UI.getCurrent());
         final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);

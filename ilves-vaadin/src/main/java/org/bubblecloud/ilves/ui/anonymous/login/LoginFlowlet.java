@@ -48,14 +48,22 @@ public final class LoginFlowlet extends AbstractFlowlet {
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(LoginFlowlet.class);
 
+    /** The user name. */
     private String username;
 
+    /** The password. */
     private char[] passwordChars;
 
+    /**
+     * @return the user name
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * @return the password
+     */
     public char[] getPassword() {
         return passwordChars;
     }
