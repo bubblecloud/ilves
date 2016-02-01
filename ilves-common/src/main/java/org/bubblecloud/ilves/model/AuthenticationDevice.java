@@ -41,6 +41,9 @@ public final class AuthenticationDevice implements Serializable {
     private AuthenticationDeviceType type;
 
     @Column(nullable = false)
+    private String key;
+
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false, length = 2048)
@@ -90,6 +93,14 @@ public final class AuthenticationDevice implements Serializable {
 
     public void setEncryptedSecret(String encryptedSecret) {
         this.encryptedSecret = encryptedSecret;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getName() {

@@ -45,6 +45,7 @@ public final class LoginFlowViewlet extends AbstractFlowViewlet {
             addFlowlet(new ForgotPasswordFlowlet());
         }
         addFlowlet(new GoogleAuthenticatorFlowlet());
+        addFlowlet(new U2fAuthenticationFlowlet());
 
         setRootFlowlet(rootView);
     }

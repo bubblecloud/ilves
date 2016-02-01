@@ -74,5 +74,12 @@
         <addPrimaryKey catalogName="siteref" columnNames="authenticationdeviceid" constraintName="authenticationdevice_pkey" schemaName="public" tableName="authenticationdevice"/>
         <addForeignKeyConstraint baseColumnNames="user_userid" baseTableCatalogName="siteref" baseTableName="authenticationdevice" baseTableSchemaName="public" constraintName="fk_authenticationdevice_user_userid" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="userid" referencedTableCatalogName="siteref" referencedTableName="user_" referencedTableSchemaName="public"/>
     </changeSet>
+    <changeSet author="tlaukkan (generated)" id="0de9e0ed-83e1-417d-95d0-aeb37a39dce0">
+        <addColumn tableName="authenticationdevice">
+            <column name="key" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
 

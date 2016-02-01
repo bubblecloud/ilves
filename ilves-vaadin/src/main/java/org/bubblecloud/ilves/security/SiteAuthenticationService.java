@@ -87,6 +87,8 @@ public class SiteAuthenticationService {
 
         if (user.getGoogleAuthenticatorSecret() != null) {
             if (authenticatorCode == null) {
+                new Notification(DefaultSiteUI.getLocalizationProvider().localize("message-invalid-code", locale),
+                        Notification.Type.WARNING_MESSAGE).show(Page.getCurrent());
                 return;
             }
             if (!GoogleAuthenticatorService.checkCode(SecurityUtil.decryptSecretKey(user.getGoogleAuthenticatorSecret()), authenticatorCode)) {
@@ -94,10 +96,6 @@ public class SiteAuthenticationService {
                         Notification.Type.WARNING_MESSAGE).show(Page.getCurrent());
                 return;
             }
-        }
-
-        if (U2fService.hasDeviceRegistrations(Site.getCurrent().getSiteContext(), emailAddress)) {
-            return;
         }
 
         final String errorKey = LoginService.login(ui.getSite().getSiteContext(), company,

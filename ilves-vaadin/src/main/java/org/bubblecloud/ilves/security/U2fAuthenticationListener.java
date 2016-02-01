@@ -16,10 +16,11 @@
 package org.bubblecloud.ilves.security;
 
 /**
- * Universal second factor (U2F) listener.
+ * Universal second factor (U2F) authentication listener.
  *
  * @author Tommi S.E. Laukkanen
  */
-public interface U2fListener {
-    void onDeviceRegistrationSuccess();
+public interface U2fAuthenticationListener {
+    void onDeviceAuthenticationSuccess();
+    void onDeviceAuthenticationFailure();
 }

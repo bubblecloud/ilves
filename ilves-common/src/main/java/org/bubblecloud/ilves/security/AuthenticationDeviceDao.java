@@ -138,4 +138,23 @@ public class AuthenticationDeviceDao {
         query.setParameter("user", user);
         return query.getResultList();
     }
+
+    /**
+     * Gets authentication device by key.
+     *
+     * @param entityManager the entity manager.
+     * @param key          the key
+     * @return the authentication device
+     */
+    public static final AuthenticationDevice getAuthenticationDeviceByKey(final EntityManager entityManager,
+                                                                          final String key) {
+        final TypedQuery<AuthenticationDevice> query = entityManager.createQuery(
+                "select e from AuthenticationDevice as e where e.key=:key order by e.name",
+                AuthenticationDevice.class);
+        query.setParameter("key", key);
+        if (query.getResultList().size() == 0) {
+            return null;
+        }
+        return query.getResultList().get(0);
+    }
 }

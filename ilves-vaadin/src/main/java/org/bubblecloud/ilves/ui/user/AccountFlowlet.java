@@ -195,13 +195,13 @@ public final class AccountFlowlet extends AbstractFlowlet {
                         U2fService.removeDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress());
                         u2fRegisterButton.setState(U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress()));
                     } else {
-                        final U2fConnector u2fConnector = new U2fConnector(new U2fListener() {
+                        final U2fConnector u2fConnector = new U2fConnector();
+                        u2fConnector.startRegistration(new U2fRegistrationListener() {
                             @Override
                             public void onDeviceRegistrationSuccess() {
                                 u2fRegisterButton.setState(U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress()));
                             }
                         });
-                        u2fConnector.startRegistration();
                     }
 
                 }

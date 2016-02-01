@@ -16,6 +16,7 @@
 package org.bubblecloud.ilves.ui.anonymous.login;
 
 import com.vaadin.event.MouseEvents;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
@@ -93,6 +94,7 @@ public final class LoginFlowlet extends AbstractFlowlet {
         final Button loginButton = new Button(getSite().localize("button-login"));
         loginButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
         loginButton.setId("login");
+        loginButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         passwordLoginLayout.addComponent(loginButton);
         loginButton.addClickListener(new ClickListener() {
             @Override
@@ -112,6 +114,8 @@ public final class LoginFlowlet extends AbstractFlowlet {
                                     SiteAuthenticationService.login(username, passwordChars, null, UUID.randomUUID().toString());
                                 } else if (authenticationDeviceType == AuthenticationDeviceType.GOOGLE_AUTHENTICATOR) {
                                     getFlow().forward(GoogleAuthenticatorFlowlet.class);
+                                } else if (authenticationDeviceType == AuthenticationDeviceType.UNIVERSAL_SECOND_FACTOR) {
+                                    getFlow().forward(U2fAuthenticationFlowlet.class);
                                 }
                             }
                         });

@@ -93,6 +93,7 @@ public class U2fService {
 
         final AuthenticationDevice authenticationDevice = new AuthenticationDevice();
 
+        authenticationDevice.setKey(deviceRegistration.getKeyHandle());
         String name;
         try {
             name = deviceRegistration.getAttestationCertificate().getSubjectDN().toString();
@@ -102,13 +103,34 @@ public class U2fService {
         } catch (final Exception e) {
             name = "u2f device";
         }
-
         authenticationDevice.setName(name);
+
         authenticationDevice.setType(AuthenticationDeviceType.UNIVERSAL_SECOND_FACTOR);
         authenticationDevice.setUser(user);
         authenticationDevice.setEncryptedSecret(encryptedSecret);
 
         AuthenticationDeviceDao.addAuthenticationDevice(entityManager, authenticationDevice);
+    }
+
+    /**
+     * Updates device registration.
+     * @param context the context
+     * @param emailAddress the email address
+     * @param deviceRegistration the device registration
+     */
+    public static void updateDeviceRegistration(final SiteContext context, final String emailAddress, final DeviceRegistration deviceRegistration) {
+        final Company company = context.getObject(Company.class);
+        final EntityManager entityManager = context.getEntityManager();
+        final User user = UserDao.getUser(entityManager, company, emailAddress);
+        final String secret = deviceRegistration.toJson();
+        final String encryptedSecret = SecurityUtil.encryptSecretKey(secret);
+
+        final AuthenticationDevice authenticationDevice = AuthenticationDeviceDao.getAuthenticationDeviceByKey(entityManager, deviceRegistration.getKeyHandle());
+        if (!user.getUserId().equals(authenticationDevice.getUser().getUserId())) {
+            throw new SecurityException("Authentication device user mismatch.");
+        }
+        authenticationDevice.setEncryptedSecret(encryptedSecret);
+        AuthenticationDeviceDao.updateAuthenticationDevice(entityManager, authenticationDevice);
     }
 
     /**
