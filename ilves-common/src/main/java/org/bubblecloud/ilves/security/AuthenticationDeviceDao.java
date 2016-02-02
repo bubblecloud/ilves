@@ -44,7 +44,7 @@ public class AuthenticationDeviceDao {
      * @param entityManager the entity manager
      * @param authenticationDevice the authenticationDevice
      */
-    protected static final void addAuthenticationDevice(final EntityManager entityManager,
+    public static final void addAuthenticationDevice(final EntityManager entityManager,
                                                         final AuthenticationDevice authenticationDevice) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
@@ -68,7 +68,7 @@ public class AuthenticationDeviceDao {
      * @param entityManager the entity manager
      * @param authenticationDevice the authenticationDevice
      */
-    protected static final void updateAuthenticationDevice(final EntityManager entityManager,
+    public static final void updateAuthenticationDevice(final EntityManager entityManager,
                                                            final AuthenticationDevice authenticationDevice) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
@@ -91,7 +91,7 @@ public class AuthenticationDeviceDao {
      * @param entityManager the entity manager
      * @param authenticationDevice the authenticationDevice
      */
-    protected static final void removeAuthenticationDevice(final EntityManager entityManager,
+    public static final void removeAuthenticationDevice(final EntityManager entityManager,
                                                            final AuthenticationDevice authenticationDevice) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();

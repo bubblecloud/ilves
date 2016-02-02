@@ -21,6 +21,7 @@ import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.event.MouseEvents;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
@@ -30,10 +31,7 @@ import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
 import org.bubblecloud.ilves.component.grid.FieldDescriptor;
 import org.bubblecloud.ilves.component.grid.FilterDescriptor;
 import org.bubblecloud.ilves.component.grid.Grid;
-import org.bubblecloud.ilves.model.Company;
-import org.bubblecloud.ilves.model.Customer;
-import org.bubblecloud.ilves.model.Group;
-import org.bubblecloud.ilves.model.User;
+import org.bubblecloud.ilves.model.*;
 import org.bubblecloud.ilves.module.customer.CustomerModule;
 import org.bubblecloud.ilves.security.*;
 import org.bubblecloud.ilves.site.*;
@@ -60,6 +58,8 @@ public final class AccountFlowlet extends AbstractFlowlet {
     private static final long serialVersionUID = 1L;
     /** The entity container. */
     private EntityContainer<Customer> entityContainer;
+    /** The authentication device container. */
+    private EntityContainer<AuthenticationDevice> authenticationDeviceContainer;
     /** The customer grid. */
     private Grid entityGrid;
     private LargeImageToggleButton googleAuthenticatorButton;
@@ -82,6 +82,8 @@ public final class AccountFlowlet extends AbstractFlowlet {
 
     @Override
     public void initialize() {
+        final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
+
         final GridLayout gridLayout = new GridLayout(1, 7);
         gridLayout.setRowExpandRatio(0, 0.0f);
         gridLayout.setRowExpandRatio(1, 0.0f);
@@ -97,29 +99,34 @@ public final class AccountFlowlet extends AbstractFlowlet {
         gridLayout.setRowExpandRatio(4, 1f);
         setViewContent(gridLayout);
 
-        final VerticalLayout userAccountTitle = new VerticalLayout();
-        userAccountTitle.setMargin(new MarginInfo(false, false, false, false));
-        userAccountTitle.setSpacing(true);
+        authenticationDeviceContainer = new EntityContainer<AuthenticationDevice>(entityManager, true, false, false, AuthenticationDevice.class, 1000,
+                new String[]{"name"}, new boolean[]{false}, "authenticationDeviceId");
+        authenticationDeviceContainer.addContainerProperty("name", String.class, "", true, false);
+
+        final VerticalLayout userAccountLayout = new VerticalLayout();
+        userAccountLayout.setMargin(new MarginInfo(false, false, false, false));
+        userAccountLayout.setSpacing(true);
 
             /*final Embedded titleIcon = new Embedded(null, getSite().getIcon("view-icon-customer"));
             titleIcon.setWidth(32, Unit.PIXELS);
             titleIcon.setHeight(32, Unit.PIXELS);
             titleLayout.addComponent(titleIcon);*/
 
-        userAccountTitle.addComponent(new Label("<hr />", ContentMode.HTML));
+        userAccountLayout.addComponent(new Label("<hr />", ContentMode.HTML));
 
         /*final Embedded userAccountTitleIcon = new Embedded(null, getSite().getIcon("view-icon-user"));
         userAccountTitleIcon.setWidth(32, Unit.PIXELS);
         userAccountTitleIcon.setHeight(32, Unit.PIXELS);
         userAccountTitle.addComponent(userAccountTitleIcon);*/
         final Label userAccountTitleLabel = new Label("<h2>User Account</h2>", ContentMode.HTML);
-        userAccountTitle.addComponent(userAccountTitleLabel);
-        gridLayout.addComponent(userAccountTitle, 0, 0);
+        userAccountLayout.addComponent(userAccountTitleLabel);
+
+        gridLayout.addComponent(userAccountLayout, 0, 0);
 
 
         final Button editUserButton = new Button("Edit User Account");
         editUserButton.setIcon(getSite().getIcon("button-icon-edit"));
-        gridLayout.addComponent(editUserButton, 0, 3);
+        gridLayout.addComponent(editUserButton, 0, 1);
         editUserButton.addClickListener(new ClickListener() {
             /** Serial version UID. */
             private static final long serialVersionUID = 1L;
@@ -138,7 +145,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
         if (company.isOpenIdLogin()) {
             final VerticalLayout mainPanel = new VerticalLayout();
             mainPanel.setCaption(getSite().localize("header-choose-open-id-provider"));
-            gridLayout.addComponent(mainPanel, 0, 1);
+            gridLayout.addComponent(mainPanel, 0, 2);
             final HorizontalLayout openIdLayout = new HorizontalLayout();
             mainPanel.addComponent(openIdLayout);
             openIdLayout.setMargin(new MarginInfo(false, false, true, false));
@@ -152,13 +159,16 @@ public final class AccountFlowlet extends AbstractFlowlet {
 
         // Two factor authentication
         {
-            final VerticalLayout mainPanel = new VerticalLayout();
-            gridLayout.addComponent(mainPanel, 0, 2);
-            mainPanel.setCaption(getSite().localize("header-two-factor-authentication"));
-            final HorizontalLayout horizontalLayout = new HorizontalLayout();
-            mainPanel.addComponent(horizontalLayout);
-            horizontalLayout.setMargin(new MarginInfo(false, false, true, false));
-            horizontalLayout.setSpacing(true);
+            final VerticalLayout mfaLayout = new VerticalLayout();
+            mfaLayout.setSpacing(true);
+            gridLayout.addComponent(mfaLayout, 0, 3);
+
+            mfaLayout.addComponent(new Label("<h3>" + getSite().localize("header-register-mfa-device") + "</h3>", ContentMode.HTML));
+
+            final HorizontalLayout mfaRegisterButtonLayout = new HorizontalLayout();
+            mfaRegisterButtonLayout.setMargin(new MarginInfo(false, false, true, false));
+            mfaLayout.addComponent(mfaRegisterButtonLayout);
+            mfaRegisterButtonLayout.setSpacing(true);
 
             googleAuthenticatorButton = new LargeImageToggleButton("icons/twofactor/google-authenticator-large.png");
             googleAuthenticatorButton.addClickListener(new MouseEvents.ClickListener() {
@@ -176,14 +186,16 @@ public final class AccountFlowlet extends AbstractFlowlet {
                             throw new RuntimeException("Invalid company URL format.", e);
                         }
                         GoogleAuthenticatorService.showGrCodeDialog(qrCodeUrl);
+                        authenticationDeviceContainer.refresh();
                     } else {
                         user.setGoogleAuthenticatorSecret(null);
                         SecurityService.updateUser(getSite().getSiteContext(), getSite().getSiteContext().getEntityManager().merge(user));
+                        authenticationDeviceContainer.refresh();
                     }
                     googleAuthenticatorButton.setState(((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() != null);
                 }
             });
-            horizontalLayout.addComponent(googleAuthenticatorButton);
+            mfaRegisterButtonLayout.addComponent(googleAuthenticatorButton);
 
             u2fRegisterButton = new LargeImageToggleButton("icons/twofactor/u2f.png");
             u2fRegisterButton.addClickListener(new MouseEvents.ClickListener() {
@@ -194,19 +206,50 @@ public final class AccountFlowlet extends AbstractFlowlet {
                     if (U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress())) {
                         U2fService.removeDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress());
                         u2fRegisterButton.setState(U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress()));
+                        authenticationDeviceContainer.refresh();
                     } else {
                         final U2fConnector u2fConnector = new U2fConnector();
                         u2fConnector.startRegistration(new U2fRegistrationListener() {
                             @Override
                             public void onDeviceRegistrationSuccess() {
                                 u2fRegisterButton.setState(U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress()));
+                                authenticationDeviceContainer.refresh();
                             }
                         });
                     }
 
                 }
             });
-            horizontalLayout.addComponent(u2fRegisterButton);
+            mfaRegisterButtonLayout.addComponent(u2fRegisterButton);
+
+            mfaLayout.addComponent(new Label("<h3>" + getSite().localize("header-registered-mfa-devices") + "</h3>", ContentMode.HTML));
+
+            final com.vaadin.ui.Grid authenticationDeviceGrid = new com.vaadin.ui.Grid(authenticationDeviceContainer);
+            authenticationDeviceGrid.setSelectionMode(com.vaadin.ui.Grid.SelectionMode.MULTI);
+            authenticationDeviceGrid.setWidth(100, Unit.PERCENTAGE);
+            authenticationDeviceGrid.setHeightMode(HeightMode.ROW);
+            authenticationDeviceGrid.setHeightByRows(3);
+
+            final HorizontalLayout buttonLayout = new HorizontalLayout();
+            mfaLayout.addComponent(buttonLayout);
+            final Button removeButton = new Button(getSite().localize("button-remove"), getSite().getIcon("button-icon-remove"));
+            buttonLayout.addComponent(removeButton);
+            removeButton.addClickListener(new ClickListener() {
+                @Override
+                public void buttonClick(ClickEvent event) {
+                    for (final Object authenticationDeviceId : authenticationDeviceGrid.getSelectedRows()) {
+                        AuthenticationDeviceDao.removeAuthenticationDevice(entityManager,
+                                AuthenticationDeviceDao.getAuthenticationDevice(entityManager, (String) authenticationDeviceId));
+                    }
+
+                    final User user = ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession();
+                    u2fRegisterButton.setState(U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress()));
+                    googleAuthenticatorButton.setState(user.getGoogleAuthenticatorSecret() != null);
+                    authenticationDeviceContainer.refresh();
+                }
+            });
+
+            mfaLayout.addComponent(authenticationDeviceGrid);
         }
 
         if (SiteModuleManager.isModuleInitialized(CustomerModule.class)) {
@@ -216,7 +259,6 @@ public final class AccountFlowlet extends AbstractFlowlet {
             filterDefinitions.add(new FilterDescriptor("companyName", "companyName", "Company Name", new TextField(), 101, "=", String.class, ""));
             filterDefinitions.add(new FilterDescriptor("lastName", "lastName", "Last Name", new TextField(), 101, "=", String.class, ""));
 
-            final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
             entityContainer = new EntityContainer<Customer>(entityManager, true, false, false, Customer.class, 1000, new String[]{"companyName",
                     "lastName"}, new boolean[]{false, false}, "customerId");
 
@@ -333,12 +375,12 @@ public final class AccountFlowlet extends AbstractFlowlet {
 
     @Override
     public void enter() {
+        final User user = ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession();
 
         if (SiteModuleManager.isModuleInitialized(CustomerModule.class)) {
             entityContainer.removeDefaultFilters();
 
             final EntityManager entityManager = getSite().getSiteContext().getObject(EntityManager.class);
-            final User user = ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession();
 
             if (user != null) {
                 final List<Group> groups = UserDao.getUserGroups(entityManager, user.getOwner(), user);
@@ -358,9 +400,14 @@ public final class AccountFlowlet extends AbstractFlowlet {
             entityGrid.refresh();
         }
 
+        if (user != null) {
+            authenticationDeviceContainer.removeDefaultFilters();
+            authenticationDeviceContainer.addDefaultFilter(new Compare.Equal("user", user));
+            authenticationDeviceContainer.refresh();
+        }
+
         if (((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession() != null) {
             googleAuthenticatorButton.setState(((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() != null);
-            final User user = ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession();
             u2fRegisterButton.setState(U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress()));
         }
     }
