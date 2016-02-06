@@ -25,7 +25,7 @@ See: https://github.com/bubblecloud/ilves/wiki/5-Minute-Tutorial
 Usage
 -----
 
-Vaadin custom components can be used as in Vaadin:
+Vaadin custom components can be used as is:
 
 ```
 /**
