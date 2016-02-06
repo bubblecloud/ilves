@@ -17,6 +17,11 @@ Seed project is available for cloning in GitHub:
 
 https://github.com/bubblecloud/ilves-seed
 
+Tutorial can be found from Ilves Wiki:
+
+See: https://github.com/bubblecloud/ilves/wiki/5-Minute-Tutorial
+
+
 Usage
 -----
 
@@ -53,30 +58,26 @@ Embedding Ilves to console applications:
 
 ```
 
-        // Configure logging.
-        DOMConfigurator.configure("log4j.xml");
+// Configure logging.
+DOMConfigurator.configure("log4j.xml");
 
-        // Construct jetty server.
-        final Server server = Ilves.configure(PROPERTIES_FILE_PREFIX, LOCALIZATION_BUNDLE_PREFIX, PERSISTENCE_UNIT);
+// Construct jetty server.
+final Server server = Ilves.configure(PROPERTIES_FILE_PREFIX, LOCALIZATION_BUNDLE_PREFIX, PERSISTENCE_UNIT);
 
-        // Initialize modules
-        Ilves.initializeModule(AuditModule.class);
+// Initialize modules
+Ilves.initializeModule(AuditModule.class);
 
-        Ilves.addNavigationCategoryPage(0, "custom");
-        Ilves.addChildPage("custom", "comments", DefaultValoView.class);
-        Ilves.setPageComponent("comments", Slot.CONTENT, HelloComponent.class);
-        Ilves.setPageComponent("comments", Slot.FOOTER, CommentingComponent.class);
-        Ilves.setDefaultPage("comments");
+Ilves.addNavigationCategoryPage(0, "custom");
+Ilves.addChildPage("custom", "comments", DefaultValoView.class);
+Ilves.setPageComponent("comments", Slot.CONTENT, HelloComponent.class);
+Ilves.setPageComponent("comments", Slot.FOOTER, CommentingComponent.class);
+Ilves.setDefaultPage("comments");
 
-        // Start server.
-        server.start();
+// Start server.
+server.start();
 
-        // Wait for exit of the Jetty server.
-        server.join();
+// Wait for exit of the Jetty server.
+server.join();
         
 ```
-
-Usage tutorial can be found from Ilves Wiki:
-
-See: https://github.com/bubblecloud/ilves/wiki/5-Minute-Tutorial
 
