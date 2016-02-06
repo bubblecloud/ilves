@@ -130,8 +130,8 @@ public final class SiteFields {
         SiteFields.add(Company.class, new FieldDescriptor("modified", "Modified", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null,
                 true, true, true));
 
-        SiteFields.add(Customer.class, new FieldDescriptor("firstName", "First Name", TextField.class, null, 100, null, String.class, "", false, true, true));
-        SiteFields.add(Customer.class, new FieldDescriptor("lastName", "Last Name", TextField.class, null, 100, null, String.class, "", false, true, true));
+        SiteFields.add(Customer.class, new FieldDescriptor("firstName", "First Name", TextField.class, null, 150, null, String.class, "", false, true, true));
+        SiteFields.add(Customer.class, new FieldDescriptor("lastName", "Last Name", TextField.class, null, 150, null, String.class, "", false, true, true));
         SiteFields.add(Customer.class, new FieldDescriptor("phoneNumber", "Phone Number", TextField.class, null, 100, null, String.class, "", false, true, true));
         SiteFields.add(Customer.class, new FieldDescriptor("emailAddress", "Email Address", TextField.class, null, 150, null, String.class, "", false, true, true),
                 new EmailValidator("Email address is not valid."));
@@ -167,8 +167,8 @@ public final class SiteFields {
         SiteFields.add(Group.class, new FieldDescriptor("modified", "Modified", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null,
                 true, true, true));
 
-        SiteFields.add(User.class, new FieldDescriptor("firstName", "First Name", TextField.class, null, 100, null, String.class, "", false, true, true));
-        SiteFields.add(User.class, new FieldDescriptor("lastName", "Last Name", TextField.class, null, 100, null, String.class, "", false, true, true));
+        SiteFields.add(User.class, new FieldDescriptor("firstName", "First Name", TextField.class, null, 150, null, String.class, "", false, true, true));
+        SiteFields.add(User.class, new FieldDescriptor("lastName", "Last Name", TextField.class, null, 150, null, String.class, "", false, true, true));
         SiteFields.add(User.class, new FieldDescriptor("emailAddress", "Email Address", TextField.class, null, -1, null, String.class, "", false, true, true), new EmailValidator("Email address is not valid."));
         SiteFields.add(User.class, new FieldDescriptor("emailAddressValidated", "Email Validated", CheckBox.class, null, 100, null, Boolean.class, false, false, true, false));
         SiteFields.add(User.class, new FieldDescriptor("passwordHash", "Password", PasswordField.class, null, 100, null, String.class, "", false, true, true));

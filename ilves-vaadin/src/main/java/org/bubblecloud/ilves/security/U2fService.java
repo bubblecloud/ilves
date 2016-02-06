@@ -133,21 +133,4 @@ public class U2fService {
         AuthenticationDeviceDao.updateAuthenticationDevice(entityManager, authenticationDevice);
     }
 
-    /**
-     * Removes user device registratoins.
-     * @param context the security context
-     * @param emailAddress the user email address
-     */
-    public static void removeDeviceRegistrations(final SiteContext context, final String emailAddress) {
-        final Company company = context.getObject(Company.class);
-        final EntityManager entityManager = context.getEntityManager();
-        final User user = UserDao.getUser(entityManager, company, emailAddress);
-        final List<AuthenticationDevice> authenticationDevices = AuthenticationDeviceDao.getAuthenticationDevices(entityManager, user);
-
-        for (final AuthenticationDevice authenticationDevice : authenticationDevices) {
-            if (authenticationDevice.getType() == AuthenticationDeviceType.UNIVERSAL_SECOND_FACTOR) {
-                AuthenticationDeviceDao.removeAuthenticationDevice(context.getEntityManager(), authenticationDevice);
-            }
-        }
-    }
 }

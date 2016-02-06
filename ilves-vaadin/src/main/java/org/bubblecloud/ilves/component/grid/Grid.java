@@ -54,6 +54,7 @@ public class Grid extends CustomComponent {
     private Table table;
     /** The layout used for filter components. */
     private Layout filterLayout;
+    private ArrayList<Object> visibleColumnIds;
 
     /**
      * Constructor for setting the internal Container to be used as data source.
@@ -135,7 +136,7 @@ public class Grid extends CustomComponent {
      */
     public final void setFields(final List<FieldDescriptor> fieldDefinitions) {
         this.fields = fieldDefinitions;
-        final ArrayList<Object> visibleColumnIds = new ArrayList<Object>();
+        visibleColumnIds = new ArrayList<Object>();
         final ArrayList<String> visibleColumnLabels = new ArrayList<String>();
 
         if (getContainer().getContainerPropertyIds().contains(LazyQueryView.PROPERTY_ID_ITEM_STATUS)) {
@@ -211,6 +212,14 @@ public class Grid extends CustomComponent {
      */
     public final List<FilterDescriptor> getFilters() {
         return filters;
+    }
+
+    /**
+     * Get visible column IDs.
+     * @return the visible column IDs
+     */
+    public ArrayList<Object> getVisibleColumnIds() {
+        return visibleColumnIds;
     }
 
     /**

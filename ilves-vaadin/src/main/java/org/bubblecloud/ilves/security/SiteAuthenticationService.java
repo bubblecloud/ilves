@@ -165,4 +165,21 @@ public class SiteAuthenticationService {
 
         ui.getPage().setLocation(company.getUrl());
     }
+
+    /**
+     * Removes user device registratoins.
+     * @param emailAddress the user email address
+     */
+    public static void removeDeviceRegistrations(final String emailAddress) {
+        final AbstractSiteUI ui = ((AbstractSiteUI) UI.getCurrent());
+        final SiteContext context = ui.getSite().getSiteContext();
+        final Company company = context.getObject(Company.class);
+        final EntityManager entityManager = context.getEntityManager();
+        final User user = UserDao.getUser(entityManager, company, emailAddress);
+        final List<AuthenticationDevice> authenticationDevices = AuthenticationDeviceDao.getAuthenticationDevices(entityManager, user);
+
+        for (final AuthenticationDevice authenticationDevice : authenticationDevices) {
+            AuthenticationDeviceDao.removeAuthenticationDevice(context.getEntityManager(), authenticationDevice);
+        }
+    }
 }

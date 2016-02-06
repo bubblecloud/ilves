@@ -109,7 +109,7 @@ public final class UserFlowlet extends AbstractFlowlet implements ValidatingEdit
         childContainer = new EntityContainer<GroupMember>(entityManager, GroupMember.class, "groupMemberId", 1000,
             true, false, false);
         childContainer.getQueryView().getQueryDefinition().setDefaultSortState(
-                new String[] {"user.firstName", "user.lastName"}, new boolean[] {true, true});
+                new String[]{"user.firstName", "user.lastName"}, new boolean[]{true, true});
 
         ContainerUtil.addContainerProperties(childContainer, childFieldDescriptors);
 

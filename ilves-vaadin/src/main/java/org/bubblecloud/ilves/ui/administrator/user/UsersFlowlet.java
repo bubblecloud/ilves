@@ -29,6 +29,7 @@ import org.bubblecloud.ilves.model.Group;
 import org.bubblecloud.ilves.model.Privilege;
 import org.bubblecloud.ilves.model.User;
 import org.bubblecloud.ilves.security.SecurityService;
+import org.bubblecloud.ilves.security.SiteAuthenticationService;
 import org.bubblecloud.ilves.security.U2fService;
 import org.bubblecloud.ilves.security.UserDao;
 import org.bubblecloud.ilves.site.SiteFields;
@@ -101,10 +102,26 @@ public final class UsersFlowlet extends AbstractFlowlet {
 
         table.setColumnCollapsed("created", true);
         table.setColumnCollapsed("modified", true);
+        table.setColumnCollapsed("phoneNumber", true);
+        table.setColumnCollapsed("emailAddressValidated", true);
         table.setColumnCollapsed("passwordHash", true);
         table.setColumnCollapsed("openIdIdentifier", true);
         table.setColumnCollapsed("certificate", true);
         table.setColumnCollapsed("failedLoginCount", true);
+        table.setColumnCollapsed("passwordExpirationDate", true);
+
+        table.addGeneratedColumn("mfa", new UserMfaStatusColumnGenerator());
+        table.setColumnHeader("mfa", getSite().localize("field-mfa-status"));
+        table.addGeneratedColumn("locked", new UserLockedStatusColumnGenerator());
+        table.setColumnHeader("locked", getSite().localize("field-locked"));
+
+        final List<Object> visibleColumnIds = new ArrayList<>();
+        visibleColumnIds.addAll(grid.getVisibleColumnIds());
+        visibleColumnIds.add("mfa");
+        visibleColumnIds.add("locked");
+        visibleColumnIds.remove("lockedOut");
+        table.setVisibleColumns(visibleColumnIds.toArray());
+
         gridLayout.addComponent(grid, 0, 1);
 
         final Button addButton = getSite().getButton("add");
@@ -213,7 +230,7 @@ public final class UsersFlowlet extends AbstractFlowlet {
             }
         });
 
-        final Button disableTwoFactorAuthentication = getSite().getButton("disable-two-factor-authentication");
+        final Button disableTwoFactorAuthentication = getSite().getButton("disable-mfa");
         disableTwoFactorAuthentication.setImmediate(true);
         buttonLayout.addComponent(disableTwoFactorAuthentication);
         disableTwoFactorAuthentication.addClickListener(new ClickListener() {
@@ -227,7 +244,7 @@ public final class UsersFlowlet extends AbstractFlowlet {
                 }
                 final User user = container.getEntity(grid.getSelectedItemId());
                 if (U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress())) {
-                    U2fService.removeDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress());
+                    SiteAuthenticationService.removeDeviceRegistrations(user.getEmailAddress());
                 }
                 container.refresh();
                 Notification.show(getSite().localize("message-disabled-two-factor-authentication-for-user"),
