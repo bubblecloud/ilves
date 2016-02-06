@@ -148,7 +148,7 @@ public class SecurityUtil {
      */
     public static String decryptSecretKey(final String cipherText) {
         if (!PropertiesUtil.hasProperty("site", "key-encryption-secret-key")) {
-            LOGGER.error("Site key encryption key is not defined. Candidate key generated to key-encryption-secret-key-candidate.properties. Please copy the line to site-ext.properties ");
+            LOGGER.error("Server key encryption key is not defined. Candidate key generated to key-encryption-secret-key-candidate.properties. Please copy the line to site-ext.properties ");
             try {
                 FileUtils.writeStringToFile(new File("key-encryption-secret-key-candidate.properties"), "key-encryption-secret-key = " + generateKeyEncryptionSecretKey(), false);
             } catch (IOException e) {
