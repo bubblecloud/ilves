@@ -1,5 +1,7 @@
 package org.bubblecloud.ilves.security;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Base64;
 import org.bouncycastle.util.encoders.Hex;
@@ -8,6 +10,8 @@ import org.bubblecloud.ilves.util.PropertiesUtil;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.security.Security;
@@ -18,6 +22,8 @@ import java.security.Security;
  * @author Tommi S.E. Laukkanen
  */
 public class SecurityUtil {
+    /** The logger. */
+    private static final Logger LOGGER = Logger.getLogger(SecurityUtil.class);
 
     static {
         if (Security.getProvider("BC") == null) {
@@ -141,6 +147,14 @@ public class SecurityUtil {
      * @return the cipher text
      */
     public static String decryptSecretKey(final String cipherText) {
+        if (!PropertiesUtil.hasProperty("site", "key-encryption-secret-key")) {
+            LOGGER.error("Site key encryption key is not defined. Candidate key generated to key-encryption-secret-key-candidate.properties. Please copy the line to site-ext.properties ");
+            try {
+                FileUtils.writeStringToFile(new File("key-encryption-secret-key-candidate.properties"), "key-encryption-secret-key = " + generateKeyEncryptionSecretKey(), false);
+            } catch (IOException e) {
+                LOGGER.error("Attempt to write candidate key to key-encryption-secret-key-candidate.properties failed", e);
+            }
+        }
         final String systemEncodedSecretKey = PropertiesUtil.getProperty("site", "key-encryption-secret-key");
         final String systemSecretKey = decodeConfiguration(systemEncodedSecretKey);
         return decrypt(CONFIGURATION_ENCRYPTION_IV, Hex.decode(systemSecretKey), cipherText);
