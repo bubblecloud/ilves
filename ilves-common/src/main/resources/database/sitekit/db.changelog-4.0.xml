@@ -81,5 +81,8 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet author="tlaukkan (generated)" id="9ee5e4c3-5f37-4928-b36e-af9020832cde">
+        <dropColumn tableName="user_" columnName="googleauthenticatorsecret" />
+    </changeSet>
 </databaseChangeLog>
 
