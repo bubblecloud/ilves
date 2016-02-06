@@ -57,7 +57,6 @@ public class HelloComponent extends CustomComponent {
 Embedding Ilves to console applications:
 
 ```
-
 // Configure logging.
 DOMConfigurator.configure("log4j.xml");
 
@@ -78,6 +77,5 @@ server.start();
 
 // Wait for exit of the Jetty server.
 server.join();
-        
 ```
 
