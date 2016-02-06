@@ -17,7 +17,7 @@ Seed project is available for cloning in GitHub:
 
 https://github.com/bubblecloud/ilves-seed
 
-Tutorial can be found from Ilves Wiki:
+5 minute tutorial at Ilves Wiki:
 
 https://github.com/bubblecloud/ilves/wiki/5-Minute-Tutorial
 
