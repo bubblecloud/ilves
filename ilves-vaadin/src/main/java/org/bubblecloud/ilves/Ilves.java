@@ -3,6 +3,7 @@ package org.bubblecloud.ilves;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Component;
 import org.bubblecloud.ilves.security.DefaultRoles;
+import org.bubblecloud.ilves.security.SecurityUtil;
 import org.bubblecloud.ilves.server.jetty.DefaultJettyConfiguration;
 import org.bubblecloud.ilves.site.*;
 import org.bubblecloud.ilves.site.view.valo.DefaultValoView;
@@ -39,6 +40,12 @@ public class Ilves {
         if (propertiesFilePrefix != null && !propertiesFilePrefix.equals("site")) {
             PropertiesUtil.setCategoryRedirection("site", propertiesFilePrefix);
         }
+
+        try {
+            SecurityUtil.decryptSecretKey("test");
+        } catch (final Exception e) {
+        }
+
         return DefaultJettyConfiguration.configureServer(persistentUnit, localizationBundlePrefix);
     }
 
