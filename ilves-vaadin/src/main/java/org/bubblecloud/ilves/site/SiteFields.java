@@ -97,8 +97,8 @@ public final class SiteFields {
         }
         initialized = true;
 
-        SiteFields.add(Company.class, new FieldDescriptor("url", "Site URL", TextField.class, null, 100, null, String.class, "", false, true, true));
-        SiteFields.add(Company.class, new FieldDescriptor("host", "Host Name", TextField.class, null, 100, null, String.class, "", false, true, true));
+        SiteFields.add(Company.class, new FieldDescriptor("url", "Site URL", TextField.class, null, -1, null, String.class, "", false, true, true));
+        SiteFields.add(Company.class, new FieldDescriptor("host", "Host Name", TextField.class, null, 300, null, String.class, "", false, true, true));
         SiteFields.add(Company.class, new FieldDescriptor("termsAndConditions", "Terms & Conditions", TextArea.class, null, 100, null, String.class, "", false,
                 true, false));
         SiteFields.add(Company.class, new FieldDescriptor("companyName", "Company Name", TextField.class, null, -1, null, String.class, "", false, true, true));
@@ -193,8 +193,8 @@ public final class SiteFields {
         SiteFields.add(GroupMember.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,
                 true, true));
 
-        SiteFields.add(UserDirectory.class, new FieldDescriptor("address", "LDAP Address", TextField.class, null, 100, null, String.class, "", false, true, true));
-        SiteFields.add(UserDirectory.class, new FieldDescriptor("port", "LDAP Port", TextField.class, new StringToIntegerConverter(), 50, null, Integer.class, null,
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("address", "LDAP Address", TextField.class, null, -1, null, String.class, "", false, true, true));
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("port", "LDAP Port", TextField.class, new StringToIntegerConverter(), 100, null, Integer.class, null,
                 false, true, true));
 
         SiteFields.add(UserDirectory.class, new FieldDescriptor("loginDn", "LDAP Login DN", TextField.class, null, 100, null, String.class, "", false, true, true));
@@ -204,7 +204,7 @@ public final class SiteFields {
         SiteFields.add(UserDirectory.class, new FieldDescriptor("groupSearchBaseDn", "LDAP Group search Base DN", TextField.class, null, 100, null, String.class, "", false, true, true));
 
         SiteFields.add(UserDirectory.class, new FieldDescriptor("remoteLocalGroupMapping", "Remote-Local Group Mapping", TextField.class, null, 200, null, String.class, "", false, true, true));
-        SiteFields.add(UserDirectory.class, new FieldDescriptor("requiredRemoteGroup", "Required Remote Group", TextField.class, null, 100, null, String.class, "", false, true, true));
+        SiteFields.add(UserDirectory.class, new FieldDescriptor("requiredRemoteGroup", "Required Remote Group", TextField.class, null, 200, null, String.class, "", false, true, true));
         SiteFields.add(UserDirectory.class, new FieldDescriptor("subNetWhiteList", "Sub Net White List", TextField.class, null, 200, null, String.class, "", false, true, true));
         SiteFields.add(UserDirectory.class, new FieldDescriptor("enabled", "Enabled", CheckBox.class, null, 100, null, Boolean.class, false, false, true, false));
         SiteFields.add(UserDirectory.class, new FieldDescriptor("created", "Created", TimestampField.class, new TimestampConverter(), 150, null, Date.class, null, true,

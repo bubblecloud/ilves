@@ -106,6 +106,7 @@ public final class CustomersFlowlet extends AbstractFlowlet {
         table.setColumnCollapsed("created", true);
         table.setColumnCollapsed("modified", true);
         table.setColumnCollapsed("company", true);
+        table.setColumnCollapsed("phoneNumber", true);
         gridLayout.addComponent(entityGrid, 0, 1);
 
         final Button addButton = new Button("Add");

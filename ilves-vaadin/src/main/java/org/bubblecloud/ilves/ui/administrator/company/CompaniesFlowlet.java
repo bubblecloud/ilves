@@ -101,6 +101,7 @@ public final class CompaniesFlowlet extends AbstractFlowlet {
 
         table.setColumnCollapsed("created", true);
         table.setColumnCollapsed("modified", true);
+        table.setColumnCollapsed("phoneNumber", true);
         table.setColumnCollapsed("selfRegistration", true);
         table.setColumnCollapsed("emailPasswordReset", true);
         table.setColumnCollapsed("openIdLogin", true);
@@ -111,6 +112,16 @@ public final class CompaniesFlowlet extends AbstractFlowlet {
         table.setColumnCollapsed("supportEmailAddress", true);
         table.setColumnCollapsed("invoicingEmailAddress", true);
         table.setColumnCollapsed("gaTrackingId", true);
+        table.setColumnCollapsed("termsAndConditions", true);
+        table.setColumnCollapsed("companyName", true);
+        table.setColumnCollapsed("companyCode", true);
+        table.setColumnCollapsed("iban", true);
+        table.setColumnCollapsed("bic", true);
+        table.setColumnCollapsed("oAuthLogin", true);
+        table.setColumnCollapsed("oAuthSelfRegistration", true);
+        table.setColumnCollapsed("gitHubClientId", true);
+        table.setColumnCollapsed("gitHubClientSecret", true);
+
         gridLayout.addComponent(entityGrid, 0, 1);
 
         final HorizontalLayout buttonLayout = new HorizontalLayout();

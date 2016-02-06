@@ -76,6 +76,7 @@ public class ContentModule implements SiteModule {
         contentFields.getFieldDescriptor("markupType").setRequired(true);
         contentFields.getFieldDescriptor("markupType").setFieldClass(MarkupTypeField.class);
         contentFields.getFieldDescriptor("markupType").setConverter(null);
+        contentFields.getFieldDescriptor("markupType").setWidth(150);
         contentFields.getFieldDescriptor("markup").setFieldClass(MarkupField.class);
         contentFields.getFieldDescriptor("markup").setWidth(700);
         contentFields.getFieldDescriptor("markup").getValidators().clear();
@@ -107,6 +108,7 @@ public class ContentModule implements SiteModule {
        // assetFields.getFieldDescriptor("size").setDefaultValue(0);
         assetFields.getFieldDescriptor("size").setConverter(new StringToIntegerConverter());
         assetFields.getFieldDescriptor("description").setRequired(false);
+        assetFields.getFieldDescriptor("description").setWidth(-1);
 
         FieldSetDescriptorRegister.registerFieldSetDescriptor(Asset.class, assetFields);
 

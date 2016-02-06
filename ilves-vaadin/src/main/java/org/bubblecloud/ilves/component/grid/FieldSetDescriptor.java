@@ -88,14 +88,14 @@ public final class FieldSetDescriptor {
                     } else if (valueType.equals(Integer.class)) {
                         fieldClass = TextField.class;
                         converter = null;
-                        width = 50;
+                        width = 80;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
                         required = true;
                     } else if (valueType.equals(Long.class)) {
                         fieldClass = TextField.class;
                         converter = null;
-                        width = 50;
+                        width = 80;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
                         required = true;
@@ -109,7 +109,7 @@ public final class FieldSetDescriptor {
                     } else if (valueType.equals(Date.class)) {
                         fieldClass = TimestampField.class;
                         converter = new TimestampConverter();
-                        width = 150;
+                        width = 180;
                         valueAlignment = HorizontalAlignment.LEFT;
                         defaultValue = null;
                         required = true;

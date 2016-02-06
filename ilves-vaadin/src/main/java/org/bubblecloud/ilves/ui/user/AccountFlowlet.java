@@ -268,6 +268,9 @@ public final class AccountFlowlet extends AbstractFlowlet {
             table.setColumnCollapsed("created", true);
             table.setColumnCollapsed("modified", true);
             table.setColumnCollapsed("company", true);
+            table.setColumnCollapsed("phoneNumber", true);
+            table.setColumnCollapsed("emailAddress", true);
+
             gridLayout.addComponent(entityGrid, 0, 6);
 
             final HorizontalLayout customerButtonsLayout = new HorizontalLayout();
