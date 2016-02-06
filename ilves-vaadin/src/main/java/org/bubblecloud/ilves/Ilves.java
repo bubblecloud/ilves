@@ -2,6 +2,8 @@ package org.bubblecloud.ilves;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Component;
+import org.bubblecloud.ilves.model.Company;
+import org.bubblecloud.ilves.model.User;
 import org.bubblecloud.ilves.security.DefaultRoles;
 import org.bubblecloud.ilves.security.SecurityUtil;
 import org.bubblecloud.ilves.server.jetty.DefaultJettyConfiguration;
@@ -201,7 +203,6 @@ public class Ilves {
             viewDescriptor.setViewerRoles(roles);
         }
         siteDescriptor.getViewDescriptors().add(viewDescriptor);
-
     }
 
     /**
@@ -271,5 +272,21 @@ public class Ilves {
 
         // Place example Vaadin component to content slot in the view.
         viewDescriptor.setViewletClass(slot, viewletClass);
+    }
+
+    /**
+     * Gets current user.
+     * @return the current user
+     */
+    public static User getCurrentUser() {
+        return ((SecurityProviderSessionImpl) Site.getCurrent().getSecurityProvider()).getUserFromSession();
+    }
+
+    /**
+     * Gets the current company.
+     * @return the current company
+     */
+    public static Company getCurrentCompany() {
+        return Site.getCurrent().getSiteContext().getObject(Company.class);
     }
 }
