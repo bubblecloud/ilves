@@ -19,7 +19,7 @@ https://github.com/bubblecloud/ilves-seed
 
 Tutorial can be found from Ilves Wiki:
 
-See: https://github.com/bubblecloud/ilves/wiki/5-Minute-Tutorial
+https://github.com/bubblecloud/ilves/wiki/5-Minute-Tutorial
 
 
 Usage
