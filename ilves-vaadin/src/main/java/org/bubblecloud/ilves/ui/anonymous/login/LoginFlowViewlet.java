@@ -44,6 +44,7 @@ public final class LoginFlowViewlet extends AbstractFlowViewlet {
         if (company.isEmailPasswordReset()) {
             addFlowlet(new ForgotPasswordFlowlet());
         }
+        addFlowlet(new AuthenticationDeviceSelectionFlowlet());
         addFlowlet(new GoogleAuthenticatorFlowlet());
         addFlowlet(new U2fAuthenticationFlowlet());
 

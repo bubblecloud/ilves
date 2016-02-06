@@ -60,7 +60,7 @@ public class U2fService {
      * @param emailAddress the email address
      * @return list of device registrations
      */
-    public static Iterable<DeviceRegistration> getDeviceRegistrations(final SiteContext context, final String emailAddress) {
+    public static List<DeviceRegistration> getDeviceRegistrations(final SiteContext context, final String emailAddress) {
         final Company company = context.getObject(Company.class);
         final EntityManager entityManager = context.getEntityManager();
         final User user = UserDao.getUser(entityManager, company, emailAddress);

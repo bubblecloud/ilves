@@ -37,8 +37,6 @@ public class U2fAuthenticationFlowlet extends AbstractFlowlet {
 
     @Override
     protected void initialize() {
-        final Company company = getSite().getSiteContext().getObject(Company.class);
-
         final Panel loginPanel = new Panel(getSite().localize("header-u2f-authenticate"));
         setViewContent(loginPanel);
 
@@ -59,7 +57,7 @@ public class U2fAuthenticationFlowlet extends AbstractFlowlet {
         u2fConnector.startAuthentication(emailAddress, new U2fAuthenticationListener() {
             @Override
             public void onDeviceAuthenticationSuccess() {
-                SiteAuthenticationService.login(emailAddress, password, null, UUID.randomUUID().toString());
+                SiteAuthenticationService.login(emailAddress, password, UUID.randomUUID().toString());
             }
 
             @Override

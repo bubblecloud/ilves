@@ -117,13 +117,16 @@ public final class LoginFlowlet extends AbstractFlowlet {
                         loginConnector.saveCredentials(new LoginConnectorSaveListener() {
                             @Override
                             public void onSave() {
+                                final AuthenticationDeviceSelectionFlowlet selectionFlowlet = (AuthenticationDeviceSelectionFlowlet) getFlow().getFlowlet(AuthenticationDeviceSelectionFlowlet.class);
                                 final AuthenticationDeviceType authenticationDeviceType = SiteAuthenticationService.getAuthenticationDeviceType(username);
                                 if (authenticationDeviceType == AuthenticationDeviceType.NONE) {
-                                    SiteAuthenticationService.login(username, passwordChars, null, UUID.randomUUID().toString());
+                                    SiteAuthenticationService.login(username, passwordChars, UUID.randomUUID().toString());
                                 } else if (authenticationDeviceType == AuthenticationDeviceType.GOOGLE_AUTHENTICATOR) {
                                     getFlow().forward(GoogleAuthenticatorFlowlet.class);
                                 } else if (authenticationDeviceType == AuthenticationDeviceType.UNIVERSAL_SECOND_FACTOR) {
                                     getFlow().forward(U2fAuthenticationFlowlet.class);
+                                } else {
+                                    getFlow().forward(selectionFlowlet.getClass());
                                 }
                             }
                         });

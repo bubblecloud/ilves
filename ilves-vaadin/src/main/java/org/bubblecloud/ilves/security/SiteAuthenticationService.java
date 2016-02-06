@@ -20,15 +20,18 @@ import com.vaadin.server.VaadinServletRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
+import com.yubico.u2f.data.DeviceRegistration;
 import org.apache.log4j.Logger;
 import org.bubblecloud.ilves.model.*;
 import org.bubblecloud.ilves.site.AbstractSiteUI;
 import org.bubblecloud.ilves.site.DefaultSiteUI;
 import org.bubblecloud.ilves.site.Site;
+import org.bubblecloud.ilves.site.SiteContext;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,7 +45,7 @@ public class SiteAuthenticationService {
     /**
      * Gets current authentication device type for email address.
      * @param emailAddress_ the email address
-     * @return the current authentication device
+     * @return the current authentication device type or null if multiple device types exist.
      */
     public static AuthenticationDeviceType getAuthenticationDeviceType(final String emailAddress_) {
         final String emailAddress = emailAddress_.toLowerCase();
@@ -57,25 +60,44 @@ public class SiteAuthenticationService {
 
         entityManager.refresh(user);
 
-        if (U2fService.hasDeviceRegistrations(Site.getCurrent().getSiteContext(), emailAddress)) {
-            return AuthenticationDeviceType.UNIVERSAL_SECOND_FACTOR;
+        final List<AuthenticationDevice> authenticationDevices = SiteAuthenticationService.getAuthenticationDevices(emailAddress);
+        if (authenticationDevices.size() == 0) {
+            return AuthenticationDeviceType.NONE;
         }
-
-        if (user.getGoogleAuthenticatorSecret() != null) {
-            return AuthenticationDeviceType.GOOGLE_AUTHENTICATOR;
+        AuthenticationDeviceType authenticationDeviceType = null;
+        for (final AuthenticationDevice authenticationDevice : authenticationDevices) {
+            if (authenticationDeviceType == null) {
+                authenticationDeviceType = authenticationDevice.getType();
+            } else {
+                if (authenticationDevice.getType() != authenticationDeviceType) {
+                    return null;
+                }
+            }
         }
+        return authenticationDeviceType;
+    }
 
-        return AuthenticationDeviceType.NONE;
+    /**
+     * Gets device registrations.
+     * @param emailAddress the email address
+     * @return list of device registrations
+     */
+    public static List<AuthenticationDevice> getAuthenticationDevices(final String emailAddress) {
+        final AbstractSiteUI ui = ((AbstractSiteUI) UI.getCurrent());
+        final SiteContext context = ui.getSite().getSiteContext();
+            final Company company = context.getObject(Company.class);
+        final EntityManager entityManager = context.getEntityManager();
+            final User user = UserDao.getUser(entityManager, company, emailAddress);
+        return  AuthenticationDeviceDao.getAuthenticationDevices(entityManager, user);
     }
 
     /**
      * Logs user in to the site.
      * @param emailAddress_ the email address
      * @param password the password
-     * @param authenticatorCode the authenticator code (optional)
      * @param transactionId the authentication transaction ID
      */
-    public static void login(final String emailAddress_, final char[] password, final String authenticatorCode, final String transactionId) {
+    public static void login(final String emailAddress_, final char[] password, final String transactionId) {
         final  String emailAddress = emailAddress_.toLowerCase();
         final AbstractSiteUI ui = ((AbstractSiteUI)UI.getCurrent());
         final EntityManager entityManager = ui.getSite().getSiteContext().getEntityManager();
@@ -97,18 +119,6 @@ public class SiteAuthenticationService {
 
         entityManager.refresh(user);
 
-        if (user.getGoogleAuthenticatorSecret() != null) {
-            if (authenticatorCode == null) {
-                new Notification(DefaultSiteUI.getLocalizationProvider().localize("message-invalid-code", locale),
-                        Notification.Type.WARNING_MESSAGE).show(Page.getCurrent());
-                return;
-            }
-            if (!GoogleAuthenticatorService.checkCode(SecurityUtil.decryptSecretKey(user.getGoogleAuthenticatorSecret()), authenticatorCode)) {
-                new Notification(DefaultSiteUI.getLocalizationProvider().localize("message-invalid-code", locale),
-                        Notification.Type.WARNING_MESSAGE).show(Page.getCurrent());
-                return;
-            }
-        }
 
         final String errorKey = LoginService.login(ui.getSite().getSiteContext(), company,
                 user, emailAddress, password, VaadinSession.getCurrent().getSession().getId(), transactionId);
@@ -119,13 +129,8 @@ public class SiteAuthenticationService {
             // Silently fail.
         } else {
             // Login failure
-            if (authenticatorCode != null) {
-                new Notification(DefaultSiteUI.getLocalizationProvider().localize("message-invalid-email-or-password-or-user-locked", locale),
-                        Notification.Type.WARNING_MESSAGE).show(Page.getCurrent());
-            } else {
-                new Notification(DefaultSiteUI.getLocalizationProvider().localize(errorKey, locale),
-                        Notification.Type.WARNING_MESSAGE).show(Page.getCurrent());
-            }
+            new Notification(DefaultSiteUI.getLocalizationProvider().localize(errorKey, locale),
+                    Notification.Type.WARNING_MESSAGE).show(Page.getCurrent());
         }
     }
 

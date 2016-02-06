@@ -108,7 +108,7 @@ public abstract class AbstractFlowViewlet extends AbstractViewlet implements Flo
         tabSheet = new TabSheet();
         tabSheet.setStyleName("flow-sheet");
         tabSheet.hideTabs(true);
-        tabSheet.setSizeFull();
+        tabSheet.setWidth(100, Unit.PERCENTAGE);
 
         layout.addComponent(topLayout);
         layout.addComponent(tabSheet);

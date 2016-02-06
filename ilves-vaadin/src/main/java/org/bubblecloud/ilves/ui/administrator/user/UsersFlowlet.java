@@ -226,11 +226,6 @@ public final class UsersFlowlet extends AbstractFlowlet {
                     return;
                 }
                 final User user = container.getEntity(grid.getSelectedItemId());
-                if (user.getGoogleAuthenticatorSecret() != null) {
-                    user.setGoogleAuthenticatorSecret(null);
-                    user.setFailedLoginCount(0);
-                    SecurityService.updateUser(getSite().getSiteContext(), user);
-                }
                 if (U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress())) {
                     U2fService.removeDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress());
                 }

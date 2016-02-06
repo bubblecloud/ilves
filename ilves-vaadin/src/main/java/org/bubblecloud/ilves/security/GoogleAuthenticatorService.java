@@ -18,14 +18,26 @@ package org.bubblecloud.ilves.security;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
+import com.yubico.u2f.data.DeviceRegistration;
 import org.apache.commons.codec.binary.Base32;
+import org.bubblecloud.ilves.model.AuthenticationDevice;
+import org.bubblecloud.ilves.model.AuthenticationDeviceType;
+import org.bubblecloud.ilves.model.Company;
+import org.bubblecloud.ilves.model.User;
+import org.bubblecloud.ilves.site.SecurityProviderSessionImpl;
 import org.bubblecloud.ilves.site.Site;
+import org.bubblecloud.ilves.site.SiteContext;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.persistence.EntityManager;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -161,5 +173,59 @@ public class GoogleAuthenticatorService {
         subWindow.setHeight(260, Sizeable.Unit.PIXELS);
         subWindow.center();
         UI.getCurrent().addWindow(subWindow);
+    }
+
+    /**
+     * Starts GoogleAuthenticator device registration.
+     *
+     * @param googleAuthenticatorRegistrationListener the listener
+     */
+    public static void startRegistration(final GoogleAuthenticatorRegistrationListener googleAuthenticatorRegistrationListener) {
+        final Site site = Site.getCurrent();
+        final SiteContext securityContext = site.getSiteContext();
+        final Company company = securityContext.getObject(Company.class);
+        final User user = ((SecurityProviderSessionImpl)
+                site.getSecurityProvider()).getUserFromSession();
+
+        final String secretKey = generateSecretKey();
+        SecurityService.updateUser(securityContext, securityContext.getEntityManager().merge(user));
+        final String qrCodeUrl;
+        try {
+            qrCodeUrl = getQRBarcodeURL(user.getEmailAddress(), new URL(company.getUrl()).getHost(), secretKey);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Invalid company URL format.", e);
+        }
+        showGrCodeDialog(qrCodeUrl);
+
+        addDeviceRegistration(securityContext, user.getEmailAddress(), secretKey);
+        googleAuthenticatorRegistrationListener.onDeviceRegistrationSuccess();
+    }
+
+    /**
+     * Adds device registration.
+     * @param context the context
+     * @param emailAddress the email address
+     * @param secret the device secret
+     */
+    public static void addDeviceRegistration(final SiteContext context, final String emailAddress, final String secret) {
+        final Company company = context.getObject(Company.class);
+        final EntityManager entityManager = context.getEntityManager();
+        final User user = UserDao.getUser(entityManager, company, emailAddress);
+        final String encryptedSecret = SecurityUtil.encryptSecretKey(secret);
+        final AuthenticationDevice authenticationDevice = new AuthenticationDevice();
+
+        final Date now = new Date();
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss,SSS");
+        final String deviceKey = emailAddress + "-ga-" + now.getTime();
+        final String deviceName = "Google Authenticator " + simpleDateFormat.format(now);
+
+        authenticationDevice.setKey(deviceKey);
+        authenticationDevice.setName(deviceName);
+
+        authenticationDevice.setType(AuthenticationDeviceType.GOOGLE_AUTHENTICATOR);
+        authenticationDevice.setUser(user);
+        authenticationDevice.setEncryptedSecret(encryptedSecret);
+
+        AuthenticationDeviceDao.addAuthenticationDevice(entityManager, authenticationDevice);
     }
 }

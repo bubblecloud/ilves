@@ -41,8 +41,6 @@ import org.bubblecloud.ilves.util.OpenIdUtil;
 import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 
 import javax.persistence.EntityManager;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -102,6 +100,7 @@ public final class AccountFlowlet extends AbstractFlowlet {
         authenticationDeviceContainer = new EntityContainer<AuthenticationDevice>(entityManager, true, false, false, AuthenticationDevice.class, 1000,
                 new String[]{"name"}, new boolean[]{false}, "authenticationDeviceId");
         authenticationDeviceContainer.addContainerProperty("name", String.class, "", true, false);
+        authenticationDeviceContainer.addDefaultFilter(new Compare.Equal("user", null));
 
         final VerticalLayout userAccountLayout = new VerticalLayout();
         userAccountLayout.setMargin(new MarginInfo(false, false, false, false));
@@ -118,15 +117,19 @@ public final class AccountFlowlet extends AbstractFlowlet {
         userAccountTitleIcon.setWidth(32, Unit.PIXELS);
         userAccountTitleIcon.setHeight(32, Unit.PIXELS);
         userAccountTitle.addComponent(userAccountTitleIcon);*/
-        final Label userAccountTitleLabel = new Label("<h2>User Account</h2>", ContentMode.HTML);
+        final Label userAccountTitleLabel = new Label("<h2>" +getSite().localize("header-user-account") + "</h2>", ContentMode.HTML);
         userAccountLayout.addComponent(userAccountTitleLabel);
 
         gridLayout.addComponent(userAccountLayout, 0, 0);
 
+        final VerticalLayout informationLayout = new VerticalLayout();
+        informationLayout.setSpacing(true);
+        gridLayout.addComponent(informationLayout, 0, 1);
 
-        final Button editUserButton = new Button("Edit User Account");
+        informationLayout.addComponent(new Label("<h3>" + getSite().localize("header-user-account-information") + "</h3>", ContentMode.HTML));
+        final Button editUserButton = new Button(getSite().localize("button-edit-user-account-information"));
         editUserButton.setIcon(getSite().getIcon("button-icon-edit"));
-        gridLayout.addComponent(editUserButton, 0, 1);
+        informationLayout.addComponent(editUserButton);
         editUserButton.addClickListener(new ClickListener() {
             /** Serial version UID. */
             private static final long serialVersionUID = 1L;
@@ -143,17 +146,17 @@ public final class AccountFlowlet extends AbstractFlowlet {
 
         final Company company = getSite().getSiteContext().getObject(Company.class);
         if (company.isOpenIdLogin()) {
-            final VerticalLayout mainPanel = new VerticalLayout();
-            mainPanel.setCaption(getSite().localize("header-choose-open-id-provider"));
-            gridLayout.addComponent(mainPanel, 0, 2);
-            final HorizontalLayout openIdLayout = new HorizontalLayout();
-            mainPanel.addComponent(openIdLayout);
-            openIdLayout.setMargin(new MarginInfo(false, false, true, false));
-            openIdLayout.setSpacing(true);
+            final VerticalLayout openIdLayout = new VerticalLayout();
+            openIdLayout.setCaption(getSite().localize("header-choose-open-id-provider"));
+            gridLayout.addComponent(openIdLayout, 0, 2);
+            final HorizontalLayout openIdProvidersLayout = new HorizontalLayout();
+            openIdLayout.addComponent(openIdProvidersLayout);
+            openIdProvidersLayout.setMargin(new MarginInfo(false, false, true, false));
+            openIdProvidersLayout.setSpacing(true);
             final String returnViewName = "openidlink";
             final Map<String, String> urlIconMap = OpenIdUtil.getOpenIdProviderUrlIconMap();
             for (final String url : urlIconMap.keySet()) {
-                openIdLayout.addComponent(OpenIdUtil.getLoginButton(url, urlIconMap.get(url), returnViewName));
+                openIdProvidersLayout.addComponent(OpenIdUtil.getLoginButton(url, urlIconMap.get(url), returnViewName));
             }
         }
 
@@ -174,25 +177,12 @@ public final class AccountFlowlet extends AbstractFlowlet {
             googleAuthenticatorButton.addClickListener(new MouseEvents.ClickListener() {
                 @Override
                 public void click(MouseEvents.ClickEvent event) {
-                    final User user = ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession();
-                    if (((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() == null) {
-                        final String secretKey = GoogleAuthenticatorService.generateSecretKey();
-                        user.setGoogleAuthenticatorSecret(SecurityUtil.encryptSecretKey(secretKey));
-                        SecurityService.updateUser(getSite().getSiteContext(), getSite().getSiteContext().getEntityManager().merge(user));
-                        final String qrCodeUrl;
-                        try {
-                            qrCodeUrl = GoogleAuthenticatorService.getQRBarcodeURL(user.getEmailAddress(), new URL(company.getUrl()).getHost(), secretKey);
-                        } catch (MalformedURLException e) {
-                            throw new RuntimeException("Invalid company URL format.", e);
+                    GoogleAuthenticatorService.startRegistration(new GoogleAuthenticatorRegistrationListener() {
+                        @Override
+                        public void onDeviceRegistrationSuccess() {
+                            authenticationDeviceContainer.refresh();
                         }
-                        GoogleAuthenticatorService.showGrCodeDialog(qrCodeUrl);
-                        authenticationDeviceContainer.refresh();
-                    } else {
-                        user.setGoogleAuthenticatorSecret(null);
-                        SecurityService.updateUser(getSite().getSiteContext(), getSite().getSiteContext().getEntityManager().merge(user));
-                        authenticationDeviceContainer.refresh();
-                    }
-                    googleAuthenticatorButton.setState(((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() != null);
+                    });
                 }
             });
             mfaRegisterButtonLayout.addComponent(googleAuthenticatorButton);
@@ -201,22 +191,13 @@ public final class AccountFlowlet extends AbstractFlowlet {
             u2fRegisterButton.addClickListener(new MouseEvents.ClickListener() {
                 @Override
                 public void click(MouseEvents.ClickEvent event) {
-                    final User user = ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession();
-
-                    if (U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress())) {
-                        U2fService.removeDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress());
-                        u2fRegisterButton.setState(U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress()));
-                        authenticationDeviceContainer.refresh();
-                    } else {
-                        final U2fConnector u2fConnector = new U2fConnector();
-                        u2fConnector.startRegistration(new U2fRegistrationListener() {
-                            @Override
-                            public void onDeviceRegistrationSuccess() {
-                                u2fRegisterButton.setState(U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress()));
-                                authenticationDeviceContainer.refresh();
-                            }
-                        });
-                    }
+                    final U2fConnector u2fConnector = new U2fConnector();
+                    u2fConnector.startRegistration(new U2fRegistrationListener() {
+                        @Override
+                        public void onDeviceRegistrationSuccess() {
+                            authenticationDeviceContainer.refresh();
+                        }
+                    });
 
                 }
             });
@@ -241,10 +222,6 @@ public final class AccountFlowlet extends AbstractFlowlet {
                         AuthenticationDeviceDao.removeAuthenticationDevice(entityManager,
                                 AuthenticationDeviceDao.getAuthenticationDevice(entityManager, (String) authenticationDeviceId));
                     }
-
-                    final User user = ((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession();
-                    u2fRegisterButton.setState(U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress()));
-                    googleAuthenticatorButton.setState(user.getGoogleAuthenticatorSecret() != null);
                     authenticationDeviceContainer.refresh();
                 }
             });
@@ -400,16 +377,10 @@ public final class AccountFlowlet extends AbstractFlowlet {
             entityGrid.refresh();
         }
 
-        if (user != null) {
-            authenticationDeviceContainer.removeDefaultFilters();
-            authenticationDeviceContainer.addDefaultFilter(new Compare.Equal("user", user));
-            authenticationDeviceContainer.refresh();
-        }
+        authenticationDeviceContainer.removeDefaultFilters();
+        authenticationDeviceContainer.addDefaultFilter(new Compare.Equal("user", user));
+        authenticationDeviceContainer.refresh();
 
-        if (((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession() != null) {
-            googleAuthenticatorButton.setState(((SecurityProviderSessionImpl) getSite().getSecurityProvider()).getUserFromSession().getGoogleAuthenticatorSecret() != null);
-            u2fRegisterButton.setState(U2fService.hasDeviceRegistrations(getSite().getSiteContext(), user.getEmailAddress()));
-        }
     }
 
 }

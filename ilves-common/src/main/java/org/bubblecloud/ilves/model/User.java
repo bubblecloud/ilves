@@ -80,10 +80,6 @@ public final class User implements Serializable {
     @Column(nullable = true)
     private String openIdIdentifier;
 
-    /** Google authenticator secret. */
-    @Column(nullable = true)
-    private String googleAuthenticatorSecret;
-
     /** TLS client certificate. */
     @Column(nullable = true)
     private String certificate;
@@ -311,20 +307,6 @@ public final class User implements Serializable {
      */
     public void setOpenIdIdentifier(final String openIdIdentifier) {
         this.openIdIdentifier = openIdIdentifier;
-    }
-
-    /**
-     * @return the Google Authenticator secret
-     */
-    public String getGoogleAuthenticatorSecret() {
-        return googleAuthenticatorSecret;
-    }
-
-    /**
-     * @param googleAuthenticatorSecret the Google Authenticator secret to set
-     */
-    public void setGoogleAuthenticatorSecret(final String googleAuthenticatorSecret) {
-        this.googleAuthenticatorSecret = googleAuthenticatorSecret;
     }
 
     /**

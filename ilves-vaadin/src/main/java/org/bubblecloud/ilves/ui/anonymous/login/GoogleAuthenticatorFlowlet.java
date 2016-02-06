@@ -15,13 +15,19 @@
  */
 package org.bubblecloud.ilves.ui.anonymous.login;
 
+import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
+import org.bubblecloud.ilves.model.AuthenticationDevice;
 import org.bubblecloud.ilves.model.AuthenticationDeviceType;
 import org.bubblecloud.ilves.model.Company;
+import org.bubblecloud.ilves.security.GoogleAuthenticatorService;
+import org.bubblecloud.ilves.security.SecurityUtil;
 import org.bubblecloud.ilves.security.SiteAuthenticationService;
+import org.bubblecloud.ilves.site.DefaultSiteUI;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -63,8 +69,18 @@ public class GoogleAuthenticatorFlowlet extends AbstractFlowlet {
                 final String emailAddress = loginFlowlet.getUsername().toLowerCase();
                 final char[] password = loginFlowlet.getPassword();
                 final String code = codeField.getValue();
-                final AuthenticationDeviceType authenticationDeviceType = SiteAuthenticationService.getAuthenticationDeviceType(emailAddress);
-                SiteAuthenticationService.login(emailAddress, password, code, UUID.randomUUID().toString());
+
+                final List<AuthenticationDevice> authenticationDevices = SiteAuthenticationService.getAuthenticationDevices(emailAddress);
+                for (final AuthenticationDevice authenticationDevice : authenticationDevices) {
+                    if (authenticationDevice.getType() == AuthenticationDeviceType.GOOGLE_AUTHENTICATOR) {
+                        if (GoogleAuthenticatorService.checkCode(SecurityUtil.decryptSecretKey(authenticationDevice.getEncryptedSecret()), code)) {
+                            SiteAuthenticationService.login(emailAddress, password, UUID.randomUUID().toString());
+                            return;
+                        }
+                    }
+                }
+
+                new Notification(getSite().localize("message-invalid-code"),  Notification.Type.WARNING_MESSAGE).show(Page.getCurrent());
             }
         });
     }
