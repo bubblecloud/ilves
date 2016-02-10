@@ -3,7 +3,7 @@ Ilves
 
 Ilves is a lean Java web site development framework based on Vaadin framework. Ilves provides responsive user
 interface and advanced security functions in addition to host of  other useful features. It is perfect for crafting
-user interfaces for commercial sites and DIY projects without sacrificing user experience.
+user interfaces for commercial sites and DIY projects.
 
 Demo is available at Heroku:
 
