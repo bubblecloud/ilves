@@ -96,8 +96,9 @@ public class SiteAuthenticationService {
      * @param emailAddress_ the email address
      * @param password the password
      * @param transactionId the authentication transaction ID
+     * @return true if login succeeded
      */
-    public static void login(final String emailAddress_, final char[] password, final String transactionId) {
+    public static boolean login(final String emailAddress_, final char[] password, final String transactionId) {
         final  String emailAddress = emailAddress_.toLowerCase();
         final AbstractSiteUI ui = ((AbstractSiteUI)UI.getCurrent());
         final EntityManager entityManager = ui.getSite().getSiteContext().getEntityManager();
@@ -114,7 +115,7 @@ public class SiteAuthenticationService {
         if (user == null) {
             new Notification(DefaultSiteUI.getLocalizationProvider().localize("message-login-failed", locale),
                     Notification.Type.WARNING_MESSAGE).show(Page.getCurrent());
-            return;
+            return false;
         }
 
         entityManager.refresh(user);
@@ -125,12 +126,15 @@ public class SiteAuthenticationService {
 
         if (errorKey == null) {
             login(locale, entityManager, company, user);
+            return true;
         } else if (errorKey.equals("message-login-failed-duplicate-login-for-login-transaction-id")) {
+            return false;
             // Silently fail.
         } else {
             // Login failure
             new Notification(DefaultSiteUI.getLocalizationProvider().localize(errorKey, locale),
                     Notification.Type.WARNING_MESSAGE).show(Page.getCurrent());
+            return false;
         }
     }
 

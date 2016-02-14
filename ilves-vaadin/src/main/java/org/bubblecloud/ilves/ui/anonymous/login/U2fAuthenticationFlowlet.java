@@ -56,13 +56,15 @@ public class U2fAuthenticationFlowlet extends AbstractFlowlet {
         final U2fConnector u2fConnector = new U2fConnector();
         u2fConnector.startAuthentication(emailAddress, new U2fAuthenticationListener() {
             @Override
-            public void onDeviceAuthenticationSuccess() {
-                SiteAuthenticationService.login(emailAddress, password, UUID.randomUUID().toString());
+            public void onDeviceAuthenticationSuccess(final String authenticatedEmailAddress) {
+                if (!SiteAuthenticationService.login(authenticatedEmailAddress, password, UUID.randomUUID().toString())) {
+                    getFlow().back();
+                }
             }
 
             @Override
             public void onDeviceAuthenticationFailure() {
-                getFlow().forward(LoginFlowlet.class);
+                getFlow().back();
             }
         });
     }

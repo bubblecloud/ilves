@@ -231,10 +231,10 @@ public class U2fConnector extends AbstractJavaScriptExtension {
 
             AuditService.log(site.getSiteContext(), "u2f authentication success");
 
-            new Notification(
+            /*new Notification(
                     site.localize("message-u2f-device-authentication success"),
-                    Notification.Type.HUMANIZED_MESSAGE).show(Page.getCurrent());
-            u2fAuthenticationListener.onDeviceAuthenticationSuccess();
+                    Notification.Type.HUMANIZED_MESSAGE).show(Page.getCurrent());*/
+            u2fAuthenticationListener.onDeviceAuthenticationSuccess(authenticateEmailAddress);
         } catch(final Exception e) {
             LOGGER.error("Error processing U2F authenticate response.", e);
             new Notification(

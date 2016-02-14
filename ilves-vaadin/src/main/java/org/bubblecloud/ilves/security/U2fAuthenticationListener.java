@@ -21,6 +21,14 @@ package org.bubblecloud.ilves.security;
  * @author Tommi S.E. Laukkanen
  */
 public interface U2fAuthenticationListener {
-    void onDeviceAuthenticationSuccess();
+    /**
+     * Event invoked on authentication success.
+     * @param authenticatedEmailAddress the authenticated email address
+     */
+    void onDeviceAuthenticationSuccess(final String authenticatedEmailAddress);
+
+    /**
+     * Event invoked on authentication failure.
+     */
     void onDeviceAuthenticationFailure();
 }
