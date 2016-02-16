@@ -28,16 +28,8 @@ Usage
 Vaadin custom components can be used as is:
 
 ```
-/**
- * Custom component example.
- *
- * @author Tommi S.E. Laukkanen
- */
 public class HelloComponent extends CustomComponent {
 
-    /**
-     * Default constructor which sets up the component.
-     */
     public HelloComponent() {
         final User user = Ilves.getCurrentUser();
         final String greeting;
