@@ -7,7 +7,7 @@ window._gaq = window._gaq || [];
 })();
 
 window.org_bubblecloud_ilves_site_SiteAnalyser = function() {
-    this.pushCommand = function(command) {
-        _gaq.push(command);
+    this.pushCommand = function(command, value) {
+        _gaq.push([command, value]);
     }
 }

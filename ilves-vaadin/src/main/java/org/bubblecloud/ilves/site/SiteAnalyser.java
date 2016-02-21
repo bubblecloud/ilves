@@ -14,21 +14,21 @@ public class SiteAnalyser extends AbstractJavaScriptExtension implements ViewCha
         this.gaTrackingId = gaTrackingId;
         if (!StringUtils.isEmpty(gaTrackingId)) {
             extend(ui);
-            pushCommand("_setAccount", gaTrackingId);
+            pushCommand(new String[]{"_setAccount", gaTrackingId});
         }
     }
 
     public void trackPageView(String name) {
         if (!StringUtils.isEmpty(gaTrackingId)) {
-            pushCommand("_trackPageview", name);
+            pushCommand(new String[]{"_trackPageview", name});
         }
     }
 
-    private void pushCommand(Object... commandAndArguments) {
+    private void pushCommand(final String[] commandAndArguments) {
         if (!StringUtils.isEmpty(gaTrackingId)) {
             // Cast to Object to use Object[] commandAndArguments as the first
             // varargs argument instead of as the full varargs argument array.
-            callFunction("pushCommand", (Object) commandAndArguments);
+            callFunction("pushCommand", commandAndArguments);
         }
     }
 
