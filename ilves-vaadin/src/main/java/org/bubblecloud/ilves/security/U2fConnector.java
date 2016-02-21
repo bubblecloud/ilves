@@ -60,10 +60,25 @@ public class U2fConnector extends AbstractJavaScriptExtension {
      * The register window.
      */
     private final Window registerWindow = new Window(Site.getCurrent().localize("header-register-u2f-device"));
+    /**
+     * The site.
+     */
     private final Site site;
+    /**
+     * The company.
+     */
     private final Company company;
+    /**
+     * The APP ID.
+     */
     private final String appId;
+    /**
+     * U2F registration listener.
+     */
     private U2fRegistrationListener u2FRegistrationListener;
+    /**
+     * U2F authentication listener.
+     */
     private U2fAuthenticationListener u2fAuthenticationListener;
 
     /**
@@ -71,14 +86,12 @@ public class U2fConnector extends AbstractJavaScriptExtension {
      */
     public U2fConnector() {
         extend(UI.getCurrent());
-
         addFunction("onRegisterResponse", new JavaScriptFunction() {
             @Override
             public void call(final JsonArray arguments) {
                 onReqisterResponse(arguments);
             }
         });
-
         addFunction("onAuthenticateResponse", new JavaScriptFunction() {
             @Override
             public void call(final JsonArray arguments) {
@@ -111,11 +124,6 @@ public class U2fConnector extends AbstractJavaScriptExtension {
         registerWindow.setHeight(200, Sizeable.Unit.PIXELS);
         registerWindow.center();
         UI.getCurrent().addWindow(registerWindow);
-    }
-
-    public void startAuthentication(final String emailAddress, final U2fAuthenticationListener u2fAuthenticationListener) {
-        this.u2fAuthenticationListener = u2fAuthenticationListener;
-        sendAuthenticateRequest(emailAddress);
     }
 
     /**
@@ -178,6 +186,17 @@ public class U2fConnector extends AbstractJavaScriptExtension {
      * Field for holding email address between authenticate request and response call.
      */
     private String authenticateEmailAddress = null;
+
+    /**
+     * Starts authentication.
+     * @param emailAddress the email address
+     * @param u2fAuthenticationListener the U2F authentication listener
+     */
+    public void startAuthentication(final String emailAddress, final U2fAuthenticationListener u2fAuthenticationListener) {
+        this.u2fAuthenticationListener = u2fAuthenticationListener;
+        sendAuthenticateRequest(emailAddress);
+    }
+
 
     /**
      * Send authenticate request to U2F JavaScript API.
