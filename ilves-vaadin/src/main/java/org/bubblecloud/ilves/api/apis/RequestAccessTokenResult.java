@@ -16,6 +16,10 @@ public class RequestAccessTokenResult {
      * The expiration time.
      */
     private Date expirationTime;
+    /**
+     * The error key
+     */
+    private String errorKey;
 
     public String getAccessToken() {
         return accessToken;
@@ -31,5 +35,13 @@ public class RequestAccessTokenResult {
 
     public void setExpirationTime(Date expirationTime) {
         this.expirationTime = expirationTime;
+    }
+
+    public String getErrorKey() {
+        return errorKey;
+    }
+
+    public void setErrorKey(String errorKey) {
+        this.errorKey = errorKey;
     }
 }

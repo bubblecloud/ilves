@@ -51,7 +51,7 @@ public class ApiInvocationHandler implements InvocationHandler {
                 }
                 if (!roleAccessGranted) {
                     LOGGER.warn(method.getDeclaringClass().getSimpleName() + "." + method.getName()
-                            + " access denied.");
+                            + " access denied for user with roles: " + context.getRoles());
                     throw new SecurityException("access_denied");
                 }
             }

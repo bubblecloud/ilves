@@ -2,19 +2,22 @@ package org.bubblecloud.ilves.api;
 
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.googlecode.jsonrpc4j.ProxyUtil;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.bubblecloud.ilves.Ilves;
 import org.bubblecloud.ilves.api.apis.RequestAccessTokenResult;
 import org.bubblecloud.ilves.api.apis.Security;
-import org.bubblecloud.ilves.api.apis.SecurityImpl;
+import org.bubblecloud.ilves.model.Company;
+import org.bubblecloud.ilves.security.CompanyDao;
+import org.bubblecloud.ilves.security.SecurityApiImpl;
 import org.bubblecloud.ilves.module.audit.AuditModule;
 import org.bubblecloud.ilves.module.content.ContentModule;
 import org.bubblecloud.ilves.module.customer.CustomerModule;
+import org.bubblecloud.ilves.site.DefaultSiteUI;
 import org.eclipse.jetty.server.Server;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import javax.persistence.EntityManager;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,11 +44,18 @@ public class ApiTest {
         Ilves.initializeModule(CustomerModule.class);
         Ilves.initializeModule(ContentModule.class);
 
-        Ilves.addApi(Security.class, SecurityImpl.class);
+        Ilves.addApi(Security.class, SecurityApiImpl.class);
         Ilves.addApi(ApiMock.class, ApiMockImpl.class);
 
         // Start server.
         server.start();
+
+        final EntityManager entityManager = DefaultSiteUI.getEntityManagerFactory().createEntityManager();
+        final Company company = CompanyDao.getCompany(entityManager, "*");
+        company.setSelfRegistration(true);
+        entityManager.getTransaction().begin();
+        entityManager.persist(company);
+        entityManager.getTransaction().commit();
 
         final JsonRpcHttpClient apiMockClient = new JsonRpcHttpClient(
                 new URL("http://localhost:8080/api/apimock"));
@@ -60,14 +70,15 @@ public class ApiTest {
                 new JsonRpcHttpClient(
                         new URL("http://localhost:8080/api/security")));
 
-        final RequestAccessTokenResult result = security.requestAccessToken("admin@admin.org", "password");
+        Assert.assertTrue(security.selfRegisterUser("test", "user", "test.user@admin.org", "+123", "password"));
+        final RequestAccessTokenResult result = security.requestAccessToken("test.user@admin.org", "password");
 
         final Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + new String(result.getAccessToken()));
 
         apiMockClient.setHeaders(headers);
 
-        Assert.assertEquals("[administrator]:test", apiMock.testMethod("test"));
+        Assert.assertEquals("[user]:test", apiMock.testMethod("test"));
 
         server.stop();
     }

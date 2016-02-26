@@ -27,4 +27,15 @@ public interface Security {
     @AccessGrant(roles = {"anonymous"})
     void invalidateAccessToken(final String account, final String accessToken);
 
+    /**
+     * Self registers user.
+     * @param firstName first name
+     * @param lastName last name
+     * @param emailAddress email address
+     * @param phoneNumber phone number
+     * @param password password
+     * @return true if registration was successful
+     */
+    @AccessGrant(roles = {"anonymous"})
+    boolean selfRegisterUser(String firstName, String lastName, String emailAddress, String phoneNumber, String password);
 }
