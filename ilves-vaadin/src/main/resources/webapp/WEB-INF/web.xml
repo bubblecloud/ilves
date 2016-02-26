@@ -14,6 +14,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>Api Servlet</servlet-name>
+        <servlet-class>org.bubblecloud.ilves.api.ApiServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Api Servlet</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>Uuid Servlet</servlet-name>
         <servlet-class>org.bubblecloud.ilves.security.UuidServlet</servlet-class>
     </servlet>

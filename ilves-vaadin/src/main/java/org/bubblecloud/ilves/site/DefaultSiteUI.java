@@ -57,7 +57,7 @@ public final class DefaultSiteUI extends AbstractSiteUI {
         // Choose company for this site context.
         final VaadinServletRequest servletRequest = (VaadinServletRequest) VaadinService.getCurrentRequest();
         // The virtual host based on URL.
-        final Company company = resolveCompany(entityManager, servletRequest);
+        final Company company = resolveCompany(entityManager, servletRequest.getHttpServletRequest().getServerName());
 
         final SiteContext siteContext = new SiteContext(entityManager, auditEntityManager, servletRequest, securityProvider);
         siteContext.putObject(EntityManager.class, entityManager);
@@ -88,8 +88,7 @@ public final class DefaultSiteUI extends AbstractSiteUI {
         return new Site(SiteMode.PRODUCTION, contentProvider, localizationProvider, securityProvider, siteContext);
     }
 
-    public static Company resolveCompany(EntityManager entityManager, VaadinServletRequest servletRequest) {
-        final String hostName = servletRequest.getHttpServletRequest().getServerName();
+    public static Company resolveCompany(EntityManager entityManager, final String hostName) {
         Company company = CompanyDao.getCompany(entityManager, hostName);
         if (company == null) {
             company = CompanyDao.getCompany(entityManager, "*");

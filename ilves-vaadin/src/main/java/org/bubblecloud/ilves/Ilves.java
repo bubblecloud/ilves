@@ -2,6 +2,7 @@ package org.bubblecloud.ilves;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Component;
+import org.bubblecloud.ilves.api.ApiServlet;
 import org.bubblecloud.ilves.model.Company;
 import org.bubblecloud.ilves.model.User;
 import org.bubblecloud.ilves.security.DefaultRoles;
@@ -288,5 +289,14 @@ public class Ilves {
      */
     public static Company getCurrentCompany() {
         return Site.getCurrent().getSiteContext().getObject(Company.class);
+    }
+
+    /**
+     * Add thread safe API object to JSON RPC API servlet.
+     * @param apiInterface the API interface
+     * @param apiImplementation the API implementation
+     */
+    public static void addApi(final Class apiInterface, final Object apiImplementation) {
+        ApiServlet.addApi(apiInterface, apiImplementation);
     }
 }

@@ -42,7 +42,7 @@ public class CredentialPostRequestHandler implements RequestHandler {
 
         if (pathInfo != null && pathInfo.contains("oauthredirect")) {
             final EntityManager entityManager = ui.getSite().getSiteContext().getEntityManager();
-            final Company company = DefaultSiteUI.resolveCompany(entityManager, (VaadinServletRequest) request);
+            final Company company = DefaultSiteUI.resolveCompany(entityManager, ((VaadinServletRequest) VaadinService.getCurrentRequest()).getServerName());
 
             if (VaadinSession.getCurrent().getSession().getAttribute("user") == null) {
                 final String code = request.getParameter("code");

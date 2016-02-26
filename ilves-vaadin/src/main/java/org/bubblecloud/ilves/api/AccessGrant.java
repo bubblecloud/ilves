@@ -1,4 +1,4 @@
-package org.bubblecloud.ilves.rpc;
+package org.bubblecloud.ilves.api;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

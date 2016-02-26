@@ -1,4 +1,4 @@
-package org.bubblecloud.ilves.rpc;
+package org.bubblecloud.ilves.api;
 
 import org.apache.log4j.Logger;
 import org.bubblecloud.ilves.site.SiteContext;

@@ -18,7 +18,7 @@ public class OAuthServiceTest {
     public void testGet() throws Exception {
         final String response = OAuthService.get("https://api.github.com/user/emails", "xxx");
         ObjectMapper objectMapper = new ObjectMapper();
-        final ArrayList<Map<String, Object>> emailList = objectMapper.readValue(response, ArrayList.class);
+        final ArrayList<Map<String, Object>> emailList = (ArrayList<Map<String, Object>>) objectMapper.readValue(response, ArrayList.class);
         System.out.println(emailList);
         Assert.assertEquals(1, emailList.size());
         Assert.assertEquals("tommi.s.e.laukkanen@gmail.com", emailList.get(0).get("email"));
