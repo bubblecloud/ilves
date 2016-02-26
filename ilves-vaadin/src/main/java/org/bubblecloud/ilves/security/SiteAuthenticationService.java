@@ -95,10 +95,10 @@ public class SiteAuthenticationService {
      * Logs user in to the site.
      * @param emailAddress_ the email address
      * @param password the password
-     * @param transactionId the authentication transaction ID
+     * @param accessToken the access token
      * @return true if login succeeded
      */
-    public static boolean login(final String emailAddress_, final char[] password, final String transactionId) {
+    public static boolean login(final String emailAddress_, final char[] password, final char[] accessToken) {
         final  String emailAddress = emailAddress_.toLowerCase();
         final AbstractSiteUI ui = ((AbstractSiteUI)UI.getCurrent());
         final EntityManager entityManager = ui.getSite().getSiteContext().getEntityManager();
@@ -122,7 +122,7 @@ public class SiteAuthenticationService {
 
 
         final String errorKey = LoginService.login(ui.getSite().getSiteContext(), company,
-                user, emailAddress, password, VaadinSession.getCurrent().getSession().getId(), transactionId);
+                user, emailAddress, password, VaadinSession.getCurrent().getSession().getId(), accessToken);
 
         if (errorKey == null) {
             login(locale, entityManager, company, user);

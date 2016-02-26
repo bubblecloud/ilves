@@ -18,6 +18,7 @@ package org.bubblecloud.ilves.ui.anonymous.login;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.apache.commons.codec.binary.Hex;
 import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
 import org.bubblecloud.ilves.model.AuthenticationDevice;
 import org.bubblecloud.ilves.model.AuthenticationDeviceType;
@@ -27,6 +28,8 @@ import org.bubblecloud.ilves.security.SecurityUtil;
 import org.bubblecloud.ilves.security.SiteAuthenticationService;
 import org.bubblecloud.ilves.site.DefaultSiteUI;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,11 +73,13 @@ public class GoogleAuthenticatorFlowlet extends AbstractFlowlet {
                 final char[] password = loginFlowlet.getPassword();
                 final String code = codeField.getValue();
 
+                final char[] accessToken = SecurityUtil.generateAccessToken();
+
                 final List<AuthenticationDevice> authenticationDevices = SiteAuthenticationService.getAuthenticationDevices(emailAddress);
                 for (final AuthenticationDevice authenticationDevice : authenticationDevices) {
                     if (authenticationDevice.getType() == AuthenticationDeviceType.GOOGLE_AUTHENTICATOR) {
                         if (GoogleAuthenticatorService.checkCode(SecurityUtil.decryptSecretKey(authenticationDevice.getEncryptedSecret()), code)) {
-                            SiteAuthenticationService.login(emailAddress, password, UUID.randomUUID().toString());
+                            SiteAuthenticationService.login(emailAddress, password,accessToken);
                             return;
                         }
                     }

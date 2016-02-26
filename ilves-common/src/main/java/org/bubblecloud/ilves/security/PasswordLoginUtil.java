@@ -32,9 +32,6 @@ import org.joda.time.DateTime;
 
 import javax.persistence.EntityManager;
 import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -63,7 +60,7 @@ public class PasswordLoginUtil {
         if (user.getUserId() == null) {
             user.setUserId(UUID.randomUUID().toString());
         }
-        final byte[] passwordAndSaltBytes = convertCharactersToBytes(ArrayUtils.addAll((user.getUserId() + ":").toCharArray(), password));
+        final byte[] passwordAndSaltBytes = SecurityUtil.convertCharactersToBytes(ArrayUtils.addAll((user.getUserId() + ":").toCharArray(), password));
         final MessageDigest md = MessageDigest.getInstance("SHA-256");
         final byte[] passwordAndSaltDigest = md.digest(passwordAndSaltBytes);
         user.setPasswordHash(StringUtil.toHexString(passwordAndSaltDigest));
@@ -347,29 +344,15 @@ public class PasswordLoginUtil {
         }
     }
 
-    /**
-     * Converts character array to byte array
-     * @param characters the character array
-     * @return the byte array
-     */
-    public static byte[] convertCharactersToBytes(char[] characters) {
-        CharBuffer charBuffer = CharBuffer.wrap(characters);
-        final ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(charBuffer);
-        byte[] bytes = Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
-        Arrays.fill(charBuffer.array(), '\u0000');
-        Arrays.fill(byteBuffer.array(), (byte) 0);
-        return bytes;
-    }
-
     private static boolean checkPasswordMatchWithUserIdAsSalt(User user, char[] userPassword) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        final byte[] passwordAndSaltBytes = convertCharactersToBytes(ArrayUtils.addAll((user.getUserId() + ":").toCharArray(), userPassword));
+        final byte[] passwordAndSaltBytes = SecurityUtil.convertCharactersToBytes(ArrayUtils.addAll((user.getUserId() + ":").toCharArray(), userPassword));
         final MessageDigest md = MessageDigest.getInstance("SHA-256");
         final String passwordAndSaltDigest = StringUtil.toHexString(md.digest(passwordAndSaltBytes));
         return passwordAndSaltDigest.equals(user.getPasswordHash());
     }
 
     private static boolean checkPasswordMatchWithEmailAsSalt(User user, char[] userPassword) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        final byte[] passwordAndSaltBytes = convertCharactersToBytes(ArrayUtils.addAll((user.getEmailAddress() + ":").toCharArray(), userPassword));
+        final byte[] passwordAndSaltBytes = SecurityUtil.convertCharactersToBytes(ArrayUtils.addAll((user.getEmailAddress() + ":").toCharArray(), userPassword));
         final MessageDigest md = MessageDigest.getInstance("SHA-256");
         final String passwordAndSaltDigest = StringUtil.toHexString(md.digest(passwordAndSaltBytes));
         return passwordAndSaltDigest.equals(user.getPasswordHash());

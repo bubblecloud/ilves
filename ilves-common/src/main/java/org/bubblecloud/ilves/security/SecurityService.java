@@ -378,6 +378,20 @@ public class SecurityService {
         }
     }
 
+
+    public static void removeUserSession(final EntityManager entityManager, final UserSession userSession) {
+        entityManager.getTransaction().begin();
+        try {
+            entityManager.remove(userSession);
+            entityManager.getTransaction().commit();
+        } catch (final Exception e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw new RuntimeException("Unable to persist user session.", e);
+        }
+    }
+
     /**
      * Gets user session.
      * @param entityManager the entity manager
@@ -405,7 +419,7 @@ public class SecurityService {
      * @param loginTransactionIdHash the login transaction ID hash
      * @return user session or null
      */
-    public static UserSession getUserSessionByLoginTransactionIdHash(final EntityManager entityManager, final String loginTransactionIdHash) {
+    public static UserSession getUserSessionByAccessTokenHash(final EntityManager entityManager, final String loginTransactionIdHash) {
         final CriteriaBuilder queryBuilder = entityManager.getCriteriaBuilder();
         final CriteriaQuery<UserSession> criteriaQuery = queryBuilder.createQuery(UserSession.class);
         final Root<UserSession> root = criteriaQuery.from(UserSession.class);

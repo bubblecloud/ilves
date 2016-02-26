@@ -9,7 +9,7 @@
         </layout>
     </appender>
 
-    <logger name="org.vaadin.addons.sitekit" additivity="false">
+    <logger name="org.bubblecloud.ilves" additivity="false">
         <level value="debug"/>
         <appender-ref ref="console"/>
     </logger>

@@ -6,6 +6,7 @@ import org.bubblecloud.ilves.util.PropertiesUtil;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +44,8 @@ public class SecurityContext {
     protected String userName;
     /** The user roles. */
     protected final List<String> roles;
+    /** The web session ID if exists. */
+    protected final HttpSession session;
 
     /**
      * Constructor for defining parameters for processing context.
@@ -84,6 +87,7 @@ public class SecurityContext {
         this.userId = userId;
         this.userName = userName;
         this.roles = roles;
+        this.session = null;
     }
 
     /**
@@ -110,6 +114,7 @@ public class SecurityContext {
         this.userId = user != null ? user.getUserId() : null;
         this.userName = user != null ? user.getEmailAddress() : null;
         this.roles = roles;
+        this.session = request.getSession();
     }
 
     /**
@@ -136,6 +141,7 @@ public class SecurityContext {
         this.userId = null;
         this.userName = null;
         this.roles = new ArrayList<String>();
+        this.session = request.getSession();
     }
 
 
@@ -228,4 +234,7 @@ public class SecurityContext {
         return roles;
     }
 
+    public HttpSession getSession() {
+        return session;
+    }
 }

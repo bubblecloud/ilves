@@ -22,17 +22,21 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.log4j.Logger;
 import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
 import org.bubblecloud.ilves.exception.SiteException;
 import org.bubblecloud.ilves.model.AuthenticationDeviceType;
 import org.bubblecloud.ilves.model.Company;
 import org.bubblecloud.ilves.security.OAuthService;
+import org.bubblecloud.ilves.security.SecurityUtil;
 import org.bubblecloud.ilves.security.SiteAuthenticationService;
 import org.bubblecloud.ilves.util.JadeUtil;
 import org.bubblecloud.ilves.util.OpenIdUtil;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Map;
 import java.util.UUID;
 
@@ -117,10 +121,13 @@ public final class LoginFlowlet extends AbstractFlowlet {
                         loginConnector.saveCredentials(new LoginConnectorSaveListener() {
                             @Override
                             public void onSave() {
+
+                                final char[] accessToken = SecurityUtil.generateAccessToken();
+
                                 final AuthenticationDeviceSelectionFlowlet selectionFlowlet = (AuthenticationDeviceSelectionFlowlet) getFlow().getFlowlet(AuthenticationDeviceSelectionFlowlet.class);
                                 final AuthenticationDeviceType authenticationDeviceType = SiteAuthenticationService.getAuthenticationDeviceType(username);
                                 if (authenticationDeviceType == AuthenticationDeviceType.NONE) {
-                                    SiteAuthenticationService.login(username, passwordChars, UUID.randomUUID().toString());
+                                    SiteAuthenticationService.login(username, passwordChars, accessToken);
                                 } else if (authenticationDeviceType == AuthenticationDeviceType.GOOGLE_AUTHENTICATOR) {
                                     getFlow().forward(GoogleAuthenticatorFlowlet.class);
                                 } else if (authenticationDeviceType == AuthenticationDeviceType.UNIVERSAL_SECOND_FACTOR) {

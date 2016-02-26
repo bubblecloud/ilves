@@ -15,12 +15,10 @@
  */
 package org.bubblecloud.ilves.security;
 
-import org.apache.commons.codec.binary.Hex;
 import org.bubblecloud.ilves.model.Company;
 import org.bubblecloud.ilves.model.User;
 import org.bubblecloud.ilves.model.UserSession;
 
-import java.security.MessageDigest;
 import java.util.Date;
 
 /**
@@ -40,19 +38,19 @@ public class LoginService {
      * @param emailAddress the email addres
      * @param password the password
      * @param sessionId the session ID for blocking duplicated login posts for same session
+     * @param accessToken the access token
      * @return null if success or error key
      */
-    public static String login(final SecurityContext context, final Company company, final User user, final String emailAddress, final char[] password, final String sessionId, final String loginTransactionId) {
-        final String sessionIdHash = calculateIdHash(sessionId);
-        final String loginTransactionIdHash = calculateIdHash(loginTransactionId);
+    public static String login(final SecurityContext context, final Company company, final User user, final String emailAddress, final char[] password, final String sessionId, final char[] accessToken) {
+        final String sessionIdHash = SecurityUtil.calculateHash(sessionId);
+        final String accessTokenHash = SecurityUtil.getSecretHash(accessToken);
 
         if (SecurityService.getUserSessionByIdHash(context.getEntityManager(), sessionIdHash) != null) {
             return "message-login-failed-duplicate-login-for-session";
         }
-        if (SecurityService.getUserSessionByLoginTransactionIdHash(context.getEntityManager(), loginTransactionIdHash) != null) {
+        if (SecurityService.getUserSessionByAccessTokenHash(context.getEntityManager(), accessTokenHash) != null) {
             return "message-login-failed-duplicate-login-for-login-transaction-id";
         }
-
 
         final String errorKey = PasswordLoginUtil.login(emailAddress, context.getRemoteHost(),
                 context.getRemoteIpAddress(), context.getRemotePort(),
@@ -61,7 +59,7 @@ public class LoginService {
 
             final UserSession userSession = new UserSession();
             userSession.setSessionIdHash(sessionIdHash);
-            userSession.setLoginTransactionIdHash(loginTransactionIdHash);
+            userSession.setLoginTransactionIdHash(accessTokenHash);
             userSession.setUser(user);
             userSession.setCreated(new Date());
 
@@ -72,17 +70,6 @@ public class LoginService {
             AuditService.log(context, "password login failure", "User", user != null ? user.getUserId() : null, emailAddress);
         }
         return errorKey;
-    }
-
-    public static String calculateIdHash(String sessionId) {
-        final MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-            md.update(sessionId.getBytes("UTF-8")); // Change this to "UTF-16" if needed
-        } catch (final Exception e) {
-            throw new RuntimeException("Unable to compute session ID hash.", e);
-        }
-        return Hex.encodeHexString(md.digest());
     }
 
     /**

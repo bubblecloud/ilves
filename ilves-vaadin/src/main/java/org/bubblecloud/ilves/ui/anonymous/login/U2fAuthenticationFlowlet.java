@@ -16,12 +16,16 @@
 package org.bubblecloud.ilves.ui.anonymous.login;
 
 import com.vaadin.ui.*;
+import org.apache.commons.codec.binary.Hex;
 import org.bubblecloud.ilves.component.flow.AbstractFlowlet;
 import org.bubblecloud.ilves.model.Company;
+import org.bubblecloud.ilves.security.SecurityUtil;
 import org.bubblecloud.ilves.security.SiteAuthenticationService;
 import org.bubblecloud.ilves.security.U2fAuthenticationListener;
 import org.bubblecloud.ilves.security.U2fConnector;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.UUID;
 
 /**
@@ -57,7 +61,9 @@ public class U2fAuthenticationFlowlet extends AbstractFlowlet {
         u2fConnector.startAuthentication(emailAddress, new U2fAuthenticationListener() {
             @Override
             public void onDeviceAuthenticationSuccess(final String authenticatedEmailAddress) {
-                if (!SiteAuthenticationService.login(authenticatedEmailAddress, password, UUID.randomUUID().toString())) {
+                final char[] accessToken = SecurityUtil.generateAccessToken();
+
+                if (!SiteAuthenticationService.login(authenticatedEmailAddress, password, accessToken)) {
                     getFlow().back();
                 }
             }

@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import org.apache.log4j.Logger;
 import org.bubblecloud.ilves.model.Company;
-import org.bubblecloud.ilves.security.DefaultRoles;
+import org.bubblecloud.ilves.model.Group;
+import org.bubblecloud.ilves.model.User;
+import org.bubblecloud.ilves.model.UserSession;
+import org.bubblecloud.ilves.security.*;
 import org.bubblecloud.ilves.site.DefaultSiteUI;
-import org.bubblecloud.ilves.site.SecurityProvider;
 import org.bubblecloud.ilves.site.SiteContext;
 import org.bubblecloud.ilves.util.WebSecurityUtil;
 import org.eclipse.jetty.http.HttpStatus;
@@ -34,14 +36,14 @@ public class ApiServlet extends HttpServlet {
     /** The object mapper. */
     private LinkedList<ObjectMapper> objectMapperPool = new LinkedList<ObjectMapper>();
     /** The thread safe API objects. */
-    private static Map<Class, Object> apis = new HashMap<>();
+    private static Map<Class, Class<? extends ApiImplementation>> apis = new HashMap<>();
 
     /**
      * Add API object to the API servlet class.
      * @param apiInterface the API interface
      * @param apiImplementation the API implementation
      */
-    public static void addApi(final Class apiInterface, final Object apiImplementation) {
+    public static void addApi(final Class apiInterface, final Class<? extends ApiImplementation> apiImplementation) {
         apis.put(apiInterface, apiImplementation);
     }
 
@@ -70,7 +72,22 @@ public class ApiServlet extends HttpServlet {
             // The virtual host based on URL.
             final Company company = DefaultSiteUI.resolveCompany(entityManager, request.getServerName());
             // The security provider.
-            final SecurityProvider securityProvider = new ApiSecurityProviderImpl(DefaultRoles.ADMINISTRATOR, DefaultRoles.USER);
+            final ApiSecurityProviderImpl securityProvider = new ApiSecurityProviderImpl(DefaultRoles.ADMINISTRATOR, DefaultRoles.USER);
+
+            final String accessTokenHeaderValue = request.getHeader("Authorization");
+            if (accessTokenHeaderValue != null && accessTokenHeaderValue.startsWith("Bearer ")) {
+                final char[] accessToken = accessTokenHeaderValue.substring(7).toCharArray();
+                final String accessTokenHash = SecurityUtil.getSecretHash(accessToken);
+                final UserSession userSession = SecurityService.getUserSessionByAccessTokenHash(entityManager, accessTokenHash);
+                if (userSession != null) {
+                    final long sessionAgeMillis = new Date().getTime() - userSession.getCreated().getTime();
+                    if (sessionAgeMillis < SecurityUtil.ACCESS_TOKEN_LIFETIME_MILLIS) {
+                        final User user = userSession.getUser();
+                        final List<Group> groups = UserDao.getUserGroups(entityManager, company, user);
+                        securityProvider.setUser(user, groups);
+                    }
+                }
+            }
 
             // The context.
             final SiteContext context = new SiteContext(entityManager, auditEntityManager, request, securityProvider);
@@ -79,12 +96,12 @@ public class ApiServlet extends HttpServlet {
             context.putObject(Company.class, company);
 
             Class apiInterface = null;
-            Object apiImplementation = null;
+            ApiImplementation apiImplementation = null;
             for (final Class apiCandidate : apis.keySet()) {
                 final String apikey = apiCandidate.getSimpleName().toLowerCase();
                 if (uri.endsWith(apikey)) {
                     apiInterface = apiCandidate;
-                    apiImplementation = apis.get(apiCandidate);
+                    apiImplementation = apis.get(apiCandidate).newInstance();
                     break;
                 }
             }
@@ -93,6 +110,8 @@ public class ApiServlet extends HttpServlet {
                 response.setStatus(HttpStatus.NOT_FOUND_404);
                 return;
             }
+
+            apiImplementation.setContext(context);
 
             ObjectMapper objectMapper;
             synchronized (objectMapperPool) {

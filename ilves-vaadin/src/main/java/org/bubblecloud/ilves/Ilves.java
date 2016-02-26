@@ -2,6 +2,7 @@ package org.bubblecloud.ilves;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Component;
+import org.bubblecloud.ilves.api.ApiImplementation;
 import org.bubblecloud.ilves.api.ApiServlet;
 import org.bubblecloud.ilves.model.Company;
 import org.bubblecloud.ilves.model.User;
@@ -296,7 +297,7 @@ public class Ilves {
      * @param apiInterface the API interface
      * @param apiImplementation the API implementation
      */
-    public static void addApi(final Class apiInterface, final Object apiImplementation) {
+    public static void addApi(final Class apiInterface, final Class<? extends ApiImplementation> apiImplementation) {
         ApiServlet.addApi(apiInterface, apiImplementation);
     }
 }

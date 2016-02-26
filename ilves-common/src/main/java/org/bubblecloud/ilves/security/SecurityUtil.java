@@ -1,20 +1,29 @@
 package org.bubblecloud.ilves.security;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Base64;
 import org.bouncycastle.util.encoders.Hex;
+import org.bubblecloud.ilves.model.User;
 import org.bubblecloud.ilves.util.PropertiesUtil;
+import org.bubblecloud.ilves.util.StringUtil;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.util.Arrays;
 
 /**
  * Security utility methods.
@@ -55,6 +64,10 @@ public class SecurityUtil {
      * Default initialization vector for encrypted configuration.
      */
     public static final byte[] CONFIGURATION_ENCRYPTION_IV = Hex.decode("1aa13e4a6f1a022b51b550fffcd43021");
+    /** The secure random. */
+    private static SecureRandom random = new SecureRandom();
+    /** The access token lifetime in milliseconds. */
+    public static final long ACCESS_TOKEN_LIFETIME_MILLIS = 15 * 60 * 1000;
 
     /**
      * Method for generating keyt encryption secret key.
@@ -160,4 +173,56 @@ public class SecurityUtil {
         return decrypt(CONFIGURATION_ENCRYPTION_IV, Hex.decode(systemSecretKey), cipherText);
     }
 
+    /**
+     * Calculate hash for string.
+     * @param stringValue the string value
+     * @return the hash as hex encoded string
+     */
+    public static String calculateHash(String stringValue) {
+        final MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+            md.update(stringValue.getBytes("UTF-8")); // Change this to "UTF-16" if needed
+        } catch (final Exception e) {
+            throw new RuntimeException("Unable to compute session ID hash.", e);
+        }
+        return org.apache.commons.codec.binary.Hex.encodeHexString(md.digest());
+    }
+
+    /**
+     * Generates access token.
+     * @return the access token
+     */
+    public static char[] generateAccessToken() {
+        final char[] accessToken;
+        synchronized (random) {
+            accessToken = org.apache.commons.codec.binary.Hex.encodeHex(new BigInteger(130, random).toByteArray());
+        }
+        return accessToken;
+    }
+
+    public static String getSecretHash(final char[] secret) {
+        final byte[] accessTokenHashBytes = convertCharactersToBytes(secret);
+        final MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            throw new SecurityException(e);
+        }
+        return StringUtil.toHexString(md.digest(accessTokenHashBytes));
+    }
+
+    /**
+     * Converts character array to byte array
+     * @param characters the character array
+     * @return the byte array
+     */
+    public static byte[] convertCharactersToBytes(char[] characters) {
+        CharBuffer charBuffer = CharBuffer.wrap(characters);
+        final ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(charBuffer);
+        byte[] bytes = Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
+        Arrays.fill(charBuffer.array(), '\u0000');
+        Arrays.fill(byteBuffer.array(), (byte) 0);
+        return bytes;
+    }
 }
