@@ -4,7 +4,7 @@ import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.googlecode.jsonrpc4j.ProxyUtil;
 import org.bubblecloud.ilves.Ilves;
 import org.bubblecloud.ilves.api.apis.RequestAccessTokenResult;
-import org.bubblecloud.ilves.api.apis.Security;
+import org.bubblecloud.ilves.api.apis.SecurityApi;
 import org.bubblecloud.ilves.model.Company;
 import org.bubblecloud.ilves.security.CompanyDao;
 import org.bubblecloud.ilves.security.SecurityApiImpl;
@@ -44,7 +44,7 @@ public class ApiTest {
         Ilves.initializeModule(CustomerModule.class);
         Ilves.initializeModule(ContentModule.class);
 
-        Ilves.addApi(Security.class, SecurityApiImpl.class);
+        Ilves.addApi(SecurityApi.class, SecurityApiImpl.class);
         Ilves.addApi(ApiMock.class, ApiMockImpl.class);
 
         // Start server.
@@ -64,11 +64,11 @@ public class ApiTest {
                 getClass().getClassLoader(),
                 ApiMock.class, apiMockClient);
 
-        final Security security = ProxyUtil.createClientProxy(
+        final SecurityApi security = ProxyUtil.createClientProxy(
                 getClass().getClassLoader(),
-                Security.class,
+                SecurityApi.class,
                 new JsonRpcHttpClient(
-                        new URL("http://localhost:8080/api/security")));
+                        new URL("http://localhost:8080/api/securityapi")));
 
         Assert.assertTrue(security.selfRegisterUser("test", "user", "test.user@admin.org", "+123", "password"));
         final RequestAccessTokenResult result = security.requestAccessToken("test.user@admin.org", "password");

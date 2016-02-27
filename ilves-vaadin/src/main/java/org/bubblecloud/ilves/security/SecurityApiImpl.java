@@ -4,7 +4,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.bubblecloud.ilves.api.ApiImplementation;
 import org.bubblecloud.ilves.api.apis.RequestAccessTokenResult;
-import org.bubblecloud.ilves.api.apis.Security;
+import org.bubblecloud.ilves.api.apis.SecurityApi;
 import org.bubblecloud.ilves.model.*;
 import org.bubblecloud.ilves.module.customer.CustomerModule;
 import org.bubblecloud.ilves.site.SiteContext;
@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author Tommi S.E. Laukkanen
  */
-public class SecurityApiImpl implements Security, ApiImplementation {
+public class SecurityApiImpl implements SecurityApi, ApiImplementation {
     /** The logger. */
     private static final Logger LOGGER = Logger.getLogger(SecurityApiImpl.class);
     /** The context. */

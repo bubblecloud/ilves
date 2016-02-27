@@ -7,7 +7,7 @@ import org.bubblecloud.ilves.api.AccessGrant;
  *
  * @author Tommi S.E. Laukkanen
  */
-public interface Security {
+public interface SecurityApi {
 
     /**
      * Requests access token.
