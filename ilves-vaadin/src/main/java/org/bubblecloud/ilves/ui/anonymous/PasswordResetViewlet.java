@@ -25,6 +25,7 @@ import org.bubblecloud.ilves.util.StringUtil;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -44,7 +45,7 @@ public class PasswordResetViewlet extends AbstractViewlet {
     /** Password characters. */
     private static final String PASSWORD_CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!#%&,.-+*";
     /** Random for password generation. */
-    private static Random random = new Random(System.currentTimeMillis());
+    private static SecureRandom random = new SecureRandom();
 
     @Override
     public final void enter(final String parameters) {
