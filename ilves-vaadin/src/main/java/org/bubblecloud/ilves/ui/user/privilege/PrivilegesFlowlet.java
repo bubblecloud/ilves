@@ -28,6 +28,7 @@ import org.bubblecloud.ilves.model.User;
 import org.bubblecloud.ilves.security.SecurityService;
 import org.bubblecloud.ilves.security.UserDao;
 import org.bubblecloud.ilves.site.Site;
+import org.bubblecloud.ilves.util.PropertiesUtil;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -211,6 +212,10 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
     }
 
     private void refreshUserMatrix() {
+        if ("true".equals(PropertiesUtil.getProperty("site", "disable-user-asset-permissions"))) {
+            return;
+        }
+
         final EntityManager entityManager = Site.getCurrent().getSiteContext().getObject(EntityManager.class);
         final Company company = Site.getCurrent().getSiteContext().getObject(Company.class);
 
@@ -264,6 +269,9 @@ public class PrivilegesFlowlet extends AbstractFlowlet {
     }
 
     private void saveUserMatrix() {
+        if ("true".equals(PropertiesUtil.getProperty("site", "disable-user-asset-permissions"))) {
+            return;
+        }
         final EntityManager entityManager = Site.getCurrent().getSiteContext().getObject(EntityManager.class);
         final Company company = Site.getCurrent().getSiteContext().getObject(Company.class);
 
